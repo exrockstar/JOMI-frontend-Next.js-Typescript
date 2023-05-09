@@ -1,0 +1,10 @@
+query ArticleAuthors {
+  output: articles {
+    articles {
+      authors {
+        slug
+        _id
+      }
+    }
+  }
+}

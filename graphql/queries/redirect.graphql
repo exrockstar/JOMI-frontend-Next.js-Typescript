@@ -1,0 +1,7 @@
+query Redirect($from: String!) {
+  redirectFor(from: $from) {
+    from
+    to
+    type
+  }
+}

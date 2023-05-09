@@ -1,0 +1,15 @@
+query FeaturedInstitutions {
+  featured_institutions {
+    _id
+    name
+    subscriber_display_name
+    urlLink
+    image {
+      filename
+      geometry {
+        height
+        width
+      }
+    }
+  }
+}

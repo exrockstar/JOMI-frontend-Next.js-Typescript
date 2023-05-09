@@ -1,0 +1,11 @@
+User-agent: *
+
+Disallow: /api
+Allow: /api/files
+Disallow: /cms
+Disallow: /quiz
+Disallow: /password-protect
+Disallow: /account
+Disallow: /access
+
+Sitemap: https://jomi.com/sitemap_index.xml

@@ -1,0 +1,23 @@
+mutation TrackArticle($input: TrackArticleInput!) {
+  trackArticle(input: $input)
+}
+
+mutation TrackVideoPlay($input: TrackVideoInput!) {
+  trackVideoPlay(input: $input)
+}
+
+mutation TrackVideoTime($input: TrackVideoTimeInput!) {
+  trackVideoTime(input: $input)
+}
+
+mutation TrackVideoBlock($input: TrackVideoInput!) {
+  trackVideoBlock(input: $input)
+}
+
+mutation TrackSubscribe($input: TrackSubscribeInput!) {
+  trackSubscribe(input: $input)
+}
+
+mutation TrackInitiateCheckout($input: TrackInitiateCheckoutInput!) {
+  trackInitiateCheckout(input: $input)
+}

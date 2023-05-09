@@ -1,0 +1,168 @@
+query ArticlesBySlug($publication_id: String!, $locale: String) {
+  articleBySlug(publication_id: $publication_id, locale: $locale) {
+    _id
+    title
+    status
+    isFree
+    comment_status
+    comment_count
+    isPasswordProtected
+    authors {
+      _id
+      name {
+        last
+        first
+        middle
+      }
+      role
+      display_name
+      slug
+      image {
+        filename
+        path
+      }
+    }
+    visibility
+    previousWistiaIDS
+    categories {
+      _id
+      name
+      short
+      displayName
+      color
+      slug
+      desc
+    }
+    tags
+    content {
+      toc {
+        number
+        _id
+        text
+        id
+        subheaders {
+          number
+          text
+          id
+        }
+      }
+      otoc {
+        _id
+        number
+        text
+        id
+        subheaders {
+          number
+          text
+          id
+        }
+      }
+      transcription
+      article
+      abstract
+      outline
+      citations
+      cite_this_article
+    }
+    category_priority_sort
+    all_priority_sort
+    created
+    updated
+    assets {
+      url
+      width
+      height
+      fileSize
+      contentType
+      type
+    }
+    chapters {
+      number
+      title
+      time
+      subchapters {
+        number
+        parent
+        title
+        time
+      }
+    }
+    hospital {
+      name
+    }
+    preprint_date
+    edit_last
+    published
+    production_id
+    display_last
+    publication_id
+    slug
+    image {
+      geometry {
+        width
+        height
+      }
+      format
+      filename
+      length
+    }
+    vid_length
+    wistia_id
+    authors_attr_html
+    descriptionSEO
+    has_complete_abstract
+    DOIStatus
+    wistia {
+      internal_id
+      name
+      duration
+      progress
+      status
+      uploaded
+      updated
+      description
+      thumbnail {
+        url
+        width
+        height
+      }
+      project {
+        id
+        name
+        hashed_id
+      }
+    }
+    stats {
+      averagePercentWatched
+      pageLoads
+      percentOfVisitorsClickingPlay
+      plays
+      visitors
+    }
+    enabled_languages
+  }
+}
+
+# We'll have to incrementally properties as we re-implement more features in article-detail page.
+query ArticleById($article_id: String!){
+  articleById(article_id: $article_id){
+    _id
+    updated
+    slug
+    title
+    content {
+      cite_this_article
+    }
+    authors {
+      display_name
+      name {
+        last
+        first
+        middle
+      }
+    }
+    published,
+    preprint_date,
+    publication_id
+  }
+}

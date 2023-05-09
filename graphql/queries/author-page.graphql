@@ -1,0 +1,16 @@
+query AuthorPage($input: ArticleInput!) {
+  categories {
+    _id
+    short
+    displayName
+    color
+    slug
+    desc
+  }
+  articleOutput: articles(input: $input) {
+    articles {
+      ...ArticleListParts
+    }
+    totalCount
+  }
+}

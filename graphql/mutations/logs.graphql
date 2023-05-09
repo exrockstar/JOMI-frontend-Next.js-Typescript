@@ -1,0 +1,4 @@
+
+mutation WriteLog($level: String!, $message: String!, $meta:String){
+  writeLog(level: $level, message: $message, meta: $meta)
+}

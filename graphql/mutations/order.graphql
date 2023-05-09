@@ -1,0 +1,41 @@
+mutation AddOrUpdateOrder($input: OrderInput!) {
+  addOrUpdateOrder(input: $input)
+}
+
+mutation CancelOrder($subscription_id: String!) {
+  cancelOrder(subscription_id: $subscription_id)
+}
+
+mutation UnsubscribeOrder($order_id: String!) {
+  unsubscribeOrder(order_id: $order_id) {
+    _id
+    isCanceled
+    start
+    end
+    description
+    isTrialPeriod
+  }
+}
+
+mutation ResubscribeOrder($order_id: String!) {
+  resubscribeOrder(order_id: $order_id) {
+    _id
+    isCanceled
+    start
+    end
+    description
+    isTrialPeriod
+  }
+}
+
+query PreviewUpgradeSubscription($price_id:String!){
+  upgradeSubscriptionPreview(price_id: $price_id){
+    amount
+    description
+    cardLast4
+  }
+}
+
+mutation UpgradeSubscription($price_id:String!){
+  upgradeSubscription(price_id: $price_id)
+}

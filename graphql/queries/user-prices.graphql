@@ -1,0 +1,41 @@
+query UserPrices {
+  user {
+    user_type
+    subActive
+    activeOrder {
+      _id
+      start
+      end
+      description
+      isCanceled
+      plan_interval
+      isTrialPeriod
+      amount
+      promoCode
+      currency
+      discount {
+        code
+        name
+        duration
+        duration_in_months
+        amount_off
+        percent_off
+      }
+    }
+    stripeData {
+      stripeId
+      prices {
+        id: priceId
+        product
+        currency
+        nickname
+        unit_amount
+        unit_decimal
+        interval
+      }
+      isTrialsFeatureEnabled
+      trialDuration
+      trial_order_count
+    }
+  }
+}

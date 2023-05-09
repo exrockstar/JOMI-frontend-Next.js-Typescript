@@ -1,0 +1,19 @@
+fragment RedirectParts on Redirect{
+    _id
+    created
+    updated
+    author{
+        name{
+            first
+            last
+        }
+    }
+    name
+    from
+    to
+    type
+    track
+    stats{
+        time
+    }
+}

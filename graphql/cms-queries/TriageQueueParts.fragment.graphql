@@ -1,0 +1,44 @@
+fragment TriageQueueParts on TriageQueue {
+  _id
+  created
+  updated
+  type
+  priority
+  display_name
+  institution_name
+  email
+  countryCode
+  regionName
+  market
+  user {
+    _id
+    email
+    display_name
+    user_type
+    specialty
+    countryCode
+    regionName
+    institution_name
+    subActive
+    matchStatus
+    matchedBy
+  }
+  additional_info {
+    question
+    response
+    suggested_contact
+    contactInfo
+    request_email_sent
+    pocs_email_sent
+  }
+  institution {
+    _id
+    name
+    points_of_contact {
+      name
+      email
+      role
+      isMainContact
+    }
+  }
+}

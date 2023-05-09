@@ -1,0 +1,28 @@
+
+query SiteSettings {
+  getSiteSettings {
+    isTrialFeatureOn
+    trialDuration
+    updated
+    updatedBy {
+      display_name
+      _id
+    }
+	}
+}
+
+mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
+  updateSiteSettings(input: $input){
+    isTrialFeatureOn
+    trialDuration
+    updated
+    updatedBy {
+      display_name
+      _id
+    }
+  }
+}
+
+mutation AddHashToTranslations {
+  addTranslationsHash
+}

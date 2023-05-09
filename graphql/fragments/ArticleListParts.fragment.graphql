@@ -1,0 +1,46 @@
+fragment ArticleListParts on Article {
+  _id
+  title
+  status
+  publication_id
+  descriptionSEO
+  authors {
+    _id
+    display_name
+    role
+    slug
+  }
+  visibility
+  vid_length
+  categories {
+    _id
+    short
+    displayName
+    color
+    slug
+  }
+  created
+  hospital {
+    name
+  }
+  slug
+  image {
+    geometry {
+      width
+      height
+    }
+    filename
+  }
+  production_id
+  published
+  updated
+  preprint_date
+  restrictions {
+     article
+  }
+  wistia {
+    duration
+  }
+  tags
+  comment_count
+}

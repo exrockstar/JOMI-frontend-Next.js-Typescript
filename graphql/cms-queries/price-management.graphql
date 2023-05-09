@@ -1,0 +1,21 @@
+mutation CreateGeographicPrice($input: GeographicPriceInput!) {
+  createGeographicPrice(input: $input) {
+    ...PriceParts
+  }
+}
+
+mutation UpdateGeographicPrice($id: String!, $input: UpdatePriceInput!) {
+  updatePrice(id: $id, input: $input) {
+    ...PriceParts
+  }
+}
+
+mutation DeletePrice($priceId: String!) {
+  deletePrice(id: $priceId) {
+    ...PriceParts
+  }
+}
+
+mutation SyncPricesFromStripe {
+  syncDefaultPricesToDb
+}

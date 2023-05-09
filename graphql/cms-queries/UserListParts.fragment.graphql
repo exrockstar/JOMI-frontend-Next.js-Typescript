@@ -1,0 +1,114 @@
+fragment UserListParts on User {
+  _id
+  name {
+    first
+    last
+    middle
+    nickname
+  }
+  display_name
+  email
+  role
+  user_type
+  specialty
+  institution
+  institution_name
+  countryCode
+  regionName
+  user_type_other
+  created
+  total_time_watched
+  articleCount
+  subActive
+  loginCount
+  promo_code
+  isSubscribed
+  last_visited
+  matchStatus
+  matchedBy
+  emailNeedsConfirm
+  instEmailVerified
+  institutionalEmail
+  subscription {
+    subType
+    fromInst
+  }
+  social {
+    google {
+      id
+    }
+    linkedin {
+      id
+    }
+    facebook {
+      id
+    }
+  }
+  referer
+  referrerPath
+  anon_link_id
+  hasRequestedSubscription
+  requestSubscriptionCount
+}
+
+fragment UserDetail on User {
+  _id
+  email
+  display_name
+  name {
+    first
+    last
+  }
+  user_type
+  specialty
+  created
+  last_visited
+  slug
+  role
+  phone
+  institution
+  institution_name
+  institutionalEmail
+  matchedBy
+  matchStatus
+  interests
+  emailNeedsConfirm
+  instEmailVerified
+  hasManualBlock
+  manualBlockMessage
+  deleted
+  email_preference
+  signInToken
+  image {
+    filename
+    length
+    format
+  }
+  subActive
+  social {
+    google {
+      email
+      id
+      displayName
+    }
+    linkedin {
+      email
+      id
+      displayName
+    }
+    facebook {
+      email
+      id
+      displayName
+    }
+  }
+  subscription {
+    subType
+    fromInst
+  }
+  isTrialFeatureOn
+  trialDuration
+  referer
+  referrerPath
+  anon_link_id
+}

@@ -1,0 +1,3 @@
+mutation UpdateInstEmail($email: String!) {
+  updateInstEmail(email: $email)
+}

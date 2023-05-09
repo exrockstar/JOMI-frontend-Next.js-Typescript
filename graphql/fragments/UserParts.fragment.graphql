@@ -1,0 +1,12 @@
+fragment UserParts on User {
+  _id
+  name {
+    first
+    last
+  }
+  emailVerified
+  subActive
+  email
+  role
+  isPasswordSet
+}

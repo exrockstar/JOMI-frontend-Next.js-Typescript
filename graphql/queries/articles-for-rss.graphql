@@ -1,0 +1,47 @@
+query ArticlesForRss {
+  articlesForRss {
+    _id
+    title
+    publication_id
+    categories {
+      _id
+      displayName
+    }
+    tags
+    content {
+      abstract
+    }
+    assets {
+      url
+      width
+      height
+      fileSize
+      contentType
+      type
+    }
+    slug
+    vid_length
+    wistia_id
+    published
+    wistia {
+      thumbnail {
+        url
+        width
+        height
+      }
+      duration
+    }
+    stats {
+      averagePercentWatched
+      pageLoads
+      percentOfVisitorsClickingPlay
+      plays
+      visitors
+    }
+    updated
+    image {
+      filename
+    }
+    enabled_languages
+  }
+}

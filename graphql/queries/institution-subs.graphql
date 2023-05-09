@@ -1,0 +1,8 @@
+query InstitutionSubs {
+  institution_subs {
+    _id
+    category
+    name
+    displayName: subscriber_display_name
+  }
+}

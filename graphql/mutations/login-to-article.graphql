@@ -1,0 +1,3 @@
+mutation LoginToArticle($publication_id: String!, $password: String!) {
+  loginToArticle(publication_id: $publication_id, password: $password)
+}

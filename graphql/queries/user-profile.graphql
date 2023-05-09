@@ -1,0 +1,18 @@
+query UserProfile {
+  user {
+    ...UserProfileParts
+  }
+  userAccessType {
+    accessType
+    institution_name
+    shouldRequestInstVerification
+    viaTemporaryIp
+    expiry
+    subscriptionExpiresAt
+    requireLogin
+    institution_id
+  }
+  geolocation {
+    countryCode
+  }
+}

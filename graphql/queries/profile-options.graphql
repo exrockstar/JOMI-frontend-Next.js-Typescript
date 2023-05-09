@@ -1,0 +1,12 @@
+query ProfileOptions {
+  profileOptions {
+    userTypes {
+      _id
+      type
+    }
+    specialties {
+      _id
+      name
+    }
+  }
+}

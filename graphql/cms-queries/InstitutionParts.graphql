@@ -1,0 +1,39 @@
+fragment InstitutionParts on Institution {
+  _id
+  created
+  updated
+  name
+  aliases
+  subscription {
+    status
+    last_checked
+    order
+  }
+  domains
+  urlLink
+  category
+  subscriber_display_name
+  show_on_subscribers_page
+  restrictMatchByName
+  points_of_contact {
+    name
+    email
+    role
+    notes
+    isMainContact
+  }
+  image {
+    filename
+    geometry {
+      width
+      height
+    }
+  }
+  locations {
+    ...LocationParts
+  }
+  accessSettings{
+    displayTrafficGraph
+  }
+  notes
+}

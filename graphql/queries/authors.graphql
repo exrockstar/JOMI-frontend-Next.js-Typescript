@@ -1,0 +1,10 @@
+query Authors {
+  authors {
+    _id
+    display_name
+    slug
+    image {
+      filename
+    }
+  }
+}

@@ -1,0 +1,46 @@
+query RedirectsList($input: RedirectInput!){
+  fetchRedirects(input: $input){
+    redirects{
+      _id
+      from
+      to
+      type
+      name
+      track
+      author{
+        name{
+          first
+          last
+        }
+      }
+      stats{
+        time
+      }
+    }
+    count
+  }
+}
+
+query RedirectById($id: String!) {
+  redirect: fetchRedirectById(id: $id) {
+    ...RedirectParts
+  }
+}
+
+mutation DeleteRedirect($input: DeleteRedirectInput!){
+  deleteRedirect(input: $input) {
+    _id
+  }
+}
+
+mutation UpdateRedirect($input: UpdateRedirectInput!){
+  redirect: updateRedirect(input: $input) {
+    ...RedirectParts
+  }
+}
+
+mutation CreateRedirect($input: CreateRedirectInput!){
+  redirect: createRedirect(input: $input) {
+    ...RedirectParts
+  }
+}

@@ -1,0 +1,27 @@
+query FrontPage {
+  latestArticles {
+    _id
+    title
+    slug
+    publication_id
+    image { 
+      filename
+    }
+    categories {
+      color
+      slug
+      displayName
+      _id
+    }
+    authors {
+      image {
+        filename
+      }
+        display_name
+        slug
+    }
+    hospital {
+      name
+    }
+  }
+}

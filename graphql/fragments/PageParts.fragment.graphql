@@ -1,0 +1,18 @@
+fragment PageParts on Page{
+    _id
+    created
+    updated
+    author{
+        name{
+            first
+            last
+        }
+    }
+    title
+    status
+    slug
+    content
+    scripts
+    meta_desc
+    sidebar
+}

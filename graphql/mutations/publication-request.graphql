@@ -1,0 +1,3 @@
+mutation PublicationRequest($input: PublicationRequestInput!) {
+  createPublicationRequest(input: $input)
+}

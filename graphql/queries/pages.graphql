@@ -1,0 +1,8 @@
+query Pages {
+  pages {
+    slug
+    title
+    _id
+    updated
+  }
+}

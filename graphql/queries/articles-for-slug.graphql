@@ -1,0 +1,7 @@
+query ArticlesForSlug {
+  articlesForSlug {
+    title
+    slug
+    publication_id
+  }
+}

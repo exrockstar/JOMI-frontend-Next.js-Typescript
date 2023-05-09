@@ -1,0 +1,14 @@
+fragment LocationParts on Location {
+  _id
+  created
+  updated
+  title
+  comment
+  orders {
+    ...OrderParts
+  }
+  ip_ranges {
+    ...IpRangeParts
+  }
+  
+}

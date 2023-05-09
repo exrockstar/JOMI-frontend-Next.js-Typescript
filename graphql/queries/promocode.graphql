@@ -1,0 +1,42 @@
+# query GetPromoCode($code: String!) {
+#   promoCode(code: $code) {
+#     _id
+#     title
+#     days
+#     price
+#     isSubscription
+#     stripe {
+#       price
+#     }
+#   }
+# }
+
+query GetCombinedPromoCode($code: String!) {
+  output:getCombinedPromoCode (code: $code) {
+    promoCode {
+      _id
+      title
+      days
+      price
+      isSubscription
+      stripe {
+        price
+      }
+    }
+    stripeCode{
+      _id
+      name
+      code
+      valid
+      couponId
+      duration
+      duration_in_months
+      amount_off
+      percent_off
+    }
+  }
+}
+
+mutation HandleFreePromoCode($code: String!) {
+  handleFreePromoCode(code: $code)
+}

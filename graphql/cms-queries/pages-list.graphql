@@ -1,0 +1,49 @@
+query PagesList($input: PageInputFetch!){
+  fetchPages(input: $input){
+    totalCount
+    pages{
+      _id
+      title
+      status
+      slug
+      author{
+        name{
+          first
+          last
+        }
+      }
+    }
+  }
+}
+
+query PageById($id: String!) {
+  page: fetchPageById(id: $id) {
+    ...PageParts
+  }
+}
+
+mutation DeletePage($id: String!){
+  deletePage(id: $id) {
+    _id
+  }
+}
+mutation CreatePage($input: CreatePageInput!){
+  createPage(input: $input){
+    _id
+    created
+    updated
+    title
+    status
+    slug
+    content
+    scripts
+    meta_desc
+    sidebar
+  }
+}
+
+mutation UpdatePage($input: UpdatePageInput!){
+  page: updatePage(input: $input){
+    ...PageParts
+  }
+}

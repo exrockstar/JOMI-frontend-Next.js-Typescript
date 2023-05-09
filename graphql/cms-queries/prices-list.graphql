@@ -1,0 +1,12 @@
+query PricesList($input: PriceFilterInput) {
+  prices(input: $input) {
+    ...PriceParts
+  }
+}
+
+query GetDefaultPrices{
+  prices: getDefaultPrices {
+    product
+    _id
+  }
+}

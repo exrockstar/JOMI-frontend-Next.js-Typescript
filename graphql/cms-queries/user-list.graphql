@@ -1,0 +1,60 @@
+query UserManagementList($input: UserInput!) {
+  users(input: $input) {
+    count
+    users {
+      ...UserListParts
+    }
+    dbQueryString
+  }
+}
+
+query useUserByInstitutionList($instId: String!, $input: UserInput!) {
+  usersByInstitution(instId: $instId, input: $input) {
+    count
+    users {
+      ...UserListParts
+      accessExpiredAt
+      lastSubType
+    }
+  }
+}
+
+query DownloadUserList($input: UserInput!) {
+  users(input: $input) {
+    users {
+      ...UserListParts
+    }
+  }
+}
+
+mutation CreatUser($input: AddUserInput!) {
+  createUser(input: $input) {
+    ...UserListParts
+  }
+}
+
+mutation UpdateUserCms($input: UpdateUserInput!) {
+  updateUserCms(input: $input) {
+    ...UserDetail
+  }
+}
+
+query UserDetail($id: String!) {
+  userById(id: $id) {
+    ...UserDetail
+    accessExpiredAt
+    lastSubType
+  }
+}
+
+mutation CreateSignInToken($input: CreateSignInTokenInput!) {
+  token: createSignInToken(input: $input)
+}
+
+mutation DeleteSignInToken($user_id: String!) {
+  deleteSignInToken(user_id: $user_id)
+}
+
+mutation AddCRMTagsToFoundUsers($input: UserInput!, $tags: [String!]!){
+  addCRMTagsToUsers(input:$input,tags: $tags)
+}

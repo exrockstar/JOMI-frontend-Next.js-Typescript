@@ -1,0 +1,21 @@
+mutation CreateInstituion($input: CreateInstitutionInput!) {
+  institution: createInstitution(input: $input) {
+    _id
+    name
+  }
+}
+
+mutation UpdateInstitution($input: UpdateInstitutionInput!) {
+  institution: updateInstitution(input: $input) {
+    ...InstitutionParts
+  }
+}
+
+mutation UpdateInstitutionContacts(
+  $id: String!
+  $contacts: [ContactPersonInput!]!
+) {
+  institution: updateInstitutionContacts(id: $id, contacts: $contacts) {
+    ...InstitutionParts
+  }
+}

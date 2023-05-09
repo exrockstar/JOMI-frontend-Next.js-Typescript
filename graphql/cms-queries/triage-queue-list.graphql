@@ -1,0 +1,120 @@
+query TriageQueueList($input: TriageQueueInput!) {
+  triageQueueRequests(input: $input) {
+    count
+    dbQueryString
+    triage_requests {
+      _id
+      created
+      updated
+      type
+      priority
+      display_name
+      email
+      institution_name
+      countryCode
+      regionName
+      sentEmailAt
+      user {
+        _id
+        email
+        display_name
+        user_type
+        specialty
+        countryCode
+        regionName
+        institution_name
+        subActive
+      }
+      institution {
+        _id
+        name
+
+        stats {
+          userCount
+          loginCount
+          articleCount
+          totalArticleCount
+        }
+        category
+      }
+        notes
+        market
+    }
+  }
+}
+
+query RequestsByUser($instId: String!, $input: TriageQueueInput!) {
+  triageQueueRequestsByInstitution(instId:$instId, input: $input) {
+    triage_requests {
+      _id
+      email
+      display_name
+      user_type
+      specialty
+      last_visited
+      last_request_date
+      registered
+      loginCount
+      articleCount
+      requestCount
+      requests {
+        created
+        message
+      }
+    }
+    count
+    totalRequestCount
+  }
+}
+
+
+query TriageQueueById($id: String!, $pocName: String) {
+  triageQueueRequest: triageQueueById(id: $id) {
+    ...TriageQueueParts
+    emailTemplate(pocName: $pocName)
+    notes
+  }
+}
+
+mutation ApplyInstitutionToTriage($id: String!, $institution_id: String!) {
+  triageQueueRequest: applyInstitutionToTriage(
+    id: $id
+    institution_id: $institution_id
+  ) {
+    ...TriageQueueParts
+    emailTemplate
+    notes
+  }
+}
+
+mutation UpdateTriageQueueResponse($input: UpdateTriageResponseInput!) {
+  triageQueueRequest: updateTriageResponse(input: $input) {
+    ...TriageQueueParts
+    emailTemplate
+    notes
+  }
+}
+
+mutation UpdateTriageQueueNotes($input: UpdateTriageNotesInput!) {
+  triageQueueRequest: updateTriageNotes(input: $input) {
+    ...TriageQueueParts
+    emailTemplate
+    notes
+  }
+}
+
+mutation UpdateTriageQueueStatus($input: UpdateTriageInput!) {
+  triageQueueRequest: updateTriageQueueStatus(input: $input) {
+    ...TriageQueueParts
+    emailTemplate
+    notes
+  }
+}
+
+mutation SendTriageQueueEmail($input: TriageQueueEmailInput!) {
+  triageQueueRequest: sendTriageQueueEmail(input: $input) {
+    ...TriageQueueParts
+    emailTemplate
+    notes
+  }
+}

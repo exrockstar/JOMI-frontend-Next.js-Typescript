@@ -1,0 +1,22 @@
+export const interests = [
+  'General Surgery',
+  'Breast Surgery',
+  'Endocrine Surgery',
+  'Colorectal Surgery',
+  'Gastrointestinal',
+  'Orthopaedics',
+  'Orthopaedic Trauma',
+  'Joint Replacement',
+  'Shoulder',
+  'Hand & Elbow',
+  'Ankle',
+  'Otolaryngology',
+  'Neurosurgery',
+  'Cardiac Surgery',
+  'Vascular Surgery',
+  'Ophthalmology',
+  'Urology',
+  'OB/GYN',
+  'Interventional Radiology',
+  'Skin and Soft Tissue'
+]

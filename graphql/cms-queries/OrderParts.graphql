@@ -1,0 +1,48 @@
+fragment OrderParts on Order {
+  _id
+  start
+  end
+  isCanceled
+  description
+  plan_interval
+  currency
+  type
+  created
+  updated
+  lastEditedBy
+  createdBy
+  status
+  amount
+  require_login
+  restricted_user_types
+  restricted_specialties
+  deleted
+}
+
+fragment OrderByIdParts on Order {
+  _id
+  payment_status
+  status
+  currency
+  renewals
+  createdBy
+  lastEditedBy
+  created
+  updated
+  start
+  end
+  isCanceled
+  description
+  type
+  plan_interval
+  amount
+  institution 
+  user_id
+  promoCode 
+  renewals
+  latest_invoice
+  require_login
+  isCanceled
+  plan_id
+  deleted
+}

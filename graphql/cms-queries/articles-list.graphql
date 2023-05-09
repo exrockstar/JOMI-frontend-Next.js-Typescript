@@ -1,0 +1,59 @@
+query ArticlesList($input: ArticleInputFetch!){
+  fetchArticles(input: $input){
+    totalCount
+    articles{
+      _id
+      title
+      status
+      publication_id
+      production_id
+      published
+      preprint_date
+      has_complete_abstract
+      authors {
+        _id
+        display_name
+      }
+      restrictions{
+        article
+      }
+      DOIStatus
+      languages
+      enabled_languages
+      content{ 
+        article 
+      }
+      contentlength
+    }
+  }
+}
+
+mutation UpdateArticle($input: UpdateArticleInput!){
+  article: updateArticle(input: $input) {
+    ...ArticleListParts
+  }
+}
+
+mutation GenerateDOIArticle($id: String!){
+  article: generateDOI(id: $id){
+    ...ArticleListParts
+  }
+}
+
+mutation UpdateWistiaMetadata {
+  updateWistiaMetadata
+}
+
+mutation TranslateArticles($input: TranslateArticlesInput!){
+  translateArticles(input: $input){
+    publication_id
+    success
+    message
+    language
+    slug
+  }
+}
+
+mutation AddLanguagesToExistingArticles {
+  addLanguagesToExistingArticles
+}

@@ -1,0 +1,17 @@
+mutation CreateLocation($input: LocationInput!) {
+  createLocation(input: $input) {
+    ...LocationParts
+  }
+}
+
+mutation UpdateLocation($input: LocationInput!) {
+  updateLocation(input: $input) {
+    ...LocationParts
+  }
+}
+
+mutation DeleteLocation($id: String!) {
+  deleteLocation(id: $id) {
+    ...LocationParts
+  }
+}

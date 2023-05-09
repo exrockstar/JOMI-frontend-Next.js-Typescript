@@ -1,0 +1,20 @@
+fragment UserProfileParts on User {
+  _id
+  name {
+    first
+    last
+  }
+  display_name
+  email
+  institution
+  institution_name
+  institutionalEmail
+  role
+  specialty
+  subActive
+  created
+  user_type
+  subscription {
+    subType
+  }
+}

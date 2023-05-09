@@ -1,0 +1,10 @@
+query Categories {
+  categories {
+    _id
+    short
+    displayName
+    color
+    slug
+    desc
+  }
+}

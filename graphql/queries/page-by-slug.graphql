@@ -1,0 +1,14 @@
+query PageBySlug($slug: String!) {
+  pageBySlug(slug: $slug) {
+    _id
+    status
+    scripts
+    sidebar
+    created
+    updated
+    title
+    slug
+    content
+    meta_desc
+  }
+}

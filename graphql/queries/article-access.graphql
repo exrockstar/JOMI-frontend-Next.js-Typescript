@@ -1,0 +1,14 @@
+query ArticleAccess($publication_id: String!) {
+  article: articleBySlug(publication_id: $publication_id) {
+    articleAccessType {
+      accessType
+      institution_name
+      shouldRequestInstVerification
+      viaTemporaryIp
+      isTrial
+      subscriptionExpiresAt
+      expiry
+      requireLogin
+    }
+  }
+}

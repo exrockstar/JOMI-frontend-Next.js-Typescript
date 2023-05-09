@@ -1,0 +1,7 @@
+mutation SendInstitutionEmailConfirmation($email: String!) {
+  sendInstEmailConfirmation(email: $email)
+}
+
+mutation ConfirmInstitutionEmail($token: String!) {
+  token: confirmInstEmail(token: $token)
+}

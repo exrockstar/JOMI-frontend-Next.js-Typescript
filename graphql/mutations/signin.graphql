@@ -1,0 +1,17 @@
+mutation SignIn($input: SignInInput!) {
+  signIn(input: $input) {
+    ...UserParts
+  }
+}
+
+mutation SignInViaToken($token: String!) {
+  tokenSignIn(token: $token) {
+    ...UserParts
+  }
+}
+
+mutation SignInViaOldToken($tokenId: String!) {
+  user: signInUsingOldToken(tokenId: $tokenId) {
+    ...UserParts
+  }
+}

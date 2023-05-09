@@ -1,0 +1,23 @@
+
+query GetScienceOpenPubIds {
+  getScienceOpenArticlesXml {
+    articlePublicationId
+    generatedAt
+  }
+}
+
+query GetScienceOpenXmlByPublicationId($pub_id: String!){
+  getScienceOpenArticleByPubId(publication_id: $pub_id){
+    generatedXml
+    articlePublicationId
+    generatedAt
+  }
+}
+
+mutation GenerateAllScienceOpenXml{
+  generateAllScienceOpenXml  
+}
+
+query ScienceOpenLastGenerated {
+  scienceOpenLastGeneratedAt
+}

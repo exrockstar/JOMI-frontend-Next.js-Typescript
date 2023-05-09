@@ -1,0 +1,7 @@
+mutation ConfirmEmail($token: String!) {
+  token: confirmEmail(token: $token)
+}
+
+mutation ResendConfirmEmail($email: String!) {
+  sendEmailConfirmation(email: $email)
+}

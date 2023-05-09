@@ -1,0 +1,39 @@
+query InstitutionsList($input: InstitutionInput!) {
+  institutions(input: $input) {
+    institutions {
+      _id
+      name
+      category
+      total_article_count
+      user_count
+      created
+      expiry_date_cached
+      subscription {
+        status
+        expiredOrderStatus
+      }
+      pending_requests
+      sent_requests
+      total_requests
+
+    }
+    dbQueryString
+    count
+  }
+}
+
+query InstitutionById($id: String!) {
+  institution: institutionById(id: $id) {
+    ...InstitutionParts
+  }
+}
+
+query InstitutionSearch($input: InstitutionInput!) {
+  institutions(input: $input) {
+    institutions {
+      value: _id
+      label: name
+    }
+    count
+  }
+}

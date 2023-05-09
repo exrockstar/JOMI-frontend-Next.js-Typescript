@@ -1,0 +1,13 @@
+fragment MediaLibaryParts on MediaOutput {
+  files {
+    _id
+    filename
+    length
+    uploadDate
+    metadata {
+      title
+      description
+    }
+  }
+  count
+}

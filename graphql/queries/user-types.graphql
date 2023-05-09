@@ -1,0 +1,10 @@
+query UserTypesAndSpecialties {
+  userTypes {
+    type
+    _id
+  }
+  specialties {
+    name
+    _id
+  }
+}

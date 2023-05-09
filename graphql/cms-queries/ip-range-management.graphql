@@ -1,0 +1,17 @@
+mutation CreateIpRange($input: IpRangeInput!) {
+  ip_range: createIpRange(input: $input) {
+    ...IpRangeParts
+  }
+}
+
+mutation UpdateIpRange($id: String!, $input: IpRangeInput!) {
+  ip_range: updateIpRange(id: $id, input: $input) {
+    ...IpRangeParts
+  }
+}
+
+mutation DeleteIpRange($id: String!) {
+  ip_range: deleteIpRange(id: $id) {
+    _id
+  }
+}

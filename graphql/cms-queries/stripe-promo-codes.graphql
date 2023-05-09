@@ -1,0 +1,112 @@
+
+query GetStripePromoCodes($input: StripePromoCodeListInput!) {
+  getStripePromoCodes(input: $input) {
+    items {
+      _id
+      amount_off
+      percent_off
+      duration
+      duration_in_months
+      name
+      applies_to
+      redeem_by      
+      code
+      couponId
+      created
+      max_redemptions
+      times_redeemed
+      valid
+      active
+    }
+    totalCount
+  }
+}
+
+query GetStripePromoCode($id: String!){
+  getStripePromoCode(id: $id){
+    _id
+    amount_off
+    percent_off
+    duration
+    duration_in_months
+    name
+    applies_to
+    redeem_by
+    code
+    couponId
+    created
+    max_redemptions
+    times_redeemed
+    valid
+    active
+    createdBy {
+      _id
+      display_name
+    }
+  }
+}
+
+query GetStripePromoCodeByCode($code: String!){
+  getStripePromoCodeByCode(code: $code){
+    _id
+    amount_off
+    percent_off
+    duration
+    duration_in_months
+    name
+    applies_to
+    redeem_by
+    code
+    couponId
+    created
+    max_redemptions
+    times_redeemed
+    valid
+    active
+    createdBy {
+      _id
+      display_name
+    }
+  }
+}
+
+
+query PromoCodeRedeemList($id:String!, $input: RedeemListInput!){
+  orders:getStripePromocodeRedeems(id: $id, input: $input){
+    items {
+      _id,
+      user_id
+      user {
+        email
+      }
+      created
+      amount
+      description
+    }
+    totalCount
+  }
+}
+
+mutation CreateStripeCode($input: CreatePromoCodeInput!) {
+  createStripePromoCode(input: $input){
+    _id
+    couponId
+    valid
+    code
+    name
+  }
+}
+
+mutation UpdateStripeCode($input: UpdateStripeCodeInput!){
+  updateStripePromoCode(input: $input) {
+    _id
+    couponId
+    valid
+    code
+    name
+  }
+}
+
+mutation DeleteStripePromoCode($id:String!){
+  deleteStripePromocode(id:$id)
+}

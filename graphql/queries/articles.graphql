@@ -1,0 +1,8 @@
+query Articles($input: ArticleInput) {
+  articleOutput: articles(input: $input) {
+    articles {
+      ...ArticleListParts
+    }
+    totalCount
+  }
+}

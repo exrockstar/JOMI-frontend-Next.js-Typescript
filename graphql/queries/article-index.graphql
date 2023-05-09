@@ -1,0 +1,27 @@
+query AllArticleVotes {
+  allArticleVotes {
+    t
+    v
+  }
+}
+
+query GetUserArticleVotes {
+  userArticleVotes {
+    t
+    v
+  }
+}
+
+mutation AddVote($article_title: String!) {
+  addVote(article_title: $article_title) {
+    t
+    v
+  }
+}
+
+mutation RedactVote($article_title: String!) {
+  redactVote(article_title: $article_title) {
+    t
+    v
+  }
+}

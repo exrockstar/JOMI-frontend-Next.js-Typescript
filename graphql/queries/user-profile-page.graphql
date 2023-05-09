@@ -1,0 +1,22 @@
+query UserProfilePage {
+  user {
+    _id
+    name {
+      first
+      last
+    }
+    display_name
+    email
+    emailVerified
+    instEmailVerified
+    institution
+    institution_name
+    institutionalEmail
+    interests
+    isPasswordSet
+    phone
+    specialty
+    subActive
+    user_type
+  }
+}

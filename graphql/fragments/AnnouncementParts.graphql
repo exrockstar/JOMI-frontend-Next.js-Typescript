@@ -1,0 +1,39 @@
+fragment AnnouncementParts on Announcement {
+  _id
+  lastEditedBy
+  isPermanent
+  limit
+  cache_id
+  enabled
+  createdAt
+  updatedAt
+  type
+  backgroundColor
+  author {
+    _id
+    display_name
+  }
+  lastEditedBy
+  title
+  content
+}
+
+fragment AnnouncementViews on Announcement {
+  views
+  unique_views
+  user_views {
+    total
+    by_country {
+      key
+      views
+    }
+    by_institution {
+      key
+      views
+    }
+    by_user_type {
+      key
+      views
+    }
+  }
+}

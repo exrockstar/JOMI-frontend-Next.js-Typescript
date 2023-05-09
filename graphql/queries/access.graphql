@@ -1,0 +1,119 @@
+query InstitutionsAccessList($input: InstitutionInput!) {
+  output: institutions(input: $input) {
+    institutions {
+      _id
+      name
+      user_count
+      total_article_count
+      pending_requests
+      sent_requests
+      created
+      subscription {
+        status
+      }
+    }
+    count
+  }
+}
+
+query AccessEvents($input: AccessFilterInput) {
+  output: accessEvents(input: $input) {
+    events {
+      activity
+      user_id
+      article_title
+      article_publication_id
+      created
+      ip_address_str
+      user {
+        display_name
+        email
+        referer
+        referrerPath
+      }
+      geolocation {
+        countryCode
+        regionName
+      }
+      institution {
+        name
+      }
+      time_watched
+      referredFrom
+      referrerPath
+    }
+    count
+  }
+}
+
+
+query InstutionAccessOverview( $input:InstitutionAccessInput!) {
+
+  institutionAccessStats(input:$input){
+    users
+    activeUsers
+    totalLogins
+    totalArticleViews
+    anonymousArticleViews
+    articleViewsByUser
+  }
+  institutionUserTypesStats(input:$input){
+    user_type
+    count
+  }
+}
+
+query InstitutionTrafficOverTime($input: InstitutionAccessInput!, $groupBy: String!){
+  institutionTrafficOverTime(input: $input, groupBy: $groupBy){
+    _id
+    count
+  }
+}
+
+query ArticleActivityStats($input: AccessFilterInput!){
+  articleAccessStats(input: $input){
+    items {
+      _id
+      articleViews
+      uniqueViews
+      article {
+        title
+        publication_id
+        slug
+        status
+      }
+    }
+    totalCount
+  }
+}
+
+
+query InstArticleEventLogs($input: AccessFilterInput!) {
+  output: instArticleEventLogs(input: $input) {
+    events {
+      activity
+      user_id
+      article_title
+      article_publication_id
+      created
+      ip_address_str
+      user {
+        display_name
+        email
+      }
+      geolocation {
+        countryCode
+        regionName
+      }
+      institution {
+        name
+      }
+      time_watched      
+    }
+    count
+  }
+}
+
+query GenCounterReport($input: CounterInput!) {
+  genCounterReport(input: $input)
+}

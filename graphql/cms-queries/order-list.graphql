@@ -1,0 +1,37 @@
+# Order list for user
+
+query OrdersByUserId($user_id: String!) {
+  ordersByUserId(user_id: $user_id) {
+    _id
+    start
+    end
+    isCanceled
+    description
+    plan_interval
+    currency
+    type
+    created
+    updated
+    lastEditedBy
+    createdBy
+    status
+    amount
+    require_login
+    renewals
+    status
+    payment_status
+  }
+}
+
+query OrderById($order_id: String!) {
+  orderById(id: $order_id) {
+    ...OrderByIdParts
+  }
+}
+
+
+mutation UpdateOrderByUser($id: String!, $input: OrderInputForUser!){
+  updateOrderForUser(id: $id, input:$input) {
+    ...OrderByIdParts
+  }
+}

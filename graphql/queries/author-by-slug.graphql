@@ -1,0 +1,15 @@
+query AuthorBySlug($slug: String!) {
+  authorBySlug(slug: $slug) {
+    _id
+    display_name
+    slug
+    role
+    image {
+      geometry {
+        height
+        width
+      }
+      filename
+    }
+  }
+}

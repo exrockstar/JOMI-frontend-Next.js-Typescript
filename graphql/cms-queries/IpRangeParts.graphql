@@ -1,0 +1,10 @@
+fragment IpRangeParts on IpRange {
+  _id
+  created
+  updated
+  location
+  institution
+  start_string
+  end_string
+  lastEditedBy
+}

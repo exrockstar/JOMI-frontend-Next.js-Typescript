@@ -1,0 +1,9 @@
+
+mutation RunJobManually($name: String!){
+  runJobManually(name: $name)
+}
+
+  query IsJobRunning($name: String!){
+    isJobRunning(name: $name)
+    jobProgress(name: $name)
+  }

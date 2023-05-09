@@ -1,0 +1,36 @@
+query MediaLibrary($input: MediaInput) {
+  files(input: $input) {
+    files {
+      _id
+      filename
+      length
+      uploadDate
+      metadata {
+        title
+        description
+      }
+    }
+    count
+  }
+}
+
+mutation DeleteMedia($_id: String!) {
+  result: deleteMedia(_id: $_id)
+}
+
+mutation UpdateMediaLibrary($input: UpdateMediaLibraryInput!) {
+  mediaLibrary: updateMediaLibrary(input: $input) {
+    ...MediaLibraryPart
+  }
+}
+
+fragment MediaLibraryPart on Media {
+    _id
+    filename
+    length
+    uploadDate
+    metadata {
+      title
+      description
+    }
+  }

@@ -1,0 +1,10 @@
+query AccessesByUserId($input: AccessesByUserIdInput!) {
+  accessesByUserId(input: $input) {
+    created
+    article_title
+    activity
+    ip_address_str
+    time_watched
+    user_agent
+  }
+}

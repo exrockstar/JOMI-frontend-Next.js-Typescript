@@ -1,0 +1,40 @@
+mutation CreateOrder($input: OrderInputForLocation!) {
+  order: createOrder(input: $input) {
+    ...OrderParts
+  }
+}
+
+mutation UpdateOrder($id: String!, $input: OrderInputForLocation!) {
+  order: updateOrder(id: $id, input: $input) {
+    ...OrderParts
+  }
+}
+
+mutation DeleteOrder($id: String!) {
+  order: deleteOrder(id: $id) {
+    _id
+  }
+}
+
+mutation CreateOrderForUser($input: OrderInputForUser!) {
+  order: createOrderForUser(input: $input) {
+    _id
+    start
+    end
+    isCanceled
+    description
+    plan_interval
+    currency
+    type
+    created
+    updated
+    lastEditedBy
+    createdBy
+    status
+    amount
+    require_login
+    renewals
+    status
+    payment_status
+  }
+}

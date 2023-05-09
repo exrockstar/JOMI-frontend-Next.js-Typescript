@@ -1,0 +1,15 @@
+mutation CompleteRegistration($input: ExtendedRegistrationInput!) {
+  completeUserRegistration(input: $input) {
+    updatedUser {
+      ...UserProfileParts
+    }
+    updatedAccess {
+      accessType
+      institution_name
+      shouldRequestInstVerification
+      viaTemporaryIp
+      expiry
+    }
+    matchedWithInstitution
+  }
+}

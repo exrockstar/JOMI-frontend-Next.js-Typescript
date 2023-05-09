@@ -1,0 +1,34 @@
+query Announcements {
+  announcements {
+    ...AnnouncementParts
+  }
+}
+
+query Announcement($_id: String!) {
+  announcement(id: $_id) {
+    ...AnnouncementParts
+    ...AnnouncementViews
+  }
+}
+
+mutation ToggleAnnouncement($_id: String!, $enabled: Boolean!) {
+  announcement: setEnabledAnnouncement(_id: $_id, enabled: $enabled) {
+    ...AnnouncementParts
+  }
+}
+
+mutation DeleteAnnouncement($_id: String!) {
+  result: deleteAnnouncement(_id: $_id)
+}
+
+mutation CreateAnnouncement {
+  announcement: createAnnouncement {
+    ...AnnouncementParts
+  }
+}
+
+mutation UpdateAnnouncement($input: AnnouncementInput!) {
+  updateAnnouncement(input: $input) {
+    ...AnnouncementParts
+  }
+}

@@ -1,0 +1,3 @@
+mutation TrackAnnouncement($_id: String!) {
+  trackAnnouncement(_id: $_id)
+}
