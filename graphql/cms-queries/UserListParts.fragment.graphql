@@ -32,6 +32,8 @@ fragment UserListParts on User {
   subscription {
     subType
     fromInst
+    lastSubType
+    lastSubTypeExpiry
   }
   social {
     google {

@@ -131,12 +131,10 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
               )}
               {!!users?.length &&
                 users?.map((user) => {
-                  const subType = user?.subscription?.subType
-                  const access = subType
-                    ? subType === SubType.NotCreated
-                      ? user.lastSubType
-                      : subType
-                    : 'No Access'
+                  const access = user?.subscription.subType
+                  const lastAccess = user?.subscription.lastSubType
+                  const accessExpiry = user?.subscription.lastSubTypeExpiry
+                  console.log(user.subscription.lastSubTypeExpiry)
                   const needsInstEmailConfirmation =
                     user?.matchedBy === MatchedBy.InstitutionalEmail &&
                     !user?.instEmailVerified
@@ -145,7 +143,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                     user?.emailNeedsConfirm
 
                   const needsConfirmation =
-                    access === SubType.Institution &&
+                    lastAccess === SubType.Institution &&
                     (needsInstEmailConfirmation || needsEmailConfirmation)
 
                   return (
@@ -170,7 +168,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                       <TableCell>{user.matchedBy}</TableCell>
                       <TableCell sx={{ minWidth: 200 }}>
                         <Typography sx={{ textTransform: 'capitalize' }}>
-                          {access}
+                          {lastAccess}
                         </Typography>
                         {needsConfirmation && (
                           <Box width={'100%'}>
@@ -179,11 +177,10 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                             </Typography>
                           </Box>
                         )}
-                        {!!user.accessExpiredAt && (
+                        {!!accessExpiry && (
                           <Box width={'100%'}>
                             <Typography variant="caption" color="error.main">
-                              Expired:{' '}
-                              {dayjs(user.accessExpiredAt).format('L LT')}
+                              Expired: {dayjs(accessExpiry).format('L LT')}
                             </Typography>
                           </Box>
                         )}
