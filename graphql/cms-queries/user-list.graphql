@@ -13,8 +13,7 @@ query useUserByInstitutionList($instId: String!, $input: UserInput!) {
     count
     users {
       ...UserListParts
-      accessExpiredAt
-      lastSubType
+      
     }
   }
 }

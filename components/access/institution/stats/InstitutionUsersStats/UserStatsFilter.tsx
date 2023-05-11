@@ -55,6 +55,7 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       type: 'text',
       operations: StringOperations
     },
+
     {
       columnName: 'specialty',
       label: 'Specialty',
@@ -101,6 +102,12 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       label: 'Last Visited',
       type: 'date',
       operations: [QueryOperation.Before, QueryOperation.After]
+    },
+    {
+      columnName: 'subscription.lastSubType',
+      label: 'Access',
+      type: 'text',
+      operations: StringOperations
     }
   ]
   return (

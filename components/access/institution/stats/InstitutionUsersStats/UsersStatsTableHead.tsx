@@ -29,7 +29,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Matched By'
   },
   {
-    id: 'subscription.subType',
+    id: 'subscription.lastSubType',
     label: 'Access'
   },
 

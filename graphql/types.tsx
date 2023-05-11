@@ -2376,8 +2376,8 @@ export type SignUpInput = {
   lastName?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
   phoneNumber?: InputMaybe<Scalars['String']>;
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
 };
 
 export type SiteSetting = {
@@ -2553,14 +2553,16 @@ export type SubscriptionInput = {
   email: Scalars['String'];
   institution_name: Scalars['String'];
   message: Scalars['String'];
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
 };
 
 export type SubscriptionType = {
   __typename?: 'SubscriptionType';
   fromInst?: Maybe<Scalars['String']>;
   lastChecked: Scalars['DateTime'];
+  lastSubType?: Maybe<SubType>;
+  lastSubTypeExpiry?: Maybe<Scalars['DateTime']>;
   subType?: Maybe<SubType>;
 };
 
@@ -2574,20 +2576,20 @@ export type Thumbnail = {
 export type TrackArticleInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   publication_id: Scalars['String'];
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
   uniqueView?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type TrackInitiateCheckoutInput = {
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
 };
 
 export type TrackRequestInstSubscriptionInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
 };
 
 export type TrackSubscribeInput = {
@@ -2598,8 +2600,8 @@ export type TrackVideoInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   block_type?: InputMaybe<Scalars['String']>;
   publication_id: Scalars['String'];
-  referredFrom: Scalars['String'];
-  referrerPath: Scalars['String'];
+  referredFrom?: InputMaybe<Scalars['String']>;
+  referrerPath?: InputMaybe<Scalars['String']>;
   uniqueView?: InputMaybe<Scalars['Boolean']>;
 };
 
