@@ -72,7 +72,7 @@ const TrafficOverTimeCard = () => {
     <Card>
       <Box p={2}>
         <Typography color="text.secondary" gutterBottom variant="overline">
-          Traffic Over Time
+          Article Views Over Time
         </Typography>
         <CardContent sx={{ height: 300, width: '100%' }}>
           <Box

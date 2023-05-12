@@ -11,10 +11,11 @@ import {
   MenuItem,
   IconButton
 } from '@mui/material'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { ColumnFilter, QueryOperation, StatusType } from 'graphql/types'
 import React, { useState } from 'react'
 import { ColumnOption } from './ColumnOption'
+import CustomDatePicker from '../CustomDatePicker'
 
 type Props = {
   columnOptions: ColumnOption[]
@@ -128,9 +129,11 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
               {columnOption?.operations.map((operation) => {
                 return (
                   <MenuItem value={operation} key={operation}>
-                    {operation == 'greater_than_or_equal' ? '>=' 
-                      : operation == 'less_than_or_equal' ? '<=' 
-                      : operation }
+                    {operation == 'greater_than_or_equal'
+                      ? '>='
+                      : operation == 'less_than_or_equal'
+                      ? '<='
+                      : operation}
                   </MenuItem>
                 )
               })}
@@ -152,13 +155,12 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
               />
             )}
             {columnOption.type === 'date' && (
-              <DatePicker
-                label="Date"
-                value={filter.value ?? dayjs()}
-                onChange={(newValue) => {
-                  handleValueChange(index, newValue)
+              <CustomDatePicker
+                defaultLabel="Date filter"
+                value={filter.value}
+                onChange={(val?: Dayjs) => {
+                  handleValueChange(index, val.toISOString())
                 }}
-                renderInput={(params) => <TextField {...params} size="small" />}
               />
             )}
             {columnOption.type === 'select' && (

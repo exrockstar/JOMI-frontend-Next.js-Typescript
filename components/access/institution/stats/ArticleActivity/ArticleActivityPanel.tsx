@@ -12,7 +12,8 @@ import {
   Box,
   Pagination,
   TableFooter,
-  Button
+  Button,
+  Chip
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import { InstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.generated'
@@ -25,7 +26,7 @@ import Link from 'next/link'
 import ArticleActivityHeader from './ArticleActivityHeader'
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 import ArticleActivityFilter from './ArticleActivityFilter'
-import { Visibility } from '@mui/icons-material'
+import { Info, Visibility } from '@mui/icons-material'
 
 type Props = {
   institution: InstitutionByIdQuery['institution']
@@ -77,7 +78,7 @@ const ArticleActivityPanel = ({ institution }: Props) => {
   }
   const TablePagination = (
     <TableFooter>
-      <Box p={1} display="flex" alignItems="center">
+      <Box p={1} display="flex" alignItems="center" gap={2}>
         <Pagination
           count={pageCount}
           shape="rounded"
@@ -88,6 +89,9 @@ const ArticleActivityPanel = ({ institution }: Props) => {
           <Typography color="text.secondary">
             {skip} to {Math.min(skip + perPage, count)} of {count} articles
           </Typography>
+        )}
+        {filters?.length > 0 && (
+          <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
         )}
       </Box>
     </TableFooter>

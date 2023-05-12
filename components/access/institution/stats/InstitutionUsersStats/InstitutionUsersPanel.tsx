@@ -1,4 +1,4 @@
-import { InfoOutlined, Visibility } from '@mui/icons-material'
+import { FilterList, Info, Visibility } from '@mui/icons-material'
 import {
   Stack,
   CircularProgress,
@@ -89,7 +89,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const isAdmin = session?.user?.role === UserRoles.Admin
   const TablePagination = (
     <TableFooter>
-      <Box p={1} display="flex" alignItems="center">
+      <Box p={1} display="flex" alignItems="center" gap={2}>
         <Pagination
           count={pageCount}
           shape="rounded"
@@ -101,6 +101,9 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
             {skip + 1} to {Math.min(skip + perPage, filterCount)} of{' '}
             {filterCount} users
           </Typography>
+        )}
+        {filters?.length > 0 && (
+          <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
         )}
       </Box>
     </TableFooter>

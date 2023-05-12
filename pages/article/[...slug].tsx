@@ -113,7 +113,7 @@ function SingleArticle({ article }: SingleArticleProps) {
     )
   }, [article])
 
-  if (article.isPasswordProtected && !showArticle) {
+  if (article?.isPasswordProtected && !showArticle) {
     return (
       <ArticlePassword
         onComplete={onComplete}
