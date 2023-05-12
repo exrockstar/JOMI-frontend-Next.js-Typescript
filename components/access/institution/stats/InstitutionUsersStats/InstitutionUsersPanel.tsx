@@ -102,7 +102,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
             {filterCount} users
           </Typography>
         )}
-        {filters.length > 0 && (
+        {filters?.length > 0 && (
           <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
         )}
       </Box>
