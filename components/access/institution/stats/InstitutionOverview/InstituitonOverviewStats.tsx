@@ -14,13 +14,14 @@ import { InstitutionPartsFragment } from 'graphql/cms-queries/InstitutionParts.g
 import { useInstutionAccessOverviewQuery } from 'graphql/queries/access.generated'
 
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AliasesCard from './AliasesCard'
 import DomainsCard from './DomainsCard'
 import StatCard from './StatCard'
 import UserTypesCard from './UserTypesCard'
 import { InfoOutlined } from '@mui/icons-material'
 import TrafficOverTimeCard from './TrafficOverTimeCard'
+import CustomDatePicker from '../../../../common/CustomDatePicker'
 
 type Props = {
   institutionId: string
@@ -42,53 +43,23 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
     skip: !institutionId
   })
 
-  const onStartChange = (newVal: Dayjs) => {
-    let query = {
-      ...router.query
+  const handleChange = (newVal: Dayjs, prop: 'end' | 'start') => {
+    const query = router.query
+    if (!newVal) {
+      delete query[prop]
+      router.push({ query })
+      return
     }
-    const formatted = newVal?.format('YYYY-MM-DD')
-    const isValid = dayjs(formatted).isValid()
-    if (isValid && !!newVal) {
-      query.start = formatted
-    } else {
-      delete query.start
-    }
-    router.push({ query })
-  }
-  const onEndChange = (newVal: Dayjs) => {
-    const query = {
-      ...router.query
-    }
-    const formatted = newVal?.format('YYYY-MM-DD')
-    const isValid = dayjs(formatted).isValid()
-    if (isValid && !!newVal) {
+    if (newVal.isValid()) {
       const formatted = newVal?.format('YYYY-MM-DD')
-      query.end = formatted
-    } else {
-      delete query.end
+      router.push({
+        query: {
+          ...query,
+          [prop]: formatted
+        }
+      })
     }
-    router.push({
-      query
-    })
   }
-  const renderInput = (props: TextFieldProps) => (
-    <TextField
-      {...props}
-      onChange={(e) => {
-        //dayjs returns invalid for the format M/D/YYYY
-        //we just transform it to the correct format. -> MM/DD/YYYY
-
-        //replace the month part: M/ -> MM/
-        let val = e.target.value.replace(/^\d\//, (val) => `0${val}`)
-        //replace the date part MM/D/ -> MM/DD/
-        val = val.replace(/\/\d\//, (val) => `/0${val.replace('/', '')}`)
-
-        e.target.value = val
-        props.inputProps.onChange(e)
-      }}
-      size="small"
-    />
-  )
 
   const accessStats = data?.institutionAccessStats
 
@@ -106,19 +77,19 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
 
         <Stack direction="row" gap={2} alignItems="center" mb={2}>
           <Typography fontWeight={600}>Period</Typography>
-          <DatePicker
-            clearable
-            value={start || null}
-            onChange={onStartChange}
-            renderInput={renderInput}
-            disableMaskedInput={true}
+          <CustomDatePicker
+            defaultLabel="Start date"
+            value={start}
+            onChange={(val?: Dayjs) => {
+              handleChange(val, 'start')
+            }}
           />
-          <DatePicker
-            clearable
-            value={end || null}
-            onChange={onEndChange}
-            renderInput={renderInput}
-            disableMaskedInput={true}
+          <CustomDatePicker
+            defaultLabel="End date"
+            value={end}
+            onChange={(val?: Dayjs) => {
+              handleChange(val, 'end')
+            }}
           />
         </Stack>
       </Stack>

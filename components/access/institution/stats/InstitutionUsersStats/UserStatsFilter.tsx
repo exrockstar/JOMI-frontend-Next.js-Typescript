@@ -4,7 +4,7 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { StringOperations } from 'components/common/FilterDrawer/operations'
 import { useUserTypesAndSpecialtiesQuery } from 'graphql/queries/user-types.generated'
-import { ColumnFilter, QueryOperation, UserRoles } from 'graphql/types'
+import { ColumnFilter, QueryOperation, SubType, UserRoles } from 'graphql/types'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -106,8 +106,9 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
     {
       columnName: 'subscription.lastSubType',
       label: 'Access',
-      type: 'text',
-      operations: StringOperations
+      type: 'select',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual],
+      values: Object.values(SubType)
     }
   ]
   return (
