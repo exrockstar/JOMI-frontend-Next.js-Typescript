@@ -9,21 +9,21 @@ export type ArticlesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticlesListQuery = { __typename?: 'Query', fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, preprint_date?: any | null | undefined, has_complete_abstract?: boolean | null | undefined, DOIStatus?: string | null | undefined, languages?: Array<string> | null | undefined, enabled_languages?: Array<string> | null | undefined, contentlength?: number | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, content: { __typename?: 'Content', article?: string | null | undefined } }> } };
+export type ArticlesListQuery = { __typename?: 'Query', allArticleIds: Array<string>, fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, preprint_date?: any | null | undefined, has_complete_abstract?: boolean | null | undefined, DOIStatus?: string | null | undefined, languages?: Array<string> | null | undefined, enabled_languages?: Array<string> | null | undefined, contentlength?: number | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, content: { __typename?: 'Content', article?: string | null | undefined } }> } };
 
 export type UpdateArticleMutationVariables = Types.Exact<{
   input: Types.UpdateArticleInput;
 }>;
 
 
-export type UpdateArticleMutation = { __typename?: 'Mutation', article?: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug: string, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } | null | undefined };
+export type UpdateArticleMutation = { __typename?: 'Mutation', article?: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } | null | undefined };
 
 export type GenerateDoiArticleMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
 }>;
 
 
-export type GenerateDoiArticleMutation = { __typename?: 'Mutation', article: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug: string, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } };
+export type GenerateDoiArticleMutation = { __typename?: 'Mutation', article: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } };
 
 export type UpdateWistiaMetadataMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -42,9 +42,24 @@ export type AddLanguagesToExistingArticlesMutationVariables = Types.Exact<{ [key
 
 export type AddLanguagesToExistingArticlesMutation = { __typename?: 'Mutation', addLanguagesToExistingArticles: string };
 
+export type SetPurchaseSettingMutationVariables = Types.Exact<{
+  input: Types.UpdatePurchaseSettingInput;
+}>;
+
+
+export type SetPurchaseSettingMutation = { __typename?: 'Mutation', updatePurchaseSetting: Array<{ __typename?: 'Article', publication_id?: string | null | undefined, slug?: string | null | undefined }> };
+
+export type SelectedArticlesQueryVariables = Types.Exact<{
+  article_ids: Array<Types.Scalars['String']> | Types.Scalars['String'];
+}>;
+
+
+export type SelectedArticlesQuery = { __typename?: 'Query', articlesByIds: Array<{ __typename?: 'Article', _id: string, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined }> };
+
 
 export const ArticlesListDocument = gql`
     query ArticlesList($input: ArticleInputFetch!) {
+  allArticleIds
   fetchArticles(input: $input) {
     totalCount
     articles {
@@ -70,6 +85,9 @@ export const ArticlesListDocument = gql`
         article
       }
       contentlength
+      isPurchaseArticleFeatureOn
+      isRentArticleFeatureOn
+      purchaseAllowedCountries
     }
   }
 }
@@ -265,3 +283,75 @@ export function useAddLanguagesToExistingArticlesMutation(baseOptions?: Apollo.M
 export type AddLanguagesToExistingArticlesMutationHookResult = ReturnType<typeof useAddLanguagesToExistingArticlesMutation>;
 export type AddLanguagesToExistingArticlesMutationResult = Apollo.MutationResult<AddLanguagesToExistingArticlesMutation>;
 export type AddLanguagesToExistingArticlesMutationOptions = Apollo.BaseMutationOptions<AddLanguagesToExistingArticlesMutation, AddLanguagesToExistingArticlesMutationVariables>;
+export const SetPurchaseSettingDocument = gql`
+    mutation SetPurchaseSetting($input: UpdatePurchaseSettingInput!) {
+  updatePurchaseSetting(input: $input) {
+    publication_id
+    slug
+  }
+}
+    `;
+export type SetPurchaseSettingMutationFn = Apollo.MutationFunction<SetPurchaseSettingMutation, SetPurchaseSettingMutationVariables>;
+
+/**
+ * __useSetPurchaseSettingMutation__
+ *
+ * To run a mutation, you first call `useSetPurchaseSettingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetPurchaseSettingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setPurchaseSettingMutation, { data, loading, error }] = useSetPurchaseSettingMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSetPurchaseSettingMutation(baseOptions?: Apollo.MutationHookOptions<SetPurchaseSettingMutation, SetPurchaseSettingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetPurchaseSettingMutation, SetPurchaseSettingMutationVariables>(SetPurchaseSettingDocument, options);
+      }
+export type SetPurchaseSettingMutationHookResult = ReturnType<typeof useSetPurchaseSettingMutation>;
+export type SetPurchaseSettingMutationResult = Apollo.MutationResult<SetPurchaseSettingMutation>;
+export type SetPurchaseSettingMutationOptions = Apollo.BaseMutationOptions<SetPurchaseSettingMutation, SetPurchaseSettingMutationVariables>;
+export const SelectedArticlesDocument = gql`
+    query SelectedArticles($article_ids: [String!]!) {
+  articlesByIds(article_ids: $article_ids) {
+    _id
+    purchaseAllowedCountries
+    isPurchaseArticleFeatureOn
+    isRentArticleFeatureOn
+  }
+}
+    `;
+
+/**
+ * __useSelectedArticlesQuery__
+ *
+ * To run a query within a React component, call `useSelectedArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSelectedArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSelectedArticlesQuery({
+ *   variables: {
+ *      article_ids: // value for 'article_ids'
+ *   },
+ * });
+ */
+export function useSelectedArticlesQuery(baseOptions: Apollo.QueryHookOptions<SelectedArticlesQuery, SelectedArticlesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SelectedArticlesQuery, SelectedArticlesQueryVariables>(SelectedArticlesDocument, options);
+      }
+export function useSelectedArticlesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SelectedArticlesQuery, SelectedArticlesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SelectedArticlesQuery, SelectedArticlesQueryVariables>(SelectedArticlesDocument, options);
+        }
+export type SelectedArticlesQueryHookResult = ReturnType<typeof useSelectedArticlesQuery>;
+export type SelectedArticlesLazyQueryHookResult = ReturnType<typeof useSelectedArticlesLazyQuery>;
+export type SelectedArticlesQueryResult = Apollo.QueryResult<SelectedArticlesQuery, SelectedArticlesQueryVariables>;

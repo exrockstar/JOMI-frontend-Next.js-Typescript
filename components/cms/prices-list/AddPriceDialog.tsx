@@ -18,7 +18,7 @@ import FormikSelect from 'components/common/formik/FormkSelect'
 import { Form, Formik } from 'formik'
 import { useCreateGeographicPriceMutation } from 'graphql/cms-queries/price-management.generated'
 import { usePricesListQuery } from 'graphql/cms-queries/prices-list.generated'
-import { CountryEnum } from 'graphql/types'
+import { CountryEnum, GeographicPriceInput, OrderInterval } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
 import React from 'react'
@@ -32,34 +32,30 @@ const schema = object({
   product_id: string().required('Please select a product id'), //user type .e.g., prod_surgical_tech, prod_other , etc.,
   countryCode: string().required('Country code is required'),
 
-  amountYearly: number().optional(),
-  amountMonthly: number().optional(),
+  amount: number().optional(),
   percentageFromDefaultPrice: number().optional().min(0).max(100)
 })
 
 const AddPriceDialog = ({ ...props }: Props) => {
   const { data: session } = useSession()
-  const {
-    data,
-    updateQuery: updatePricesQuery,
-    refetch
-  } = usePricesListQuery({
-    skip: !session?.user
+  const { filters } = usePricesListControls()
+  const { data, refetch } = usePricesListQuery({
+    skip: !session?.user,
+    fetchPolicy: 'network-only'
   })
   const { enqueueSnackbar } = useSnackbar()
   const [createPrice, { loading: creatingPrice }] =
     useCreateGeographicPriceMutation({
       onCompleted(result) {
-        updatePricesQuery((prev) => {
-          return {
-            prices: [...prev.prices, ...result.createGeographicPrice]
-          }
-        })
         enqueueSnackbar(`Successfully added prices!`, {
           variant: 'success'
         })
-        props.onClose({}, 'backdropClick')
-        refetch()
+        props.onClose({}, null)
+        refetch({
+          input: {
+            filters
+          }
+        })
       },
       onError(error) {
         enqueueSnackbar(`Failed to create price: ${error.message}`, {
@@ -67,13 +63,14 @@ const AddPriceDialog = ({ ...props }: Props) => {
         })
       }
     })
-  const handleSubmit = (values: TypeOf<typeof schema>) => {
+  const handleSubmit = async (values: GeographicPriceInput) => {
     console.log(`submtting`, values)
-    createPrice({
+    await createPrice({
       variables: {
         input: {
-          amountMonthly: values.amountMonthly * 100,
-          amountYearly: values.amountYearly * 100,
+          amount: values.amount ? values.amount * 100 : null,
+          interval:
+            (values.interval as any) === 'One-Time' ? null : values.interval,
           countryCode: values.countryCode as CountryEnum,
           product_id: values.product_id,
           percentageFromDefaultPrice: values.percentageFromDefaultPrice
@@ -89,18 +86,20 @@ const AddPriceDialog = ({ ...props }: Props) => {
   )
   const product_ids = Array.from(products_ids_set)
   return (
-    <Formik
+    <Formik<GeographicPriceInput>
       onSubmit={handleSubmit}
       initialValues={{
         product_id: '',
-        countryCode: '',
-        amountYearly: 0,
-        amountMonthly: 0,
+        countryCode: null,
+        amount: null,
+        interval: null,
         percentageFromDefaultPrice: 0
       }}
       validationSchema={schema}
     >
-      {({ submitForm, isSubmitting, errors }) => {
+      {({ submitForm, isSubmitting, errors, values }) => {
+        const isOneTimePaymentProduct = values.product_id.endsWith('article')
+
         return (
           <Dialog {...props} maxWidth="md">
             <Form>
@@ -126,16 +125,34 @@ const AddPriceDialog = ({ ...props }: Props) => {
                     Guide: If you input amount yearly and monthly, please leave
                     percentage blank and vise versa.
                   </Typography>
-                  <FormikTextField
-                    name="amountYearly"
-                    label="Yearly Subscription Amount"
-                    type="number"
-                  />
-                  <FormikTextField
-                    name="amountMonthly"
-                    label="Monthly Subscription Amount"
-                    type="number"
-                  />
+
+                  <FormikSelect
+                    name="interval"
+                    id="interval-select"
+                    label="Interval(Monthly, Yearly, One-time payment)"
+                    placeholder="Select Interval"
+                    value={isOneTimePaymentProduct ? 'One-Time' : ''}
+                  >
+                    <MenuItem
+                      value={OrderInterval.Month}
+                      disabled={isOneTimePaymentProduct}
+                    >
+                      Monthly
+                    </MenuItem>
+                    <MenuItem
+                      value={OrderInterval.Year}
+                      disabled={isOneTimePaymentProduct}
+                    >
+                      Yearly
+                    </MenuItem>
+                    <MenuItem
+                      value={'One-Time'}
+                      disabled={!isOneTimePaymentProduct}
+                    >
+                      One-time Payment
+                    </MenuItem>
+                  </FormikSelect>
+                  <FormikTextField name="amount" label="Amount" type="number" />
                   <Typography variant="caption">
                     Percentage from default: Automatically calculates percentage
                     from default price to be used for monthly and yearly prices.
@@ -150,10 +167,7 @@ const AddPriceDialog = ({ ...props }: Props) => {
               </DialogContent>
               <Divider />
               <DialogActions sx={{ p: 3 }}>
-                <Button
-                  color="error"
-                  onClick={(e) => props.onClose(e, 'backdropClick')}
-                >
+                <Button color="error" onClick={(e) => props.onClose(e, null)}>
                   Cancel
                 </Button>
                 <LoadingButton

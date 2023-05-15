@@ -105,7 +105,11 @@ const PricesListPage = () => {
       {addDialogShown && (
         <AddPriceDialog
           open={addDialogShown}
-          onClose={() => setAddDialogShown(false)}
+          onClose={(event, reason) => {
+            if (reason !== 'backdropClick') {
+              setAddDialogShown(false)
+            }
+          }}
         />
       )}
       <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
@@ -117,7 +121,7 @@ const PricesListPage = () => {
             color="primary"
             onClick={() => setAddDialogShown(true)}
           >
-            Add Geographic Pricing
+            Add Price
           </LoadingButton>
           <LoadingButton
             startIcon={<Refresh />}

@@ -41,6 +41,7 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
     pageSize,
     setPageSize,
     selectedItems,
+    allArticleIds,
     setSelectedItems
   } = useArticlesList()
   const { enqueueSnackbar } = useSnackbar()
@@ -126,6 +127,16 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                   <Button
                     variant="outlined"
                     onClick={() => {
+                      setSelectedItems(allArticleIds)
+                    }}
+                    color="secondary"
+                    size="small"
+                  >
+                    Select All
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
                       setSelectedItems([])
                     }}
                     color="error"
@@ -164,6 +175,14 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                 i % 2 !== 0
                   ? (stickyTableCellColor = 'white')
                   : (stickyTableCellColor = '#fafafa')
+
+                const ppaCountries = article.purchaseAllowedCountries
+                const ppAcountriesText =
+                  ppaCountries?.length > 4
+                    ? `${ppaCountries?.slice(0, 4).join(', ')} and ${
+                        ppaCountries.length - 4
+                      } others`
+                    : `${ppaCountries?.slice(0, 4).join(', ')}`
                 return (
                   <StyledTableRow key={article._id}>
                     <StickyTableCell
@@ -245,13 +264,21 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                     <TableCell>
                       {article.enabled_languages?.join(', ') ?? 'N/A'}
                     </TableCell>
-                    {/* {article.contentlength < 2000 ? (
-                      <TableCell>Yes</TableCell>
-                    ) : (
-                      <TableCell>No</TableCell>
-                    )} */}
+                    <TableCell>{article.contentlength}</TableCell>
                     <TableCell>
-                      {article.contentlength}
+                      {article.isRentArticleFeatureOn ? 'Yes' : 'No'}
+                    </TableCell>
+                    <TableCell>
+                      {article.isPurchaseArticleFeatureOn ? 'Yes' : 'No'}
+                    </TableCell>
+                    <TableCell sx={{ minWidth: 150, textOverflow: 'ellipsis' }}>
+                      {article.purchaseAllowedCountries?.length > 0 ? (
+                        <Typography variant="caption">
+                          {ppAcountriesText}
+                        </Typography>
+                      ) : (
+                        'All Countries'
+                      )}
                     </TableCell>
                     <TableCell>
                       <Box display={'flex'} gap="2">

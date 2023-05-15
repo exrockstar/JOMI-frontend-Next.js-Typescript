@@ -44,16 +44,16 @@ const basePalette: PaletteOptions = {
   },
 
   grey: {
-    50: '#f8f8f8',
-    100: '#f5f5f5',
-    200: '#ddd',
-    300: '#aaa',
-    400: '#999',
-    500: '#888',
-    600: '#666',
-    700: '#444',
-    800: '#333',
-    900: '#222'
+    50: colors.zinc[50],
+    100: colors.zinc[100],
+    200: colors.zinc[200],
+    300: colors.zinc[300],
+    400: colors.zinc[400],
+    500: colors.zinc[500],
+    600: colors.zinc[600],
+    700: colors.zinc[700],
+    800: colors.zinc[800],
+    900: colors.zinc[900]
   }
 }
 

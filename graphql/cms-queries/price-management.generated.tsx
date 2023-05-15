@@ -9,7 +9,7 @@ export type CreateGeographicPriceMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateGeographicPriceMutation = { __typename?: 'Mutation', createGeographicPrice?: Array<{ __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval: Types.OrderInterval, unit_amount: number, currency: string }> | null | undefined };
+export type CreateGeographicPriceMutation = { __typename?: 'Mutation', createGeographicPrice?: { __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number, currency: string } | null | undefined };
 
 export type UpdateGeographicPriceMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -17,14 +17,14 @@ export type UpdateGeographicPriceMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateGeographicPriceMutation = { __typename?: 'Mutation', updatePrice?: { __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval: Types.OrderInterval, unit_amount: number, currency: string } | null | undefined };
+export type UpdateGeographicPriceMutation = { __typename?: 'Mutation', updatePrice?: { __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number, currency: string } | null | undefined };
 
 export type DeletePriceMutationVariables = Types.Exact<{
   priceId: Types.Scalars['String'];
 }>;
 
 
-export type DeletePriceMutation = { __typename?: 'Mutation', deletePrice?: { __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval: Types.OrderInterval, unit_amount: number, currency: string } | null | undefined };
+export type DeletePriceMutation = { __typename?: 'Mutation', deletePrice?: { __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number, currency: string } | null | undefined };
 
 export type SyncPricesFromStripeMutationVariables = Types.Exact<{ [key: string]: never; }>;
 

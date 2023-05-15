@@ -5,28 +5,38 @@ import { countries, CountryType } from './countryList'
 
 type Props = {
   name: string
+  multiple?: boolean
+  label?: string
 }
 
-const CountrySelector = ({ name }: Props) => {
-  const [field, meta] = useField<string>(name)
+const CountrySelector = ({ name, multiple, label }: Props) => {
+  const [field, meta] = useField<string | string[]>(name)
   const { setFieldValue } = useFormikContext()
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    country: CountryType
+    countries: CountryType | CountryType[]
   ) => {
-    setFieldValue(name, country?.code ?? null)
-  }
+    if (Array.isArray(countries)) {
+      const codes = countries.map((c) => c.code).filter((c) => !!c)
 
-  const value = countries.find((c) => c.code === field.value)
+      setFieldValue(name, codes ?? null)
+    } else {
+      setFieldValue(name, countries?.code ?? null)
+    }
+  }
+  const value = Array.isArray(field.value)
+    ? countries.filter((c) => field.value.includes(c.code))
+    : countries.find((c) => c.code === field.value)
   return (
     <Autocomplete
       onChange={handleChange}
       value={value}
       options={countries}
+      multiple={multiple}
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Select country"
+          label={label ?? 'Select country'}
           error={!!meta.error}
           helperText={meta.error}
         />

@@ -67,9 +67,13 @@ const UserOrdersList = ({ userId }: Props) => {
                   <TableCell>{order.currency}</TableCell>
                   <TableCell>{order.renewals}</TableCell>
                   <TableCell>
-                    {dayjs(order.start).format('MM/DD/YYYY')}
+                    {order.start
+                      ? dayjs(order.start).format('MM/DD/YYYY')
+                      : 'N/A'}
                   </TableCell>
-                  <TableCell>{dayjs(order.end).format('MM/DD/YYYY')}</TableCell>
+                  <TableCell>
+                    {order.end ? dayjs(order.end).format('MM/DD/YYYY') : 'N/A'}
+                  </TableCell>
                   <TableCell>{order.status}</TableCell>
                   <TableCell>{order.payment_status}</TableCell>
                 </StyledTableRow>

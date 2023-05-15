@@ -39,6 +39,7 @@ import {
 } from 'graphql/queries/scienceopen.generated'
 import dayjs from 'dayjs'
 import ArticleTranslationsDialog from 'components/cms/articles-list/ArticleTranslationsDialog'
+import PurchaseSettingDialog from 'components/cms/articles-list/PurchaseSettingDialog'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -113,13 +114,29 @@ const columnOptions: ColumnOption[] = [
     columnName: 'contentlength',
     type: 'text',
     label: `Content Length`,
-    operations: [QueryOperation.GreaterThanOrEqual, QueryOperation.LessThanOrEqual]
+    operations: [
+      QueryOperation.GreaterThanOrEqual,
+      QueryOperation.LessThanOrEqual
+    ]
+  },
+  {
+    columnName: 'purchaseSettingEnabled',
+    type: 'boolean',
+    label: 'Purchase Setting',
+    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+  },
+  {
+    columnName: 'purchaseAllowedCountries',
+    type: 'text',
+    label: 'PPA Scope',
+    operations: StringOperations
   }
 ]
 const ArticlesListPage = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
   const {
     articles,
@@ -268,6 +285,15 @@ const ArticlesListPage = () => {
           >
             Add Translations
           </Button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            sx={{ ml: 2 }}
+            onClick={() => setPurchaseDialogOpen(true)}
+            disabled={!selectedItems.length}
+          >
+            Update Purchase Settings
+          </Button>
           <LoadingButton
             color="secondary"
             variant="outlined"
@@ -286,6 +312,14 @@ const ArticlesListPage = () => {
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
         key={selectedItems.toString()}
+      />
+      <PurchaseSettingDialog
+        open={purchaseDialogOpen}
+        onClose={(e, reason) => {
+          if (reason === 'backdropClick') return
+          setPurchaseDialogOpen(false)
+        }}
+        key={selectedItems.toString() + 1}
       />
       {loading ? (
         <Stack alignItems="center" justifyContent="center" height="90vh">

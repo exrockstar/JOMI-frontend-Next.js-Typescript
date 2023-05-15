@@ -9,7 +9,7 @@ export type PricesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval: Types.OrderInterval, unit_amount: number, currency: string }> };
+export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number, currency: string }> };
 
 export type GetDefaultPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 

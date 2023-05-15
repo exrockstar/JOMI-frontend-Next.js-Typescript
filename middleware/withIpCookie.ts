@@ -19,7 +19,16 @@ export const withIpCookie: MiddlewareFactory = (next: NextMiddleware) => {
 
     if (searchParams.has('test_ip') && res) {
       const testIp = searchParams.get('test_ip')
-      console.log('Test IP', testIp)
+      if (testIp === 'reset' || !testIp) {
+        if (res instanceof NextResponse) {
+          // res.cookies.set('test_ip', '', {
+          //   httpOnly: true,
+          //   expires: new Date()
+          // })
+          res.cookies.delete('test_ip')
+        }
+        return res
+      }
       try {
         const response = await fetch(`https://ipapi.co/${testIp}/json/`)
         const data = await response.json()

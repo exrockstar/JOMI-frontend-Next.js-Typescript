@@ -1,0 +1,46 @@
+
+mutation PurchaseArticle($input: ArticlePurchaseInput!){
+  addPurchaseArticleOrder(input:$input)
+}
+
+query GetPurchasedArticles {
+  articles: getPurchasedArticles {
+    _id
+    description
+    amount
+    created
+    article {
+      slug      
+      publication_id
+      title
+    }
+    type
+    end
+  }
+}
+
+query GetPurchasedArticlesByUserId($id: String!) {
+  articles: getPurchasedArticlesByUserId(id: $id){
+    _id
+    description
+    amount
+    created
+    article {
+      slug      
+      publication_id
+      title
+    }
+    type
+    end
+  }
+}
+
+query GetPriceByProductId($product_id: String!){
+  getPriceByProductId(product_id: $product_id){
+    _id
+    product
+    priceId
+    unit_amount
+    countryCode
+  }
+}

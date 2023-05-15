@@ -1,11 +1,8 @@
 import { Box, Typography } from '@mui/material'
-import { styled } from '@mui/material/styles'
-
 import LimitedAccessBox from './LimitedAccessBox'
 import RequestOrPurchaseBox from './RequestOrPurchaseBox'
 import { useEffect, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
-import { useSnackbar } from 'notistack'
 import dayjs from 'dayjs'
 import { ArticleAccessBoxContainer, BoxHeading, FreeArticleBox } from './common'
 import InstitutionalAccessBox from './InstitutionalAccessBox'
@@ -22,8 +19,6 @@ type ArticleAccessBoxProps = {
 
 export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
   const { data: session, status } = useSession()
-  const { enqueueSnackbar } = useSnackbar()
-
   const { data, loading, refetch } = useArticleAccessQuery({
     skip: status === 'loading',
     variables: {
@@ -40,7 +35,10 @@ export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
   const subscriptionExpired =
     accessData?.subscriptionExpiresAt &&
     dayjs(accessData.subscriptionExpiresAt).isBefore(new Date())
+  const purchaseDescription = `${article.publication_id} - ${article.title}`
+  const userId = session?.user?._id
 
+  const [purchasePrice, rentPrice] = data?.getPurchaseAndRentPrices ?? []
   const Component = useMemo(() => {
     if (accessData?.requireLogin) {
       return (
@@ -55,12 +53,19 @@ export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
       )
     }
 
+    const purchasePriceAmount = purchasePrice?.unit_amount ?? 0
+    const rentPriceAmount = rentPrice?.unit_amount ?? 0
     switch (accessType) {
       case AccessTypeEnum.LimitedAccess:
         return <LimitedAccessBox />
       case AccessTypeEnum.Evaluation:
         return (
           <RequestOrPurchaseBox
+            purchaseDescription={purchaseDescription}
+            userId={userId}
+            articleId={article._id}
+            purchasePrice={purchasePriceAmount}
+            rentPrice={rentPriceAmount}
             message={
               <>
                 <Typography variant="body2" mb={1} fontWeight={700}>
@@ -81,6 +86,11 @@ export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
       case AccessTypeEnum.RequireSubscription:
         return (
           <RequestOrPurchaseBox
+            purchaseDescription={purchaseDescription}
+            userId={userId}
+            articleId={article._id}
+            purchasePrice={purchasePriceAmount}
+            rentPrice={rentPriceAmount}
             message={
               <>
                 <Typography variant="body2" mb={1} fontWeight={700}>
@@ -133,6 +143,27 @@ export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
 
   if (accessType === AccessTypeEnum.AdminAccess) return null
 
+  if (accessType === AccessTypeEnum.ArticlePurchase) {
+    return <FreeArticleBox>ARTICLE ACCESS</FreeArticleBox>
+  }
+  if (accessType === AccessTypeEnum.ArticleRent) {
+    return (
+      <ArticleAccessBoxContainer sx={{ backgroundColor: '#D6F0E3' }}>
+        <BoxHeading sx={{ backgroundColor: '#41B87C' }}>
+          RENT ACCESS (48 Hours)
+        </BoxHeading>
+        <Box p={2}>
+          <Typography variant="body2" fontWeight={600}>
+            Expires at:{' '}
+            {dayjs(accessData.subscriptionExpiresAt).format(
+              'MM/DD/YYYY HH:mm:ss A'
+            )}
+          </Typography>
+        </Box>
+      </ArticleAccessBoxContainer>
+    )
+  }
+
   if (accessType === AccessTypeEnum.IndividualSubscription) {
     return <FreeArticleBox>SUBSCRIBED</FreeArticleBox>
   }
@@ -151,11 +182,16 @@ export default function ArticleAccessBox({ article }: ArticleAccessBoxProps) {
 
   return (
     <ArticleAccessBoxContainer>
-      {accessData?.requireLogin ? 
-        <BoxHeading sx={{background: 'linear-gradient(to bottom, #60A5FA, #4F46E5)'}}>{accessText}</BoxHeading> :
-        <BoxHeading>{accessText}</BoxHeading>
-      }
-      <Box p={2} sx={{backgroundColor: "#FFFFFF"}}>{Component}</Box>
+      <BoxHeading
+        sx={{
+          background: accessData?.requireLogin
+            ? 'linear-gradient(to bottom, #60A5FA, #4F46E5)'
+            : '#E11D48'
+        }}
+      >
+        {accessText}
+      </BoxHeading>
+      <Box p={2}>{Component}</Box>
     </ArticleAccessBoxContainer>
   )
 }

@@ -30,6 +30,7 @@ const CredentialsForm: React.FC<{ onComplete?(): void }> = ({ onComplete }) => {
   const handleSubmit = async (values: FormValues) => {
     setLoading(true)
     const callbackUrl = getCallbackUrl()
+    console.log('callbackUrl', callbackUrl)
     const res = await signIn('credentials', {
       redirect: false,
       callbackUrl: callbackUrl,

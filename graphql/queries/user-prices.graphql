@@ -1,5 +1,6 @@
 query UserPrices {
   user {
+    _id
     user_type
     subActive
     activeOrder {

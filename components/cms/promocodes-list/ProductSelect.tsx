@@ -10,7 +10,8 @@ import {
   TableCell,
   TableRow,
   TableHead,
-  FormControlLabel
+  FormControlLabel,
+  Divider
 } from '@mui/material'
 import FormikCheckbox from 'components/common/formik/FormikCheckbox'
 import { useField, useFormikContext } from 'formik'
@@ -25,7 +26,7 @@ const ProductSelect = () => {
   const { data } = useUserTypesAndSpecialtiesQuery()
   const [field] = useField<string[]>('applies_to')
   const { setFieldValue } = useFormikContext()
-  const [selectedUserTypes, setSelectedUserTypes] = useState<string[]>([]) // [Other, Physician, etc...]
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]) // [Other, Physician, etc...]
   const userTypes = data?.userTypes ?? []
   const monthlyIds = userTypes?.map(
     ({ type }) => `prod_${snakeCase(type)}_month`
@@ -40,64 +41,81 @@ const ProductSelect = () => {
   const allYearlySelected = every(yearlyIds, (p) => selectedIds.includes(p))
   const someYearlySelected =
     !allYearlySelected && yearlyIds.some((p) => selectedIds.includes(p))
-  const sorted = [...selectedUserTypes.sort()]
 
-  const setSelectedIds = (ids: string[]) => {
-    setFieldValue('applies_to', uniq([...ids]))
+  const sortedSelectedProducts = [...selectedProducts.sort()]
+
+  const setSelectedProductIds = (ids: string[]) => {
+    setFieldValue('applies_to', uniq(ids))
   }
   const getProductIdsForType = (type: string) => {
     return [`prod_${snakeCase(type)}_year`, `prod_${snakeCase(type)}_month`]
   }
 
+  const isOneTimePaymentProduct = (product_id: string) =>
+    product_id.endsWith('article')
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const values = e.target.value as unknown as string[]
-    const productIds = values
-      .filter((v) => !selectedUserTypes.includes(v))
-      .flatMap((value) => getProductIdsForType(value))
-    setSelectedUserTypes(values)
-    setSelectedIds([...selectedIds, ...productIds])
+
+    // convert values to product ids
+    const productIds = values.flatMap((value) => {
+      if (isOneTimePaymentProduct(value)) {
+        return [value]
+      }
+      return getProductIdsForType(value)
+    })
+    setSelectedProducts(values)
+    setSelectedProductIds(productIds)
   }
 
   //update the selected user types on the select component based on the products
-  function updatedSelectedUserTypes(newValues: string[]) {
+  function updateSelectedProducts(newValues: string[]) {
     const selected = userTypes
       .filter(({ type }) => {
         const productIds = getProductIdsForType(type)
         return productIds.some((p) => newValues?.includes(p))
       })
       .map((type) => type.type)
-    setSelectedUserTypes(selected)
+
+    const oneTimeProducts = newValues.filter(isOneTimePaymentProduct)
+    setSelectedProducts([...selected, ...oneTimeProducts])
   }
 
+  // handler for checkbox change on table
   const onCheckboxChange = (checked: boolean, productId: string) => {
     if (!checked) {
       const newValues = selectedIds.filter((val) => val !== productId)
-      updatedSelectedUserTypes(newValues)
-      setSelectedIds(newValues)
+      updateSelectedProducts(newValues)
+      setSelectedProductIds(newValues)
     } else {
-      const newValues = uniq([...selectedIds, productId])
-      updatedSelectedUserTypes(newValues)
-      setSelectedIds(newValues)
+      const newValues = [...selectedIds, productId]
+      updateSelectedProducts(newValues)
+      setSelectedProductIds(newValues)
     }
   }
 
   const onAllChange = (checked: boolean, products: string[]) => {
     const currentValue = field?.value ?? []
     if (!checked) {
-      //remove all monthly products
+      //remove all products
       const newValues = currentValue.filter((val) => !products.includes(val))
-      updatedSelectedUserTypes(newValues)
-      setSelectedIds(newValues)
+      updateSelectedProducts(newValues)
+      setSelectedProductIds(newValues)
     } else {
-      const newValues = uniq([...currentValue, ...products])
-      updatedSelectedUserTypes(newValues)
-      setSelectedIds(newValues)
+      const newValues = [...currentValue, ...products]
+
+      updateSelectedProducts(newValues)
+      setSelectedProductIds(newValues)
     }
   }
 
   return (
     <FormControl fullWidth size="small" sx={{ width: 300 }}>
-      <Select multiple value={sorted ?? []} onChange={handleChange}>
+      <Select
+        multiple
+        value={sortedSelectedProducts ?? []}
+        onChange={handleChange}
+      >
+        <Divider sx={{ fontSize: 12 }}>Subscriptions</Divider>
         {userTypes?.map((userType) => {
           return (
             <MenuItem key={userType._id} value={userType.type}>
@@ -105,6 +123,16 @@ const ProductSelect = () => {
             </MenuItem>
           )
         })}
+        <Divider sx={{ fontSize: 12 }}>One-Time Purchases</Divider>
+        <MenuItem
+          key="product_purchase_article"
+          value="product_purchase_article"
+        >
+          Purchase Article
+        </MenuItem>
+        <MenuItem key="product_rent_article" value="product_rent_article">
+          Rent Article
+        </MenuItem>
       </Select>
       <FormControlLabel
         control={
@@ -126,13 +154,13 @@ const ProductSelect = () => {
         }
         label="Select All Yearly Subscriptions"
       />
-      {!!sorted.length && (
+      {!!sortedSelectedProducts.length && (
         <Box my={2} sx={{ maxHeight: 400, width: 800, overflowY: 'scroll' }}>
           <Table size="small">
             <TableHead>
               <TableRow sx={{ position: 'sticky', top: 0, zIndex: 1 }}>
                 <TableCell sx={{ backgroundColor: 'grey.200' }}>
-                  User Type
+                  User Type / Product
                 </TableCell>
                 <TableCell sx={{ backgroundColor: 'grey.200' }}>
                   Monthly
@@ -142,26 +170,40 @@ const ProductSelect = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {sorted.map((user_type, index) => {
-                const monthlyProductId = `prod_${snakeCase(user_type)}_month`
-                const yearlyProductId = `prod_${snakeCase(user_type)}_year`
+            <TableBody
+              sx={{
+                '& td': {
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  borderColor: 'divider'
+                }
+              }}
+            >
+              {sortedSelectedProducts.map((product, index) => {
+                //render for one-time purchase products
+                if (product.endsWith('article')) {
+                  return (
+                    <TableRow>
+                      <TableCell>
+                        <Typography sx={{ width: 250 }} variant="body2">
+                          {product}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>N/A</TableCell>
+                      <TableCell>N/A</TableCell>
+                    </TableRow>
+                  )
+                }
+                const monthlyProductId = `prod_${snakeCase(product)}_month`
+                const yearlyProductId = `prod_${snakeCase(product)}_year`
                 const monthlyChecked = selectedIds.includes(monthlyProductId)
                 const yearlyChecked = selectedIds.includes(yearlyProductId)
+
                 return (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      '& td': {
-                        borderWidth: '1px',
-                        borderStyle: 'solid',
-                        borderColor: 'divider'
-                      }
-                    }}
-                  >
+                  <TableRow key={index}>
                     <TableCell>
                       <Typography sx={{ width: 250 }} variant="body2">
-                        {user_type}
+                        {product}
                       </Typography>
                     </TableCell>
                     <TableCell>

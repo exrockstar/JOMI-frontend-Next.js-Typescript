@@ -10,5 +10,19 @@ query ArticleAccess($publication_id: String!) {
       expiry
       requireLogin
     }
+    _id
+    title
+    publication_id  
+    showRentArticle
+    rentDuration
+    showPurchaseArticle
+    status
+  }
+  getPurchaseAndRentPrices {
+    _id
+    product
+    priceId
+    unit_amount
+    countryCode
   }
 }

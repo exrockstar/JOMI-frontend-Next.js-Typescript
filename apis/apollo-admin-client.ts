@@ -112,7 +112,7 @@ export function getApolloUserClient(
           'x-city': val.city
         }
       }
-      console.log('_headers', newHeaders)
+      // console.log('_headers', newHeaders)
       return newHeaders
     })
 

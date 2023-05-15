@@ -35,7 +35,11 @@ const InstitutionalAccessBox: React.FC<Props> = ({ access }) => {
           {access.institution_name}
         </Typography>
         {access.viaTemporaryIp && access.expiry && (
-          <Typography variant="body2" color="textSecondary" fontFamily="Manrope">
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            fontFamily="Manrope"
+          >
             Off-site access until:{' '}
             {dayjs(access.expiry).format('MMMM DD, YYYY')}
           </Typography>
@@ -45,11 +49,19 @@ const InstitutionalAccessBox: React.FC<Props> = ({ access }) => {
         <>
           <Stack px={2} pb={1} alignItems="flex-start" alignSelf="flex-start">
             <Typography variant="body2" fontWeight={400} fontFamily="Manrope">
-              Trial access will expire on: <Typography fontFamily="Manrope" variant="body1" component="span" fontWeight={700}>{expiry}</Typography>
+              Trial access will expire on:{' '}
+              <Typography
+                fontFamily="Manrope"
+                variant="body1"
+                component="span"
+                fontWeight={700}
+              >
+                {expiry}
+              </Typography>
             </Typography>
           </Stack>
           <Box p={2} bgcolor={'#FFFFFF'}>
-            <RequestOrPurchaseBox />
+            {/* <RequestOrPurchaseBox /> */}
           </Box>
         </>
       )}

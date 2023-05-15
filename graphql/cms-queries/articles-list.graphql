@@ -1,4 +1,5 @@
 query ArticlesList($input: ArticleInputFetch!){
+  allArticleIds
   fetchArticles(input: $input){
     totalCount
     articles{
@@ -24,6 +25,9 @@ query ArticlesList($input: ArticleInputFetch!){
         article 
       }
       contentlength
+      isPurchaseArticleFeatureOn
+      isRentArticleFeatureOn      
+      purchaseAllowedCountries
     }
   }
 }
@@ -56,4 +60,20 @@ mutation TranslateArticles($input: TranslateArticlesInput!){
 
 mutation AddLanguagesToExistingArticles {
   addLanguagesToExistingArticles
+}
+
+mutation SetPurchaseSetting($input:UpdatePurchaseSettingInput!){
+  updatePurchaseSetting(input: $input) {
+    publication_id,
+    slug
+  }
+}
+
+query SelectedArticles($article_ids: [String!]!){
+  articlesByIds(article_ids: $article_ids){
+    _id   
+    purchaseAllowedCountries
+    isPurchaseArticleFeatureOn
+    isRentArticleFeatureOn      
+  }
 }

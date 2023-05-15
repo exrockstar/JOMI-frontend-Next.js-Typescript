@@ -37,7 +37,7 @@ export type ArticleActivityStatsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticleActivityStatsQuery = { __typename?: 'Query', articleAccessStats: { __typename?: 'InstitutionArticleStatsOutput', totalCount: number, items: Array<{ __typename?: 'InstitutionArticleStats', _id: string, articleViews: number, uniqueViews: number, article?: { __typename?: 'Article', title: string, publication_id?: string | null | undefined, slug: string, status: string } | null | undefined }> } };
+export type ArticleActivityStatsQuery = { __typename?: 'Query', articleAccessStats: { __typename?: 'InstitutionArticleStatsOutput', totalCount: number, items: Array<{ __typename?: 'InstitutionArticleStats', _id: string, articleViews: number, uniqueViews: number, article?: { __typename?: 'Article', title: string, publication_id?: string | null | undefined, slug?: string | null | undefined, status: string } | null | undefined }> } };
 
 export type InstArticleEventLogsQueryVariables = Types.Exact<{
   input: Types.AccessFilterInput;

@@ -43,4 +43,6 @@ fragment ArticleListParts on Article {
   }
   tags
   comment_count
+  isPurchaseArticleFeatureOn
+  isRentArticleFeatureOn
 }

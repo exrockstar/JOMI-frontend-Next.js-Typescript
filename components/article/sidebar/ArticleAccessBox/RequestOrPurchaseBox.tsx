@@ -2,13 +2,30 @@ import { Divider, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
-import { AccessBoxButton, PurchaseNowAccessBoxButton, RequestSubscriptionButton } from './common'
+import {
+  AccessBoxButton,
+  PurchaseNowAccessBoxButton,
+  RequestSubscriptionButton
+} from './common'
 import { analytics } from 'apis/analytics'
+import PurchaseArticleButton from '../AccessBox/common/PurchaseArticleButton'
 
 type Props = {
   message?: ReactNode
+  userId: string
+  purchaseDescription: string
+  articleId: string
+  purchasePrice: number
+  rentPrice: number
 }
-const RequestOrPurchaseBox = ({ message }: Props) => {
+const RequestOrPurchaseBox = ({
+  message,
+  userId,
+  purchaseDescription,
+  articleId,
+  rentPrice,
+  purchasePrice
+}: Props) => {
   const router = useRouter()
   return (
     <Stack>
@@ -16,10 +33,21 @@ const RequestOrPurchaseBox = ({ message }: Props) => {
         message
       ) : (
         <>
-          <Typography variant="body2" mb={1} fontWeight={700} fontFamily="Manrope">
+          <Typography
+            variant="body2"
+            mb={1}
+            fontWeight={700}
+            fontFamily="Manrope"
+          >
             {`To maintain access to JOMI's exclusive content:`}
           </Typography>
-          <Typography variant="body2" fontSize={13} fontWeight={500} mb={2} fontFamily="Manrope">
+          <Typography
+            variant="body2"
+            fontSize={13}
+            fontWeight={500}
+            mb={2}
+            fontFamily="Manrope"
+          >
             {`Request your institution to purchase a JOMI subscription:`}
           </Typography>
         </>
@@ -32,7 +60,10 @@ const RequestOrPurchaseBox = ({ message }: Props) => {
         />
       </Link>
 
-      <Divider sx={{ my: 2.5, background: '#FFFFFF' }} component="div">
+      <Divider
+        sx={{ my: 2.5, background: '#FFFFFF', fontSize: 12 }}
+        component="div"
+      >
         OR
       </Divider>
 

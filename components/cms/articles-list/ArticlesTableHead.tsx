@@ -71,6 +71,18 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'contentlength',
     label: `Content Length`
+  },
+  {
+    id: 'isRentArticleFeatureOn',
+    label: 'Rent Enabled'
+  },
+  {
+    id: 'isPurchaseArticleFeatureOn',
+    label: 'Purchase Enabled'
+  },
+  {
+    id: 'purchaseAllowedCountries',
+    label: 'PPA Scope'
   }
 ]
 
@@ -154,22 +166,20 @@ const ArticlesTableHead = () => {
               key={headCell.id}
               sortDirection={sortBy === headCell.id ? order : false}
             >
-           
-                <TableSortLabel
-                  active={sortBy === headCell.id}
-                  direction={sortBy === headCell.id ? order : 'asc'}
-                  onClick={createSortHandler(headCell.id)}
-                >
-                  {headCell.label}
-                  {sortBy === headCell.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {order === 'desc'
-                        ? 'sorted descending'
-                        : 'sorted ascending'}
-                    </Box>
-                  ) : null}
-                </TableSortLabel>
-              
+              <TableSortLabel
+                active={sortBy === headCell.id}
+                direction={sortBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {sortBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
             </TableCell>
           )
         })}
