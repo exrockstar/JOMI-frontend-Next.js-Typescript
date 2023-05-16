@@ -95,7 +95,6 @@ const ArticlesTableHead = () => {
   const someSelected = ids.some((id) => selectedItems.includes(id))
   const stickyCells = headCells.filter((h) => !!h.sticky)
   const regularCells = headCells.filter((h) => !h.sticky)
-  const contentLengthColHeader = 'Content Length (<2,000)'
   return (
     <TableHead>
       <TableRow>
@@ -174,7 +173,6 @@ const ArticlesTableHead = () => {
             </TableCell>
           )
         })}
-        <TableCell>{contentLengthColHeader}</TableCell>
         <TableCell>Actions</TableCell>
       </TableRow>
     </TableHead>
