@@ -3,11 +3,16 @@ query SiteSettings {
   getSiteSettings {
     isTrialFeatureOn
     trialDuration
+    isRentArticleFeatureOn
+    isPurchaseArticleFeatureOn
+    displayPurchaseAndRentToAdminOnly
+    rentDuration
     updated
     updatedBy {
       display_name
       _id
     }
+
 	}
 }
 
@@ -15,6 +20,10 @@ mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
   updateSiteSettings(input: $input){
     isTrialFeatureOn
     trialDuration
+    isRentArticleFeatureOn
+    isPurchaseArticleFeatureOn
+    displayPurchaseAndRentToAdminOnly
+    rentDuration
     updated
     updatedBy {
       display_name

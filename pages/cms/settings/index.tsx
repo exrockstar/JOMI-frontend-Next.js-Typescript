@@ -39,6 +39,7 @@ import {
   useIsJobRunningLazyQuery,
   useRunJobManuallyMutation
 } from 'graphql/cms-queries/jobs.generated'
+import PayPerArticleSettings from 'components/settings/PayPerArticleSettings'
 
 const Settings = () => {
   const [generatingSitemap, setGeneratingSitemap] = useState(false)
@@ -126,14 +127,9 @@ const Settings = () => {
     return <CircularLoader />
   }
 
-  const handleSubmit = async (input: UpdateSiteSettingInput) => {
+  const handleSubmit = async (input) => {
     const { errors, data: updated } = await updateSiteSettings({
-      variables: {
-        input: {
-          isTrialFeatureOn: input.isTrialFeatureOn,
-          trialDuration: input.trialDuration
-        }
-      }
+      variables: { input }
     })
 
     if (!errors) {
@@ -159,53 +155,51 @@ const Settings = () => {
   if (isServer) return null
   return (
     <CmsLayout>
-      <Formik
+      <Formik<UpdateSiteSettingInput>
         onSubmit={handleSubmit}
         initialValues={{
+          isPurchaseArticleFeatureOn: settings.isPurchaseArticleFeatureOn,
+          isRentArticleFeatureOn: settings.isRentArticleFeatureOn,
           isTrialFeatureOn: settings.isTrialFeatureOn,
-          trialDuration: settings.trialDuration || 2
+          rentDuration: settings.rentDuration,
+          trialDuration: settings.trialDuration,
+          displayPurchaseAndRentToAdminOnly:
+            settings.displayPurchaseAndRentToAdminOnly
         }}
       >
         <Form>
-          <Grid container>
-            <Grid item lg={4}>
-              <Stack p={2} pt={5}>
-                <Box>
-                  <Typography variant="h3">Site Settings</Typography>
-                  {!!settings.updatedBy && (
-                    <Typography variant="body2" color="text.secondary">
-                      Updated at{' '}
-                      {dayjs(settings.updated).format('MM/DD/YYYY hh:mm A')}
-                      {' by '}
-                      <Link href={`/cms/user/${settings.updatedBy?._id}`}>
-                        <a>{settings.updatedBy.display_name ?? 'N/A'}</a>
-                      </Link>
-                    </Typography>
-                  )}
+          <Box p={2}>
+            <Typography variant="h3">Site Settings</Typography>
+            {!!settings.updatedBy && (
+              <Typography variant="body2" color="text.secondary">
+                Updated at{' '}
+                {dayjs(settings.updated).format('MM/DD/YYYY hh:mm A')}
+                {' by '}
+                <Link href={`/cms/user/${settings.updatedBy?._id}`}>
+                  <a>{settings.updatedBy.display_name ?? 'N/A'}</a>
+                </Link>
+              </Typography>
+            )}
 
-                  <LoadingButton
-                    startIcon={<Refresh />}
-                    variant="outlined"
-                    loading={generatingSitemap}
-                    onClick={generateSitemap}
-                    size="small"
-                    sx={{ my: 2 }}
-                  >
-                    Generate article sitemap
-                  </LoadingButton>
-                  <LoadingButton
-                    startIcon={<Refresh />}
-                    variant="outlined"
-                    loading={addingHash}
-                    onClick={() => addLanguagesToExisting()}
-                    size="small"
-                    sx={{ my: 2, ml: 2 }}
-                  >
-                    Add Languages to Existing Articles
-                  </LoadingButton>
-                  <TrialsSettings />
-                </Box>
+            <LoadingButton
+              startIcon={<Refresh />}
+              variant="outlined"
+              loading={generatingSitemap}
+              onClick={generateSitemap}
+              size="small"
+              sx={{ my: 2 }}
+            >
+              Generate article sitemap
+            </LoadingButton>
+          </Box>
+          <Grid container gap={2} sx={{ p: 2 }}>
+            <Grid item lg={4}>
+              <Stack>
+                <TrialsSettings />
               </Stack>
+            </Grid>
+            <Grid item lg={4}>
+              <PayPerArticleSettings />
             </Grid>
           </Grid>
           <SaveButton />

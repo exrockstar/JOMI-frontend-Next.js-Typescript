@@ -29,9 +29,7 @@ const SubscriptionExpiredBox: React.FC<Props> = ({ access }) => {
           <b>{expiryDate}</b>
         </Typography>
       </Stack>
-      <Box p={2}>
-        <RequestOrPurchaseBox />
-      </Box>
+      <Box p={2}>{/* <RequestOrPurchaseBox /> */}</Box>
     </ArticleAccessBoxContainer>
   )
 }

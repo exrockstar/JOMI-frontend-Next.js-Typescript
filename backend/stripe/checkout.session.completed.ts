@@ -10,6 +10,7 @@ import { OrderInput, OrderType, PromoCode, PromoCodeType } from 'graphql/types'
 import { logger } from 'logger/logger'
 import Stripe from 'stripe'
 import { PriceMetadata } from './common/PriceMetadata'
+import { handlePurchaseArticle } from './handlePurchaseArticle'
 
 const API_KEY = process.env.STRIPE_SECRET_KEY
 
@@ -31,6 +32,9 @@ export async function handleCheckoutSessionCompleted(
 
   try {
     const priceId = session.metadata.priceId
+    if (!priceId) {
+      return handlePurchaseArticle(session)
+    }
     const price = await stripe.prices.retrieve(priceId)
     const metadata = price.metadata as unknown as PriceMetadata
 

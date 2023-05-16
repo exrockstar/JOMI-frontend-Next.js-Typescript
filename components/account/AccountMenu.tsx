@@ -55,6 +55,19 @@ export default function AccountMenu() {
       </Box>
       <ListDivider />
       <Box>
+        <Link href="/account/purchase-history" passHref legacyBehavior>
+          <ListButton
+            variant="text"
+            fullWidth
+            data-event="Account Menu Sidebar - Purchase History"
+            onClick={analytics.trackClick}
+          >
+            Purchase History
+          </ListButton>
+        </Link>
+      </Box>
+      <ListDivider />
+      <Box>
         <Link href="/account/subscription" passHref legacyBehavior>
           <ListButton
             variant="text"

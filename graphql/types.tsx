@@ -81,6 +81,8 @@ export type AccessType = {
 /** Types of access granted to the user/visitor when viewing an article */
 export enum AccessTypeEnum {
   AdminAccess = 'AdminAccess',
+  ArticlePurchase = 'ArticlePurchase',
+  ArticleRent = 'ArticleRent',
   AwaitingEmailConfirmation = 'AwaitingEmailConfirmation',
   Evaluation = 'Evaluation',
   FreeAccess = 'FreeAccess',
@@ -193,14 +195,20 @@ export type Article = {
   image?: Maybe<Image>;
   isFree: Scalars['Boolean'];
   isPasswordProtected: Scalars['Boolean'];
+  isPurchaseArticleFeatureOn?: Maybe<Scalars['Boolean']>;
+  isRentArticleFeatureOn?: Maybe<Scalars['Boolean']>;
   languages?: Maybe<Array<Scalars['String']>>;
   preprint_date?: Maybe<Scalars['DateTime']>;
   previousWistiaIDS?: Maybe<Array<Maybe<Scalars['String']>>>;
   production_id?: Maybe<Scalars['String']>;
   publication_id?: Maybe<Scalars['String']>;
   published?: Maybe<Scalars['DateTime']>;
+  purchaseAllowedCountries?: Maybe<Array<CountryEnum>>;
+  rentDuration: Scalars['Int'];
   restrictions?: Maybe<Restriction>;
-  slug: Scalars['String'];
+  showPurchaseArticle: Scalars['Boolean'];
+  showRentArticle: Scalars['Boolean'];
+  slug?: Maybe<Scalars['String']>;
   stats?: Maybe<ArticleStats>;
   status: Scalars['String'];
   tags: Array<Scalars['String']>;
@@ -246,6 +254,17 @@ export type ArticleOutput = {
   __typename?: 'ArticleOutput';
   articles: Array<Article>;
   totalCount: Scalars['Int'];
+};
+
+export type ArticlePurchaseInput = {
+  amount: Scalars['Float'];
+  articleId: Scalars['String'];
+  description: Scalars['String'];
+  end?: InputMaybe<Scalars['DateTime']>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  stripeCoupon?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<OrderType>;
+  user_id: Scalars['String'];
 };
 
 export enum ArticleRestrictionEnum {
@@ -742,9 +761,9 @@ export type GeoLocation = {
 };
 
 export type GeographicPriceInput = {
-  amountMonthly: Scalars['Int'];
-  amountYearly: Scalars['Int'];
+  amount?: InputMaybe<Scalars['Int']>;
   countryCode: CountryEnum;
+  interval?: InputMaybe<OrderInterval>;
   percentageFromDefaultPrice?: InputMaybe<Scalars['Int']>;
   product_id: Scalars['String'];
 };
@@ -1034,6 +1053,7 @@ export type Mutation = {
   addCRMTagsToUsers: Scalars['Boolean'];
   addLanguagesToExistingArticles: Scalars['String'];
   addOrUpdateOrder: Scalars['Boolean'];
+  addPurchaseArticleOrder: Scalars['Boolean'];
   addTranslationsHash: Scalars['String'];
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
@@ -1042,7 +1062,7 @@ export type Mutation = {
   confirmEmail?: Maybe<Scalars['String']>;
   confirmInstEmail?: Maybe<Scalars['String']>;
   createAnnouncement: Announcement;
-  createGeographicPrice?: Maybe<Array<StripePrice>>;
+  createGeographicPrice?: Maybe<StripePrice>;
   createInstitution: Institution;
   createIpRange?: Maybe<IpRange>;
   createLocation?: Maybe<Location>;
@@ -1116,6 +1136,7 @@ export type Mutation = {
   updatePreference: Scalars['Boolean'];
   updatePrice?: Maybe<StripePrice>;
   updateProfile: Scalars['Boolean'];
+  updatePurchaseSetting: Array<Article>;
   updateRedirect?: Maybe<Redirect>;
   updateSiteSettings: SiteSetting;
   updateStripePromoCode: StripePromoCode;
@@ -1138,6 +1159,11 @@ export type MutationAddCrmTagsToUsersArgs = {
 
 export type MutationAddOrUpdateOrderArgs = {
   input: OrderInput;
+};
+
+
+export type MutationAddPurchaseArticleOrderArgs = {
+  input: ArticlePurchaseInput;
 };
 
 
@@ -1520,6 +1546,11 @@ export type MutationUpdateProfileArgs = {
 };
 
 
+export type MutationUpdatePurchaseSettingArgs = {
+  input: UpdatePurchaseSettingInput;
+};
+
+
 export type MutationUpdateRedirectArgs = {
   input: UpdateRedirectInput;
 };
@@ -1591,6 +1622,8 @@ export type Order = {
   __typename?: 'Order';
   _id: Scalars['ID'];
   amount?: Maybe<Scalars['Float']>;
+  article?: Maybe<Article>;
+  articleId?: Maybe<Scalars['String']>;
   created: Scalars['DateTime'];
   createdBy?: Maybe<Scalars['String']>;
   currency?: Maybe<OrderCurrency>;
@@ -1859,6 +1892,8 @@ export enum OrderType {
   Individual = 'individual',
   Institution = 'institution',
   Institutional = 'institutional',
+  PurchaseArticle = 'purchase_article',
+  RentArticle = 'rent_article',
   Standard = 'standard',
   StandardStripe = 'standard_stripe',
   Trial = 'trial'
@@ -1976,6 +2011,7 @@ export type Query = {
   __typename?: 'Query';
   accessEvents: AccessEventsOutput;
   accessesByUserId?: Maybe<Array<Access>>;
+  allArticleIds: Array<Scalars['String']>;
   allArticleVotes: Array<NewArticleVote>;
   announcement: Announcement;
   announcementForUser?: Maybe<Array<Announcement>>;
@@ -1984,6 +2020,7 @@ export type Query = {
   articleById?: Maybe<Article>;
   articleBySlug?: Maybe<Article>;
   articles: ArticleOutput;
+  articlesByIds: Array<Article>;
   articlesForRss: Array<Article>;
   articlesForSlug: Array<ArticleForSlug>;
   authorBySlug?: Maybe<Author>;
@@ -2001,6 +2038,10 @@ export type Query = {
   geolocation?: Maybe<Geolocation>;
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
+  getPriceByProductId: StripePrice;
+  getPurchaseAndRentPrices: Array<StripePrice>;
+  getPurchasedArticles: Array<Order>;
+  getPurchasedArticlesByUserId: Array<Order>;
   getScienceOpenArticleByPubId?: Maybe<ScienceOpenXml>;
   getScienceOpenArticlesXml: Array<ScienceOpenXml>;
   getSiteSettings: SiteSetting;
@@ -2084,6 +2125,11 @@ export type QueryArticlesArgs = {
 };
 
 
+export type QueryArticlesByIdsArgs = {
+  article_ids: Array<Scalars['String']>;
+};
+
+
 export type QueryAuthorBySlugArgs = {
   slug: Scalars['String'];
 };
@@ -2131,6 +2177,16 @@ export type QueryGenCounterReportArgs = {
 
 export type QueryGetCombinedPromoCodeArgs = {
   code: Scalars['String'];
+};
+
+
+export type QueryGetPriceByProductIdArgs = {
+  product_id: Scalars['String'];
+};
+
+
+export type QueryGetPurchasedArticlesByUserIdArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -2383,7 +2439,11 @@ export type SignUpInput = {
 export type SiteSetting = {
   __typename?: 'SiteSetting';
   _id: Scalars['String'];
+  displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
+  isPurchaseArticleFeatureOn: Scalars['Boolean'];
+  isRentArticleFeatureOn: Scalars['Boolean'];
   isTrialFeatureOn: Scalars['Boolean'];
+  rentDuration: Scalars['Float'];
   scienceOpenXmlGeneratedAt: Scalars['DateTime'];
   trialDuration: Scalars['Float'];
   updated: Scalars['DateTime'];
@@ -2464,7 +2524,8 @@ export type StripePrice = {
   countryCode?: Maybe<CountryEnum>;
   countryCodes?: Maybe<Array<CountryEnum>>;
   currency: Scalars['String'];
-  interval: OrderInterval;
+  enabled?: Maybe<Scalars['Boolean']>;
+  interval?: Maybe<OrderInterval>;
   nickname: Scalars['String'];
   priceId: Scalars['ID'];
   product: Scalars['String'];
@@ -2809,6 +2870,13 @@ export type UpdateProfileInput = {
   user_type?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdatePurchaseSettingInput = {
+  article_ids: Array<Scalars['String']>;
+  isPurchaseArticleFeatureOn: Scalars['Boolean'];
+  isRentArticleFeatureOn: Scalars['Boolean'];
+  purchaseAllowedCountries?: InputMaybe<Array<CountryEnum>>;
+};
+
 export type UpdateRedirectInput = {
   from?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -2819,8 +2887,13 @@ export type UpdateRedirectInput = {
 };
 
 export type UpdateSiteSettingInput = {
-  isTrialFeatureOn: Scalars['Boolean'];
-  trialDuration: Scalars['Float'];
+  displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
+  isPurchaseArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
+  isRentArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
+  isTrialFeatureOn?: InputMaybe<Scalars['Boolean']>;
+  rentDuration?: InputMaybe<Scalars['Float']>;
+  trialDuration?: InputMaybe<Scalars['Float']>;
+  updated?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type UpdateStripeCodeInput = {

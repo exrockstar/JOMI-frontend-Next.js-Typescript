@@ -7,7 +7,7 @@ export const ArticleAccessBoxContainer = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   boxShadow: '-1px 2px 3px 0 rgb(10 0 0 / 22%)',
-  backgroundColor: '#FAC8C9',
+  backgroundColor: 'white',
   overflow: 'hidden',
   [theme.breakpoints.down('sm')]: {
     width: '100vw',
@@ -26,16 +26,16 @@ export const BoxHeading = styled(Box)(({ theme }) => ({
   padding: 16,
   textAlign: 'center',
   backgroundColor: '#E11D48',
-  width: '100vw',
   borderTopRightRadius: 0,
   borderBottomLeftRadius: 0,
   textTransform: 'uppercase',
   letterSpacing: '.95px',
+  width: '100vw',
   [theme.breakpoints.up('md')]: {
     width: '100%'
   },
   fontWeight: 'bold',
-  fontFamily: "Manrope"
+  fontFamily: 'Manrope'
 }))
 
 export const FreeArticleBox = styled(Box)({
@@ -56,12 +56,12 @@ export const AccessBoxButton = styled(Button)(({ theme }) => ({
   padding: '7px 21px',
   borderRadius: (theme.shape.borderRadius as number) * 1,
   textTransform: 'none',
-  fontWeight: 'bold',
+  fontWeight: 'bold'
 }))
 
-//Hard input for text inside button due to constraints with creating linear-gradient colors 
+//Hard input for text inside button due to constraints with creating linear-gradient colors
 //for just the text and border.
-export const RequestSubscriptionButton = styled(Button)(({theme}) => ({
+export const RequestSubscriptionButton = styled(Button)(({ theme }) => ({
   maxWidth: '100%',
   padding: '7px 21px',
   textTransform: 'none',
@@ -72,7 +72,7 @@ export const RequestSubscriptionButton = styled(Button)(({theme}) => ({
   borderRadius: (theme.shape.borderRadius as number) * 1,
   zIndex: '1',
 
-  "::before": {
+  '::before': {
     position: 'absolute',
     content: '""',
     top: '1px',
@@ -81,29 +81,27 @@ export const RequestSubscriptionButton = styled(Button)(({theme}) => ({
     left: '1px',
     backgroundColor: 'white',
     borderRadius: (theme.shape.borderRadius as number) * 1,
-    zIndex: '-1',
+    zIndex: '-1'
   },
 
-  "::after": {
+  '::after': {
     content: '"Request Subscription"',
     fontWeight: 'bold',
     background: 'linear-gradient(to bottom, #AAAAFF, #0000FF)',
     WebkitBackgroundClip: 'text',
-    color: 'transparent',
+    color: 'transparent'
   },
-    
-  
+
   transition: 'all 0.2s ease-in-out',
 
   '&:hover': {
-    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
-  },
-  
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)'
+  }
 }))
 
-//Hard input for text inside button due to constraints with creating linear-gradient colors 
+//Hard input for text inside button due to constraints with creating linear-gradient colors
 //for just the text and border.
-export const CreateAnAccountButton = styled(Button)(({theme}) => ({
+export const CreateAnAccountButton = styled(Button)(({ theme }) => ({
   maxWidth: '100%',
   padding: '7px 21px',
   textTransform: 'none',
@@ -114,7 +112,7 @@ export const CreateAnAccountButton = styled(Button)(({theme}) => ({
   borderRadius: (theme.shape.borderRadius as number) * 1,
   zIndex: '1',
 
-  "::before": {
+  '::before': {
     position: 'absolute',
     content: '""',
     top: '1px',
@@ -123,27 +121,25 @@ export const CreateAnAccountButton = styled(Button)(({theme}) => ({
     left: '1px',
     backgroundColor: 'white',
     borderRadius: (theme.shape.borderRadius as number) * 1,
-    zIndex: '-1',
+    zIndex: '-1'
   },
 
-  "::after": {
+  '::after': {
     content: '"Create an Account"',
     fontWeight: 'bold',
     background: 'linear-gradient(to bottom, #AAAAFF, #0000FF)',
     WebkitBackgroundClip: 'text',
-    color: 'transparent',
+    color: 'transparent'
   },
-    
-  
+
   transition: 'all 0.2s ease-in-out',
 
   '&:hover': {
-    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
-  },
-  
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)'
+  }
 }))
 
-export const PurchaseNowAccessBoxButton = styled(Button)(({theme}) => ({
+export const PurchaseNowAccessBoxButton = styled(Button)(({ theme }) => ({
   maxWidth: '100%',
   padding: '7px 21px',
   textTransform: 'none',
@@ -154,7 +150,7 @@ export const PurchaseNowAccessBoxButton = styled(Button)(({theme}) => ({
   borderRadius: (theme.shape.borderRadius as number) * 1,
   zIndex: '1',
 
-  "::before": {
+  '::before': {
     position: 'absolute',
     content: '""',
     top: '1px',
@@ -163,22 +159,20 @@ export const PurchaseNowAccessBoxButton = styled(Button)(({theme}) => ({
     left: '1px',
     backgroundColor: 'white',
     borderRadius: (theme.shape.borderRadius as number) * 1,
-    zIndex: '-1',
+    zIndex: '-1'
   },
 
-  "::after": {
+  '::after': {
     content: '"Purchase Now"',
     fontWeight: 'bold',
     background: 'linear-gradient(to bottom, #AAAAFF, #0000FF)',
     WebkitBackgroundClip: 'text',
-    color: 'transparent',
+    color: 'transparent'
   },
-    
-  
+
   transition: 'all 0.2s ease-in-out',
 
   '&:hover': {
-    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)',
-  },
-  
+    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.2)'
+  }
 }))

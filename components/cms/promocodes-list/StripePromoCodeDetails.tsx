@@ -259,55 +259,89 @@ const StripePromoCodeDetails = ({ promocode }: Props) => {
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell>User Types </TableCell>
+                      <TableCell>User Types / Product </TableCell>
                       <TableCell>Monthly</TableCell>
                       <TableCell>Yearly</TableCell>
+                      <TableCell>One-Time Payment</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {promocode.applies_to?.length ? (
                       <>
-                        {userTypes
-                          .map(({ type, _id }) => {
-                            const applies_to = promocode.applies_to
-                            const prod_month = `prod_${snakeCase(type)}_month`
-                            const prod_year = `prod_${snakeCase(type)}_year`
-                            const includesMonthly =
-                              applies_to.includes(prod_month)
-                            const includesYearly =
-                              applies_to.includes(prod_year)
-                            if (!includesMonthly && !includesYearly) return null
-                            return (
-                              <StyledTableRow key={_id}>
-                                <TableCell>{type}</TableCell>
-                                <TableCell>
-                                  {includesMonthly ? (
+                        <>
+                          {userTypes
+                            .map(({ type, _id }) => {
+                              const applies_to = promocode.applies_to
+                              const prod_month = `prod_${snakeCase(type)}_month`
+                              const prod_year = `prod_${snakeCase(type)}_year`
+                              const includesMonthly =
+                                applies_to.includes(prod_month)
+                              const includesYearly =
+                                applies_to.includes(prod_year)
+
+                              if (!includesMonthly && !includesYearly)
+                                return null
+
+                              return (
+                                <StyledTableRow key={_id}>
+                                  <TableCell>{type}</TableCell>
+                                  <TableCell>
+                                    {includesMonthly ? (
+                                      <Typography
+                                        color="secondary.main"
+                                        variant="body2"
+                                      >
+                                        Yes
+                                      </Typography>
+                                    ) : (
+                                      'No'
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
+                                    {includesYearly ? (
+                                      <Typography
+                                        color="secondary.main"
+                                        variant="body2"
+                                      >
+                                        Yes
+                                      </Typography>
+                                    ) : (
+                                      'No'
+                                    )}
+                                  </TableCell>
+                                </StyledTableRow>
+                              )
+                            })
+                            .filter((x) => x)}
+                        </>
+                        <>
+                          {['Purchase Article', 'Rent Article'].map(
+                            (product) => {
+                              const applies_to = promocode.applies_to
+                              const prod = `product_${snakeCase(product)}`
+
+                              const included = applies_to.includes(prod)
+
+                              if (!included) return null
+
+                              return (
+                                <StyledTableRow key={prod}>
+                                  <TableCell>{product}</TableCell>
+                                  <TableCell>No</TableCell>
+                                  <TableCell>No</TableCell>
+                                  <TableCell>
                                     <Typography
                                       color="secondary.main"
                                       variant="body2"
                                     >
                                       Yes
                                     </Typography>
-                                  ) : (
-                                    'No'
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  {includesYearly ? (
-                                    <Typography
-                                      color="secondary.main"
-                                      variant="body2"
-                                    >
-                                      Yes
-                                    </Typography>
-                                  ) : (
-                                    'No'
-                                  )}
-                                </TableCell>
-                              </StyledTableRow>
-                            )
-                          })
-                          .filter((x) => x)}
+                                  </TableCell>
+                                </StyledTableRow>
+                              )
+                            }
+                          )}
+                        </>
                       </>
                     ) : (
                       <TableRow>

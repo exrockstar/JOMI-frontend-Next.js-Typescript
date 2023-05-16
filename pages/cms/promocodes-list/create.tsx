@@ -160,14 +160,15 @@ const CreateStripePromoCodePage = () => {
               <Box>
                 <Box>
                   <Typography variant="body2">
-                    Apply to specific user types
+                    Apply to specific user types or products
                   </Typography>
                   <ProductSelect />
                 </Box>
                 <Typography variant="caption">
-                  1. Choose which specific user types this code will apply to.
+                  1. Choose which specific user types or products this code will
+                  apply to.
                   <br />
-                  2. You can select multiple types. <br />
+                  2. You can select multiple types or products. <br />
                   3. If none is selected, it will apply to all user types or
                   yearly and monthly products.
                 </Typography>

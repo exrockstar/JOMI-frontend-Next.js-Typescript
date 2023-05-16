@@ -6,14 +6,14 @@ const defaultOptions =  {}
 export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn: boolean, trialDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn: boolean, trialDuration: number, isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type UpdateSiteSettingsMutationVariables = Types.Exact<{
   input: Types.UpdateSiteSettingInput;
 }>;
 
 
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn: boolean, trialDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn: boolean, trialDuration: number, isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type AddHashToTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -26,6 +26,10 @@ export const SiteSettingsDocument = gql`
   getSiteSettings {
     isTrialFeatureOn
     trialDuration
+    isRentArticleFeatureOn
+    isPurchaseArticleFeatureOn
+    displayPurchaseAndRentToAdminOnly
+    rentDuration
     updated
     updatedBy {
       display_name
@@ -66,6 +70,10 @@ export const UpdateSiteSettingsDocument = gql`
   updateSiteSettings(input: $input) {
     isTrialFeatureOn
     trialDuration
+    isRentArticleFeatureOn
+    isPurchaseArticleFeatureOn
+    displayPurchaseAndRentToAdminOnly
+    rentDuration
     updated
     updatedBy {
       display_name

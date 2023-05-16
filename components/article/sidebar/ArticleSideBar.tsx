@@ -7,6 +7,7 @@ import ArticleAccessBox from './ArticleAccessBox'
 import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
 import LanguageSwitcher from '../LanguageSwitcher'
 import { memo, useRef } from 'react'
+import AccessBox from './AccessBox'
 
 type Article = ArticlesBySlugQuery['articleBySlug']
 type ArticleSideBarProps = {
@@ -19,33 +20,54 @@ function ArticleSideBar({ article }: ArticleSideBarProps) {
   return (
     <Box display={'flex'} flexDirection={'column'}>
       <Box ref={myRef}>
-        <ArticleAccessBox article={article} />
+        {/* <ArticleAccessBox article={article} /> */}
+        <AccessBox article={article} />
+        <Box>
+          <Hidden smDown>
+            <LanguageSwitcher enabledLanguages={article.enabled_languages} />
+          </Hidden>
+          <Box
+            display="flex"
+            sx={{
+              width: '100%',
+              height: '100%',
+              flexDirection: 'column'
+            }}
+            component="aside"
+          >
+            <ShareSection
+              publicationId={article?.publication_id}
+              slug={article?.slug}
+            />
+            <AuthorSection authors={article?.authors} />
 
-        <Hidden smDown>
-          <LanguageSwitcher enabledLanguages={article.enabled_languages} />
-        </Hidden>
-        <Box
-          display="flex"
-          sx={{
-            width: '100%',
-            height: '100%',
-            flexDirection: 'column'
-          }}
-          component="aside"
-        >
-          <ShareSection
-            publicationId={article?.publication_id}
-            slug={article?.slug}
-          />
-          <AuthorSection authors={article?.authors} />
+            <Hidden smDown>
+              <LanguageSwitcher enabledLanguages={article.enabled_languages} />
+            </Hidden>
+            <Box
+              display="flex"
+              sx={{
+                width: '100%',
+                height: '100%',
+                flexDirection: 'column'
+              }}
+              component="aside"
+            >
+              <ShareSection
+                publicationId={article?.publication_id}
+                slug={article?.slug}
+              />
+              <AuthorSection authors={article?.authors} />
 
-          <HospitalSection hospitalName={article?.hospital?.name} />
+              <HospitalSection hospitalName={article?.hospital?.name} />
 
-          <InfoSection
-            published={article?.published?.split('T')[0]}
-            publicationId={article?.publication_id}
-            productionId={article?.production_id}
-          />
+              <InfoSection
+                published={article?.published?.split('T')[0]}
+                publicationId={article?.publication_id}
+                productionId={article?.production_id}
+              />
+            </Box>
+          </Box>
         </Box>
       </Box>
     </Box>

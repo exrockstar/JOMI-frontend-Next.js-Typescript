@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type FrontPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FrontPageQuery = { __typename?: 'Query', latestArticles: Array<{ __typename?: 'Article', _id: string, title: string, slug: string, publication_id?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined, categories: Array<{ __typename?: 'Category', color: string, slug: string, displayName: string, _id: string }>, authors: Array<{ __typename?: 'Author', display_name?: string | null | undefined, slug?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined }> };
+export type FrontPageQuery = { __typename?: 'Query', latestArticles: Array<{ __typename?: 'Article', _id: string, title: string, slug?: string | null | undefined, publication_id?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined, categories: Array<{ __typename?: 'Category', color: string, slug: string, displayName: string, _id: string }>, authors: Array<{ __typename?: 'Author', display_name?: string | null | undefined, slug?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined }> };
 
 
 export const FrontPageDocument = gql`

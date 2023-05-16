@@ -34,6 +34,7 @@ type State = {
   setSelectedItems(id: string[]): void
   selectedItems: string[]
   refetch(): void
+  allArticleIds: string[]
 }
 
 const ArticlesListContext = createContext<State>({
@@ -53,6 +54,7 @@ const ArticlesListContext = createContext<State>({
   setSearchTerm(searchTerm: string) {},
   setFilters(filters: ColumnFilter[]) {},
   setSelectedItems(id: string[]) {},
+  allArticleIds: [],
   selectedItems: [],
   refetch() {}
 })
@@ -89,7 +91,6 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
   const [selectedItems, setSelectedItems] = useState([])
   const [filters, setFilters] = useState<ColumnFilter[]>([])
   const { data: session } = useSession()
-
   const {
     data,
     loading,
@@ -109,6 +110,7 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
     },
     nextFetchPolicy: 'network-only'
   })
+  const allArticleIds = data?.allArticleIds
 
   const refetch = () => {
     _reftech({
@@ -208,7 +210,8 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
         setFilters,
         selectedItems,
         setSelectedItems,
-        refetch
+        refetch,
+        allArticleIds
       }}
     >
       {children}
