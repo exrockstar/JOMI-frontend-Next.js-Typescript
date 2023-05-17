@@ -27,6 +27,7 @@ import ArticleActivityHeader from './ArticleActivityHeader'
 import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 import ArticleActivityFilter from './ArticleActivityFilter'
 import { Info, Visibility } from '@mui/icons-material'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
 
 type Props = {
   institution: InstitutionByIdQuery['institution']
@@ -34,6 +35,7 @@ type Props = {
 
 const ArticleActivityPanel = ({ institution }: Props) => {
   const router = useRouter()
+  const { filters } = useQueryFilters()
   const sort_by = (router.query.sort_by as string) ?? 'articleViews'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const search = router.query.search as string
@@ -41,9 +43,7 @@ const ArticleActivityPanel = ({ institution }: Props) => {
   const perPage = 20
   const skip = (page - 1) * perPage
   const sort_order = sort_order_str === 'desc' ? -1 : 1
-  const filters = useReadLocalStorage<ColumnFilter[]>(
-    ArticleActivityFilter.STORAGE_KEY
-  )
+
   const input: AccessFilterInput = {
     sort_by,
     sort_order,
@@ -55,7 +55,7 @@ const ArticleActivityPanel = ({ institution }: Props) => {
         operation: QueryOperation.Equal,
         value: institution._id
       },
-      ...(filters || [])
+      ...filters
     ]
   }
   if (search) {

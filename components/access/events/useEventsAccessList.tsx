@@ -1,15 +1,9 @@
+import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 import {
-  useInstitutionsAccessListQuery,
-  InstitutionsAccessListQuery,
   AccessEventsQuery,
   useAccessEventsQuery
 } from 'graphql/queries/access.generated'
-import {
-  AccessFilterInput,
-  ActivityType,
-  ColumnFilter,
-  QueryOperation
-} from 'graphql/types'
+import { AccessFilterInput, ColumnFilter } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import {
   createContext,
@@ -20,67 +14,32 @@ import {
 } from 'react'
 
 type State = {
-  page: number
-  setPage(page: number): void
-  sortBy: string
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
-  search: string
-  setSearch(value: string): void
   events: AccessEventsQuery['output']['events']
   count: AccessEventsQuery['output']['count']
-  setPageSize(size: number): void
-  pageSize: number
   loading: boolean
-  filters?: ColumnFilter[]
   filterDrawerOpen: boolean
-  setFilters(filters: ColumnFilter[]): void
   setFilterDrawerOpen(open: boolean): void
   error: string
   refetch(): void
-}
+} & UseListInputState
 
-const EventsAccessContext = createContext<State>({
-  page: 0,
-  setPage(page: number) {},
-  sortBy: 'created',
-  setSortBy(column: string) {},
-  sortOrder: -1,
-  setSortOrder(asc: number) {},
-  search: '',
-  setSearch(value: string) {},
-  events: [],
-  count: 0,
-  loading: false,
-  setPageSize(size: number) {},
-  pageSize: 10,
-  error: "Couldn't load events",
-  setFilters(filters: ColumnFilter[]) {},
-  filterDrawerOpen: false,
-  setFilterDrawerOpen(value: boolean) {},
-  refetch() {}
-})
+const EventsAccessContext = createContext<State>(null)
 
-const LOCAL_STORAGE_KEY = 'jomi.access-events-list'
-type TableState = {
-  page: number
-  sortBy: string
-  sortOrder: 1 | -1
-  filters: ColumnFilter[]
-}
 export const EventsAccessListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const [page, setPage] = useState(1)
-  const [sortOrder, setSortOrder] = useState(-1)
-  const [sortBy, setSortBy] = useState('created')
-  const [search, setSearch] = useState('')
-  const [pageSize, setPageSize] = useState(10)
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false)
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
-  const [filters, setFilters] = useState<ColumnFilter[]>([])
+
+  const state = useListInput({
+    page: 1,
+    sort_order: -1,
+    sort_by: 'created',
+    page_size: 10
+  })
+
+  const { page, sortOrder, sortBy, pageSize, filters, searchTerm } = state
   const input: AccessFilterInput = {
     skip: (page - 1) * pageSize,
     limit: pageSize,
@@ -89,28 +48,16 @@ export const EventsAccessListProvider: React.FC<PropsWithChildren> = ({
     filters: filters
   }
 
-  if (search) {
-    input.search = search
+  if (searchTerm) {
+    input.search = searchTerm
   }
-  console.log('input', input)
+
   const { data, loading, error, refetch } = useAccessEventsQuery({
     skip: !session,
     variables: {
       input: input
     }
   })
-
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as TableState
-
-    if (parsed) {
-      setFilters(parsed.filters ?? [])
-      setSortBy(parsed.sortBy ?? 'created')
-      setSortOrder(parsed.sortOrder ?? -1)
-      setPage(parsed.page ?? 1)
-    }
-  }, [])
 
   //perserve previous count
   useEffect(() => {
@@ -122,24 +69,14 @@ export const EventsAccessListProvider: React.FC<PropsWithChildren> = ({
   return (
     <EventsAccessContext.Provider
       value={{
-        page,
-        setPage,
-        sortBy,
-        sortOrder,
-        setSortOrder,
-        setSortBy,
-        search,
-        setSearch,
-        events: data?.output.events,
-        count: count,
-        loading,
-        setPageSize,
-        pageSize,
+        ...state,
+        count,
         error: error?.message,
-        filters,
-        setFilters,
-        refetch,
+        events: data?.output.events,
         filterDrawerOpen,
+        loading,
+
+        refetch,
         setFilterDrawerOpen
       }}
     >

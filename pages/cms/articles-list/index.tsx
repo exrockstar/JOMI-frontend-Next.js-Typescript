@@ -147,12 +147,12 @@ const ArticlesListPage = () => {
     setPage,
     setFilters,
     filters,
-    selectedItems
+    selectedItems,
+    searchTerm
   } = useArticlesList()
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
-    setPage(1)
     setDrawerOpen(!drawerOpen)
   }
 
@@ -225,8 +225,8 @@ const ArticlesListPage = () => {
         <SearchInput
           onSubmit={(str) => {
             setSearchTerm(str)
-            setPage(1)
           }}
+          value={searchTerm}
           placeholder="Search by Title, Author Name, or ID"
         />
         <Tooltip

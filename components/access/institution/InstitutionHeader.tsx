@@ -10,6 +10,7 @@ import {
 import React, { useMemo } from 'react'
 import SearchInput from '../SearchInput'
 import { useInstitutionAccessList } from './useInstitutionAccessList'
+import { QueryOperation } from 'graphql/types'
 
 const InstitutionHeader = () => {
   const {
@@ -17,10 +18,8 @@ const InstitutionHeader = () => {
     setPage,
     count,
     pageSize,
-    sortBy,
-    setSortBy,
-    sortOrder,
-    setSortOrder,
+    searchTerm,
+    setFilters,
     setSearchTerm
   } = useInstitutionAccessList()
   const pageCount = Math.ceil(count / pageSize)
@@ -28,7 +27,6 @@ const InstitutionHeader = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value)
-    setPage(1)
   }
 
   const paginationSummary = useMemo(() => {
@@ -51,6 +49,7 @@ const InstitutionHeader = () => {
           <SearchInput
             onSubmit={handleSearch}
             placeholder="Search institution name..."
+            value={searchTerm}
           />
         </Grid>
         <Grid item sm={12}>

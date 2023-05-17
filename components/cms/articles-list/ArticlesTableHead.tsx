@@ -90,17 +90,14 @@ const ArticlesTableHead = () => {
   const {
     sortBy,
     sortOrder,
-    setSortBy,
-    setSortOrder,
+    setSort,
     selectedItems,
     setSelectedItems,
     articles
   } = useArticlesList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      setSortBy(property)
-      setSortOrder(-sortOrder)
-    }
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => setSort(property, -sortOrder)
+  }
 
   const ids = articles?.map((a) => a._id) ?? []
   const allSelected = ids.every((id) => selectedItems.includes(id))

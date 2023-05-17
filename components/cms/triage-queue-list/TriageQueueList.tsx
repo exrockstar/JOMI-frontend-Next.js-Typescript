@@ -43,7 +43,6 @@ const TriageQueueList = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPageSize(+event.target.value)
-    setPage(1)
   }
 
   const rowBackground = (status: TriageQueueStatus) => {

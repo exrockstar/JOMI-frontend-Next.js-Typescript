@@ -10,7 +10,7 @@ import { useMediaLibraryList } from './useMediaLibraryList'
 import { visuallyHidden } from '@mui/utils'
 
 interface HeadCell {
-  id: string,
+  id: string
   label: string
 }
 
@@ -38,14 +38,14 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const MediaLibraryTableHead = () => {
-  const { sortBy, sortOrder, setSortBy, setSortOrder } = useMediaLibraryList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
+  const { sortBy, sortOrder, setSort } = useMediaLibraryList()
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => {
       if (property != 'image') {
-        setSortBy(property)
-        setSortOrder(-sortOrder)
+        setSort(property, -sortOrder)
       }
     }
+  }
   return (
     <TableHead>
       <TableRow>

@@ -1,4 +1,4 @@
-import { FilterList, Info, Visibility } from '@mui/icons-material'
+import { Info, Visibility } from '@mui/icons-material'
 import {
   Stack,
   CircularProgress,
@@ -9,36 +9,24 @@ import {
   Table,
   TableBody,
   TableCell,
-  Link as MuiLink,
   TableRow,
   TableContainer,
-  TablePagination,
   TableFooter,
   Pagination,
   Button,
-  Chip,
-  Tooltip
+  Chip
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import { useUseUserByInstitutionListQuery } from 'graphql/cms-queries/user-list.generated'
-import {
-  ColumnFilter,
-  MatchedBy,
-  QueryOperation,
-  SubType,
-  UserInput,
-  UserRoles
-} from 'graphql/types'
+import { MatchedBy, SubType, UserInput, UserRoles } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { useReadLocalStorage } from 'usehooks-ts'
-import InstitutionTableHead from '../../InstitutionTableHead'
 import UserStatsTableHead from './UsersStatsTableHead'
 import UserStatsFilter from './UserStatsFilter'
 import UserStatsHeader from './UserStatsHeader'
+import { useQueryFilters } from '../../../../hooks/useQueryFilters'
 
 type Props = {
   institutionId: string
@@ -47,8 +35,7 @@ type Props = {
 const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const router = useRouter()
   const { data: session } = useSession()
-  const storage_key = UserStatsFilter.STORAGE_KEY
-  const filters = useReadLocalStorage<ColumnFilter[]>(storage_key)
+  const { filters } = useQueryFilters()
   const sort_by = (router.query.sort_by as string) ?? 'created'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const search = router.query.search as string
@@ -153,7 +140,11 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                     <StyledTableRow key={user._id}>
                       <TableCell>
                         {isAdmin ? (
-                          <Link href={`/cms/user/${user._id}`} target="_blank">
+                          <Link
+                            href={`/cms/user/${user._id}`}
+                            target="_blank"
+                            passHref
+                          >
                             <Typography>{user.email}</Typography>
                           </Link>
                         ) : (

@@ -41,12 +41,10 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const StripeRedeemListTableHead = () => {
-  const { sortBy, sortOrder, setSortBy, setSortOrder } = useCodeRedeemList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      setSortBy(property)
-      setSortOrder(-sortOrder)
-    }
+  const { sortBy, sortOrder, setSort } = useCodeRedeemList()
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => setSort(property, -sortOrder)
+  }
 
   const stickyCells = headCells.filter((h) => !!h.sticky)
   const regularCells = headCells.filter((h) => !h.sticky)
@@ -54,8 +52,8 @@ const StripeRedeemListTableHead = () => {
   return (
     <TableHead>
       <TableRow>
-        <StickyTableCell backgroundColor="#efefef" sx={{ p: 0 }}>
-          <Box>
+        <StickyTableCell sx={{ p: 0 }}>
+          <Box bgcolor={'#efefef'}>
             {stickyCells.map((headCell) => {
               const order = sortOrder >= 1 ? 'asc' : 'desc'
               return (

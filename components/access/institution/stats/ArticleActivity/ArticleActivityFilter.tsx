@@ -1,6 +1,7 @@
 import { Drawer } from '@mui/material'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
 import { ColumnFilter, QueryOperation } from 'graphql/types'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -11,24 +12,11 @@ type Props = {
 }
 
 const ArticleActivityFilter = ({ open, setOpen }: Props) => {
-  const router = useRouter()
-  const [filters, setFilters] = useLocalStorage<ColumnFilter[]>(
-    ArticleActivityFilter.STORAGE_KEY,
-    []
-  )
+  const { filters, setFilters } = useQueryFilters()
 
   const onSubmitFilter = (newFilters: ColumnFilter[]) => {
-    if (!newFilters.length) {
-      router.reload()
-    }
     setFilters(newFilters)
     setOpen(false)
-    router.push({
-      query: {
-        ...router.query,
-        page: 1
-      }
-    })
   }
 
   const columnOptions: ColumnOption[] = [
@@ -57,5 +45,3 @@ const ArticleActivityFilter = ({ open, setOpen }: Props) => {
   )
 }
 export default ArticleActivityFilter
-
-ArticleActivityFilter.STORAGE_KEY = 'jomi.article-activity-filter'

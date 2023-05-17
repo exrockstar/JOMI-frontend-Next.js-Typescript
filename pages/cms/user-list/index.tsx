@@ -217,7 +217,6 @@ const UserManagementListPage = () => {
     sortOrder,
     filters,
     setFilters,
-    setPage,
     dbQueryString
   } = useUserManagementList()
 
@@ -225,7 +224,6 @@ const UserManagementListPage = () => {
     if (!filters) return
 
     setFilters(filters)
-    setPage(1)
     setDrawerOpen(!drawerOpen)
   }
 

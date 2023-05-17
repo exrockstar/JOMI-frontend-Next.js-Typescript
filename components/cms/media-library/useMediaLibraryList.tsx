@@ -1,10 +1,12 @@
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
 import {
   MediaLibraryQuery,
   useMediaLibraryQuery
 } from 'graphql/cms-queries/media-library.generated'
-
+import { ParsedUrlQuery } from 'querystring'
 import { ColumnFilter, QueryOperation } from 'graphql/types'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import {
   createContext,
   PropsWithChildren,
@@ -12,62 +14,31 @@ import {
   useEffect,
   useState
 } from 'react'
+import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 
 type State = {
-  page: number
-  setPage(page: number): void
-  sortBy: string
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
   searchMediaName(searchTerm: string): void
   medias: MediaLibraryQuery['files']['files']
   count: MediaLibraryQuery['files']['count']
-  pageSize: number
-  setPageSize(value: number): void
-  filters?: ColumnFilter[]
-  setFilters(filters: ColumnFilter[]): void
   loading: boolean
   error: string
   refetch(): void
-}
+} & UseListInputState
 
-const MediaLibraryListContext = createContext<State>({
-  page: 0,
-  setPage(page: number) {},
-  searchMediaName(value: string) {},
-  medias: [],
-  sortBy: '',
-  setSortBy(column: string) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  count: 0,
-  loading: false,
-  pageSize: 10,
-  setPageSize(value: number) {},
-  setFilters(filters: ColumnFilter[]) {},
-  error: "Couldn't load institutions",
-  refetch() {}
-})
+const MediaLibraryListContext = createContext<State>(null)
 
-const LOCAL_STORAGE_KEY = 'jomi.media-library-status'
-type MediaListStatus = {
-  page: number
-  sortBy: string
-  sortOrder: 1 | -1
-  filters: ColumnFilter[]
-}
 export const MediaLibraryListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const [page, setPage] = useState(1)
-  const [sortBy, setSortBy] = useState('filename')
-  const [sortOrder, setSortOrder] = useState(1)
-
-  const [pageSize, setPageSize] = useState(10)
+  const state = useListInput({
+    page: 1,
+    sort_by: 'filename',
+    sort_order: 1,
+    page_size: 10
+  })
+  const { page, pageSize, sortBy, sortOrder, filters, setFilters } = state
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
-  const [filters, setFilters] = useState<ColumnFilter[]>([])
 
   const { data, loading, error, refetch } = useMediaLibraryQuery({
     skip: !session?.user,
@@ -81,29 +52,6 @@ export const MediaLibraryListProvider: React.FC<PropsWithChildren> = ({
       }
     }
   })
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as MediaListStatus
-
-    if (parsed) {
-      setPage(parsed.page ?? 1)
-      setFilters(parsed.filters ?? [])
-      setSortBy(parsed.sortBy ?? 'filename')
-      setSortOrder(parsed.sortOrder ?? 1)
-    }
-  }, [])
-
-  useEffect(() => {
-    const stringified = JSON.stringify({
-      page,
-      filters,
-      sortBy,
-      sortOrder
-    })
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringified)
-  }, [filters, sortBy, sortOrder, page])
-
-  //perserve previous count
   useEffect(() => {
     if (!loading && !error) {
       setCount(data?.files.count ?? 0)
@@ -140,21 +88,12 @@ export const MediaLibraryListProvider: React.FC<PropsWithChildren> = ({
   return (
     <MediaLibraryListContext.Provider
       value={{
-        page,
-        setPage,
-        sortBy,
-        setSortBy,
-        sortOrder,
-        setSortOrder,
+        ...state,
         searchMediaName,
         medias: data?.files.files,
         count: count,
         loading,
-        pageSize,
-        setPageSize,
         error: error?.message,
-        filters,
-        setFilters,
         refetch
       }}
     >

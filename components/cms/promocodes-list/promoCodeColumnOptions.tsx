@@ -33,7 +33,7 @@ export const promoCodeColumnOptions: ColumnOption[] = [
   },
   {
     label: 'Amount OFF',
-    columnName: 'amomunt_off',
+    columnName: 'amount_off',
     type: 'number',
     operations: NumericOperations
   },

@@ -64,13 +64,10 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const StripePromoCodeListTableHeader = () => {
-  const { sortBy, sortOrder, setSortBy, setSortOrder } =
-    useStripePromoCodesList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      setSortBy(property)
-      setSortOrder(-sortOrder)
-    }
+  const { sortBy, sortOrder, setSort } = useStripePromoCodesList()
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => setSort(property, -sortOrder)
+  }
 
   const stickyCells = headCells.filter((h) => !!h.sticky)
   const regularCells = headCells.filter((h) => !h.sticky)

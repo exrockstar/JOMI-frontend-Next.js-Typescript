@@ -1,3 +1,4 @@
+import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 import {
   RedirectsListQuery,
   useRedirectsListQuery
@@ -16,52 +17,21 @@ type State = {
   count: RedirectsListQuery['fetchRedirects']['count']
   loading: boolean
   error: string
-  sortBy: string
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
-  page: number
-  setPage(page: number): void
-  pageSize: number
-  setPageSize(value: number): void
-  searchTerm: string
-  setSearchTerm(searchTerm: string): void
-}
+} & UseListInputState
 
-const RedirectsListContext = createContext<State>({
-  redirects: [],
-  count: 0,
-  loading: false,
-  error: "Couldn't load redirects list",
-  sortBy: '',
-  setSortBy(column: string) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  page: 0,
-  setPage(page: number) {},
-  pageSize: 10,
-  setPageSize(value: number) {},
-  searchTerm: '',
-  setSearchTerm(searchTerm: string) {}
-})
-
-const LOCAL_STORAGE_KEY = 'jomi.redir-list-status'
-type RedirListStatus = {
-  sortBy: string
-  sortOrder: 1 | -1
-  page: number
-}
+const RedirectsListContext = createContext<State>(null)
 
 export const RedirectsListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const [sortBy, setSortBy] = useState('from')
-  const [sortOrder, setSortOrder] = useState(1)
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
   const [count, setCount] = useState(0)
-  const [searchTerm, setSearchTerm] = useState(null)
-
+  const state = useListInput({
+    page: 1,
+    sort_order: 1,
+    sort_by: 'from',
+    page_size: 10
+  })
+  const { sortBy, sortOrder, page, pageSize, searchTerm } = state
   const { data: session } = useSession()
   const { data, loading, error } = useRedirectsListQuery({
     skip: !session?.user,
@@ -76,26 +46,6 @@ export const RedirectsListProvider: React.FC<PropsWithChildren> = ({
     }
   })
 
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as RedirListStatus
-
-    if (parsed) {
-      setSortBy(parsed.sortBy ?? 'from')
-      setSortOrder(parsed.sortOrder ?? 1)
-      setPage(parsed.page ?? 1)
-    }
-  }, [])
-
-  useEffect(() => {
-    const stringified = JSON.stringify({
-      sortBy,
-      sortOrder,
-      page
-    })
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringified)
-  }, [sortBy, sortOrder, page])
-
   //perserve previous count
   useEffect(() => {
     if (!loading && !error) {
@@ -106,20 +56,11 @@ export const RedirectsListProvider: React.FC<PropsWithChildren> = ({
   return (
     <RedirectsListContext.Provider
       value={{
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
-        sortBy,
-        setSortBy,
-        sortOrder,
-        setSortOrder,
+        ...state,
         redirects: data?.fetchRedirects.redirects,
         count: count,
         loading,
-        error: error?.message,
-        searchTerm,
-        setSearchTerm
+        error: error?.message
       }}
     >
       {children}

@@ -13,6 +13,8 @@ import {
 } from 'react'
 import { ColumnFilter } from 'graphql/types'
 import { useRouter } from 'next/router'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
+import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 
 type State = {
   articles: ArticlesListQuery['fetchArticles']['articles']
@@ -35,31 +37,10 @@ type State = {
   selectedItems: string[]
   refetch(): void
   allArticleIds: string[]
-}
+} & UseListInputState
 
-const ArticlesListContext = createContext<State>({
-  articles: [],
-  totalCount: 0,
-  loading: false,
-  error: "Couldn't load articles list",
-  sortBy: '',
-  setSortBy(column: string) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  page: 0,
-  setPage(page: number) {},
-  pageSize: 10,
-  setPageSize(value: number) {},
-  searchTerm: '',
-  setSearchTerm(searchTerm: string) {},
-  setFilters(filters: ColumnFilter[]) {},
-  setSelectedItems(id: string[]) {},
-  allArticleIds: [],
-  selectedItems: [],
-  refetch() {}
-})
+const ArticlesListContext = createContext<State | null>(null)
 
-const LOCAL_STORAGE_KEY = 'jomi.articles-list-status'
 interface MyQuery extends ParsedUrlQuery {
   page?: string
   page_size?: string
@@ -68,28 +49,17 @@ interface MyQuery extends ParsedUrlQuery {
   search?: string
 }
 
-type ArticlesListStatus = {
-  sortBy: string
-  sortOrder: 1 | -1
-  page: number
-  filters: ColumnFilter[]
-}
-
 export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const router = useRouter()
-  const query = router.query as MyQuery
-
-  const page = parseInt(query.page ?? '1')
-  const sortBy = query.sort_by ?? 'title'
-  const sortOrder = parseInt(query.sort_order || '-1')
-  const pageSize = parseInt(query.page_size ?? '50')
-
+  const state = useListInput({
+    page: 1,
+    page_size: 50,
+    sort_order: -1,
+    sort_by: 'title'
+  })
   const [totalCount, setTotalCount] = useState(0)
-  const [searchTerm, setSearchTerm] = useState(null)
   const [selectedItems, setSelectedItems] = useState([])
-  const [filters, setFilters] = useState<ColumnFilter[]>([])
   const { data: session } = useSession()
   const {
     data,
@@ -100,12 +70,12 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
     skip: !session?.user,
     variables: {
       input: {
-        sort_by: sortBy,
-        sort_order: sortOrder,
-        limit: pageSize,
-        skip: (page - 1) * pageSize,
-        search_term: searchTerm,
-        filters: filters
+        sort_by: state.sortBy,
+        sort_order: state.sortOrder,
+        limit: state.pageSize,
+        skip: (state.page - 1) * state.pageSize,
+        search_term: state.searchTerm,
+        filters: state.filters
       }
     },
     nextFetchPolicy: 'network-only'
@@ -115,73 +85,15 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
   const refetch = () => {
     _reftech({
       input: {
-        sort_by: sortBy,
-        sort_order: sortOrder,
-        limit: pageSize,
-        skip: (page - 1) * pageSize,
-        search_term: searchTerm,
-        filters: filters
+        sort_by: state.sortBy,
+        sort_order: state.sortOrder,
+        limit: state.pageSize,
+        skip: (state.page - 1) * state.pageSize,
+        search_term: state.searchTerm,
+        filters: state.filters
       }
     })
   }
-  const setPage = (page: number) => {
-    router.push({
-      query: {
-        ...query,
-        page
-      }
-    })
-  }
-
-  const setSortBy = (sort_by: string) => {
-    router.push({
-      query: {
-        ...query,
-        sort_by
-      }
-    })
-  }
-
-  const setSortOrder = (sort_order: number) => {
-    router.push({
-      query: {
-        ...query,
-        sort_order
-      }
-    })
-  }
-
-  const setPageSize = (page_size: number) => {
-    router.push({
-      query: {
-        ...query,
-        page_size,
-        page: 1
-      }
-    })
-  }
-
-  //Grab data from the cache (if there is any) and set input options accordingly
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as ArticlesListStatus
-
-    if (parsed) {
-      setFilters(parsed.filters ?? [])
-    }
-  }, [])
-
-  //Convert to JS object to store in the cache
-  useEffect(() => {
-    const stringified = JSON.stringify({
-      sortBy,
-      sortOrder,
-      page,
-      filters
-    })
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringified)
-  }, [sortBy, sortOrder, page, filters])
-
   //perserve previous count
   useEffect(() => {
     if (!loading && !error) {
@@ -192,22 +104,11 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
   return (
     <ArticlesListContext.Provider
       value={{
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
-        sortBy,
-        setSortBy,
-        sortOrder,
-        setSortOrder,
+        ...state,
         articles: data?.fetchArticles.articles,
         totalCount: totalCount,
         loading,
         error: error?.message,
-        searchTerm,
-        setSearchTerm,
-        filters,
-        setFilters,
         selectedItems,
         setSelectedItems,
         refetch,

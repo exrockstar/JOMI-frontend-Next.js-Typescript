@@ -30,7 +30,6 @@ const PromoCodesListPage = () => {
     if (!filters) return
 
     setFilters(filters)
-    setPage(1)
     setDrawerOpen(!drawerOpen)
   }
   return (
