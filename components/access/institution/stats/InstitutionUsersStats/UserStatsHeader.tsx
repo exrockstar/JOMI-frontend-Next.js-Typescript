@@ -16,6 +16,7 @@ import React, { useMemo, useState } from 'react'
 import { useReadLocalStorage } from 'usehooks-ts'
 import UserStatsFilter from './UserStatsFilter'
 import { FilterList } from '@mui/icons-material'
+import { useQueryFilters } from '../../../../hooks/useQueryFilters'
 type Props = {
   pageCount: number
   count: number
@@ -24,6 +25,7 @@ type Props = {
 const UserStatsHeader = ({ pageCount }: Props) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const { filters } = useQueryFilters()
   const query = router.query
   const search = (query.search as string) ?? ''
   const page = parseInt((query.page as string) ?? '1')
@@ -42,8 +44,6 @@ const UserStatsHeader = ({ pageCount }: Props) => {
     })
   }
 
-  const storage_key = UserStatsFilter.STORAGE_KEY
-  const filters = useReadLocalStorage<ColumnFilter[]>(storage_key)
   return (
     <div>
       <Box display="flex" alignItems="center" justifyContent="space-between">

@@ -13,189 +13,51 @@ import {
   PromoCodeRedeemListQuery,
   usePromoCodeRedeemListQuery
 } from 'graphql/cms-queries/stripe-promo-codes.generated'
+import { useListInput, UseListInputState } from 'components/hooks/useListInput'
 
 type State = {
   orders: PromoCodeRedeemListQuery['orders']['items']
   totalCount: number
   loading: boolean
   error: string
-  sortBy: string
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
-  page: number
-  setPage(page: number): void
-  pageSize: number
-  setPageSize(value: number): void
-  searchTerm: string
-  setSearchTerm(searchTerm: string): void
-  filters?: ColumnFilter[]
-  setFilters(filters: ColumnFilter[]): void
   setSelectedItems(id: string[]): void
   selectedItems: string[]
   refetch(): void
-}
+} & UseListInputState
 
-const StripePromoCodesListContext = createContext<State>({
-  orders: [],
-  totalCount: 0,
-  loading: false,
-  error: "Couldn't load stripe promocodes list",
-  sortBy: '',
-  setSortBy(column: string) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  page: 0,
-  setPage(page: number) {},
-  pageSize: 10,
-  setPageSize(value: number) {},
-  searchTerm: '',
-  setSearchTerm(searchTerm: string) {},
-  setFilters(filters: ColumnFilter[]) {},
-  setSelectedItems(id: string[]) {},
-  selectedItems: [],
-  refetch() {}
-})
-
-const LOCAL_STORAGE_KEY = 'jomi.articles-list-status'
-interface MyQuery extends ParsedUrlQuery {
-  page?: string
-  page_size?: string
-  sort_by?: string
-  sort_order?: string
-  search?: string
-}
-
-type ListStatus = {
-  filters: ColumnFilter[]
-}
+const StripePromoCodesListContext = createContext<State>(null)
 
 export const PromocodeRedeemListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
   const router = useRouter()
-  const query = router.query as MyQuery
-  children
-  const page = parseInt(query.page ?? '1')
-  const sortBy = query.sort_by ?? 'created'
-  const sortOrder = parseInt(query.sort_order || '-1')
-  const pageSize = parseInt(query.page_size ?? '50')
-  const search = query.search || null
+  const id = router.query.id as string
   const [totalCount, setTotalCount] = useState(0)
   const [selectedItems, setSelectedItems] = useState([])
-  const [filters, setFilters] = useState<ColumnFilter[]>([])
   const { data: session } = useSession()
 
-  const {
-    data,
-    loading,
-    error,
-    refetch: _reftech
-  } = usePromoCodeRedeemListQuery({
+  const state = useListInput({
+    page: 1,
+    sort_by: 'created',
+    page_size: 50,
+    sort_order: -1
+  })
+  const { sortBy, sortOrder, pageSize, page, searchTerm, filters } = state
+  const { data, loading, error, refetch } = usePromoCodeRedeemListQuery({
     skip: !session?.user,
     variables: {
-      id: router.query.id as string,
+      id: id,
       input: {
         sort_by: sortBy,
         sort_order: sortOrder,
         limit: pageSize,
         skip: (page - 1) * pageSize,
-        search: search,
+        search: searchTerm,
         filters: filters
       }
     },
     nextFetchPolicy: 'network-only'
   })
-
-  const refetch = () => {
-    _reftech({
-      input: {
-        sort_by: sortBy,
-        sort_order: sortOrder,
-        limit: pageSize,
-        skip: (page - 1) * pageSize,
-        search: search,
-        filters: filters
-      }
-    })
-  }
-  const setPage = (page: number) => {
-    router.push({
-      query: {
-        ...query,
-        page
-      }
-    })
-  }
-
-  const setSortBy = (sort_by: string) => {
-    router.push({
-      query: {
-        ...query,
-        sort_by
-      }
-    })
-  }
-
-  const setSortOrder = (sort_order: number) => {
-    router.push({
-      query: {
-        ...query,
-        sort_order
-      }
-    })
-  }
-
-  const setPageSize = (page_size: number) => {
-    router.push({
-      query: {
-        ...query,
-        page_size,
-        page: 1
-      }
-    })
-  }
-
-  const setSearchTerm = (search?: string) => {
-    if (!!search) {
-      router.push({
-        query: {
-          ...query,
-          search,
-          page: 1
-        }
-      })
-    } else {
-      delete query.search
-      router.push({
-        query: {
-          ...query,
-          page: 1
-        }
-      })
-    }
-  }
-
-  //Grab data from the cache (if there is any) and set input options accordingly
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as ListStatus
-
-    if (parsed) {
-      setFilters(parsed.filters ?? [])
-    }
-  }, [])
-
-  //Convert to JS object to store in the cache
-  useEffect(() => {
-    const stringified = JSON.stringify({
-      sortBy,
-      sortOrder,
-      page,
-      filters
-    })
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringified)
-  }, [sortBy, sortOrder, page, filters])
 
   //perserve previous count
   useEffect(() => {
@@ -207,22 +69,11 @@ export const PromocodeRedeemListProvider: React.FC<PropsWithChildren> = ({
   return (
     <StripePromoCodesListContext.Provider
       value={{
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
-        sortBy,
-        setSortBy,
-        sortOrder,
-        setSortOrder,
+        ...state,
         orders: data?.orders.items,
         totalCount: totalCount,
         loading,
         error: error?.message,
-        searchTerm: search,
-        setSearchTerm,
-        filters,
-        setFilters,
         selectedItems,
         setSelectedItems,
         refetch

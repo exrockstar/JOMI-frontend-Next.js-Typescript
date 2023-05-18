@@ -2,10 +2,8 @@ import {
   UserManagementListQuery,
   useUserManagementListQuery
 } from 'graphql/cms-queries/user-list.generated'
-import { ParsedUrlQuery } from 'querystring'
-import { QueryOperation, ColumnFilter, UserInput } from 'graphql/types'
+import { UserInput } from 'graphql/types'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
 import {
   createContext,
   PropsWithChildren,
@@ -13,154 +11,51 @@ import {
   useEffect,
   useState
 } from 'react'
+import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 
 type State = {
-  page: number
-  setPage(page: number): void
-  sortBy: string
-  setSort(sort_by: string, sort_order: number): void
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
-  searchUserName(searchTerm: string): void
   users: UserManagementListQuery['users']['users']
   count: UserManagementListQuery['users']['count']
-  pageSize: number
-  setPageSize(value: number): void
-  filters?: ColumnFilter[]
-  setFilters(filters: ColumnFilter[]): void
   loading: boolean
   error: string
   refetch(): void
   input?: UserInput
   dbQueryString: string
-}
+} & UseListInputState
 
-const UserManagementListContext = createContext<State>({
-  page: 0,
-  setPage(page: number) {},
-  sortBy: '',
-  setSortBy(column: string) {},
-  setSort(sort_by: string, sort_order: number) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  searchUserName(value: string) {},
-  users: [],
-  count: 0,
-  loading: false,
-  pageSize: 10,
-  setPageSize(value: number) {},
-  setFilters(filters: ColumnFilter[]) {},
-  error: "Couldn't load Users",
-  refetch() {},
-  dbQueryString: ''
-})
-const LOCAL_STORAGE_KEY = 'jomi.user-list-status'
-
-type ListStatus = {
-  filters: ColumnFilter[]
-}
-
-interface MyQuery extends ParsedUrlQuery {
-  page?: string
-  page_size?: string
-  sort_by?: string
-  sort_order?: string
-  search?: string
-}
+const UserManagementListContext = createContext<State | null>(null)
 
 export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const router = useRouter()
-  const query = router.query as MyQuery
-
-  const page = parseInt(query.page ?? '1')
-  const sortBy = query.sort_by ?? 'created'
-  const sortOrder = parseInt(query.sort_order || '-1')
-  const pageSize = parseInt(query.page_size ?? '50')
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
-  const [filters, setFilters] = useState<ColumnFilter[]>([])
-  const search = query.search
+
+  const state = useListInput({
+    page: 1,
+    sort_by: 'created',
+    sort_order: -1,
+    page_size: 50
+  })
 
   const input: UserInput = {
-    skip: (page - 1) * pageSize,
-    limit: pageSize,
-    sort_by: sortBy,
-    sort_order: sortOrder,
-    filters: filters
+    skip: (state.page - 1) * state.pageSize,
+    limit: state.pageSize,
+    sort_by: state.sortBy,
+    sort_order: state.sortOrder,
+    filters: state.filters
   }
 
-  if (search) {
-    input.search = search
+  if (state.searchTerm) {
+    input.search = state.searchTerm
   }
+
   const { data, loading, error, refetch } = useUserManagementListQuery({
     skip: !session?.user,
     variables: {
       input: input
     }
   })
-  const setPage = (page: number) => {
-    router.push({
-      query: {
-        ...query,
-        page
-      }
-    })
-  }
-  const setSort = (sort_by: string, sort_order: number) => {
-    router.push({
-      query: {
-        ...query,
-        sort_by,
-        sort_order
-      }
-    })
-  }
-  const setSortBy = (sort_by: string) => {
-    router.push({
-      query: {
-        ...query,
-        sort_by
-      }
-    })
-  }
-
-  const setSortOrder = (sort_order: number) => {
-    router.push({
-      query: {
-        ...query,
-        sort_order
-      }
-    })
-  }
-
-  const setPageSize = (page_size: number) => {
-    router.push({
-      query: {
-        ...query,
-        page_size,
-        page: 1
-      }
-    })
-  }
-
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY) ?? '{}'
-    const parsed = JSON.parse(saved) as ListStatus
-
-    if (parsed) {
-      setFilters(parsed.filters ?? [])
-    }
-  }, [])
-
-  useEffect(() => {
-    const stringified = JSON.stringify({
-      filters
-    })
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringified)
-  }, [filters, sortBy, sortOrder, page])
 
   //perserve previous count
   useEffect(() => {
@@ -169,53 +64,17 @@ export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
     }
   }, [data?.users.count, loading, error])
 
-  const searchUserName = (searchTerm: string) => {
-    const nameFilter = filters.find((filter) => filter.columnName === 'name')
-    if (nameFilter) {
-      setFilters(
-        filters.map((filter) => {
-          if (filter === nameFilter) {
-            return {
-              ...filter,
-              value: searchTerm.trim()
-            }
-          }
-          return filter
-        })
-      )
-    } else {
-      setFilters([
-        {
-          columnName: 'name',
-          operation: QueryOperation.Contains,
-          value: searchTerm
-        },
-        ...filters
-      ])
-    }
-  }
   return (
     <UserManagementListContext.Provider
       value={{
-        page,
-        setPage,
-        sortBy,
-        setSortBy,
-        setSort,
-        sortOrder,
-        setSortOrder,
-        searchUserName,
-        users: data?.users.users,
+        ...state,
         count: count,
-        loading,
-        pageSize,
-        setPageSize,
+        dbQueryString: data?.users.dbQueryString,
         error: error?.message,
-        filters,
-        setFilters,
-        refetch,
         input,
-        dbQueryString: data?.users.dbQueryString
+        loading,
+        refetch,
+        users: data?.users.users
       }}
     >
       {children}

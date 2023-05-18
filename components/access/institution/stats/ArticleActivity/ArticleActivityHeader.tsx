@@ -1,26 +1,15 @@
-import {
-  Grid,
-  Stack,
-  Pagination,
-  Typography,
-  Box,
-  Tooltip,
-  IconButton,
-  Badge
-} from '@mui/material'
+import { Box, Tooltip, IconButton, Badge } from '@mui/material'
 import SearchInput from 'components/access/SearchInput'
-import page from 'components/account/newsletter/page'
-import { ColumnFilter } from 'graphql/types'
 import { useRouter } from 'next/router'
-import React, { useMemo, useState } from 'react'
-import { useReadLocalStorage } from 'usehooks-ts'
+import { useState } from 'react'
 import { FilterList } from '@mui/icons-material'
-import UserStatsFilter from '../InstitutionUsersStats/UserStatsFilter'
 import ArticleActivityFilter from './ArticleActivityFilter'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
 
 const ArticleActivityHeader = () => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const { filters } = useQueryFilters()
   const query = router.query
   const search = (query.search as string) ?? ''
   const handleSearch = (val: string) => {
@@ -37,8 +26,6 @@ const ArticleActivityHeader = () => {
     })
   }
 
-  const storage_key = ArticleActivityFilter.STORAGE_KEY
-  const filters = useReadLocalStorage<ColumnFilter[]>(storage_key)
   return (
     <div>
       <Box display="flex" alignItems="center" justifyContent="space-between">

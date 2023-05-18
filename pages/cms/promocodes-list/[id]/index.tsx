@@ -55,9 +55,8 @@ const PromoCodeDetails = () => {
     if (!IS_SERVER && router.isReady) {
       console.log(router)
       //set the tab based on the URL
-      const url = router.asPath.split('/')
+      const url = router.pathname.split('/')
       const tabUrl = url[4] ?? ''
-
       const val = getValue(tabUrl)
       setValue(val)
     }

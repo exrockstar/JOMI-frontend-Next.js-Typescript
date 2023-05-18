@@ -1,3 +1,4 @@
+import { useListInput } from 'components/hooks/useListInput'
 import {
   useInstitutionsAccessListQuery,
   InstitutionsAccessListQuery
@@ -13,73 +14,44 @@ import {
 } from 'react'
 
 type State = {
-  page: number
-  setPage(page: number): void
-  sortBy: string
-  setSortBy(column: string): void
-  sortOrder: number
-  setSortOrder(asc: number): void
-  searchTerm: string
-  setSearchTerm(value: string): void
   institutions: InstitutionsAccessListQuery['output']['institutions']
   count: InstitutionsAccessListQuery['output']['count']
   pageSize: number
   loading: boolean
   error: string
   refetch(): void
-}
+} & ReturnType<typeof useListInput>
 
-const InstitutionAccessContext = createContext<State>({
-  page: 0,
-  setPage(page: number) {},
-  sortBy: '',
-  setSortBy(column: string) {},
-  sortOrder: 1,
-  setSortOrder(asc: number) {},
-  searchTerm: '',
-  setSearchTerm(value: string) {},
-  institutions: [],
-  count: 0,
-  loading: false,
-  pageSize: 10,
-  error: "Couldn't load institutions",
-  refetch() {}
-})
+const InstitutionAccessContext = createContext<State | null>(null)
 
 export const InstitutionAccessProvider: React.FC<PropsWithChildren> = ({
   children
 }) => {
-  const [page, setPage] = useState(1)
-  const [sortBy, setSortBy] = useState('name')
-  const [sortOrder, setSortOrder] = useState(1)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [pageSize, setPageSize] = useState(10)
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
-  const filters = searchTerm
-    ? [
-        {
-          columnName: 'name',
-          operation: QueryOperation.Contains,
-          value: searchTerm
-        }
-      ]
-    : []
+
+  const state = useListInput({
+    page: 1,
+    sort_by: 'name',
+    sort_order: 1,
+    page_size: 10
+  })
 
   const { data, loading, error, refetch } = useInstitutionsAccessListQuery({
     skip: !session,
     variables: {
       input: {
-        skip: (page - 1) * pageSize,
-        limit: pageSize,
-        sort_by: sortBy,
-        sort_order: sortOrder,
-        filters: filters
+        skip: (state.page - 1) * state.pageSize,
+        limit: state.pageSize,
+        sort_by: state.sortBy,
+        sort_order: state.sortOrder,
+        filters: state.filters,
+        search: state.searchTerm
       }
     }
   })
 
-  //perserve previous count
+  // perserve previous count
   useEffect(() => {
     if (!loading && !error) {
       setCount(data?.output.count ?? 0)
@@ -89,18 +61,10 @@ export const InstitutionAccessProvider: React.FC<PropsWithChildren> = ({
   return (
     <InstitutionAccessContext.Provider
       value={{
-        page,
-        setPage,
-        sortBy,
-        setSortBy,
-        sortOrder,
-        setSortOrder,
-        searchTerm,
-        setSearchTerm,
+        ...state,
         institutions: data?.output.institutions,
         count: count,
         loading,
-        pageSize,
         error: error?.message,
         refetch
       }}

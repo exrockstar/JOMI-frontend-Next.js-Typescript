@@ -67,11 +67,12 @@ const StripeRedeemList: React.FC<{}> = () => {
                       whiteSpace: 'nowrap',
                       ':hover': { cursor: 'pointer' }
                     }}
-                    backgroundColor={stickyTableCellColor}
                   >
-                    <Link href={`/cms/user/${order.user_id}`}>
-                      {order.user?.email}
-                    </Link>
+                    <Box bgcolor={stickyTableCellColor}>
+                      <Link href={`/cms/user/${order.user_id}`}>
+                        {order.user?.email}
+                      </Link>
+                    </Box>
                   </StickyTableCell>
 
                   <TableCell>{order.description ?? 'No description'}</TableCell>

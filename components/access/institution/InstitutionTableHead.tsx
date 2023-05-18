@@ -51,13 +51,10 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const InstitutionTableHead = () => {
-  const { sortBy, sortOrder, setSortBy, setSortOrder } =
-    useInstitutionAccessList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      setSortBy(property)
-      setSortOrder(-sortOrder)
-    }
+  const { sortBy, sortOrder, setSort } = useInstitutionAccessList()
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => setSort(property, -sortOrder)
+  }
   return (
     <TableHead>
       <TableRow>

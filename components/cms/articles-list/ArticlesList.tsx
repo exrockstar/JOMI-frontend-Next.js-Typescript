@@ -61,7 +61,6 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPageSize(+event.target.value)
-    setPage(1)
   }
 
   const [generateDoiMutation] = useGenerateDoiArticleMutation({
@@ -165,9 +164,11 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
             <ArticlesTableHead />
             <TableBody>
               {articles?.map((article, i) => {
-                const htmlContent = article.content.article ?? ""
-                const strippedContent = htmlContent ?  htmlContent.replace(/<[^>]*>/g, "") : ""
-                const charCount = htmlContent.length;
+                const htmlContent = article.content.article ?? ''
+                const strippedContent = htmlContent
+                  ? htmlContent.replace(/<[^>]*>/g, '')
+                  : ''
+                const charCount = htmlContent.length
                 const production_id = article.production_id || 'N/A'
                 const publication_id = article.publication_id || 'N/A'
                 const selected = selectedItems.includes(article._id)

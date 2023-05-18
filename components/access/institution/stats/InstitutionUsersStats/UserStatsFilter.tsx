@@ -1,5 +1,4 @@
 import { Drawer } from '@mui/material'
-import { eventsColumnOptions } from 'components/access/events/eventsColumnOptions'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { StringOperations } from 'components/common/FilterDrawer/operations'
@@ -7,7 +6,7 @@ import { useUserTypesAndSpecialtiesQuery } from 'graphql/queries/user-types.gene
 import { ColumnFilter, QueryOperation, SubType, UserRoles } from 'graphql/types'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useLocalStorage } from 'usehooks-ts'
+import { useQueryFilters } from '../../../../hooks/useQueryFilters'
 type Props = {
   open: boolean
   setOpen(open: boolean): void
@@ -22,11 +21,7 @@ export enum _MatchedBy {
   NotMatched = 'not_matched'
 }
 const UserStatsFilter = ({ open, setOpen }: Props) => {
-  const router = useRouter()
-  const [filters, setFilters] = useLocalStorage<ColumnFilter[]>(
-    UserStatsFilter.STORAGE_KEY,
-    []
-  )
+  const { filters, setFilters } = useQueryFilters()
   const { data } = useUserTypesAndSpecialtiesQuery({
     fetchPolicy: 'cache-first'
   })
@@ -34,12 +29,6 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
   const onSubmitFilter = (newFilters: ColumnFilter[]) => {
     setFilters(newFilters)
     setOpen(false)
-    router.push({
-      query: {
-        ...router.query,
-        page: 1
-      }
-    })
   }
 
   const columnOptions: ColumnOption[] = [
@@ -128,5 +117,3 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
   )
 }
 export default UserStatsFilter
-
-UserStatsFilter.STORAGE_KEY = 'jomi.user-stats-filter'

@@ -64,7 +64,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Date Created'
   },
   {
-    id:'referredFrom',
+    id: 'referredFrom',
     label: 'Referrer'
   },
   {
@@ -74,12 +74,10 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const EventListTableHead = () => {
-  const { sortBy, sortOrder, setSortBy, setSortOrder } = useEventsAccessList()
-  const createSortHandler =
-    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      setSortBy(property)
-      setSortOrder(-sortOrder)
-    }
+  const { sortBy, sortOrder, setSort } = useEventsAccessList()
+  const createSortHandler = (property: HeadCell['id']) => {
+    return () => setSort(property, -sortOrder)
+  }
   return (
     <TableHead>
       <TableRow>

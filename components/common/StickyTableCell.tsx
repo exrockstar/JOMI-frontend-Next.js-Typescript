@@ -2,7 +2,7 @@ import { TableCell } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 interface StickyTableCellProps {
-  backgroundColor: string
+  backgroundColor?: string
   selected?: boolean
 }
 export const StickyTableCell = styled(TableCell)<StickyTableCellProps>(

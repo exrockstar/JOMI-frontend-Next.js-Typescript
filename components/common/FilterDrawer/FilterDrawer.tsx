@@ -91,7 +91,11 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
       component="form"
       onSubmit={(e) => {
         e.preventDefault()
-        onSubmit(filtersLocal)
+        const columnNames = columnOptions.map((o) => o.columnName)
+        const toSubmit = filtersLocal.filter((f) =>
+          columnNames.includes(f.columnName)
+        )
+        onSubmit(toSubmit)
       }}
     >
       <Typography variant="overline">Add/Remove Filters</Typography>
@@ -159,7 +163,7 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                 defaultLabel="Date filter"
                 value={filter.value}
                 onChange={(val?: Dayjs) => {
-                  handleValueChange(index, val.toISOString())
+                  handleValueChange(index, val.format('MM-DD-YYYY'))
                 }}
               />
             )}

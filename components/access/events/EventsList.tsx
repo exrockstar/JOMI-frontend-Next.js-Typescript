@@ -31,7 +31,7 @@ const EventsList = () => {
     events,
     loading,
     error,
-    setSearch,
+    setSearchTerm,
     page,
     setPage,
     count,
@@ -122,7 +122,7 @@ const EventsList = () => {
                   <TableCell>
                     {event.user_id !== 'anon' ? (
                       <MuiLink
-                        onClick={() => setSearch(event.user_id)}
+                        onClick={() => setSearchTerm(event.user_id)}
                         href="#"
                       >
                         {event.user_id}

@@ -41,6 +41,7 @@ import { useInstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.g
 import SearchInput from '../SearchInput'
 import { ArrowBack } from '@mui/icons-material'
 import Link from 'next/link'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
 const ArticleActivityDetailsPanel = () => {
   const router = useRouter()
   const sort_by = (router.query.sort_by as string) ?? 'created'
@@ -53,10 +54,7 @@ const ArticleActivityDetailsPanel = () => {
   const perPage = 20
   const skip = (page - 1) * perPage
   const sort_order = sort_order_str === 'desc' ? -1 : 1
-  const [filters] = useLocalStorage<ColumnFilter[]>(
-    ArticleActivityDetailsPanel.STORAGE_KEY,
-    []
-  )
+  const { filters } = useQueryFilters()
 
   const id = router.query.id as string
   const { data: institutionData } = useInstitutionByIdQuery({
@@ -236,4 +234,3 @@ const ArticleActivityDetailsPanel = () => {
 }
 
 export default ArticleActivityDetailsPanel
-ArticleActivityDetailsPanel.STORAGE_KEY = 'jomi.article-activity-details'

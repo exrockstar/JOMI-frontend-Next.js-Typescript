@@ -5,7 +5,7 @@ import {
   Box,
   Tooltip,
   Badge,
-  IconButton,
+  IconButton
 } from '@mui/material'
 
 import React, { useMemo } from 'react'
@@ -14,17 +14,12 @@ import { useEventsAccessList } from './useEventsAccessList'
 
 const EventsHeader = () => {
   const {
-    setPage,
     setFilterDrawerOpen,
     filterDrawerOpen,
-    setSearch,
-    search,
+    setSearchTerm,
+    searchTerm,
     filters
   } = useEventsAccessList()
-  const handleSearch = (value: string) => {
-    setSearch(value)
-    setPage(1)
-  }
 
   const toggleDrawer = () => {
     setFilterDrawerOpen(!filterDrawerOpen)
@@ -44,9 +39,9 @@ const EventsHeader = () => {
             alignItems="center"
           >
             <SearchInput
-              onSubmit={handleSearch}
+              onSubmit={setSearchTerm}
               placeholder="Search by user id"
-              value={search}
+              value={searchTerm}
             />
             <Tooltip
               title={`Filter list.  ${filters?.length || 0} filters set`}

@@ -81,7 +81,6 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPageSize(+event.target.value)
-    setPage(1)
   }
 
   return (

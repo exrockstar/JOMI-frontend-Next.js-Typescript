@@ -65,15 +65,13 @@ const MediaLibaryListPage = () => {
     error,
     count,
     searchMediaName,
-    setPage,
     filters,
     setFilters,
-    refetch,
+    refetch
   } = useMediaLibraryList()
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
-    setPage(1)
     setDrawerOpen(!drawerOpen)
   }
   const toggleDrawer = () => {
@@ -111,7 +109,16 @@ const MediaLibaryListPage = () => {
           >
             Add Image
           </LoadingButton>
-          <Typography><Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>{filters.length == 0 ? 'None' : `${filters.length} total:` + filters.map((filter, i) => ` ${filter.columnName} ${filter.operation} ${filter.value}`)}</Typography>
+          <Typography>
+            <Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>
+            {filters.length == 0
+              ? 'None'
+              : `${filters.length} total:` +
+                filters.map(
+                  (filter, i) =>
+                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
+                )}
+          </Typography>
         </Stack>
         <Tooltip title={`Filter list.  ${filters?.length || 0} filters set`}>
           <Badge

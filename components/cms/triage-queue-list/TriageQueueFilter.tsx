@@ -118,10 +118,9 @@ const columnOptions: ColumnOption[] = [
 ]
 
 const TriageQueueFilter = (props: DrawerProps) => {
-  const { filters, setPage, setFilters } = useTriageQueueList()
+  const { filters, setFilters } = useTriageQueueList()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
-    setPage(1)
     props.onClose && props.onClose({}, 'backdropClick')
   }
 

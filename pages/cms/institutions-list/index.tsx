@@ -118,10 +118,9 @@ const InstitutionsListPage = () => {
     error,
     count,
     filters,
-    searchInstitutionName,
+    setSearchTerm,
     setFilters,
-    setPage,
-    search,
+    searchTerm,
     dbQueryString
   } = useInstitutionList()
 
@@ -129,13 +128,11 @@ const InstitutionsListPage = () => {
     useUpdateAllInstStatsMutation()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
-    setPage(1)
     setDrawerOpen(!drawerOpen)
   }
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen)
   }
-  console.log(dbQueryString)
   return (
     <CmsLayout>
       <Drawer anchor={'right'} open={drawerOpen} onClose={toggleDrawer}>
@@ -207,9 +204,9 @@ const InstitutionsListPage = () => {
       </Stack>
       <Stack px={2}>
         <SearchInput
-          onSubmit={searchInstitutionName}
+          onSubmit={setSearchTerm}
           placeholder="Search name, domain, aliases, id"
-          value={search}
+          value={searchTerm}
         />
       </Stack>
       {loading ? (
