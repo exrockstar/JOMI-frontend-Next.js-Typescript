@@ -273,7 +273,9 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                       {article.enabled_languages?.join(', ') ?? 'N/A'}
                     </TableCell>
                     <TableCell>
-                      {article.outdatedTranslations.length ? (
+                      {!article.languages?.length ? (
+                        'No translations'
+                      ) : article.outdatedTranslations?.length ? (
                         article.outdatedTranslations?.join(', ')
                       ) : (
                         <Typography display="flex" alignItems="center">

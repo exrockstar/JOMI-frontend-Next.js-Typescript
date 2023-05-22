@@ -52,7 +52,7 @@ const isProduction = process.env.APP_ENV === 'production'
  * @returns
  */
 function SingleArticle({ article }: SingleArticleProps) {
-  const [showArticle, setShowArticle] = useState(!article.isPasswordProtected)
+  const [showArticle, setShowArticle] = useState(!article?.isPasswordProtected)
 
   const onComplete = () => {
     setShowArticle(true)
