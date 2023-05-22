@@ -69,6 +69,10 @@ const headCells: readonly HeadCell[] = [
     label: 'Enabled Translations'
   },
   {
+    id: 'outdatedTranslations',
+    label: 'Outdated Translations'
+  },
+  {
     id: 'contentlength',
     label: `Content Length`
   },

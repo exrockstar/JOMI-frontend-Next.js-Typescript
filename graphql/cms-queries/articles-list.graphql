@@ -21,6 +21,7 @@ query ArticlesList($input: ArticleInputFetch!){
       DOIStatus
       languages
       enabled_languages
+      outdatedTranslations
       content{ 
         article 
       }
@@ -56,6 +57,10 @@ mutation TranslateArticles($input: TranslateArticlesInput!){
     language
     slug
   }
+}
+
+mutation CheckOutdatedTranslations{
+  checkOutdatedTranslations
 }
 
 mutation AddLanguagesToExistingArticles {

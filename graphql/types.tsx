@@ -198,6 +198,7 @@ export type Article = {
   isPurchaseArticleFeatureOn?: Maybe<Scalars['Boolean']>;
   isRentArticleFeatureOn?: Maybe<Scalars['Boolean']>;
   languages?: Maybe<Array<Scalars['String']>>;
+  outdatedTranslations?: Maybe<Array<Scalars['String']>>;
   preprint_date?: Maybe<Scalars['DateTime']>;
   previousWistiaIDS?: Maybe<Array<Maybe<Scalars['String']>>>;
   production_id?: Maybe<Scalars['String']>;
@@ -1058,6 +1059,7 @@ export type Mutation = {
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
   cancelOrder: Scalars['Boolean'];
+  checkOutdatedTranslations: Scalars['Boolean'];
   completeUserRegistration: ExtendedRegistrationOutput;
   confirmEmail?: Maybe<Scalars['String']>;
   confirmInstEmail?: Maybe<Scalars['String']>;
