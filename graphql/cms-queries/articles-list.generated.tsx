@@ -9,7 +9,7 @@ export type ArticlesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticlesListQuery = { __typename?: 'Query', allArticleIds: Array<string>, fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, preprint_date?: any | null | undefined, has_complete_abstract?: boolean | null | undefined, DOIStatus?: string | null | undefined, languages?: Array<string> | null | undefined, enabled_languages?: Array<string> | null | undefined, contentlength?: number | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, content: { __typename?: 'Content', article?: string | null | undefined } }> } };
+export type ArticlesListQuery = { __typename?: 'Query', allArticleIds: Array<string>, fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, preprint_date?: any | null | undefined, has_complete_abstract?: boolean | null | undefined, DOIStatus?: string | null | undefined, languages?: Array<string> | null | undefined, enabled_languages?: Array<string> | null | undefined, outdatedTranslations?: Array<string> | null | undefined, contentlength?: number | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, content: { __typename?: 'Content', article?: string | null | undefined } }> } };
 
 export type UpdateArticleMutationVariables = Types.Exact<{
   input: Types.UpdateArticleInput;
@@ -36,6 +36,11 @@ export type TranslateArticlesMutationVariables = Types.Exact<{
 
 
 export type TranslateArticlesMutation = { __typename?: 'Mutation', translateArticles: Array<{ __typename?: 'TranslationResult', publication_id: string, success: boolean, message?: string | null | undefined, language: string, slug: string }> };
+
+export type CheckOutdatedTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type CheckOutdatedTranslationsMutation = { __typename?: 'Mutation', checkOutdatedTranslations: boolean };
 
 export type AddLanguagesToExistingArticlesMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -81,6 +86,7 @@ export const ArticlesListDocument = gql`
       DOIStatus
       languages
       enabled_languages
+      outdatedTranslations
       content {
         article
       }
@@ -253,6 +259,36 @@ export function useTranslateArticlesMutation(baseOptions?: Apollo.MutationHookOp
 export type TranslateArticlesMutationHookResult = ReturnType<typeof useTranslateArticlesMutation>;
 export type TranslateArticlesMutationResult = Apollo.MutationResult<TranslateArticlesMutation>;
 export type TranslateArticlesMutationOptions = Apollo.BaseMutationOptions<TranslateArticlesMutation, TranslateArticlesMutationVariables>;
+export const CheckOutdatedTranslationsDocument = gql`
+    mutation CheckOutdatedTranslations {
+  checkOutdatedTranslations
+}
+    `;
+export type CheckOutdatedTranslationsMutationFn = Apollo.MutationFunction<CheckOutdatedTranslationsMutation, CheckOutdatedTranslationsMutationVariables>;
+
+/**
+ * __useCheckOutdatedTranslationsMutation__
+ *
+ * To run a mutation, you first call `useCheckOutdatedTranslationsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCheckOutdatedTranslationsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [checkOutdatedTranslationsMutation, { data, loading, error }] = useCheckOutdatedTranslationsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCheckOutdatedTranslationsMutation(baseOptions?: Apollo.MutationHookOptions<CheckOutdatedTranslationsMutation, CheckOutdatedTranslationsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CheckOutdatedTranslationsMutation, CheckOutdatedTranslationsMutationVariables>(CheckOutdatedTranslationsDocument, options);
+      }
+export type CheckOutdatedTranslationsMutationHookResult = ReturnType<typeof useCheckOutdatedTranslationsMutation>;
+export type CheckOutdatedTranslationsMutationResult = Apollo.MutationResult<CheckOutdatedTranslationsMutation>;
+export type CheckOutdatedTranslationsMutationOptions = Apollo.BaseMutationOptions<CheckOutdatedTranslationsMutation, CheckOutdatedTranslationsMutationVariables>;
 export const AddLanguagesToExistingArticlesDocument = gql`
     mutation AddLanguagesToExistingArticles {
   addLanguagesToExistingArticles

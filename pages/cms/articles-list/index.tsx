@@ -29,7 +29,10 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useEffect, useState } from 'react'
 import { FilterList, Home } from '@mui/icons-material'
 import ArticlesList from 'components/cms/articles-list/ArticlesList'
-import { useUpdateWistiaMetadataMutation } from 'graphql/cms-queries/articles-list.generated'
+import {
+  useCheckOutdatedTranslationsMutation,
+  useUpdateWistiaMetadataMutation
+} from 'graphql/cms-queries/articles-list.generated'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
 import {
@@ -148,7 +151,8 @@ const ArticlesListPage = () => {
     setFilters,
     filters,
     selectedItems,
-    searchTerm
+    searchTerm,
+    refetch
   } = useArticlesList()
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
@@ -166,6 +170,12 @@ const ArticlesListPage = () => {
       },
       onError(error) {
         enqueueSnackbar(error.message, { variant: 'error' })
+      }
+    })
+  const [checkOutdated, { loading: checkOutdatedLoading }] =
+    useCheckOutdatedTranslationsMutation({
+      onCompleted() {
+        refetch()
       }
     })
   const { data, refetch: refetchGenerated } = useScienceOpenLastGeneratedQuery()
@@ -285,6 +295,19 @@ const ArticlesListPage = () => {
           >
             Add Translations
           </Button>
+          <Tooltip title={`Last generated at: ${lastGenerateDate}`} arrow>
+            <LoadingButton
+              color="secondary"
+              variant="outlined"
+              sx={{ ml: 2 }}
+              onClick={() => {
+                checkOutdated()
+              }}
+              loading={checkOutdatedLoading}
+            >
+              Check Outdated Translations
+            </LoadingButton>
+          </Tooltip>
           <Button
             color="secondary"
             variant="outlined"

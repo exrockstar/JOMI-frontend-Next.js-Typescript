@@ -1,4 +1,11 @@
-import { Add, Edit, MoreVert, Refresh, Visibility } from '@mui/icons-material'
+import {
+  Add,
+  Check,
+  Edit,
+  MoreVert,
+  Refresh,
+  Visibility
+} from '@mui/icons-material'
 import {
   TableContainer,
   Card,
@@ -264,6 +271,15 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                     </TableCell>
                     <TableCell>
                       {article.enabled_languages?.join(', ') ?? 'N/A'}
+                    </TableCell>
+                    <TableCell>
+                      {article.outdatedTranslations.length ? (
+                        article.outdatedTranslations?.join(', ')
+                      ) : (
+                        <Typography display="flex" alignItems="center">
+                          <Check color="success" /> Up to date
+                        </Typography>
+                      )}
                     </TableCell>
                     <TableCell>{article.contentlength}</TableCell>
                     <TableCell>
