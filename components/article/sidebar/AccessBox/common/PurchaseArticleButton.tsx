@@ -6,6 +6,7 @@ import DefaultButton from './DefaultButton'
 import PromocodeModal from './PromocodeModal'
 import { OrderType } from 'graphql/types'
 import { analytics } from 'apis/analytics'
+import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 
 type Props = {
   userId: string
@@ -13,14 +14,18 @@ type Props = {
   articleId: string
   text: string
   type: OrderType.PurchaseArticle | OrderType.RentArticle
+  price: number
 }
 
 const PurchaseArticleButton = (props: Props) => {
-  const { userId, purchaseDescription, articleId, text, type } = props
+  const { userId, purchaseDescription, articleId, text, type, price } = props
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const ref = useRef<HTMLFormElement>(null)
   const [promocode, setPromocode] = useState('')
+  const { referredFrom, referrerPath, anon_link_id } =
+    useGoogleAnalyticsHelpers()
+
   useEffect(() => {
     const query = router.query
 
@@ -43,6 +48,7 @@ const PurchaseArticleButton = (props: Props) => {
     }
     return url.toString()
   }
+
   return (
     <>
       <PromocodeModal
@@ -56,6 +62,14 @@ const PurchaseArticleButton = (props: Props) => {
           setPromocode(code)
         }}
         onSubmit={() => {
+          const eventName = type === OrderType.PurchaseArticle ? 'purchase_article' : 'rent_article'
+          gtag('event', eventName, {
+            referredFrom,
+            referrerPath,
+            anon_link_id,
+            userId,
+            value: price
+          })
           ref.current.submit()
         }}
       />
