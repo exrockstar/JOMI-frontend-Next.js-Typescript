@@ -81,10 +81,11 @@ const PurchaseArticleSection = ({ data }: Props) => {
                 userId={userId}
                 purchaseDescription={purchaseDescription}
                 articleId={article._id}
-                text={`Purchase  for $${(
+                text={`Purchase for $${(
                   purchasePrice.unit_amount / 100
                 ).toFixed(0)}`}
                 type={OrderType.PurchaseArticle}
+                price={purchasePrice.unit_amount / 100}
               />
             )}
             {showRentArticleButton && (
@@ -95,6 +96,7 @@ const PurchaseArticleSection = ({ data }: Props) => {
                   articleId={article._id}
                   text={`Rent Article`}
                   type={OrderType.RentArticle}
+                  price={rentPrice.unit_amount / 100}
                 />
               </Tooltip>
             )}

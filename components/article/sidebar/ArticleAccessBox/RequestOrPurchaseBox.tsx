@@ -8,7 +8,6 @@ import {
   RequestSubscriptionButton
 } from './common'
 import { analytics } from 'apis/analytics'
-import PurchaseArticleButton from '../AccessBox/common/PurchaseArticleButton'
 
 type Props = {
   message?: ReactNode

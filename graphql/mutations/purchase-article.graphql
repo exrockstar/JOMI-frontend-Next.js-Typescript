@@ -9,6 +9,7 @@ query GetPurchasedArticles {
     description
     amount
     created
+    currency
     article {
       slug      
       publication_id

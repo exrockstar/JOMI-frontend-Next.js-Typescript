@@ -20,6 +20,7 @@ import { useAppState } from 'components/_appstate/useAppState'
 import { getApolloUserClient } from 'apis/apollo-admin-client'
 import Cookies from 'cookies'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import { OrderType } from 'graphql/types'
 const CheckoutSuccessPage = () => {
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -53,6 +54,7 @@ const CheckoutSuccessPage = () => {
       referredFrom,
       referrerPath,
       anon_link_id,
+      event_label: OrderType.Individual,
       items: [
         {
           item_id: order._id,

@@ -10,11 +10,12 @@ import {
   UserPricesQuery,
   UserPricesQueryVariables
 } from 'graphql/queries/user-prices.generated'
+import { OrderType } from 'graphql/types'
 import { logger } from 'logger/logger'
 import { NextApiRequest } from 'next'
 import { getToken } from 'next-auth/jwt'
 import Stripe from 'stripe'
-logger.info(process.env.STRIPE_SECRET_KEY)
+
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: '2020-08-27',
   maxNetworkRetries: 2
@@ -22,7 +23,7 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export default async function handler(req: NextApiRequest, res) {
   const { userId, description, articleId, from, type, coupon } = req.body
-  console.log('coupon', coupon)
+  console.log(userId, description, type, coupon)
   if (req.method === 'POST') {
     try {
       const secret = process.env.SECRET
@@ -30,12 +31,9 @@ export default async function handler(req: NextApiRequest, res) {
         req: req,
         secret: secret
       })
-
+      const origin = req.headers.origin ?? 'https://jomi.com'
       if (!token) {
-        const signupUrl = new URL(
-          '/signup',
-          req.headers.origin ?? 'http://localhost:3000'
-        )
+        const signupUrl = new URL('/signup', origin)
 
         signupUrl.searchParams.append('from', from)
 
@@ -61,7 +59,7 @@ export default async function handler(req: NextApiRequest, res) {
         query: GetPriceByProductIdDocument,
         variables: {
           product_id:
-            type === 'purchase-article'
+            type === OrderType.PurchaseArticle
               ? 'product_purchase_article'
               : 'product_rent_article'
         },
@@ -71,6 +69,10 @@ export default async function handler(req: NextApiRequest, res) {
           }
         }
       })
+      // redirect to purchase-success page to track article/rent purchases
+      const success_url = new URL('/purchase-success', origin)
+      success_url.searchParams.append('from', encodeURIComponent(from))
+
       const params: Stripe.Checkout.SessionCreateParams = {
         customer: userData?.data?.user.stripeData?.stripeId,
         line_items: [
@@ -82,7 +84,7 @@ export default async function handler(req: NextApiRequest, res) {
         ],
 
         mode: 'payment',
-        success_url: from,
+        success_url: success_url.toString(),
         cancel_url: from,
         metadata: {
           description,
