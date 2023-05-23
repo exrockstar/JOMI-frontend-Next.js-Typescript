@@ -62,7 +62,7 @@ const PurchaseArticleButton = (props: Props) => {
           setPromocode(code)
         }}
         onSubmit={() => {
-          const eventName = type === OrderType.PurchaseArticle ? 'purchase_article' : 'rent_article'
+          const eventName = type === OrderType.PurchaseArticle ? 'initiate_purchase_article' : 'initiate_rent_article'
           gtag('event', eventName, {
             referredFrom,
             referrerPath,
