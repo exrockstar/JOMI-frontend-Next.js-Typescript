@@ -23,7 +23,7 @@ const LatestArticlesSection = () => {
         variant="contained"
         color="primary"
         LinkComponent={Link}
-        href="/index"
+        href="/articles"
         size="large"
         endIcon={<ArrowForward />}
         sx={{ mt: 6, width: { xs: '100%', md: 'unset' } }}
