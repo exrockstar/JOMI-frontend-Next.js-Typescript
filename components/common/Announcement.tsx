@@ -3,11 +3,12 @@ import { Container, IconButton, Stack, Tooltip } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { Box } from '@mui/system'
 import { AnnouncementPartsFragment } from 'graphql/fragments/AnnouncementParts.generated'
+import { SiteWideAnnouncementsQuery } from 'graphql/queries/announcement-for-user.generated'
 import { AnnouncementType } from 'graphql/types'
 import { memo, useMemo } from 'react'
 
 type Props = {
-  announcement: AnnouncementPartsFragment
+  announcement: Unpacked<SiteWideAnnouncementsQuery['getSiteWideAnnouncements']>
   onClose(cache_id: string): void
 }
 
@@ -30,11 +31,7 @@ const Announcement = ({ announcement, onClose }: Props) => {
   return (
     <Box sx={{ backgroundColor: bgColor }}>
       <Container maxWidth="lg">
-        <Stack
-          direction={'row'}
-          alignItems="center"
-          justifyContent="space-between"
-        >
+        <Stack direction={'row'} alignItems="center" justifyContent="space-between">
           <Box
             dangerouslySetInnerHTML={{ __html: announcement.content }}
             py={1.5}
@@ -57,10 +54,7 @@ const Announcement = ({ announcement, onClose }: Props) => {
             }}
           ></Box>
 
-          <Tooltip
-            placement="bottom-end"
-            title="Do not show this announcement again"
-          >
+          <Tooltip placement="bottom-end" title="Do not show this announcement again">
             <CloseButton
               onClick={() => onClose(announcement.cache_id)}
               aria-label="hide-announcement"

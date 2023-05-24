@@ -5,6 +5,7 @@ query AnnoucementForUser {
     backgroundColor
     content
     title
+    
   }
 }
 
@@ -16,6 +17,7 @@ query SiteWideAnnouncements {
     backgroundColor
     content
     isPermanent
+    type
   }
 }
 

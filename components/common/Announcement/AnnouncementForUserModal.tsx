@@ -1,8 +1,7 @@
-import { Check, Close, MarkEmailRead } from '@mui/icons-material'
-import { Box, Button, Dialog, DialogContent, Divider, IconButton, Tooltip, Typography } from '@mui/material'
+import { Close, MarkEmailRead } from '@mui/icons-material'
+import { Box, Button, Dialog, DialogContent, Divider, IconButton, Typography } from '@mui/material'
 import { useAppState } from 'components/_appstate/useAppState'
-import { Announcement } from 'graphql/types'
-import { useEffect, useState } from 'react'
+import { AnnoucementForUserQuery } from 'graphql/queries/announcement-for-user.generated'
 
 /**
  * Component to show targeted announcements to logged-in users
@@ -11,7 +10,7 @@ import { useEffect, useState } from 'react'
 const UserAnnouncementModal = () => {
   const { personalAnnouncements, setShowPersonalAnnouncements: setShow, markNotificationAsRead } = useAppState()
   const show = personalAnnouncements.show
-  const announcements = personalAnnouncements.announcements as Announcement[]
+  const announcements = personalAnnouncements.announcements as AnnoucementForUserQuery['announcementForUser']
   if (!announcements?.length) return null
   return (
     <Dialog open={show} maxWidth="md" fullWidth>
