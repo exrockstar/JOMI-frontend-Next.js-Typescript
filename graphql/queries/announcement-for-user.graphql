@@ -1,13 +1,21 @@
 query AnnoucementForUser {
   announcementForUser {
-    ...AnnouncementParts
+    _id
+    cache_id
+    backgroundColor
+    content
+    title
   }
 }
 
 
 query SiteWideAnnouncements {
   getSiteWideAnnouncements{
-    ...AnnouncementParts
+    _id
+    cache_id
+    backgroundColor
+    content
+    isPermanent
   }
 }
 

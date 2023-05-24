@@ -12,7 +12,7 @@ export type AnnoucementForUserQuery = { __typename?: 'Query', announcementForUse
 export type SiteWideAnnouncementsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteWideAnnouncementsQuery = { __typename?: 'Query', getSiteWideAnnouncements?: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined }> | null | undefined };
+export type SiteWideAnnouncementsQuery = { __typename?: 'Query', getSiteWideAnnouncements?: Array<{ __typename?: 'Announcement', _id: any, cache_id: string, backgroundColor?: string | null | undefined, content?: string | null | undefined, isPermanent?: boolean | null | undefined }> | null | undefined };
 
 export type MarkAnnouncementAsReadMutationVariables = Types.Exact<{
   cacheId: Types.Scalars['String'];
@@ -59,10 +59,14 @@ export type AnnoucementForUserQueryResult = Apollo.QueryResult<AnnoucementForUse
 export const SiteWideAnnouncementsDocument = gql`
     query SiteWideAnnouncements {
   getSiteWideAnnouncements {
-    ...AnnouncementParts
+    _id
+    cache_id
+    backgroundColor
+    content
+    isPermanent
   }
 }
-    ${AnnouncementPartsFragmentDoc}`;
+    `;
 
 /**
  * __useSiteWideAnnouncementsQuery__
