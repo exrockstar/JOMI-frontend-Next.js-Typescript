@@ -46,7 +46,7 @@ const AppContext = createContext<typeof context>(context)
 
 export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState(context.state)
-  const [trackAnnouncements, {}] = useTrackAnnouncementsMutation()
+  const [trackAnnouncements, { called }] = useTrackAnnouncementsMutation()
   const router = useRouter()
   const { previouslyClosed, markNotificationAsRead, setPreviouslyClosed } = useClosedAnnouncements()
   const noAnnouncements = ['/cms', '/access', '/signup', '/login']
@@ -57,11 +57,14 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: personalAnnouncementsData, updateQuery } = useAnnoucementForUserQuery({
     skip: !session?.user,
     onCompleted(result) {
-      trackAnnouncements({
-        variables: {
-          _ids: result.announcementForUser?.map((a) => a._id)
-        }
-      })
+      const ids = result.announcementForUser?.map((a) => a._id)
+      if (!!ids.length) {
+        trackAnnouncements({
+          variables: {
+            _ids: ids
+          }
+        })
+      }
     }
   })
   const personalAnnouncements = personalAnnouncementsData?.announcementForUser
@@ -73,12 +76,6 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
       const filtered = previouslyClosed.length
         ? announcements?.filter((a) => !previouslyClosed?.includes(a.cache_id))
         : announcements
-      const filtered_ids = filtered?.map((a) => a._id)
-      trackAnnouncements({
-        variables: {
-          _ids: filtered_ids
-        }
-      })
 
       setState({
         ...state,
@@ -87,6 +84,17 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
       })
     }
   })
+
+  useEffect(() => {
+    if (!called && !!state.announcements?.length) {
+      const filtered_ids = state.announcements?.map((a) => a._id)
+      trackAnnouncements({
+        variables: {
+          _ids: filtered_ids
+        }
+      })
+    }
+  }, [called, state.announcements, trackAnnouncements])
 
   const setContextState = (newState: (typeof context)['state']) => {
     setState(newState)
