@@ -234,7 +234,6 @@ export const getStaticProps: GetStaticProps<SingleArticleProps, IParams> = async
     const fixedImageLinks = fixImages(content.article, publication_id)
     const procedureOutline = fixImages(content.outline, publication_id)
     //#endregion
-    await client.clearStore()
     await client.query<SiteWideAnnouncementsQuery>({
       query: SiteWideAnnouncementsDocument
     })

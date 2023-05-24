@@ -94,7 +94,6 @@ export const getStaticProps: GetStaticProps<Props, IParams> = async ({ params })
     })
 
     const content = $('body').html()
-    await client.clearStore()
     await client.query<SiteWideAnnouncementsQuery>({
       query: SiteWideAnnouncementsDocument
     })
