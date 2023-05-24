@@ -1,12 +1,4 @@
-import {
-  Box,
-  Typography,
-  Container,
-  Grid,
-  Stack,
-  Divider,
-  Button
-} from '@mui/material'
+import { Box, Typography, Container, Grid, Stack, Divider, Button } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import Layout from 'components/layout'
 import Link from 'next/link'
@@ -25,11 +17,12 @@ import {
   InstitutionSubsDocument
 } from 'graphql/queries/institution-subs.generated'
 import { analytics } from 'apis/analytics'
+import { PageBySlugDocument, PageBySlugQuery, PageBySlugQueryVariables } from 'graphql/queries/page-by-slug.generated'
+import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import {
-  PageBySlugDocument,
-  PageBySlugQuery,
-  PageBySlugQueryVariables
-} from 'graphql/queries/page-by-slug.generated'
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 
 type GroupedInstitutions = {
   [key: string]: any[]
@@ -45,10 +38,7 @@ type Props = {
   institutions: InstitutionSubsQuery['institution_subs']
   featured: FeaturedInst[]
 } & DefaultPageProps
-export default function SubscribersPage({
-  institutions = [],
-  featured
-}: Props) {
+export default function SubscribersPage({ institutions = [], featured }: Props) {
   const sorted = [...institutions].sort((a, b) => {
     return a.name.localeCompare(b.name)
   })
@@ -65,9 +55,7 @@ export default function SubscribersPage({
       return acc
     }, {} as GroupedInstitutions)
 
-  const allExceptSurgicalTech = Object.keys(groupedInstitutions).filter(
-    (category) => category !== 'SurgTech'
-  )
+  const allExceptSurgicalTech = Object.keys(groupedInstitutions).filter((category) => category !== 'SurgTech')
   const surgTech = groupedInstitutions['SurgTech']
 
   const getCategoryHeader = (category: string) => {
@@ -97,11 +85,7 @@ export default function SubscribersPage({
               spacing={2}
               justifyContent={{ xs: 'stretch', md: 'flex-end' }}
             >
-              <Link
-                href="/account/request-subscription"
-                passHref
-                legacyBehavior
-              >
+              <Link href="/account/request-subscription" passHref legacyBehavior>
                 <Button
                   variant="outlined"
                   sx={{ borderRadius: 2, textTransform: 'none' }}
@@ -161,12 +145,7 @@ export default function SubscribersPage({
                         display="flex"
                         justifyContent="center"
                       >
-                        <Box
-                          position="relative"
-                          height={150}
-                          width="100%"
-                          margin={2.5}
-                        >
+                        <Box position="relative" height={150} width="100%" margin={2.5}>
                           <Image
                             src={imageUrl}
                             layout="fill"
@@ -208,11 +187,7 @@ export default function SubscribersPage({
                       }}
                     >
                       {instSubs.map((inst) => {
-                        return (
-                          <Typography key={inst._id}>
-                            {inst.displayName || inst.name}
-                          </Typography>
-                        )
+                        return <Typography key={inst._id}>{inst.displayName || inst.name}</Typography>
                       })}
                     </Box>
                   </Box>
@@ -234,11 +209,7 @@ export default function SubscribersPage({
                 }}
               >
                 {surgTech?.map((inst) => {
-                  return (
-                    <Typography key={inst._id}>
-                      {inst.displayName || inst.name}
-                    </Typography>
-                  )
+                  return <Typography key={inst._id}>{inst.displayName || inst.name}</Typography>
                 })}
               </Box>
             </Box>
@@ -252,18 +223,12 @@ export default function SubscribersPage({
 export const getStaticProps: GetStaticProps<Props> = async () => {
   logger.info('Regenerating /subscribers')
   const client = getApolloAdminClient()
-  const { data: institutionData } = await client.query<
-    InstitutionSubsQuery,
-    InstitutionSubsQueryVariables
-  >({
+  const { data: institutionData } = await client.query<InstitutionSubsQuery, InstitutionSubsQueryVariables>({
     query: InstitutionSubsDocument,
     fetchPolicy: 'no-cache'
   })
 
-  const { data } = await client.query<
-    PageBySlugQuery,
-    PageBySlugQueryVariables
-  >({
+  const { data } = await client.query<PageBySlugQuery, PageBySlugQueryVariables>({
     variables: {
       slug: 'subscribers'
     },
@@ -285,6 +250,10 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     })
     .get() as FeaturedInst[]
 
+  await client.query<SiteWideAnnouncementsQuery>({
+    query: SiteWideAnnouncementsDocument,
+    fetchPolicy: 'no-cache'
+  })
   return {
     props: {
       institutions: institutionData?.institution_subs,
@@ -296,7 +265,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
           following institutions share our commitment to excellence in medical
           instruction.`,
         slug: 'subscribers'
-      })
+      }),
+      [APOLLO_STATE_PROP_NAME]: client.cache.extract()
     },
     revalidate: 3600
   }

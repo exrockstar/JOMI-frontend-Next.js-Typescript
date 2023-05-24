@@ -16,6 +16,8 @@ export type Scalars = {
   DateTime: any;
   /** Mongo object id scalar type */
   ObjectId: any;
+  /** Any value */
+  any: any;
 };
 
 export type Access = {
@@ -136,11 +138,12 @@ export type Announcement = {
   _id: Scalars['ObjectId'];
   author?: Maybe<User>;
   backgroundColor?: Maybe<Scalars['String']>;
-  cache_id: Scalars['ObjectId'];
+  cache_id: Scalars['String'];
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   deleted?: Maybe<Scalars['Boolean']>;
   enabled: Scalars['Boolean'];
+  filters?: Maybe<Array<FilterExpression>>;
   isPermanent?: Maybe<Scalars['Boolean']>;
   lastEditedBy?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Float']>;
@@ -154,10 +157,11 @@ export type Announcement = {
 
 export type AnnouncementInput = {
   _id: Scalars['String'];
-  backgroundColor?: InputMaybe<Scalars['String']>;
-  content?: InputMaybe<Scalars['String']>;
+  backgroundColor: Scalars['String'];
+  content: Scalars['String'];
   enabled: Scalars['Boolean'];
-  isPermanent?: InputMaybe<Scalars['Boolean']>;
+  filters: Array<FilterExpressionInput>;
+  isPermanent: Scalars['Boolean'];
   title?: InputMaybe<Scalars['String']>;
   type: AnnouncementType;
 };
@@ -753,6 +757,25 @@ export enum FileExtensions {
   Webp = 'webp'
 }
 
+export type FilterExpression = {
+  __typename?: 'FilterExpression';
+  columnName?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  level: Scalars['Int'];
+  operator: Operators;
+  parentId?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['any']>;
+};
+
+export type FilterExpressionInput = {
+  columnName?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  level: Scalars['Int'];
+  operator: Operators;
+  parentId?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['any']>;
+};
+
 export type GeoLocation = {
   __typename?: 'GeoLocation';
   continentCode?: Maybe<Scalars['String']>;
@@ -1093,6 +1116,7 @@ export type Mutation = {
   getInstitution: Institution;
   handleFreePromoCode: Scalars['Boolean'];
   loginToArticle: Scalars['Boolean'];
+  markAnnouncementAsRead: Array<Scalars['String']>;
   redactVote: NewArticleVote;
   requestSubscription: Scalars['Boolean'];
   resetPasswordCms?: Maybe<Scalars['String']>;
@@ -1108,6 +1132,7 @@ export type Mutation = {
   syncDefaultPricesToDb: Scalars['Boolean'];
   tokenSignIn?: Maybe<User>;
   trackAnnouncement: Scalars['Boolean'];
+  trackAnnouncements: Scalars['Boolean'];
   trackArticle: Scalars['Boolean'];
   trackInitiateCheckout: Scalars['Boolean'];
   trackLogin: Scalars['Boolean'];
@@ -1341,6 +1366,11 @@ export type MutationLoginToArticleArgs = {
 };
 
 
+export type MutationMarkAnnouncementAsReadArgs = {
+  cacheId: Scalars['String'];
+};
+
+
 export type MutationRedactVoteArgs = {
   article_title: Scalars['String'];
 };
@@ -1410,6 +1440,11 @@ export type MutationTokenSignInArgs = {
 
 export type MutationTrackAnnouncementArgs = {
   _id: Scalars['String'];
+};
+
+
+export type MutationTrackAnnouncementsArgs = {
+  _ids: Array<Scalars['String']>;
 };
 
 
@@ -1619,6 +1654,21 @@ export type NewArticleVote = {
   users_voted: Array<Scalars['String']>;
   v: Scalars['Int'];
 };
+
+export enum Operators {
+  After = 'after',
+  And = 'and',
+  Before = 'before',
+  Contains = 'contains',
+  Equal = 'equal',
+  GreaterThan = 'greater_than',
+  GreaterThanOrEqual = 'greater_than_or_equal',
+  LessThan = 'less_than',
+  LessThanOrEqual = 'less_than_or_equal',
+  NotContains = 'not_contains',
+  NotEqual = 'not_equal',
+  Or = 'or'
+}
 
 export type Order = {
   __typename?: 'Order';
@@ -2047,6 +2097,7 @@ export type Query = {
   getScienceOpenArticleByPubId?: Maybe<ScienceOpenXml>;
   getScienceOpenArticlesXml: Array<ScienceOpenXml>;
   getSiteSettings: SiteSetting;
+  getSiteWideAnnouncements?: Maybe<Array<Announcement>>;
   getStripePromoCode: StripePromoCode;
   getStripePromoCodeByCode: StripePromoCode;
   getStripePromoCodes: StripePromoCodeListOutput;

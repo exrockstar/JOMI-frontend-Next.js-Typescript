@@ -13,9 +13,13 @@ const getFile = async (req: NextApiRequest, res: NextApiResponse) => {
     const fileExt = path.extname(`${fileName}`) || ''
 
     if (!fileExt) {
-      throw new Error(
-        `Requested file '${fileName}' is missing a file extension`
-      )
+      throw new Error(`Requested file '${fileName}' is missing a file extension`)
+    }
+    //check if file exists
+    const exists = await GridFS.find({ filename: fileName }).toArray()
+    if (!exists.length) {
+      res.status(404).send('Not Found')
+      return
     }
 
     // Start MongoDB Grid stream
@@ -27,10 +31,7 @@ const getFile = async (req: NextApiRequest, res: NextApiResponse) => {
     // no need extra step to optimize using sharp. NextJS already does that.
     if (process.env.NODE_ENV !== 'development') {
       //cache images for 1 week.
-      res.setHeader(
-        'Cache-Control',
-        `public, max-age=604800, s-max-age=604800, must-revalidate`
-      )
+      res.setHeader('Cache-Control', `public, max-age=604800, s-max-age=604800, must-revalidate`)
     }
     fileStream.pipe(res)
   } catch (error) {

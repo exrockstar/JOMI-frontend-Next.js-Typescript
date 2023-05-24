@@ -8,13 +8,14 @@ import { DefaultPageProps } from 'backend/seo/MetaData'
 import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { getApolloAdminClient } from 'apis/apollo-admin-client'
 import { logger } from 'logger/logger'
-import {
-  PageBySlugQuery,
-  PageBySlugQueryVariables,
-  PageBySlugDocument
-} from 'graphql/queries/page-by-slug.generated'
+import { PageBySlugQuery, PageBySlugQueryVariables, PageBySlugDocument } from 'graphql/queries/page-by-slug.generated'
 import { PagesQuery, PagesDocument } from 'graphql/queries/pages.generated'
 import cheerio from 'cheerio'
+import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
+import {
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 const isProduction = process.env.APP_ENV === 'production'
 type Props = {
   page: PageBySlugQuery['pageBySlug']
@@ -28,10 +29,7 @@ export default function SinglePage({ page, scripts }: Props) {
         <Script key={index} src={script} />
       ))}
       <Box sx={{ backgroundColor: 'white', wordBreak: 'break-word' }} p={2}>
-        <div
-          dangerouslySetInnerHTML={{ __html: page?.content }}
-          className="generated"
-        />
+        <div dangerouslySetInnerHTML={{ __html: page?.content }} className="generated" />
       </Box>
     </Layout>
   )
@@ -63,16 +61,11 @@ export async function getStaticPaths() {
 interface IParams extends ParsedUrlQuery {
   slug: string[]
 }
-export const getStaticProps: GetStaticProps<Props, IParams> = async ({
-  params
-}) => {
+export const getStaticProps: GetStaticProps<Props, IParams> = async ({ params }) => {
   logger.info(`Regenerating page ${params.slug}`)
   try {
     const client = getApolloAdminClient()
-    const { data } = await client.query<
-      PageBySlugQuery,
-      PageBySlugQueryVariables
-    >({
+    const { data } = await client.query<PageBySlugQuery, PageBySlugQueryVariables>({
       variables: {
         slug: params.slug.join('/')
       },
@@ -101,6 +94,10 @@ export const getStaticProps: GetStaticProps<Props, IParams> = async ({
     })
 
     const content = $('body').html()
+    await client.clearStore()
+    await client.query<SiteWideAnnouncementsQuery>({
+      query: SiteWideAnnouncementsDocument
+    })
     return {
       props: {
         page: {
@@ -108,6 +105,7 @@ export const getStaticProps: GetStaticProps<Props, IParams> = async ({
           content: content
         },
         scripts,
+        [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
         meta_data: buildGenericMetadata(data?.pageBySlug ?? { title: 'Error' })
       },
       revalidate: 3600

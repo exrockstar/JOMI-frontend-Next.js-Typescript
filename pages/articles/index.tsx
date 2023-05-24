@@ -1,13 +1,7 @@
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import Layout from 'components/layout'
 import Grid from '@mui/material/Grid'
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  Typography,
-  useMediaQuery
-} from '@mui/material'
+import { Box, CircularProgress, Stack, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { GetServerSideProps, GetStaticProps } from 'next'
 
@@ -38,6 +32,11 @@ import {
 } from 'graphql/queries/categories.generated'
 import { ArticleSort } from 'graphql/types'
 import { buildArticleListStructuredData } from 'backend/seo/buildArticleListStructuredData'
+import { useAppState } from 'components/_appstate/useAppState'
+import {
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 
 type Props = {
   [APOLLO_STATE_PROP_NAME]: any
@@ -74,11 +73,7 @@ function Articles() {
         <Grid container my={8}>
           <Grid item xs={12} md={9} component="section">
             <ArticleControls totalCount={totalCount} itemsPerPage={15} />
-            <ArticleList
-              articles={articles}
-              totalCount={totalCount}
-              itemsPerPage={15}
-            />
+            <ArticleList articles={articles} totalCount={totalCount} itemsPerPage={15} />
             <Box alignSelf="flex-end" mt={1}>
               <Pagination totalCount={totalCount} itemsPerPage={15} />
             </Box>
@@ -96,9 +91,7 @@ function Articles() {
 
 export default Articles
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   console.log('Regenerating articles page')
   const query = context.query
   const page = parseInt(query.page as string) || 1
@@ -127,6 +120,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   //   )
   // }
   const articles = data?.articleOutput?.articles
+
+  await client.query<SiteWideAnnouncementsQuery>({
+    query: SiteWideAnnouncementsDocument
+  })
   return {
     props: {
       //return cache from serverside as props to eliminate extra calls to api

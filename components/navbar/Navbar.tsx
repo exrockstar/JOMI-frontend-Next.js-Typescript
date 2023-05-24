@@ -1,13 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Menu,
-  Toolbar,
-  useMediaQuery
-} from '@mui/material'
+import { AppBar, Badge, Box, Button, Container, IconButton, Menu, Toolbar, useMediaQuery } from '@mui/material'
 import { frontPageTheme } from 'components/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import LogoWhite from 'public/logo-white.svg'
@@ -24,6 +15,9 @@ import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'
 import { IS_SERVER } from 'common/constants'
 import LoginDropdown from './login/LoginDropdown'
 import { useRouter } from 'next/router'
+import AnnouncementContainer from 'components/common/Announcement/AnnouncementContainer'
+import { Notifications } from '@mui/icons-material'
+import { useAppState } from 'components/_appstate/useAppState'
 const Navbar = () => {
   const theme = frontPageTheme
   const scrollHeight = 84
@@ -33,6 +27,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
   const drawerOpen = Boolean(anchorEl)
   const { data: session } = useSession()
+  const { personalAnnouncements, setShowPersonalAnnouncements } = useAppState()
   const toggleDrawer = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (anchorEl) {
       setAnchorEl(null)
@@ -55,9 +50,7 @@ const Navbar = () => {
 
     return () => window.removeEventListener('scroll', handler)
   }, [scrollHeight])
-  const isSignUpPage =
-    router.pathname.startsWith('/signup') ||
-    router.pathname.startsWith('/login')
+  const isSignUpPage = router.pathname.startsWith('/signup') || router.pathname.startsWith('/login')
   const isTransparentBg = !hasScrolled && !isSignUpPage
   return (
     <ThemeProvider theme={frontPageTheme}>
@@ -171,12 +164,7 @@ const Navbar = () => {
               </Box>
             </Box>
 
-            <Box
-              display={{ xs: 'none', md: 'flex' }}
-              alignItems="stretch"
-              gap={2.5}
-              height={44}
-            >
+            <Box display={{ xs: 'none', md: 'flex' }} alignItems="stretch" gap={2.5} height={44}>
               <SearchBar />
               {!session?.user ? (
                 <Box display={'flex'} gap={2.5}>
@@ -184,7 +172,7 @@ const Navbar = () => {
                     href={{
                       pathname: '/signup',
                       query: {
-                        from: !IS_SERVER ? encodeURI(window.location.href) : '/'
+                        from: '/'
                       }
                     }}
                     passHref
@@ -195,10 +183,33 @@ const Navbar = () => {
                   <LoginDropdown />
                 </Box>
               ) : (
-                <AccountDropdown />
+                <Box display="flex">
+                  {!!personalAnnouncements.count && (
+                    <Badge badgeContent={personalAnnouncements.count} color="error">
+                      <Notifications
+                        fontSize="large"
+                        sx={{
+                          cursor: 'pointer'
+                        }}
+                        onClick={() => setShowPersonalAnnouncements(true)}
+                      />
+                    </Badge>
+                  )}
+                  <AccountDropdown />
+                </Box>
               )}
             </Box>
             <Box display={{ xs: 'block', md: 'none' }}>
+              {!!personalAnnouncements.count && (
+                <Badge badgeContent={personalAnnouncements.count} color="error">
+                  <Notifications
+                    sx={{
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setShowPersonalAnnouncements(true)}
+                  />
+                </Badge>
+              )}
               <IconButton
                 color="secondary"
                 sx={{

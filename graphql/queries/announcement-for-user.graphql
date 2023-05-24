@@ -3,3 +3,14 @@ query AnnoucementForUser {
     ...AnnouncementParts
   }
 }
+
+
+query SiteWideAnnouncements {
+  getSiteWideAnnouncements{
+    ...AnnouncementParts
+  }
+}
+
+mutation MarkAnnouncementAsRead($cacheId: String!){
+  markAnnouncementAsRead(cacheId: $cacheId)
+}

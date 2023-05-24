@@ -20,10 +20,7 @@ import { DefaultPageProps } from 'backend/seo/MetaData'
 import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { getApolloClient } from 'apis/apollo-admin-client'
 import { cleanObj } from 'common/utils'
-import {
-  ArticleAuthorsQuery,
-  ArticleAuthorsDocument
-} from 'graphql/queries/article-authors.generated'
+import { ArticleAuthorsQuery, ArticleAuthorsDocument } from 'graphql/queries/article-authors.generated'
 import {
   AuthorBySlugQuery,
   AuthorBySlugQueryVariables,
@@ -38,6 +35,10 @@ import {
 import { ArticleSort } from 'graphql/types'
 import { logger } from 'logger/logger'
 import { buildArticleListStructuredData } from 'backend/seo/buildArticleListStructuredData'
+import {
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 type Props = {
   author?: AuthorBySlugQuery['authorBySlug']
   categories?: AuthorPageQuery['categories']
@@ -73,11 +74,7 @@ export default function Articles({ author, categories }: Props) {
         <Grid item xs={12} md={9} component="section">
           <Stack>
             <ArticleControls totalCount={totalCount} itemsPerPage={15} />
-            <ArticleList
-              articles={articles}
-              totalCount={totalCount}
-              itemsPerPage={15}
-            />
+            <ArticleList articles={articles} totalCount={totalCount} itemsPerPage={15} />
             <Box alignSelf="flex-end">
               <Pagination totalCount={totalCount} itemsPerPage={15} />
             </Box>
@@ -115,20 +112,14 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
   const { slug } = context.params as IParams
   const client = getApolloClient()
 
-  const { data } = await client.query<
-    AuthorBySlugQuery,
-    AuthorBySlugQueryVariables
-  >({
+  const { data } = await client.query<AuthorBySlugQuery, AuthorBySlugQueryVariables>({
     variables: {
       slug: slug as string
     },
     query: AuthorBySlugDocument
   })
 
-  const { data: pageData } = await client.query<
-    AuthorPageQuery,
-    AuthorPageQueryVariables
-  >({
+  const { data: pageData } = await client.query<AuthorPageQuery, AuthorPageQueryVariables>({
     variables: {
       input: {
         page: 1,
@@ -138,7 +129,9 @@ export const getStaticProps: GetStaticProps<Props> = async (context) => {
     },
     query: AuthorPageDocument
   })
-
+  await client.query<SiteWideAnnouncementsQuery>({
+    query: SiteWideAnnouncementsDocument
+  })
   const authorDisplayName = data.authorBySlug?.display_name
   const articles = pageData?.articleOutput?.articles
   if (data.authorBySlug) {

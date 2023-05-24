@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CircularProgress,
+  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -19,17 +20,17 @@ import FormikSwitch from 'components/common/formik/FormikSwitch'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import FormikTwitterPicker from 'components/common/formik/FormikTwitterPicker'
 import { Form, Formik } from 'formik'
-import {
-  useAnnouncementQuery,
-  useUpdateAnnouncementMutation
-} from 'graphql/queries/announcements.generated'
-import { AnnouncementType } from 'graphql/types'
+import { useAnnouncementQuery, useUpdateAnnouncementMutation } from 'graphql/queries/announcements.generated'
+import { AnnouncementInput, AnnouncementType } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 
 import AnnouncementEditor from './AnnouncementEditor'
 import AnnouncementPreviewModal from './AnnouncementPreviewModal'
+import AddChildButton from '../AnnouncementScoping/AddChildButton'
+import FilterExpressionList from '../AnnouncementScoping/FilterExpressionList'
+import SaveFiltersButton from '../AnnouncementScoping/SaveFiltersButton'
 
 type Props = {
   announcementId: string
@@ -49,19 +50,18 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
     skip: !announcementId || !session
   })
 
-  const [updateAnnouncement, { loading: updating, error: updateError }] =
-    useUpdateAnnouncementMutation({
-      onCompleted(data) {
-        enqueueSnackbar('Successfully updated announcement', {
-          variant: 'success'
-        })
-      },
-      onError(error) {
-        enqueueSnackbar(`Could not update announcement ${error.message}`, {
-          variant: 'error'
-        })
-      }
-    })
+  const [updateAnnouncement, { loading: updating, error: updateError }] = useUpdateAnnouncementMutation({
+    onCompleted(data) {
+      enqueueSnackbar('Successfully updated announcement', {
+        variant: 'success'
+      })
+    },
+    onError(error) {
+      enqueueSnackbar(`Could not update announcement ${error.message}`, {
+        variant: 'error'
+      })
+    }
+  })
 
   const handleSave = (values) => {
     updateAnnouncement({
@@ -86,7 +86,7 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
           <Alert color="error">Could not load announcement.</Alert>
         </Stack>
       ) : (
-        <Formik
+        <Formik<AnnouncementInput>
           onSubmit={handleSave}
           initialValues={{
             _id: announcement._id,
@@ -95,17 +95,17 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
             enabled: Boolean(announcement.enabled),
             isPermanent: Boolean(announcement?.isPermanent),
             type: AnnouncementType.Success,
-            backgroundColor: announcement?.backgroundColor ?? '#FFFFF'
+            backgroundColor: announcement?.backgroundColor ?? '#FFFFFF',
+            filters: announcement?.filters.map((filter) => {
+              let copy = { ...filter }
+              delete copy.__typename
+              return copy
+            })
           }}
         >
           {({ values }) => (
             <Form>
-              <Stack
-                p={2}
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
+              <Stack p={2} direction="row" justifyContent="space-between" alignItems="center">
                 <Box>
                   <Stack direction="row">
                     <Typography variant="h4">Details</Typography>
@@ -114,21 +114,9 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                     id: {announcementId}
                   </Typography>
                 </Box>
-                <LoadingButton
-                  startIcon={<Save />}
-                  variant="contained"
-                  type="submit"
-                  loading={updating && !updateError}
-                >
-                  Save
-                </LoadingButton>
               </Stack>
               <Card elevation={5}>
-                <Stack
-                  p={2}
-                  sx={{ width: { xs: '100%', md: '50%' } }}
-                  spacing={2}
-                >
+                <Stack p={2} sx={{ width: { xs: '100%', md: '50%' } }} spacing={2}>
                   <FormControl component="fieldset" variant="standard">
                     <FormLabel>
                       {/* <Typography variant="h5">Title</Typography> */}
@@ -149,10 +137,7 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                     <Stack direction="row" alignItems="center">
                       <FormLabel>Content</FormLabel>
                       <Tooltip title="Preview announcement">
-                        <Button
-                          onClick={() => setShowPreview(true)}
-                          endIcon={<Visibility />}
-                        >
+                        <Button onClick={() => setShowPreview(true)} endIcon={<Visibility />}>
                           Preview
                         </Button>
                       </Tooltip>
@@ -180,9 +165,7 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                           label={values.enabled ? 'Yes' : 'No'}
                         />
                       </FormControl>
-                      <FormHelperText>
-                        Publish/Unpublish the announcement
-                      </FormHelperText>
+                      <FormHelperText>Publish/Unpublish the announcement</FormHelperText>
                     </Box>
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -193,27 +176,41 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                           control={<FormikSwitch name="isPermanent" />}
                           label={values.isPermanent ? 'Yes' : 'No'}
                         />
-                        <FormHelperText>
-                          If Yes, it will remove the close button from the
-                          announcement
-                        </FormHelperText>
+                        <FormHelperText>If Yes, it will remove the close button from the announcement</FormHelperText>
                       </FormControl>
                     </Box>
                   </Grid>
-                  <Grid item xs={12}>
-                    <Stack alignItems="flex-end" p={2} pb={4}>
-                      <LoadingButton
-                        startIcon={<Save />}
-                        variant="contained"
-                        type="submit"
-                        loading={updating && !updateError}
-                      >
-                        Save
-                      </LoadingButton>
-                    </Stack>
-                  </Grid>
+                  <Grid></Grid>
+                </Grid>
+                <Divider />
+                <Grid item xs={12} sx={{ p: 2 }}>
+                  <Typography variant="h4">Scoping</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Announcement Scoping allows you to target which users, institutions, or geography will be able to
+                    see the announcement. It can also be used as a notification for a specific user.
+                  </Typography>
+                  <Typography variant="h6" my={2}>
+                    Conditions:
+                  </Typography>
+                  <FilterExpressionList />
+                  <Box display={'flex'} gap={2} my={2}>
+                    <AddChildButton />
+                  </Box>
                 </Grid>
               </Card>
+
+              <Stack sx={{ position: 'fixed', right: 16, bottom: 16 }}>
+                <LoadingButton
+                  startIcon={<Save fontSize="large" />}
+                  variant="contained"
+                  type="submit"
+                  loading={updating && !updateError}
+                  sx={{ px: 4 }}
+                  size={'large'}
+                >
+                  Save
+                </LoadingButton>
+              </Stack>
             </Form>
           )}
         </Formik>

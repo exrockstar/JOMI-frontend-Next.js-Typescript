@@ -3,42 +3,42 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
-export type TrackAnnouncementMutationVariables = Types.Exact<{
-  _id: Types.Scalars['String'];
+export type TrackAnnouncementsMutationVariables = Types.Exact<{
+  _ids: Array<Types.Scalars['String']> | Types.Scalars['String'];
 }>;
 
 
-export type TrackAnnouncementMutation = { __typename?: 'Mutation', trackAnnouncement: boolean };
+export type TrackAnnouncementsMutation = { __typename?: 'Mutation', trackAnnouncements: boolean };
 
 
-export const TrackAnnouncementDocument = gql`
-    mutation TrackAnnouncement($_id: String!) {
-  trackAnnouncement(_id: $_id)
+export const TrackAnnouncementsDocument = gql`
+    mutation TrackAnnouncements($_ids: [String!]!) {
+  trackAnnouncements(_ids: $_ids)
 }
     `;
-export type TrackAnnouncementMutationFn = Apollo.MutationFunction<TrackAnnouncementMutation, TrackAnnouncementMutationVariables>;
+export type TrackAnnouncementsMutationFn = Apollo.MutationFunction<TrackAnnouncementsMutation, TrackAnnouncementsMutationVariables>;
 
 /**
- * __useTrackAnnouncementMutation__
+ * __useTrackAnnouncementsMutation__
  *
- * To run a mutation, you first call `useTrackAnnouncementMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useTrackAnnouncementMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useTrackAnnouncementsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrackAnnouncementsMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [trackAnnouncementMutation, { data, loading, error }] = useTrackAnnouncementMutation({
+ * const [trackAnnouncementsMutation, { data, loading, error }] = useTrackAnnouncementsMutation({
  *   variables: {
- *      _id: // value for '_id'
+ *      _ids: // value for '_ids'
  *   },
  * });
  */
-export function useTrackAnnouncementMutation(baseOptions?: Apollo.MutationHookOptions<TrackAnnouncementMutation, TrackAnnouncementMutationVariables>) {
+export function useTrackAnnouncementsMutation(baseOptions?: Apollo.MutationHookOptions<TrackAnnouncementsMutation, TrackAnnouncementsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<TrackAnnouncementMutation, TrackAnnouncementMutationVariables>(TrackAnnouncementDocument, options);
+        return Apollo.useMutation<TrackAnnouncementsMutation, TrackAnnouncementsMutationVariables>(TrackAnnouncementsDocument, options);
       }
-export type TrackAnnouncementMutationHookResult = ReturnType<typeof useTrackAnnouncementMutation>;
-export type TrackAnnouncementMutationResult = Apollo.MutationResult<TrackAnnouncementMutation>;
-export type TrackAnnouncementMutationOptions = Apollo.BaseMutationOptions<TrackAnnouncementMutation, TrackAnnouncementMutationVariables>;
+export type TrackAnnouncementsMutationHookResult = ReturnType<typeof useTrackAnnouncementsMutation>;
+export type TrackAnnouncementsMutationResult = Apollo.MutationResult<TrackAnnouncementsMutation>;
+export type TrackAnnouncementsMutationOptions = Apollo.BaseMutationOptions<TrackAnnouncementsMutation, TrackAnnouncementsMutationVariables>;

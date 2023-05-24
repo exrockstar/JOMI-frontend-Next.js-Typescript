@@ -16,6 +16,14 @@ fragment AnnouncementParts on Announcement {
   lastEditedBy
   title
   content
+  filters {
+    id
+    parentId
+    columnName
+    operator
+    value
+    level
+  }
 }
 
 fragment AnnouncementViews on Announcement {

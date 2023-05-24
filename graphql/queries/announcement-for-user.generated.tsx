@@ -7,7 +7,19 @@ const defaultOptions =  {}
 export type AnnoucementForUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AnnoucementForUserQuery = { __typename?: 'Query', announcementForUser?: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined }> | null | undefined };
+export type AnnoucementForUserQuery = { __typename?: 'Query', announcementForUser?: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined }> | null | undefined };
+
+export type SiteWideAnnouncementsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+
+
+export type SiteWideAnnouncementsQuery = { __typename?: 'Query', getSiteWideAnnouncements?: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined }> | null | undefined };
+
+export type MarkAnnouncementAsReadMutationVariables = Types.Exact<{
+  cacheId: Types.Scalars['String'];
+}>;
+
+
+export type MarkAnnouncementAsReadMutation = { __typename?: 'Mutation', markAnnouncementAsRead: Array<string> };
 
 
 export const AnnoucementForUserDocument = gql`
@@ -44,3 +56,68 @@ export function useAnnoucementForUserLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type AnnoucementForUserQueryHookResult = ReturnType<typeof useAnnoucementForUserQuery>;
 export type AnnoucementForUserLazyQueryHookResult = ReturnType<typeof useAnnoucementForUserLazyQuery>;
 export type AnnoucementForUserQueryResult = Apollo.QueryResult<AnnoucementForUserQuery, AnnoucementForUserQueryVariables>;
+export const SiteWideAnnouncementsDocument = gql`
+    query SiteWideAnnouncements {
+  getSiteWideAnnouncements {
+    ...AnnouncementParts
+  }
+}
+    ${AnnouncementPartsFragmentDoc}`;
+
+/**
+ * __useSiteWideAnnouncementsQuery__
+ *
+ * To run a query within a React component, call `useSiteWideAnnouncementsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSiteWideAnnouncementsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSiteWideAnnouncementsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSiteWideAnnouncementsQuery(baseOptions?: Apollo.QueryHookOptions<SiteWideAnnouncementsQuery, SiteWideAnnouncementsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SiteWideAnnouncementsQuery, SiteWideAnnouncementsQueryVariables>(SiteWideAnnouncementsDocument, options);
+      }
+export function useSiteWideAnnouncementsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SiteWideAnnouncementsQuery, SiteWideAnnouncementsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SiteWideAnnouncementsQuery, SiteWideAnnouncementsQueryVariables>(SiteWideAnnouncementsDocument, options);
+        }
+export type SiteWideAnnouncementsQueryHookResult = ReturnType<typeof useSiteWideAnnouncementsQuery>;
+export type SiteWideAnnouncementsLazyQueryHookResult = ReturnType<typeof useSiteWideAnnouncementsLazyQuery>;
+export type SiteWideAnnouncementsQueryResult = Apollo.QueryResult<SiteWideAnnouncementsQuery, SiteWideAnnouncementsQueryVariables>;
+export const MarkAnnouncementAsReadDocument = gql`
+    mutation MarkAnnouncementAsRead($cacheId: String!) {
+  markAnnouncementAsRead(cacheId: $cacheId)
+}
+    `;
+export type MarkAnnouncementAsReadMutationFn = Apollo.MutationFunction<MarkAnnouncementAsReadMutation, MarkAnnouncementAsReadMutationVariables>;
+
+/**
+ * __useMarkAnnouncementAsReadMutation__
+ *
+ * To run a mutation, you first call `useMarkAnnouncementAsReadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkAnnouncementAsReadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markAnnouncementAsReadMutation, { data, loading, error }] = useMarkAnnouncementAsReadMutation({
+ *   variables: {
+ *      cacheId: // value for 'cacheId'
+ *   },
+ * });
+ */
+export function useMarkAnnouncementAsReadMutation(baseOptions?: Apollo.MutationHookOptions<MarkAnnouncementAsReadMutation, MarkAnnouncementAsReadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkAnnouncementAsReadMutation, MarkAnnouncementAsReadMutationVariables>(MarkAnnouncementAsReadDocument, options);
+      }
+export type MarkAnnouncementAsReadMutationHookResult = ReturnType<typeof useMarkAnnouncementAsReadMutation>;
+export type MarkAnnouncementAsReadMutationResult = Apollo.MutationResult<MarkAnnouncementAsReadMutation>;
+export type MarkAnnouncementAsReadMutationOptions = Apollo.BaseMutationOptions<MarkAnnouncementAsReadMutation, MarkAnnouncementAsReadMutationVariables>;
