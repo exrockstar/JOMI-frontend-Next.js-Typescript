@@ -1,28 +1,16 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Hidden,
-  SvgIcon,
-  Typography,
-  Link as MuiLink
-} from '@mui/material'
+import { Box, Container, Grid, Hidden, SvgIcon, Typography } from '@mui/material'
 
 import Image from 'next/image'
 import FooterImage from 'public/img/footer-phone.png'
 import FooterLink from './FooterLink'
-import { LinkedIn, PinDrop, Twitter } from '@mui/icons-material'
+import { LinkedIn, Twitter } from '@mui/icons-material'
 import FacebookIcon from 'public/icons/facebook-icon.svg'
 import SocialLink from './SocialLink'
 import Link from 'next/link'
 import LogoWhite from 'public/logo-white.svg'
 const Footer2 = () => {
   return (
-    <Box
-      bgcolor={{ xs: '#0E0E10', md: 'background.paper' }}
-      color="text.primary"
-      mt={10}
-    >
+    <Box bgcolor={{ xs: '#0E0E10', md: 'background.paper' }} color="text.primary" mt={10}>
       <Container maxWidth="lg" disableGutters component="footer">
         <Box position="relative" paddingLeft={{ md: '380px' }} display="flex">
           <Box
@@ -41,13 +29,7 @@ const Footer2 = () => {
               style={{ bottom: 0, position: 'absolute' }}
             />
           </Box>
-          <Grid
-            container
-            flexGrow={1}
-            justifyContent="space-between"
-            mt={{ xs: 4, md: 6 }}
-            mb={6}
-          >
+          <Grid container flexGrow={1} justifyContent="space-between" mt={{ xs: 4, md: 6 }} mb={6}>
             <Grid item xs={12} md={6} lg={4}>
               <Box
                 display="flex"
@@ -56,12 +38,7 @@ const Footer2 = () => {
                 mb={{ xs: 2, md: 0 }}
               >
                 <Hidden mdDown>
-                  <Typography
-                    variant="h5"
-                    component="h2"
-                    fontFamily={'DM Sans'}
-                    mb={2.25}
-                  >
+                  <Typography variant="h5" component="h2" fontFamily={'DM Sans'} mb={2.25}>
                     JOMI
                   </Typography>
                 </Hidden>
@@ -70,11 +47,7 @@ const Footer2 = () => {
                     <LogoWhite />
                   </Link>
                 </Hidden>
-                <Typography
-                  fontFamily={'DM Sans'}
-                  mb={2}
-                  color={{ xs: 'text.primary', md: 'grey.500' }}
-                >
+                <Typography fontFamily={'DM Sans'} mb={2} color={{ xs: 'text.primary', md: 'grey.500' }}>
                   ISSN:
                   <FooterLink
                     target="_blank"
@@ -92,18 +65,10 @@ const Footer2 = () => {
                 </Typography>
               </Box>
               <Hidden mdDown>
-                <Typography
-                  fontFamily={'DM Sans'}
-                  color="grey.500"
-                  variant="body2"
-                >
+                <Typography fontFamily={'DM Sans'} color="grey.500" variant="body2">
                   Copyright © 2021 JOMI LLC.
                 </Typography>
-                <Typography
-                  fontFamily={'DM Sans'}
-                  color="grey.500"
-                  variant="body2"
-                >
+                <Typography fontFamily={'DM Sans'} color="grey.500" variant="body2">
                   All rights reserved.
                 </Typography>
               </Hidden>
@@ -111,9 +76,9 @@ const Footer2 = () => {
             <Grid
               item
               display="flex"
-              direction="column"
               gap={{ xs: 0.75, md: 2 }}
               alignItems={{ xs: 'center', md: 'flex-start' }}
+              flexDirection={'column'}
               xs={6}
               lg={3}
               sx={{
@@ -141,10 +106,7 @@ const Footer2 = () => {
               <FooterLink data-event="Footer - Publish" href="/publish">
                 Publish
               </FooterLink>
-              <FooterLink
-                data-event="Footer - Editorial Board"
-                href="/editorial-board"
-              >
+              <FooterLink data-event="Footer - Editorial Board" href="/editorial-board">
                 Editorial Board
               </FooterLink>
               <FooterLink data-event="Footer - FAQ" href="/faq">
@@ -175,12 +137,7 @@ const Footer2 = () => {
               >
                 Newsletter
               </Typography> */}
-              <FooterLink
-                href="https://blog.jomi.com"
-                data-event="Footer - Blog"
-                target={'_blank'}
-                rel=""
-              >
+              <FooterLink href="https://blog.jomi.com" data-event="Footer - Blog" target={'_blank'} rel="">
                 JOMI Blog
               </FooterLink>
               <FooterLink
@@ -194,10 +151,7 @@ const Footer2 = () => {
               <FooterLink data-event="Footer - Careers" href="/careers">
                 Careers
               </FooterLink>
-              <FooterLink
-                data-event="Footer - Partners/Sponsors"
-                href="/partners"
-              >
+              <FooterLink data-event="Footer - Partners/Sponsors" href="/partners">
                 Partners/Sponsors
               </FooterLink>
               <FooterLink data-event="Footer - Contact Us" href="/contact">
@@ -211,19 +165,10 @@ const Footer2 = () => {
                 alignItems={{ xs: 'center', md: 'flex-start' }}
                 mt={{ xs: 4, md: 2, lg: 0 }}
               >
-                <Typography
-                  variant="h5"
-                  component="p"
-                  fontFamily={'DM Sans'}
-                  mb={2}
-                >
+                <Typography variant="h5" component="p" fontFamily={'DM Sans'} mb={2}>
                   Connect with us
                 </Typography>
-                <Box
-                  display="flex"
-                  flexDirection={{ xs: 'row', md: 'column' }}
-                  gap={2}
-                >
+                <Box display="flex" flexDirection={{ xs: 'row', md: 'column' }} gap={2}>
                   <SocialLink href="https://www.facebook.com/JoMIJournal/">
                     <SvgIcon component={FacebookIcon} inheritViewBox />
                     <Typography component="span" color="inherit">

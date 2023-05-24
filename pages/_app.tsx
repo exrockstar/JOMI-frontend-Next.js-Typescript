@@ -16,7 +16,7 @@ import MySnackbarProvider from 'components/common/MySnackbarProvider'
 import PageMetadata from 'components/utils/PageMetadata'
 import { defaultMeta } from 'backend/seo/defaultMetaInfo'
 import { MetaData } from 'backend/seo/MetaData'
-import { AppStateProvider } from 'components/_appstate/useAppState'
+import { AppStateProvider, useAppState } from 'components/_appstate/useAppState'
 import { CacheProvider, EmotionCache } from '@emotion/react'
 import createEmotionCache from 'common/emotionCache'
 import Script from 'next/script'
@@ -31,6 +31,7 @@ import HotJar from 'components/utils/HotJar'
 import { ErrorBoundary } from 'react-error-boundary'
 import AppErrorFallback from 'components/fallbacks/AppErrorFallback'
 import { CookiesProvider } from 'react-cookie'
+import { NextPage } from 'next'
 
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -40,25 +41,11 @@ interface MyAppProps extends AppProps {
   emotionCache: EmotionCache
 }
 const clientSideEmotionCache = createEmotionCache()
-function MyApp({
-  Component,
-  pageProps,
-  emotionCache = clientSideEmotionCache
-}: MyAppProps) {
+function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
   const apolloClient = useApollo(pageProps)
   const _pageProps = pageProps as any
   const meta: MetaData = _pageProps.meta_data ?? defaultMeta
   const theme = _pageProps.theme === 'frontPage' ? frontPageTheme : defaultTheme
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     ;[...document.querySelectorAll('*').values()].forEach((elem) => {
-  //       if (elem.childNodes?.length > 30 && elem.childNodes?.length < 100) {
-  //         console.log(elem.childNodes)
-  //       }
-  //     })
-  //   }, 1500)
-  // }, [])
 
   //Initialize FB pixel and call PageView event any time the router.events changes, needs to be in _app
   useEffect(() => {
@@ -66,12 +53,11 @@ function MyApp({
   }, [router.events])
 
   return (
-    <AppStateProvider>
-      <CookiesProvider>
-        <ApolloProvider client={apolloClient}>
+    <CookiesProvider>
+      <ApolloProvider client={apolloClient}>
+        <AppStateProvider>
           <CacheProvider value={emotionCache}>
             <PageMetadata meta_data={meta} />
-
             <ThemeProvider theme={theme}>
               <MySnackbarProvider>
                 <GoogleAnalytics metadata={meta} />
@@ -102,9 +88,9 @@ function MyApp({
               </MySnackbarProvider>
             </ThemeProvider>
           </CacheProvider>
-        </ApolloProvider>
-      </CookiesProvider>
-    </AppStateProvider>
+        </AppStateProvider>
+      </ApolloProvider>
+    </CookiesProvider>
   )
 }
 

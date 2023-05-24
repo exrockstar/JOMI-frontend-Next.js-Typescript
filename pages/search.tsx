@@ -1,12 +1,6 @@
 import Layout from 'components/layout'
 import Grid from '@mui/material/Grid'
-import {
-  Box,
-  CircularProgress,
-  Stack,
-  Typography,
-  useMediaQuery
-} from '@mui/material'
+import { Box, CircularProgress, Stack, Typography, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { GetServerSideProps, GetStaticProps } from 'next'
 import { ThemeProvider } from '@mui/material/styles'
@@ -30,16 +24,17 @@ import {
   ArticlesQueryVariables,
   useArticlesQuery
 } from 'graphql/queries/articles.generated'
-import {
-  CategoriesQuery,
-  CategoriesDocument
-} from 'graphql/queries/categories.generated'
+import { CategoriesQuery, CategoriesDocument } from 'graphql/queries/categories.generated'
 import { ArticleSort } from 'graphql/types'
 import { logger } from 'logger/logger'
 import { buildArticleListStructuredData } from 'backend/seo/buildArticleListStructuredData'
 import articles from './articles'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import {
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 
 type Props = {
   categories: CategoriesQuery['categories']
@@ -52,8 +47,7 @@ export default function Articles({ categories }: Props) {
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'))
   const { q, page, sort_by } = router.query
   const noQuery = !q
-  const { referredFrom, referrerPath, anon_link_id } =
-    useGoogleAnalyticsHelpers()
+  const { referredFrom, referrerPath, anon_link_id } = useGoogleAnalyticsHelpers()
   const { data } = useArticlesQuery({
     skip: noQuery,
     variables: {
@@ -76,30 +70,16 @@ export default function Articles({ categories }: Props) {
           <Grid item xs={12} md={9}>
             <ThemeProvider theme={frontPageTheme}>
               <Stack>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  px={{ xs: 2, md: 0 }}
-                  mb={1}
-                >
+                <Box display="flex" alignItems="center" px={{ xs: 2, md: 0 }} mb={1}>
                   <Search sx={{ color: 'text.secondary' }} fontSize="large" />
-                  <Typography
-                    color="textSecondary"
-                    variant="h4"
-                    ml={1}
-                    fontSize={{ md: '1.5rem', xs: '1rem' }}
-                  >
+                  <Typography color="textSecondary" variant="h4" ml={1} fontSize={{ md: '1.5rem', xs: '1rem' }}>
                     Search for {`"${q}"`}
                   </Typography>
                 </Box>
                 <ArticlesProvider totalCount={totalCount ?? 0}>
                   <ArticleControls totalCount={totalCount} itemsPerPage={10} />
 
-                  <ArticleList
-                    articles={articles}
-                    totalCount={totalCount}
-                    itemsPerPage={15}
-                  />
+                  <ArticleList articles={articles} totalCount={totalCount} itemsPerPage={15} />
 
                   <Box alignSelf="flex-end" mt={1}>
                     <Pagination totalCount={totalCount} itemsPerPage={10} />
@@ -118,9 +98,7 @@ export default function Articles({ categories }: Props) {
   return rendered
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   logger.info(`Regenerating search `, {
     ...context.params
   })
@@ -134,7 +112,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   const { data: categoriesData } = await client.query<CategoriesQuery>({
     query: CategoriesDocument
   })
-
+  await client.query<SiteWideAnnouncementsQuery>({
+    query: SiteWideAnnouncementsDocument
+  })
   // if (process.env.NODE_ENV === 'production') {
   //   context.res.setHeader(
   //     'Cache-Control',

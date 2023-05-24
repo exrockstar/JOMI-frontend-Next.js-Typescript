@@ -40,7 +40,7 @@ const AnnouncementDetailsPage = () => {
   const queryId = router.query.id
   const id = queryId instanceof Array ? queryId[0] : queryId
   const [value, setValue] = useState(0)
-  const tabs = ['', 'stats', 'restrictions']
+  const tabs = ['', 'stats']
 
   const getValue = (route: string) => {
     return tabs.indexOf(route)
@@ -82,7 +82,6 @@ const AnnouncementDetailsPage = () => {
           >
             <Tab label="Details" {...a11yProps(0)} />
             <Tab label="Stats" {...a11yProps(1)} />
-            <Tab label="Restrictions" {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -90,11 +89,6 @@ const AnnouncementDetailsPage = () => {
         </TabPanel>
         <TabPanel value={value} index={1}>
           <AnnouncementStats _id={id} />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <Stack>
-            <Typography variant="h4">Restrictions</Typography>
-          </Stack>
         </TabPanel>
       </Stack>
     </CmsLayout>

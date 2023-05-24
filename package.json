@@ -19,7 +19,6 @@
     "@mui/lab": "^5.0.0-alpha.64",
     "@mui/material": "^5.0.4",
     "@next-auth/mongodb-adapter": "0.0.2-next.285",
-    "@next/font": "^13.1.2",
     "@stripe/react-stripe-js": "^1.6.0",
     "@stripe/stripe-js": "^1.21.1",
     "@svgr/webpack": "^5.5.0",

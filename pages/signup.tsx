@@ -7,8 +7,12 @@ import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { GetStaticProps } from 'next'
 import PageLoadingIndicator from 'components/common/PageLoadingIndicator'
 import Layout from 'components/layout'
+import { useAppState } from 'components/_appstate/useAppState'
+import { useEffectOnce } from 'usehooks-ts'
 
 export default function SignupPage() {
+  const { setAnnouncementsShown } = useAppState()
+  useEffectOnce(() => setAnnouncementsShown(true))
   return (
     <div>
       <Hidden smDown>

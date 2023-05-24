@@ -34,6 +34,10 @@ import {
 import { ArticleSort } from 'graphql/types'
 import { buildArticleListStructuredData } from 'backend/seo/buildArticleListStructuredData'
 import { logger } from 'logger/logger'
+import {
+  SiteWideAnnouncementsQuery,
+  SiteWideAnnouncementsDocument
+} from 'graphql/queries/announcement-for-user.generated'
 
 type Props = {
   category: Unpacked<CategoriesQuery['categories']>
@@ -70,17 +74,13 @@ export default function Articles({ category }: Props) {
       </ThemeProvider>
       <Grid container>
         <Grid item xs={12} md={9} component="section">
-            <ArticlesProvider totalCount={count}>
-              <ArticleControls itemsPerPage={15} totalCount={count} />
-            </ArticlesProvider>
-            <ArticleList
-              articles={articles}
-              totalCount={count}
-              itemsPerPage={15}
-            />
-            <Box alignSelf="flex-end">
-              <Pagination itemsPerPage={15} totalCount={count} />
-            </Box>
+          <ArticlesProvider totalCount={count}>
+            <ArticleControls itemsPerPage={15} totalCount={count} />
+          </ArticlesProvider>
+          <ArticleList articles={articles} totalCount={count} itemsPerPage={15} />
+          <Box alignSelf="flex-end">
+            <Pagination itemsPerPage={15} totalCount={count} />
+          </Box>
         </Grid>
         <Grid item xs={12} md={3} component="nav">
           <CategorySidebar categories={categories?.categories ?? []} />
@@ -105,27 +105,19 @@ export default function Articles({ category }: Props) {
 //   }
 // }
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   try {
     const query = context.query
     const page = parseInt(query.page as string) || 1
-    const sort_by =
-      (query.sort_by as unknown as ArticleSort) || ArticleSort.None
+    const sort_by = (query.sort_by as unknown as ArticleSort) || ArticleSort.None
     const { category: categorySlug } = context.params
     const client = getApolloAdminClient()
 
-    const { data: categoriesData } = await client.query<
-      CategoriesQuery,
-      CategoriesQueryVariables
-    >({
+    const { data: categoriesData } = await client.query<CategoriesQuery, CategoriesQueryVariables>({
       query: CategoriesDocument
     })
 
-    const category = categoriesData.categories.find(
-      (c) => c.slug === categorySlug
-    )
+    const category = categoriesData.categories.find((c) => c.slug === categorySlug)
     const { data } = await client.query<ArticlesQuery, ArticlesQueryVariables>({
       variables: {
         input: {
@@ -136,7 +128,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       },
       query: ArticlesDocument
     })
-
+    await client.query<SiteWideAnnouncementsQuery>({
+      query: SiteWideAnnouncementsDocument
+    })
     // if (process.env.NODE_ENV === 'production') {
     //   context.res.setHeader(
     //     'Cache-Control',
@@ -145,6 +139,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     // }
 
     const articles = data?.articleOutput?.articles
+
     return {
       props: {
         //return cache from serverside as props to eliminate extra calls to api

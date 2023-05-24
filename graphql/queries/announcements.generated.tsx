@@ -7,14 +7,14 @@ const defaultOptions =  {}
 export type AnnouncementsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AnnouncementsQuery = { __typename?: 'Query', announcements: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined }> };
+export type AnnouncementsQuery = { __typename?: 'Query', announcements: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined }> };
 
 export type AnnouncementQueryVariables = Types.Exact<{
   _id: Types.Scalars['String'];
 }>;
 
 
-export type AnnouncementQuery = { __typename?: 'Query', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, views: number, unique_views?: number | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, user_views?: { __typename?: 'UserViews', total: number, by_country: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_institution: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_user_type: Array<{ __typename?: 'ViewType', key: string, views: number }> } | null | undefined } };
+export type AnnouncementQuery = { __typename?: 'Query', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, views: number, unique_views?: number | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined, user_views?: { __typename?: 'UserViews', total: number, by_country: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_institution: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_user_type: Array<{ __typename?: 'ViewType', key: string, views: number }> } | null | undefined } };
 
 export type ToggleAnnouncementMutationVariables = Types.Exact<{
   _id: Types.Scalars['String'];
@@ -22,7 +22,7 @@ export type ToggleAnnouncementMutationVariables = Types.Exact<{
 }>;
 
 
-export type ToggleAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined } };
+export type ToggleAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
 
 export type DeleteAnnouncementMutationVariables = Types.Exact<{
   _id: Types.Scalars['String'];
@@ -34,14 +34,14 @@ export type DeleteAnnouncementMutation = { __typename?: 'Mutation', result: stri
 export type CreateAnnouncementMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CreateAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined } };
+export type CreateAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
 
 export type UpdateAnnouncementMutationVariables = Types.Exact<{
   input: Types.AnnouncementInput;
 }>;
 
 
-export type UpdateAnnouncementMutation = { __typename?: 'Mutation', updateAnnouncement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: any, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined } };
+export type UpdateAnnouncementMutation = { __typename?: 'Mutation', updateAnnouncement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
 
 
 export const AnnouncementsDocument = gql`

@@ -14,23 +14,12 @@ export default function Account() {
         <meta name="robots" content="noindex" />
       </Head>
       <AccountLayout>
-        <Box
-          bgcolor="white"
-          height="100%"
-          alignItems="center"
-          justifyContent="center"
-          flex={1}
-          p={2}
-          pt={0}
-        >
+        <Box bgcolor="white" height="100%" alignItems="center" justifyContent="center" flex={1} p={2} pt={0}>
           <FeedbackHeaderText>Feedback</FeedbackHeaderText>
           <Box display={'flex'} padding={'8px'}>
             <MoreInfoMainText>
               Please share your feedback by sending us an email at
-              <MoreInfoLinkText underline="hover">
-                {' '}
-                contact@jomi.com.
-              </MoreInfoLinkText>
+              <MoreInfoLinkText underline="hover"> contact@jomi.com.</MoreInfoLinkText>
             </MoreInfoMainText>
           </Box>
         </Box>
