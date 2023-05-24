@@ -74,7 +74,6 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         ? announcements?.filter((a) => !previouslyClosed?.includes(a.cache_id))
         : announcements
       const filtered_ids = filtered?.map((a) => a._id)
-      console.log(filtered_ids)
       trackAnnouncements({
         variables: {
           _ids: filtered_ids
