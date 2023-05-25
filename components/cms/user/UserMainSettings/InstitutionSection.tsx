@@ -1,6 +1,6 @@
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, TextField, List, ListItem } from '@mui/material'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
-import { TextField } from 'formik-mui'
+
 import { UserDetailQuery } from 'graphql/cms-queries/user-list.generated'
 
 import React from 'react'
@@ -26,12 +26,7 @@ const InstitutionSection = ({ user }: Props) => {
           helperText="ID will be auto-populated when choosing a valid institution name / alias"
           disabled
         />
-        <FormikTextField
-          name="inst_email"
-          label="Institutional Email"
-          fullWidth
-          size="small"
-        />
+        <FormikTextField name="inst_email" label="Institutional Email" fullWidth size="small" />
         <FormikTextField
           value={user?.matchedBy}
           name="matchedBy"

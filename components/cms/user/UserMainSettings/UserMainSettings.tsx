@@ -1,12 +1,20 @@
-import { FormControlLabel, FormGroup, Grid, gridClasses, Typography } from '@mui/material'
+import {
+  Box,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  gridClasses,
+  List,
+  ListItem,
+  ListItemText,
+  Typography
+} from '@mui/material'
 import { removeTypeNameFromGQLResult } from 'common/utils'
 import FormikCheckbox from 'components/common/formik/FormikCheckbox'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import { Formik } from 'formik'
-import {
-  UserDetailQuery,
-  useUpdateUserCmsMutation
-} from 'graphql/cms-queries/user-list.generated'
+import { UserDetailQuery, useUpdateUserCmsMutation } from 'graphql/cms-queries/user-list.generated'
 import { UpdateUserInput } from 'graphql/types'
 import { useSnackbar } from 'notistack'
 import AccountActions from './AccountActions/AccountActions'
@@ -17,6 +25,7 @@ import OtherSettings from './OtherSettings'
 import ProfileImageSection from './ProfileImageSection'
 import SocialInfoSection from './SocialInfoSection'
 import UserSubmitButton from './UserSubmitButton'
+import dayjs from 'dayjs'
 type Props = {
   user: UserDetailQuery['userById']
 }
@@ -43,8 +52,8 @@ const UserMainSettings = ({ user }: Props) => {
         display_name: user.display_name,
         firstName: user.name?.first,
         lastName: user.name?.last,
-        referer: user.referer === "" ? "organic" : user.referer,
-        referrerPath: user.referrerPath === "" ? "N/A" : user.referrerPath,
+        referer: user.referer === '' ? 'organic' : user.referer,
+        referrerPath: user.referrerPath === '' ? 'N/A' : user.referrerPath,
         user_type: user.user_type,
         specialty: user.specialty ?? 'Other',
         role: user.role,
@@ -104,17 +113,22 @@ const UserMainSettings = ({ user }: Props) => {
           <InstitutionSection user={user} />
           <FormGroup sx={{ my: 2 }}>
             <Typography variant="h5">Trials</Typography>
-            <FormControlLabel
-              control={<FormikCheckbox name="isTrialFeatureOn" />}
-              label="Enable trials"
-            />
-            <FormikTextField
-              name="trialDuration"
-              type="number"
-              label="Trial duration (days)"
-              size="small"
-            />
+            <FormControlLabel control={<FormikCheckbox name="isTrialFeatureOn" />} label="Enable trials" />
+            <FormikTextField name="trialDuration" type="number" label="Trial duration (days)" size="small" />
           </FormGroup>
+          <Box>
+            <Typography variant="h5">Stated Institutions</Typography>
+            <List>
+              {user?.previouslyStatedInstitutions?.map((inst, i) => {
+                return (
+                  <ListItem key={i}>
+                    <ListItemText primary={inst.name} secondary={dayjs(inst.date).format('L')} />
+                    <Divider component="li" />
+                  </ListItem>
+                )
+              })}
+            </List>
+          </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <OtherSettings />

@@ -289,6 +289,7 @@ export enum ArticleSort {
 export type ArticleStats = {
   __typename?: 'ArticleStats';
   averagePercentWatched: Scalars['Float'];
+  last_checked: Scalars['DateTime'];
   pageLoads: Scalars['Int'];
   percentOfVisitorsClickingPlay: Scalars['Float'];
   plays: Scalars['Int'];
@@ -2000,6 +2001,12 @@ export type PartialRequest = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type PreviouslyStatedInst = {
+  __typename?: 'PreviouslyStatedInst';
+  date: Scalars['DateTime'];
+  name: Scalars['String'];
+};
+
 export type PriceFilterInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
 };
@@ -3049,6 +3056,7 @@ export type User = {
   name: Name;
   numSearches?: Maybe<Scalars['Int']>;
   phone?: Maybe<Scalars['String']>;
+  previouslyStatedInstitutions?: Maybe<Array<PreviouslyStatedInst>>;
   promo_code?: Maybe<Scalars['String']>;
   referer?: Maybe<Scalars['String']>;
   referrerPath?: Maybe<Scalars['String']>;
