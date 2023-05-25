@@ -29,16 +29,13 @@ type Props = {
 
 const UserManagementList: React.FC<Props> = ({ users }) => {
   const [selected, setSelected] = React.useState<string>()
-  const { page, setPage, pageSize, setPageSize, count } =
-    useUserManagementList()
+  const { page, setPage, pageSize, setPageSize, count } = useUserManagementList()
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage + 1)
   }
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(+event.target.value)
   }
 
@@ -115,36 +112,27 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
               const userSub = user.subscription?.subType ?? SubType.NotCreated
               const isSubscribed = userSub !== SubType.NotCreated
               const needsInstEmailConfirmation =
-                user?.matchedBy === MatchedBy.InstitutionalEmail &&
-                !user?.instEmailVerified
-              const needsEmailConfirmation =
-                user?.matchedBy === MatchedBy.Email && user?.emailNeedsConfirm
-              const needsConfirmation =
-                needsInstEmailConfirmation || needsEmailConfirmation
-              const color = subscriptionColor(
-                user.subscription.subType,
-                needsConfirmation
-              )
+                user?.matchedBy === MatchedBy.InstitutionalEmail && !user?.instEmailVerified
+              const needsEmailConfirmation = user?.matchedBy === MatchedBy.Email && user?.emailNeedsConfirm
+              const needsConfirmation = needsInstEmailConfirmation || needsEmailConfirmation
+              const color = subscriptionColor(user.subscription.subType, needsConfirmation)
               const userSubText = subscriptionText(user.subscription.subType)
               let stickyTableCellColor: string
-              i % 2 !== 0
-                ? (stickyTableCellColor = 'white')
-                : (stickyTableCellColor = '#fafafa')
+              i % 2 !== 0 ? (stickyTableCellColor = 'white') : (stickyTableCellColor = '#fafafa')
               let referer: string = null
               let refererPath: any = null
               if (user.referer) {
                 referer = user.referer === '' ? 'organic' : user.referer
               }
               if (user.referrerPath) {
-                refererPath =
-                  user.referrerPath === '' ? NotApplicable : user.referrerPath
+                refererPath = user.referrerPath === '' ? NotApplicable : user.referrerPath
                 if (refererPath != NotApplicable) {
                   refererPath = refererPath.replaceAll('+', ' ')
                   refererPath = refererPath.replace('?', '')
                   refererPath = refererPath.replace(/%\w\w/g, '')
                 }
               }
-
+              const statedInsts = user.previouslyStatedInstitutions
               return (
                 <StyledTableRow
                   key={user._id}
@@ -162,32 +150,16 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                     sx={{ p: 0 }}
                   >
                     <Box boxShadow={5}>
-                      <TableCell
-                        align="left"
-                        sx={{ minWidth: '6.5em' }}
-                        component="div"
-                      >
-                        <Link
-                          href={`/cms/user/${user._id}`}
-                          passHref
-                          legacyBehavior
-                        >
+                      <TableCell align="left" sx={{ minWidth: '6.5em' }} component="div">
+                        <Link href={`/cms/user/${user._id}`} passHref legacyBehavior>
                           <IconButton>
                             <Edit />
                           </IconButton>
                         </Link>
                       </TableCell>
 
-                      <TableCell
-                        align="left"
-                        component="div"
-                        sx={{ width: '100%', height: '100%' }}
-                      >
-                        <Link
-                          href={`/cms/user/${user._id}`}
-                          passHref
-                          legacyBehavior
-                        >
+                      <TableCell align="left" component="div" sx={{ width: '100%', height: '100%' }}>
+                        <Link href={`/cms/user/${user._id}`} passHref legacyBehavior>
                           <MuiLink>{user.email}</MuiLink>
                         </Link>
                         <Typography color="text.secondary" variant="body2">
@@ -201,7 +173,21 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{user.user_type || NotSpecified}</TableCell>
                   <TableCell>{user.specialty || NotSpecified}</TableCell>
-                  <TableCell>{user.institution_name || NotSpecified}</TableCell>
+                  <TableCell
+                    sx={{ maxWidth: 250, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                    title={user.institution_name}
+                  >
+                    {user.institution_name || NotSpecified}
+                  </TableCell>
+                  <TableCell sx={{ maxWidth: 250, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {!!statedInsts?.length
+                      ? statedInsts.map((x) => (
+                          <Typography key={x.name} variant="body2">
+                            {x.name}
+                          </Typography>
+                        ))
+                      : NotSpecified}
+                  </TableCell>
                   <TableCell>{user.matchStatus}</TableCell>
                   <TableCell>{last_visited}</TableCell>
                   <TableCell>{created}</TableCell>
@@ -216,11 +202,7 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                       }}
                     ></Chip>
                     {user.subscription.subType === SubType.Institution && (
-                      <Typography
-                        variant="body2"
-                        display="flex"
-                        alignItems="center"
-                      >
+                      <Typography variant="body2" display="flex" alignItems="center">
                         {user.subscription?.fromInst}
                         {needsConfirmation && (
                           <Tooltip
@@ -251,13 +233,9 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                   <TableCell>{user.regionName || NotApplicable}</TableCell>
                   <TableCell>{referer ?? NotApplicable}</TableCell>
                   <TableCell>
-                    {refererPath
-                      ?.split('&')
-                      .map((path, i) => <p key={i}>{path}</p>) ?? NotApplicable}
+                    {refererPath?.split('&').map((path, i) => <p key={i}>{path}</p>) ?? NotApplicable}
                   </TableCell>
-                  <TableCell>
-                    {user.hasRequestedSubscription ? 'Yes' : 'No'}
-                  </TableCell>
+                  <TableCell>{user.hasRequestedSubscription ? 'Yes' : 'No'}</TableCell>
                   <TableCell>{user.requestSubscriptionCount ?? 0}</TableCell>
                 </StyledTableRow>
               )
