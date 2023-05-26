@@ -1,15 +1,8 @@
-import {
-  Autocomplete,
-  CircularProgress,
-  List,
-  ListItemText,
-  MenuItem,
-  TextField
-} from '@mui/material'
+import { Autocomplete, CircularProgress, ListItemText, MenuItem, TextField } from '@mui/material'
 import { useField, useFormikContext } from 'formik'
 import { useInstitutionSearchLazyQuery } from 'graphql/cms-queries/institutions-list.generated'
 import { QueryOperation } from 'graphql/types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import throttle from 'lodash/throttle'
 import { useSnackbar } from 'notistack'
 
@@ -24,8 +17,8 @@ type Option = {
  * @returns
  */
 const UserDetailInstitutionSelector = () => {
-  const [institution_name] = useField('institution_name')
-  const [institution] = useField('institution_name')
+  const [institution_name] = useField('matched_institution_name')
+  const [institution] = useField('institution')
   const [typing, setTyping] = useState(false)
   const [value, setValue] = useState(
     institution
@@ -49,23 +42,17 @@ const UserDetailInstitutionSelector = () => {
     }
   })
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    institution: Option
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, institution: Option) => {
     if (institution) {
       setFieldValue('institution', institution?.value ?? '')
-      setFieldValue(
-        'institution_name',
-        institution.inputValue ?? institution.label
-      )
+      setFieldValue('matched_institution_name', institution.inputValue ?? institution.label)
       setValue({
         label: institution.inputValue ?? institution.label,
         value: institution.inputValue ?? institution.value
       })
     } else {
       setFieldValue('institution', '')
-      setFieldValue('institution_name', '')
+      setFieldValue('matched_institution_name', '')
       setValue(null)
     }
   }
@@ -130,9 +117,7 @@ const UserDetailInstitutionSelector = () => {
         return filtered
       }}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      getOptionLabel={(option: Option) =>
-        option.inputValue ?? option.label ?? ''
-      }
+      getOptionLabel={(option: Option) => option.inputValue ?? option.label ?? ''}
       value={value}
       options={institutions}
       loading={isLoading}
@@ -142,15 +127,13 @@ const UserDetailInstitutionSelector = () => {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Institution"
+          label="Matched Institution Name"
           size={'small'}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
               <>
-                {isLoading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
+                {isLoading ? <CircularProgress color="inherit" size={20} /> : null}
                 {params.InputProps.endAdornment}
               </>
             )
