@@ -8,8 +8,8 @@ type Props = {
 }
 const TitleSection = ({ article }: Props) => {
   if (!article) return null
-  const playCount = article.stats?.plays
-  const playCountLabel = `${playCount} views`
+  const viewCount = article.stats?.views
+  const viewCountLabel = `${viewCount} views`
   return (
     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} mt={2} px={2}>
       <Typography
@@ -22,9 +22,9 @@ const TitleSection = ({ article }: Props) => {
       >
         {article.title}
       </Typography>
-      {!!playCount && (
+      {!!viewCount && (
         <Box>
-          <ArticlePlayStatsContainer label={playCountLabel} sx={{ px: 2.5 }} />
+          <ArticlePlayStatsContainer label={viewCountLabel} />
         </Box>
       )}
     </Stack>
@@ -36,5 +36,6 @@ export default TitleSection
 const ArticlePlayStatsContainer = styled(Chip)(({ theme }) => ({
   borderRadius: '5px',
   backgroundColor: theme.palette.grey[500],
-  color: '#fff'
+  color: '#fff',
+  lineHeight: 1
 }))

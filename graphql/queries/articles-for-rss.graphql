@@ -37,6 +37,7 @@ query ArticlesForRss {
       percentOfVisitorsClickingPlay
       plays
       visitors
+      views
     }
     updated
     image {

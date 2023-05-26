@@ -39,6 +39,7 @@ import {
   SiteWideAnnouncementsDocument
 } from 'graphql/queries/announcement-for-user.generated'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
+import Error404 from 'components/error-pages/Error404'
 const ArticlePassword = dynamic(() => import('components/article/ArticlePassword'))
 
 type SingleArticleProps = {
@@ -59,7 +60,7 @@ function SingleArticle({ article }: SingleArticleProps) {
   }
 
   const ArticleContent = useMemo(() => {
-    if (!article) return null
+    if (!article) return <Error404 />
     return (
       <div>
         <ArticleEffects article={article} />

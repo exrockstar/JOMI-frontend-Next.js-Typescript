@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type ArticlesForRssQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ArticlesForRssQuery = { __typename?: 'Query', articlesForRss: Array<{ __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, tags: Array<string>, slug?: string | null | undefined, vid_length?: string | null | undefined, wistia_id?: string | null | undefined, published?: any | null | undefined, updated: any, enabled_languages?: Array<string> | null | undefined, categories: Array<{ __typename?: 'Category', _id: string, displayName: string }>, content: { __typename?: 'Content', abstract?: string | null | undefined }, assets: Array<{ __typename?: 'Assets', url: string, width: number, height: number, fileSize: number, contentType: string, type: string }>, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined, thumbnail?: { __typename?: 'Thumbnail', url: string, width: number, height: number } | null | undefined } | null | undefined, stats?: { __typename?: 'ArticleStats', averagePercentWatched: number, pageLoads: number, percentOfVisitorsClickingPlay: number, plays: number, visitors: number } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }> };
+export type ArticlesForRssQuery = { __typename?: 'Query', articlesForRss: Array<{ __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, tags: Array<string>, slug?: string | null | undefined, vid_length?: string | null | undefined, wistia_id?: string | null | undefined, published?: any | null | undefined, updated: any, enabled_languages?: Array<string> | null | undefined, categories: Array<{ __typename?: 'Category', _id: string, displayName: string }>, content: { __typename?: 'Content', abstract?: string | null | undefined }, assets: Array<{ __typename?: 'Assets', url: string, width: number, height: number, fileSize: number, contentType: string, type: string }>, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined, thumbnail?: { __typename?: 'Thumbnail', url: string, width: number, height: number } | null | undefined } | null | undefined, stats?: { __typename?: 'ArticleStats', averagePercentWatched: number, pageLoads: number, percentOfVisitorsClickingPlay: number, plays: number, visitors: number, views?: number | null | undefined } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }> };
 
 
 export const ArticlesForRssDocument = gql`
@@ -49,6 +49,7 @@ export const ArticlesForRssDocument = gql`
       percentOfVisitorsClickingPlay
       plays
       visitors
+      views
     }
     updated
     image {
