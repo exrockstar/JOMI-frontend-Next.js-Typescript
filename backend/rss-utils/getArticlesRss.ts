@@ -2,10 +2,7 @@ import { getApolloAdminClient } from 'apis/apollo-admin-client'
 import { isEmpty, sortBy } from 'lodash'
 import { decode } from 'html-entities'
 import { SITE_NAME } from 'common/constants'
-import {
-  ArticlesForRssQuery,
-  ArticlesForRssDocument
-} from 'graphql/queries/articles-for-rss.generated'
+import { ArticlesForRssQuery, ArticlesForRssDocument } from 'graphql/queries/articles-for-rss.generated'
 export async function getArticlesRss(origin: string) {
   const client = await getApolloAdminClient()
   const { data } = await client.query<ArticlesForRssQuery>({
@@ -29,9 +26,7 @@ export async function getArticlesRss(origin: string) {
 
       const abstract = decode(article.content?.abstract ?? '')
 
-      const description = isEmpty(article.content.abstract)
-        ? article.title
-        : abstract
+      const description = isEmpty(article.content.abstract) ? article.title : abstract
 
       if (!!article?.published) {
         const $pubdate = new Date(article?.published || void 0).toISOString()
@@ -67,9 +62,7 @@ export async function getArticlesRss(origin: string) {
         const current_year = new Date().getFullYear()
 
         if (!isEmpty(article.wistia_id) && !!article.assets?.length) {
-          let mp4_vids = article.assets?.filter(
-            (c) => c.contentType === 'video/mp4'
-          )
+          let mp4_vids = article.assets?.filter((c) => c.contentType === 'video/mp4')
 
           if (!!mp4_vids && !!mp4_vids?.length) {
             mp4_vids = sortBy(mp4_vids, (vid) => {
@@ -139,7 +132,7 @@ export async function getArticlesRss(origin: string) {
                 {
                   'media:community': {
                     'media:statistics': {
-                      '@views': `${article.stats.plays}`
+                      '@views': `${article.stats.views}`
                     }
                   }
                 }

@@ -293,6 +293,7 @@ export type ArticleStats = {
   pageLoads: Scalars['Int'];
   percentOfVisitorsClickingPlay: Scalars['Float'];
   plays: Scalars['Int'];
+  views?: Maybe<Scalars['Int']>;
   visitors: Scalars['Int'];
 };
 
@@ -3001,6 +3002,7 @@ export type UpdateUserInput = {
   isTrialFeatureOn?: InputMaybe<Scalars['Boolean']>;
   lastName?: InputMaybe<Scalars['String']>;
   manualBlockMessage?: InputMaybe<Scalars['String']>;
+  matched_institution_name?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   referer?: InputMaybe<Scalars['String']>;
   referrerPath?: InputMaybe<Scalars['String']>;
@@ -3053,7 +3055,7 @@ export type User = {
   manualBlockMessage?: Maybe<Scalars['String']>;
   matchStatus?: Maybe<MatchStatus>;
   matchedBy?: Maybe<MatchedBy>;
-  matched_institution_name: Scalars['String'];
+  matched_institution_name?: Maybe<Scalars['String']>;
   name: Name;
   numSearches?: Maybe<Scalars['Int']>;
   phone?: Maybe<Scalars['String']>;

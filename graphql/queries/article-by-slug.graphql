@@ -133,13 +133,10 @@ query ArticlesBySlug($publication_id: String!, $locale: String) {
       }
     }
     stats {
-      averagePercentWatched
-      pageLoads
-      percentOfVisitorsClickingPlay
-      plays
-      visitors
+      views
     }
     enabled_languages
+    
   }
 }
 
