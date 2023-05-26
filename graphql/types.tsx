@@ -3053,6 +3053,7 @@ export type User = {
   manualBlockMessage?: Maybe<Scalars['String']>;
   matchStatus?: Maybe<MatchStatus>;
   matchedBy?: Maybe<MatchedBy>;
+  matched_institution_name: Scalars['String'];
   name: Name;
   numSearches?: Maybe<Scalars['Int']>;
   phone?: Maybe<Scalars['String']>;

@@ -34,11 +34,11 @@ const headCells: readonly HeadCell[] = [
   },
   {
     id: 'institution_name',
-    label: 'Institution Name'
+    label: 'Institution Name (Stated)'
   },
   {
-    id: 'previouslyStatedInstitutions.name',
-    label: 'Stated Institutions'
+    id: 'matched_institution_name',
+    label: 'Institution Name (Matched)'
   },
   {
     id: 'matchStatus',

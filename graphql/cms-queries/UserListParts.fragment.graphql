@@ -13,6 +13,7 @@ fragment UserListParts on User {
   specialty
   institution
   institution_name
+  matched_institution_name
   countryCode
   regionName
   user_type_other
@@ -29,6 +30,7 @@ fragment UserListParts on User {
   emailNeedsConfirm
   instEmailVerified
   institutionalEmail
+
   subscription {
     subType
     fromInst
@@ -74,6 +76,7 @@ fragment UserDetail on User {
   phone
   institution
   institution_name
+  matched_institution_name
   institutionalEmail
   matchedBy
   matchStatus

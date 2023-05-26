@@ -18,6 +18,7 @@ const InstitutionSection = ({ user }: Props) => {
       </Typography>
       <Stack spacing={2}>
         <UserDetailInstitutionSelector />
+        <FormikTextField size="small" name="institution_name" label="Stated Institution" />
         <FormikTextField
           name="institution"
           label="Institution ID"

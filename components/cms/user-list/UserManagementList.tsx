@@ -132,7 +132,6 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                   refererPath = refererPath.replace(/%\w\w/g, '')
                 }
               }
-              const statedInsts = user.previouslyStatedInstitutions
               return (
                 <StyledTableRow
                   key={user._id}
@@ -180,13 +179,7 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                     {user.institution_name || NotSpecified}
                   </TableCell>
                   <TableCell sx={{ maxWidth: 250, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {!!statedInsts?.length
-                      ? statedInsts.map((x) => (
-                          <Typography key={x.name} variant="body2">
-                            {x.name}
-                          </Typography>
-                        ))
-                      : NotSpecified}
+                    {user.matched_institution_name || NotApplicable}
                   </TableCell>
                   <TableCell>{user.matchStatus}</TableCell>
                   <TableCell>{last_visited}</TableCell>

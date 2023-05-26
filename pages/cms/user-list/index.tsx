@@ -53,14 +53,14 @@ const columnOptions: ColumnOption[] = [
     operations: StringOperations
   },
   {
-    label: 'Institution name',
+    label: 'Institution (Stated)',
     columnName: 'institution_name',
     type: 'text',
     operations: StringOperations
   },
   {
-    label: 'Stated Institution',
-    columnName: 'previouslyStatedInstitutions.name',
+    label: 'Institution (Matched)',
+    columnName: 'matched_institution_name',
     type: 'text',
     operations: StringOperations
   },

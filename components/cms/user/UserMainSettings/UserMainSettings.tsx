@@ -26,11 +26,13 @@ import ProfileImageSection from './ProfileImageSection'
 import SocialInfoSection from './SocialInfoSection'
 import UserSubmitButton from './UserSubmitButton'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 type Props = {
   user: UserDetailQuery['userById']
 }
 const UserMainSettings = ({ user }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
+  const router = useRouter()
   const [updateUser, { loading: updating, client }] = useUpdateUserCmsMutation({
     onCompleted(result) {
       enqueueSnackbar(`Successfully to updated user`, {
@@ -64,6 +66,7 @@ const UserMainSettings = ({ user }: Props) => {
         institution_name: user.institution_name,
         inst_email: user.institutionalEmail,
         institution: user.institution,
+        matched_institution_name: user.matched_institution_name,
         // matchedBy: user.matchedBy ?? MatchedBy.NotMatched,
         // matchStatus: user.matchStatus ?? MatchStatus.NotMatched,
         instEmailVerified: user.instEmailVerified,
@@ -86,13 +89,14 @@ const UserMainSettings = ({ user }: Props) => {
           id: user._id,
           ...temp
         }
-
         updateUser({
           variables: {
             input
+          },
+          onCompleted() {
+            router.reload()
           }
         })
-        formikHelper.resetForm({ values })
       }}
     >
       <Grid container spacing={3}>
@@ -116,19 +120,6 @@ const UserMainSettings = ({ user }: Props) => {
             <FormControlLabel control={<FormikCheckbox name="isTrialFeatureOn" />} label="Enable trials" />
             <FormikTextField name="trialDuration" type="number" label="Trial duration (days)" size="small" />
           </FormGroup>
-          <Box>
-            <Typography variant="h5">Stated Institutions</Typography>
-            <List>
-              {user?.previouslyStatedInstitutions?.map((inst, i) => {
-                return (
-                  <ListItem key={i}>
-                    <ListItemText primary={inst.name} secondary={dayjs(inst.date).format('L')} />
-                    <Divider component="li" />
-                  </ListItem>
-                )
-              })}
-            </List>
-          </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <OtherSettings />
