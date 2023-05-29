@@ -27,6 +27,7 @@ import SocialInfoSection from './SocialInfoSection'
 import UserSubmitButton from './UserSubmitButton'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
+import PreviouslyStatedInstitutions from './PreviouslyStatedInstitutions'
 type Props = {
   user: UserDetailQuery['userById']
 }
@@ -120,6 +121,7 @@ const UserMainSettings = ({ user }: Props) => {
             <FormControlLabel control={<FormikCheckbox name="isTrialFeatureOn" />} label="Enable trials" />
             <FormikTextField name="trialDuration" type="number" label="Trial duration (days)" size="small" />
           </FormGroup>
+          <PreviouslyStatedInstitutions institutions={user?.previouslyStatedInstitutions} />
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <OtherSettings />
