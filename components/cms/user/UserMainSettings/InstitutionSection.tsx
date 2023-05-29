@@ -28,7 +28,7 @@ const InstitutionSection = ({ user }: Props) => {
           label="Matched By"
           fullWidth
           size="small"
-          helperText="By whom this user was matched by"
+          helperText="Which method was used to match the user to their institution"
           defaultValue=""
           disabled
         />
@@ -41,7 +41,7 @@ const InstitutionSection = ({ user }: Props) => {
           size="small"
           disabled
           defaultValue=""
-          helperText="Which method was used to match the user to their institution"
+          helperText="Specifies how user was matched to an institution"
         />
       </Stack>
     </div>
