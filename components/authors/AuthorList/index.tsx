@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import Grid from '@mui/material/Grid'
-import { Box, Typography } from '@mui/material'
+import { Box, Link as MUILink } from '@mui/material'
 import Link from 'next/link'
 import { Author } from 'graphql/types'
 
@@ -13,19 +13,18 @@ function AuthorList({ authors }: Props) {
     <>  <Grid item xs={12} md={6}>
       <Box mb={2}>
         {authors.map((author: Author) => {
-          const authorUrl = `/search?q=${author.slug}`
-          return (<Box key={author._id} sx={{
-            cursor: "pointer",
-            ':hover': {
-              textDecoration: "underline"
-            }
-          }}>
-            <Link href={authorUrl} passHref prefetch={false} legacyBehavior>
-              <Typography>
-                {author.display_name}
-              </Typography>
-            </Link>
-          </Box>
+          const authorUrl = `/author/${author.slug}`
+          return (
+            <MUILink
+              key={author._id}
+              component={Link}
+              href={authorUrl}
+              prefetch={false}
+              underline="hover"
+              sx={{ display: "block"}}
+            >
+              {author.display_name}
+            </MUILink>
           )
         })}
       </Box>
