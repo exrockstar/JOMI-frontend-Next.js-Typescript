@@ -18,13 +18,11 @@ import AuthorList from 'components/authors/AuthorList';
 import { Author } from 'graphql/types';
 
 type Props = {
-  authors: any[],
-  [APOLLO_STATE_PROP_NAME]: any
+  authors: AuthorsQuery["authors"],
 } & DefaultPageProps
 
-export default function Articles({ authors }: Props) {
+export default function AuthorsPage({ authors }: Props) {
   const theme = useTheme()
-  const isMdUp = useMediaQuery(theme.breakpoints.up('md'))
 
   const rendered = useMemo(() => {
     return (
@@ -44,7 +42,7 @@ export default function Articles({ authors }: Props) {
         </Container>
       </Layout>
     )
-  }, [isMdUp])
+  }, [authors])
   return rendered
 }
 
@@ -64,12 +62,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
   })
   return {
     props: {
-      [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
+      // [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
       authors: authors,
       meta_data: buildGenericMetadata({
         title: 'Publishing Authors',
         meta_desc: `Authors`,
-        slug: 'author'
+        slug: 'authors'
       }),
     }
   }

@@ -3,19 +3,13 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { InstitutionPartsFragmentDoc } from './InstitutionParts.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions = {}
+const defaultOptions =  {}
 export type InstitutionsListQueryVariables = Types.Exact<{
   input: Types.InstitutionInput;
 }>;
 
 
-export type InstitutionsListQuery = {
-  __typename?: 'Query',
-  institutions: {
-    map: any; __typename?: 'InstitutionOutput', dbQueryString: string, count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, total_article_count: number, user_count: number, created?: any | null | undefined, expiry_date_cached?: any | null | undefined, pending_requests?: number | null | undefined, sent_requests: number, total_requests?: number | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined, expiredOrderStatus?: Types.OrderType | null | undefined } }>
-  },
-  allInstitutions: Array<string>
-};
+export type InstitutionsListQuery = { __typename?: 'Query', institutions: { __typename?: 'InstitutionOutput', dbQueryString: string, count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, total_article_count: number, user_count: number, created?: any | null | undefined, expiry_date_cached?: any | null | undefined, pending_requests?: number | null | undefined, sent_requests: number, total_requests?: number | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined, expiredOrderStatus?: Types.OrderType | null | undefined } }> } };
 
 export type InstitutionByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -56,11 +50,6 @@ export const InstitutionsListDocument = gql`
   }
 }
     `;
-export const AllInstitutionsDocument = gql`
-    query Institutions {
-    allInstitutions 
-  }
-    `;
 
 /**
  * __useInstitutionsListQuery__
@@ -79,13 +68,13 @@ export const AllInstitutionsDocument = gql`
  * });
  */
 export function useInstitutionsListQuery(baseOptions: Apollo.QueryHookOptions<InstitutionsListQuery, InstitutionsListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<InstitutionsListQuery, InstitutionsListQueryVariables>(InstitutionsListDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InstitutionsListQuery, InstitutionsListQueryVariables>(InstitutionsListDocument, options);
+      }
 export function useInstitutionsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstitutionsListQuery, InstitutionsListQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<InstitutionsListQuery, InstitutionsListQueryVariables>(InstitutionsListDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InstitutionsListQuery, InstitutionsListQueryVariables>(InstitutionsListDocument, options);
+        }
 export type InstitutionsListQueryHookResult = ReturnType<typeof useInstitutionsListQuery>;
 export type InstitutionsListLazyQueryHookResult = ReturnType<typeof useInstitutionsListLazyQuery>;
 export type InstitutionsListQueryResult = Apollo.QueryResult<InstitutionsListQuery, InstitutionsListQueryVariables>;
@@ -114,13 +103,13 @@ export const InstitutionByIdDocument = gql`
  * });
  */
 export function useInstitutionByIdQuery(baseOptions: Apollo.QueryHookOptions<InstitutionByIdQuery, InstitutionByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<InstitutionByIdQuery, InstitutionByIdQueryVariables>(InstitutionByIdDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InstitutionByIdQuery, InstitutionByIdQueryVariables>(InstitutionByIdDocument, options);
+      }
 export function useInstitutionByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstitutionByIdQuery, InstitutionByIdQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<InstitutionByIdQuery, InstitutionByIdQueryVariables>(InstitutionByIdDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InstitutionByIdQuery, InstitutionByIdQueryVariables>(InstitutionByIdDocument, options);
+        }
 export type InstitutionByIdQueryHookResult = ReturnType<typeof useInstitutionByIdQuery>;
 export type InstitutionByIdLazyQueryHookResult = ReturnType<typeof useInstitutionByIdLazyQuery>;
 export type InstitutionByIdQueryResult = Apollo.QueryResult<InstitutionByIdQuery, InstitutionByIdQueryVariables>;
@@ -153,13 +142,13 @@ export const InstitutionSearchDocument = gql`
  * });
  */
 export function useInstitutionSearchQuery(baseOptions: Apollo.QueryHookOptions<InstitutionSearchQuery, InstitutionSearchQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<InstitutionSearchQuery, InstitutionSearchQueryVariables>(InstitutionSearchDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InstitutionSearchQuery, InstitutionSearchQueryVariables>(InstitutionSearchDocument, options);
+      }
 export function useInstitutionSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstitutionSearchQuery, InstitutionSearchQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<InstitutionSearchQuery, InstitutionSearchQueryVariables>(InstitutionSearchDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InstitutionSearchQuery, InstitutionSearchQueryVariables>(InstitutionSearchDocument, options);
+        }
 export type InstitutionSearchQueryHookResult = ReturnType<typeof useInstitutionSearchQuery>;
 export type InstitutionSearchLazyQueryHookResult = ReturnType<typeof useInstitutionSearchLazyQuery>;
 export type InstitutionSearchQueryResult = Apollo.QueryResult<InstitutionSearchQuery, InstitutionSearchQueryVariables>;

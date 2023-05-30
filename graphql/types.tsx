@@ -316,6 +316,7 @@ export type Author = {
   name?: Maybe<Name>;
   role?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
+  specialty?: Maybe<Scalars['String']>;
 };
 
 export type Category = {
@@ -2073,6 +2074,7 @@ export type Query = {
   accessesByUserId?: Maybe<Array<Access>>;
   allArticleIds: Array<Scalars['String']>;
   allArticleVotes: Array<NewArticleVote>;
+  allInstitutionsList: Array<Scalars['String']>;
   announcement: Announcement;
   announcementForUser?: Maybe<Array<Announcement>>;
   announcements: Array<Announcement>;

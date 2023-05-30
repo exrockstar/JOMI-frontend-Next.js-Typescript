@@ -10,7 +10,7 @@ import Link from 'next/link'
 import LogoWhite from 'public/logo-white.svg'
 const Footer2 = () => {
   return (
-    <Box bgcolor={{ xs: '#0E0E10', md: 'background.paper' }} color="text.primary" mt={10}>
+    <Box bgcolor={{ xs: '#0E0E10', md: 'background.paper' }} color="text.primary" mt={15}>
       <Container maxWidth="lg" disableGutters component="footer">
         <Box position="relative" paddingLeft={{ md: '380px' }} display="flex">
           <Box
