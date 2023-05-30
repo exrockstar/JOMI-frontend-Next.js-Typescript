@@ -2,11 +2,11 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {}
 export type AuthorsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AuthorsQuery = { __typename?: 'Query', authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, slug?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }> };
+export type AuthorsQuery = { __typename?: 'Query', authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, slug?: string | null | undefined, specialty?: string | null | undefined, name?: { last?: string | null | undefined } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }> };
 
 
 export const AuthorsDocument = gql`
@@ -15,6 +15,10 @@ export const AuthorsDocument = gql`
     _id
     display_name
     slug
+    specialty
+    name {
+      last
+    }
     image {
       filename
     }
@@ -38,13 +42,13 @@ export const AuthorsDocument = gql`
  * });
  */
 export function useAuthorsQuery(baseOptions?: Apollo.QueryHookOptions<AuthorsQuery, AuthorsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AuthorsQuery, AuthorsQueryVariables>(AuthorsDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<AuthorsQuery, AuthorsQueryVariables>(AuthorsDocument, options);
+}
 export function useAuthorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthorsQuery, AuthorsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AuthorsQuery, AuthorsQueryVariables>(AuthorsDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<AuthorsQuery, AuthorsQueryVariables>(AuthorsDocument, options);
+}
 export type AuthorsQueryHookResult = ReturnType<typeof useAuthorsQuery>;
 export type AuthorsLazyQueryHookResult = ReturnType<typeof useAuthorsLazyQuery>;
 export type AuthorsQueryResult = Apollo.QueryResult<AuthorsQuery, AuthorsQueryVariables>;

@@ -2,7 +2,7 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {}
 export type UserPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -70,13 +70,13 @@ export const UserPricesDocument = gql`
  * });
  */
 export function useUserPricesQuery(baseOptions?: Apollo.QueryHookOptions<UserPricesQuery, UserPricesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserPricesQuery, UserPricesQueryVariables>(UserPricesDocument, options);
-      }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserPricesQuery, UserPricesQueryVariables>(UserPricesDocument, options);
+}
 export function useUserPricesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserPricesQuery, UserPricesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserPricesQuery, UserPricesQueryVariables>(UserPricesDocument, options);
-        }
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserPricesQuery, UserPricesQueryVariables>(UserPricesDocument, options);
+}
 export type UserPricesQueryHookResult = ReturnType<typeof useUserPricesQuery>;
 export type UserPricesLazyQueryHookResult = ReturnType<typeof useUserPricesLazyQuery>;
 export type UserPricesQueryResult = Apollo.QueryResult<UserPricesQuery, UserPricesQueryVariables>;
