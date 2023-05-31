@@ -21,3 +21,7 @@ mutation TrackSubscribe($input: TrackSubscribeInput!) {
 mutation TrackInitiateCheckout($input: TrackInitiateCheckoutInput!) {
   trackInitiateCheckout(input: $input)
 }
+
+mutation TrackSearch($input: ArticleInput!){
+  trackSearch(input: $input)
+}

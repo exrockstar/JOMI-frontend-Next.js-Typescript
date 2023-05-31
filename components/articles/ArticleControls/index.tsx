@@ -33,10 +33,7 @@ function ArticleControls(props: Props) {
         <Box flex={1}></Box>
       </Hidden>
       <Box>
-        <Pagination
-          totalCount={props.totalCount}
-          itemsPerPage={props.itemsPerPage}
-        />
+        <Pagination totalCount={props.totalCount} itemsPerPage={props.itemsPerPage} />
       </Box>
     </Stack>
   )
@@ -46,7 +43,7 @@ type CountChipProps = {
   totalCount: number
 }
 
-function CountChip({ totalCount }: CountChipProps) {
+function CountChip({ totalCount = 0 }: CountChipProps) {
   const articlesText = totalCount > 1 ? 'articles' : 'article'
   return (
     <Chip

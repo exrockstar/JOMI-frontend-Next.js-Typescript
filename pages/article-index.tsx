@@ -202,7 +202,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   })
   const content = data.pageBySlug?.content
   const { indexInfo, sections } = transformContent(content, articles.articleOutput?.articles)
-
+  await client.resetStore()
   await client.query<SiteWideAnnouncementsQuery>({
     query: SiteWideAnnouncementsDocument
   })

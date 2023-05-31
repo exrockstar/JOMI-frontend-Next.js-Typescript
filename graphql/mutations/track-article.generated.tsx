@@ -45,6 +45,13 @@ export type TrackInitiateCheckoutMutationVariables = Types.Exact<{
 
 export type TrackInitiateCheckoutMutation = { __typename?: 'Mutation', trackInitiateCheckout: boolean };
 
+export type TrackSearchMutationVariables = Types.Exact<{
+  input: Types.ArticleInput;
+}>;
+
+
+export type TrackSearchMutation = { __typename?: 'Mutation', trackSearch: boolean };
+
 
 export const TrackArticleDocument = gql`
     mutation TrackArticle($input: TrackArticleInput!) {
@@ -232,3 +239,34 @@ export function useTrackInitiateCheckoutMutation(baseOptions?: Apollo.MutationHo
 export type TrackInitiateCheckoutMutationHookResult = ReturnType<typeof useTrackInitiateCheckoutMutation>;
 export type TrackInitiateCheckoutMutationResult = Apollo.MutationResult<TrackInitiateCheckoutMutation>;
 export type TrackInitiateCheckoutMutationOptions = Apollo.BaseMutationOptions<TrackInitiateCheckoutMutation, TrackInitiateCheckoutMutationVariables>;
+export const TrackSearchDocument = gql`
+    mutation TrackSearch($input: ArticleInput!) {
+  trackSearch(input: $input)
+}
+    `;
+export type TrackSearchMutationFn = Apollo.MutationFunction<TrackSearchMutation, TrackSearchMutationVariables>;
+
+/**
+ * __useTrackSearchMutation__
+ *
+ * To run a mutation, you first call `useTrackSearchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrackSearchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trackSearchMutation, { data, loading, error }] = useTrackSearchMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTrackSearchMutation(baseOptions?: Apollo.MutationHookOptions<TrackSearchMutation, TrackSearchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TrackSearchMutation, TrackSearchMutationVariables>(TrackSearchDocument, options);
+      }
+export type TrackSearchMutationHookResult = ReturnType<typeof useTrackSearchMutation>;
+export type TrackSearchMutationResult = Apollo.MutationResult<TrackSearchMutation>;
+export type TrackSearchMutationOptions = Apollo.BaseMutationOptions<TrackSearchMutation, TrackSearchMutationVariables>;
