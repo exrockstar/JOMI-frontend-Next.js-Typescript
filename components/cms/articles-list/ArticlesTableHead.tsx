@@ -77,6 +77,10 @@ const headCells: readonly HeadCell[] = [
     label: `Content Length`
   },
   {
+    id:'categories',
+    label: 'Categories'
+  },
+  {
     id: 'isRentArticleFeatureOn',
     label: 'Rent Enabled'
   },

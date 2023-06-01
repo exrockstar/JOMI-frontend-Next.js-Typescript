@@ -69,3 +69,29 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
   { name: 'Interventional Radiology' },
   { name: 'Skin and Soft Tissue' }
 ]
+
+/*
+* Array of all categories in our DB
+* Used right now for filtering articles in article management CMS
+*/
+export const ARTICLE_CATEGORIES = [
+  'Interventional Radiology',
+  "Obstetrics & Gynecology",
+  'Fundamentals',
+  "Hand Surgery",
+  "Vascular Surgery",
+  "Pediatric Surgery",
+  "Trauma and Acute Care",
+  "Otolaryngology",
+  "Urology",
+  "Orthopaedics",
+  "Neurosurgery",
+  "Basic Skills for the OR",
+  "Plastic Surgery",
+  "Global Surgery",
+  "Orthopaedic Trauma",
+  "General Surgery",
+  "Cardiac Surgery",
+  "(OMFS)",
+  "Ophthalmology",
+]

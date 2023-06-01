@@ -43,6 +43,7 @@ import {
 import dayjs from 'dayjs'
 import ArticleTranslationsDialog from 'components/cms/articles-list/ArticleTranslationsDialog'
 import PurchaseSettingDialog from 'components/cms/articles-list/PurchaseSettingDialog'
+import { ARTICLE_CATEGORIES } from 'common/constants'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -133,6 +134,13 @@ const columnOptions: ColumnOption[] = [
     type: 'text',
     label: 'PPA Scope',
     operations: StringOperations
+  },
+  {
+    columnName: 'categories',
+    type: 'select',
+    label: 'Categories',
+    operations: StringOperations,
+    values: ARTICLE_CATEGORIES
   }
 ]
 const ArticlesListPage = () => {
