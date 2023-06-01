@@ -49,7 +49,8 @@ const GoogleGtag = ({ metadata }: Props) => {
         user_role,
         institution_id,
         institution_name,
-        sub_type
+        sub_type,
+        userId: `${user?._id || 'N/A'}`
       },
       title: metadata.title
     })
