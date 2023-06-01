@@ -171,11 +171,6 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
             <ArticlesTableHead />
             <TableBody>
               {articles?.map((article, i) => {
-                const htmlContent = article.content.article ?? ''
-                const strippedContent = htmlContent
-                  ? htmlContent.replace(/<[^>]*>/g, '')
-                  : ''
-                const charCount = htmlContent.length
                 const production_id = article.production_id || 'N/A'
                 const publication_id = article.publication_id || 'N/A'
                 const selected = selectedItems.includes(article._id)
@@ -284,6 +279,25 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                       )}
                     </TableCell>
                     <TableCell>{article.contentlength}</TableCell>
+                    {article.categories[0] ? (
+                      <TableCell
+                        sx={{
+                          whiteSpace: 'nowrap',
+                          maxWidth: 300,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                        title={article.categories
+                          .map((c) => c.displayName)
+                          .join(', ')}
+                      >
+                        {article.categories.map((category, index) => (
+                          <div key={index}>{category.displayName}</div>
+                        ))}
+                      </TableCell>
+                    ) : (
+                      <TableCell>N/A</TableCell>
+                    )}
                     <TableCell>
                       {article.isRentArticleFeatureOn ? 'Yes' : 'No'}
                     </TableCell>

@@ -29,6 +29,9 @@ query ArticlesList($input: ArticleInputFetch!){
       isPurchaseArticleFeatureOn
       isRentArticleFeatureOn      
       purchaseAllowedCountries
+      categories{
+        displayName
+      }
     }
   }
 }
