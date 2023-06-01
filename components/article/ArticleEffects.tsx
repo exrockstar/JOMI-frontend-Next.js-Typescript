@@ -25,22 +25,20 @@ const ArticleEffects = ({ article }: Props) => {
   }, [article.publication_id, article.slug, router, router.query])
 
   useEffect(() => {
-    //track in GA4
-    analytics.trackArticleView({
-      categories: article.categories.map((c) => {
-        return c.displayName
-      }),
-      title: article.title,
-      authors: article.authors.map((a) => {
-        return a.display_name
-      })
-    })
-
-    //track in DB
     const handler = () => {
       if (hasTracked) return
       setHasTracked(true)
-
+      //track in GA4
+      analytics.trackArticleView({
+        categories: article.categories.map((c) => {
+          return c.displayName
+        }),
+        title: article.title,
+        authors: article.authors.map((a) => {
+          return a.display_name
+        })
+      })
+      //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {
         trackArticle({
           variables: {
