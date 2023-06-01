@@ -96,13 +96,16 @@ const Settings = () => {
     fetchPolicy: 'network-only'
   })
 
-  const [
-    isJobRunning,
-    { data: isJobRunningData, refetch: isJobRunningRefetch }
-  ] = useIsJobRunningLazyQuery({
+  const [isJobRunning, { data: isJobRunningData }] = useIsJobRunningLazyQuery({
     onCompleted(result) {
       if (result.isJobRunning) {
-        setTimeout(isJobRunningRefetch, 2000)
+        setTimeout(() => {
+          isJobRunning({
+            variables: {
+              name: jobName
+            }
+          })
+        }, 2000)
       }
 
       if (result.jobProgress >= 100) {
