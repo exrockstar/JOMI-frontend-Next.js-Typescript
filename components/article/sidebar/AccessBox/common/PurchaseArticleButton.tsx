@@ -62,17 +62,6 @@ const PurchaseArticleButton = (props: Props) => {
           setPromocode(code)
         }}
         onSubmit={() => {
-          const eventName =
-            type === OrderType.PurchaseArticle
-              ? 'initiate_purchase_article'
-              : 'initiate_rent_article'
-          gtag('event', eventName, {
-            referredFrom,
-            referrerPath,
-            anon_link_id,
-            userId,
-            value: price
-          })
           ref.current.submit()
         }}
       />
@@ -99,6 +88,13 @@ const PurchaseArticleButton = (props: Props) => {
             sx={{ fontSize: '.875rem', fontWeight: 700 }}
             onClick={(e) => {
               setOpen(true)
+              gtag('event', 'initiate_purchase_article', {
+                referredFrom,
+                referrerPath,
+                anon_link_id,
+                userId,
+                value: price
+              })
               analytics.trackClick(e)
             }}
             type="button"
@@ -112,6 +108,13 @@ const PurchaseArticleButton = (props: Props) => {
             fullWidth
             onClick={(e) => {
               setOpen(true)
+              gtag('event', 'initiate_rent_article', {
+                referredFrom,
+                referrerPath,
+                anon_link_id,
+                userId,
+                value: price
+              })
               analytics.trackClick(e)
             }}
             type="button"
