@@ -116,6 +116,16 @@ const trackError = (message: string) => {
   })
 }
 
+const trackArticleView = (params: Object) => {
+  const isClient = typeof window !== 'undefined'
+  gtag('event', 'article_view', {
+    params,
+    referredFrom: isClient ? localStorage.getItem('referrer') ?? '' : '',
+    referrerPath: isClient ? localStorage.getItem('referrerPath') ?? '' : '',
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+}
+
 export const analytics = {
   init,
   set,
@@ -128,5 +138,6 @@ export const analytics = {
   trackFailedLogin,
   trackCheckout,
   event,
-  trackPurchase
+  trackPurchase,
+  trackArticleView
 }

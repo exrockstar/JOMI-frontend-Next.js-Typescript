@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, useMemo } from 'react'
+import { memo, useState, useMemo } from 'react'
 import { ParsedUrlQuery } from 'querystring'
 import { Box, Grid, Hidden } from '@mui/material'
 import Layout from 'components/layout'

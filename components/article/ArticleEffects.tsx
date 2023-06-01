@@ -1,3 +1,4 @@
+import { analytics } from 'apis/analytics'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import { useTrackArticleMutation } from 'graphql/mutations/track-article.generated'
@@ -24,6 +25,18 @@ const ArticleEffects = ({ article }: Props) => {
   }, [article.publication_id, article.slug, router, router.query])
 
   useEffect(() => {
+    //track in GA4
+    analytics.trackArticleView({
+      categories: article.categories.map((c) => {
+        return c.displayName
+      }),
+      title: article.title,
+      authors: article.authors.map((a) => {
+        return a.display_name
+      })
+    })
+
+    //track in DB
     const handler = () => {
       if (hasTracked) return
       setHasTracked(true)
