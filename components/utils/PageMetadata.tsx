@@ -9,23 +9,6 @@ type Props = {
 }
 const PageMetadata = ({ meta_data = defaultMeta }: Props) => {
   const entries = Object.entries(meta_data)
-  const [referredFrom, setReferredFrom] = useLocalStorage('referrer', null)
-  const [, setReferrerrPath] = useLocalStorage('referrerPath', null)
-  const [, setAnonLinkId] = useLocalStorage('anon_link_id', null)
-  //Check where a user came from, set in local storage, call only once
-  useEffect(() => {
-    if (!referredFrom) {
-      const id =
-        Date.now().toString(36) +
-        Math.floor(
-          Math.pow(10, 12) + Math.random() * 9 * Math.pow(10, 12)
-        ).toString(36)
-
-      setReferredFrom(document.referrer)
-      setReferrerrPath(window.location.search)
-      setAnonLinkId(id)
-    }
-  }, [])
   return (
     <Head>
       <meta key="charset" charSet="utf-8" />

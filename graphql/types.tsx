@@ -89,6 +89,7 @@ export enum AccessTypeEnum {
   Evaluation = 'Evaluation',
   FreeAccess = 'FreeAccess',
   IndividualSubscription = 'IndividualSubscription',
+  IndividualTrial = 'IndividualTrial',
   InstitutionalSubscription = 'InstitutionalSubscription',
   LimitedAccess = 'LimitedAccess',
   RequireSubscription = 'RequireSubscription'
@@ -1082,6 +1083,7 @@ export type Mutation = {
   addOrUpdateOrder: Scalars['Boolean'];
   addPurchaseArticleOrder: Scalars['Boolean'];
   addTranslationsHash: Scalars['String'];
+  addTrialOrderForUser: Scalars['Boolean'];
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
   cancelOrder: Scalars['Boolean'];
@@ -1173,6 +1175,7 @@ export type Mutation = {
   updateTriageNotes: TriageQueue;
   updateTriageQueueStatus: TriageQueue;
   updateTriageResponse: TriageQueue;
+  updateTrialSettings: TrialSettings;
   updateUserCms: User;
   updateWistiaMetadata: Scalars['String'];
   upgradeSubscription?: Maybe<Scalars['Boolean']>;
@@ -1621,6 +1624,11 @@ export type MutationUpdateTriageResponseArgs = {
 };
 
 
+export type MutationUpdateTrialSettingsArgs = {
+  input: TrialSettingsInput;
+};
+
+
 export type MutationUpdateUserCmsArgs = {
   input: UpdateUserInput;
 };
@@ -1689,7 +1697,7 @@ export type Order = {
   end?: Maybe<Scalars['DateTime']>;
   institution?: Maybe<Scalars['String']>;
   isCanceled?: Maybe<Scalars['Boolean']>;
-  isTrialPeriod: Scalars['Boolean'];
+  isTrialPeriod?: Maybe<Scalars['Boolean']>;
   lastEditedBy?: Maybe<Scalars['String']>;
   latest_invoice?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
@@ -2112,6 +2120,7 @@ export type Query = {
   getStripePromoCodeByCode: StripePromoCode;
   getStripePromoCodes: StripePromoCodeListOutput;
   getStripePromocodeRedeems: RedeemListOutput;
+  getTrialSettings: TrialSettings;
   hasArticleRestriction: Scalars['Boolean'];
   hasServiceInCountry: Scalars['Boolean'];
   instArticleEventLogs: AccessEventsOutput;
@@ -2505,10 +2514,10 @@ export type SiteSetting = {
   displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
   isPurchaseArticleFeatureOn: Scalars['Boolean'];
   isRentArticleFeatureOn: Scalars['Boolean'];
-  isTrialFeatureOn: Scalars['Boolean'];
+  isTrialFeatureOn?: Maybe<Scalars['Boolean']>;
   rentDuration: Scalars['Float'];
   scienceOpenXmlGeneratedAt: Scalars['DateTime'];
-  trialDuration: Scalars['Float'];
+  trialDuration?: Maybe<Scalars['Float']>;
   updated: Scalars['DateTime'];
   updatedBy?: Maybe<User>;
 };
@@ -2852,6 +2861,19 @@ export type TriageRequestsByUserOutput = {
   triage_requests: Array<TriageRequestByUser>;
 };
 
+export type TrialSettings = {
+  __typename?: 'TrialSettings';
+  enabledCountries: Array<Scalars['String']>;
+  isTrialFeatureOn: Scalars['Boolean'];
+  trialDuration: Scalars['Float'];
+};
+
+export type TrialSettingsInput = {
+  enabledCountries: Array<Scalars['String']>;
+  isTrialFeatureOn: Scalars['Boolean'];
+  trialDuration: Scalars['Float'];
+};
+
 export type UpdateArticleInput = {
   DOIStatus?: InputMaybe<Scalars['String']>;
   content?: InputMaybe<UpdateContentInput>;
@@ -3051,6 +3073,7 @@ export type User = {
   isSubscribed?: Maybe<Scalars['Boolean']>;
   isSubscribedFromInst?: Maybe<Scalars['Boolean']>;
   isTrialFeatureOn?: Maybe<Scalars['Boolean']>;
+  isTrialsFeatureEnabled: Scalars['Boolean'];
   lastSubType?: Maybe<SubType>;
   last_visited?: Maybe<Scalars['DateTime']>;
   loginCount?: Maybe<Scalars['Int']>;
@@ -3109,11 +3132,11 @@ export enum UserRoles {
 
 export type UserStripeData = {
   __typename?: 'UserStripeData';
-  isTrialsFeatureEnabled: Scalars['Boolean'];
+  isTrialsFeatureEnabled?: Maybe<Scalars['Boolean']>;
   prices: Array<StripePrice>;
   stripeId: Scalars['String'];
-  trialDuration: Scalars['Int'];
-  trial_order_count: Scalars['Int'];
+  trialDuration?: Maybe<Scalars['Int']>;
+  trial_order_count?: Maybe<Scalars['Int']>;
 };
 
 export type UserType = {
