@@ -126,6 +126,18 @@ const trackArticleView = (params: Object) => {
   })
 }
 
+const trackTrial = (
+  eventParams: Gtag.CustomParams | Gtag.ControlParams | Gtag.EventParams = {}
+) => {
+  const isClient = typeof window !== 'undefined'
+  gtag('event', 'get_trial', {
+    ...eventParams,
+    referredFrom: isClient ? localStorage.getItem('referrer') ?? '' : '',
+    referrerPath: isClient ? localStorage.getItem('referrerPath') ?? '' : '',
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+}
+
 export const analytics = {
   init,
   set,
@@ -139,5 +151,6 @@ export const analytics = {
   trackCheckout,
   event,
   trackPurchase,
-  trackArticleView
+  trackArticleView,
+  trackTrial
 }

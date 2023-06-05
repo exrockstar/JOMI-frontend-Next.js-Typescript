@@ -1,18 +1,16 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import {
   ListItemIcon,
   MenuItem,
   Stack,
   Typography,
-  CircularProgress,
   ClickAwayListener,
   Grow,
   Paper,
   Popper
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
 import MenuList from '@mui/material/MenuList'
 
@@ -30,7 +28,7 @@ import UserAccessStatus from './UserAccessStatus'
 import { useUserProfileQuery } from 'graphql/queries/user-profile.generated'
 import { analytics } from 'apis/analytics'
 import { NavButton } from '../NavMenu'
-import CTAButton, { CTAMenuItem } from 'components/common/CTAButton'
+import { CTAMenuItem } from 'components/common/CTAButton'
 import { UserRoles } from 'graphql/types'
 
 function AccountDropdown() {
@@ -122,7 +120,7 @@ function AccountDropdown() {
         </Link>
       )}
       <UserAccessStatus
-        subActive={user?.subActive}
+        subType={user?.subscription?.subType}
         userType={user?.user_type}
         role={user?.role}
       />

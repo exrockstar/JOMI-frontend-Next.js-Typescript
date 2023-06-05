@@ -1,33 +1,23 @@
-import {
-  Box,
-  Divider,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  gridClasses,
-  List,
-  ListItem,
-  ListItemText,
-  Typography
-} from '@mui/material'
+import { Grid } from '@mui/material'
 import { removeTypeNameFromGQLResult } from 'common/utils'
-import FormikCheckbox from 'components/common/formik/FormikCheckbox'
-import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import { Formik } from 'formik'
-import { UserDetailQuery, useUpdateUserCmsMutation } from 'graphql/cms-queries/user-list.generated'
+import {
+  UserDetailQuery,
+  useUpdateUserCmsMutation
+} from 'graphql/cms-queries/user-list.generated'
 import { UpdateUserInput } from 'graphql/types'
 import { useSnackbar } from 'notistack'
 import AccountActions from './AccountActions/AccountActions'
-import BasicInfoSection from './BasicInfoSection'
-import InstitutionSection from './InstitutionSection'
-import InterestsSection from './InterestsSection'
-import OtherSettings from './OtherSettings'
-import ProfileImageSection from './ProfileImageSection'
-import SocialInfoSection from './SocialInfoSection'
+import BasicInfoSection from './sections/BasicInfoSection'
+import InstitutionSection from './sections/InstitutionSection'
+import InterestsSection from './sections/InterestsSection'
+import OtherSettings from './sections/OtherSettings'
+import ProfileImageSection from './sections/ProfileImageSection'
+import SocialInfoSection from './sections/SocialInfoSection'
 import UserSubmitButton from './UserSubmitButton'
-import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import PreviouslyStatedInstitutions from './PreviouslyStatedInstitutions'
+import PreviouslyStatedInstitutions from './sections/PreviouslyStatedInstitutions'
+import TrialsSection from './sections/TrialsSection'
 type Props = {
   user: UserDetailQuery['userById']
 }
@@ -80,8 +70,8 @@ const UserMainSettings = ({ user }: Props) => {
           length: user.image?.length,
           format: user.image?.format
         },
-        isTrialFeatureOn: user.isTrialFeatureOn,
-        trialDuration: user.trialDuration
+        trialsAllowed: user.trialsAllowed,
+        trialAccessAt: user.trialAccessAt ?? null
       }}
       onSubmit={(values, formikHelper) => {
         const temp = { ...values }
@@ -116,12 +106,11 @@ const UserMainSettings = ({ user }: Props) => {
         <Grid item xs={12} md={6} lg={3}>
           <SocialInfoSection />
           <InstitutionSection user={user} />
-          <FormGroup sx={{ my: 2 }}>
-            <Typography variant="h5">Trials</Typography>
-            <FormControlLabel control={<FormikCheckbox name="isTrialFeatureOn" />} label="Enable trials" />
-            <FormikTextField name="trialDuration" type="number" label="Trial duration (days)" size="small" />
-          </FormGroup>
-          <PreviouslyStatedInstitutions institutions={user?.previouslyStatedInstitutions} />
+
+          <PreviouslyStatedInstitutions
+            institutions={user?.previouslyStatedInstitutions}
+          />
+          <TrialsSection />
         </Grid>
         <Grid item xs={12} md={6} lg={3}>
           <OtherSettings />

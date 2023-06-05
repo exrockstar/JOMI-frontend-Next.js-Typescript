@@ -92,6 +92,8 @@ const UserDetails = () => {
     switch (subType) {
       case SubType.Individual:
         return 'secondary'
+      case SubType.Trial:
+        return 'warning'
       case SubType.Institution:
         if (needsEmailConfirmation || needsInstEmailConfirmation) {
           return 'warning'
@@ -107,6 +109,7 @@ const UserDetails = () => {
     switch (subType) {
       case SubType.Individual:
       case SubType.Institution:
+      case SubType.Trial:
         return subType
       case SubType.NotCreated:
       default:

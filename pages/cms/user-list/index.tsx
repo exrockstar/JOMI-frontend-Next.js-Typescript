@@ -1,18 +1,42 @@
 import { Add, Download, FilterList, Visibility } from '@mui/icons-material'
 import { LoadingButton, LocalizationProvider } from '@mui/lab'
 import AdapterDayjs from '@mui/lab/AdapterDayjs'
-import { Alert, Badge, Button, CircularProgress, Drawer, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import {
+  Alert,
+  Badge,
+  Button,
+  CircularProgress,
+  Drawer,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography
+} from '@mui/material'
 import SearchInput from 'components/access/SearchInput'
 import CmsLayout from 'components/cms/CmsLayout'
 import AddUserDialog from 'components/cms/user-list/AddUserDialog'
 import UserManagementList from 'components/cms/user-list/UserManagementList'
 
 import { useState } from 'react'
-import { UserManagementListProvider, useUserManagementList } from 'components/cms/user-list/useUserManagementList'
+import {
+  UserManagementListProvider,
+  useUserManagementList
+} from 'components/cms/user-list/useUserManagementList'
 import { saveJsonToFile } from 'common/saveJsonToFile'
 import { useDownloadUserListLazyQuery } from 'graphql/cms-queries/user-list.generated'
-import { StringOperations, DateOperations, NumericOperations } from 'components/common/FilterDrawer/operations'
-import { UserRoles, QueryOperation, MatchStatus, MatchedBy, ColumnFilter, SubType } from 'graphql/types'
+import {
+  StringOperations,
+  DateOperations,
+  NumericOperations
+} from 'components/common/FilterDrawer/operations'
+import {
+  UserRoles,
+  QueryOperation,
+  MatchStatus,
+  MatchedBy,
+  ColumnFilter,
+  SubType
+} from 'graphql/types'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { Router, useRouter } from 'next/router'
@@ -91,10 +115,21 @@ const columnOptions: ColumnOption[] = [
   {
     label: 'Subscription Type',
     columnName: 'subscription.subType',
-    type: 'text',
-    // operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-    operations: StringOperations
-    // values: Object.values(SubType)
+    type: 'select',
+    operations: [QueryOperation.Equal, QueryOperation.NotEqual],
+    values: Object.values(SubType)
+  },
+  {
+    label: 'Created Trial Access At',
+    columnName: 'trialAccessAt',
+    type: 'date',
+    operations: DateOperations
+  },
+  {
+    label: 'Trials Allowed',
+    columnName: 'trialsAllowed',
+    type: 'boolean',
+    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
   },
   {
     label: 'Is User Blocked',
@@ -125,7 +160,14 @@ const columnOptions: ColumnOption[] = [
     columnName: 'matchedBy',
     type: 'select',
     operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-    values: ['admin', 'email', 'ip', 'institution_name', 'institutional_email', 'not_matched']
+    values: [
+      'admin',
+      'email',
+      'ip',
+      'institution_name',
+      'institutional_email',
+      'not_matched'
+    ]
   },
   {
     label: 'Country Code',
@@ -184,7 +226,16 @@ const UserManagementListPage = () => {
   const [downloading, setDownloading] = useState(false)
   const [showQuery, setShowQuery] = useState(false)
   const router = useRouter()
-  const { users, loading, error, sortBy, sortOrder, filters, setFilters, dbQueryString } = useUserManagementList()
+  const {
+    users,
+    loading,
+    error,
+    sortBy,
+    sortOrder,
+    filters,
+    setFilters,
+    dbQueryString
+  } = useUserManagementList()
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
@@ -199,10 +250,22 @@ const UserManagementListPage = () => {
 
   return (
     <CmsLayout>
-      <DbQueryDialog open={showQuery} onClose={() => setShowQuery(false)} queryStr={dbQueryString} />
+      <DbQueryDialog
+        open={showQuery}
+        onClose={() => setShowQuery(false)}
+        queryStr={dbQueryString}
+      />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Drawer anchor={'right'} open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-          <FilterDrawer onSubmit={onSubmitFilter} columnOptions={columnOptions} filters={filters} />
+        <Drawer
+          anchor={'right'}
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <FilterDrawer
+            onSubmit={onSubmitFilter}
+            columnOptions={columnOptions}
+            filters={filters}
+          />
         </Drawer>
         {addDialoglOpen && (
           <AddUserDialog
@@ -216,7 +279,11 @@ const UserManagementListPage = () => {
         )}
 
         <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
-          <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ xs: 'flex-start', md: 'center' }} spacing={2}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            alignItems={{ xs: 'flex-start', md: 'center' }}
+            spacing={2}
+          >
             <Typography variant="h4">User Management</Typography>
             <LoadingButton
               startIcon={<Add />}
@@ -237,7 +304,10 @@ const UserManagementListPage = () => {
             >
               Add Librarian
             </LoadingButton>
-            <Tooltip title="Download results as JSON file. 1000 user limit" arrow>
+            <Tooltip
+              title="Download results as JSON file. 1000 user limit"
+              arrow
+            >
               <LoadingButton
                 startIcon={<Download />}
                 variant="outlined"
@@ -263,7 +333,11 @@ const UserManagementListPage = () => {
               </LoadingButton>
             </Tooltip>
             <Tooltip title="Display the MongoDB aggregate operation used to filter the data">
-              <Button color="primary" onClick={() => setShowQuery(true)} startIcon={<Visibility />}>
+              <Button
+                color="primary"
+                onClick={() => setShowQuery(true)}
+                startIcon={<Visibility />}
+              >
                 Show DB Query Parameters
               </Button>
             </Tooltip>
@@ -274,7 +348,10 @@ const UserManagementListPage = () => {
               {filters.length == 0
                 ? 'None'
                 : `${filters.length} total:` +
-                  filters.map((filter, i) => ` ${filter.columnName} ${filter.operation} ${filter.value}`)}
+                  filters.map(
+                    (filter, i) =>
+                      ` ${filter.columnName} ${filter.operation} ${filter.value}`
+                  )}
             </Typography>
           </Stack>
           <Tooltip title="Filter list">

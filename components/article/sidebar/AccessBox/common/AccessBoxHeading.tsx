@@ -27,6 +27,8 @@ const AccessBoxHeading = ({ data }: Props) => {
       case AccessTypeEnum.AdminAccess:
       case AccessTypeEnum.FreeAccess:
         return emerald[600]
+      case AccessTypeEnum.IndividualTrial:
+        return yellow[500]
       case AccessTypeEnum.InstitutionalSubscription:
         if (isTrial) {
           return yellow[500]
@@ -43,8 +45,7 @@ const AccessBoxHeading = ({ data }: Props) => {
   }, [accessType, isTrial, requireLogin])
 
   const headingText = useMemo(() => {
-    const isExpired =
-      subscriptionExpiresAt && dayjs().isAfter(subscriptionExpiresAt)
+    const isExpired = subscriptionExpiresAt && dayjs().isAfter(subscriptionExpiresAt)
     if (requireLogin) {
       return 'Requires Login'
     }
@@ -53,6 +54,8 @@ const AccessBoxHeading = ({ data }: Props) => {
         return 'Subscribed'
       case AccessTypeEnum.AdminAccess:
         return 'Admin Access'
+      case AccessTypeEnum.IndividualTrial:
+        return 'Trial Access'
       case AccessTypeEnum.InstitutionalSubscription:
         if (isTrial) {
           return 'Trial Access'

@@ -1,28 +1,20 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  Typography,
-  Button,
-  Link,
-  CircularProgress,
-  Stack,
-  TextField,
-  Alert
-} from '@mui/material'
+import { Box, Typography, Link, CircularProgress, Alert } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import ActiveOrder from './IndividualSubscription/ActiveOrder'
 import { useSession } from 'next-auth/react'
 import { useUserPricesQuery } from 'graphql/queries/user-prices.generated'
 import { analytics } from 'apis/analytics'
-import { LoadingButton } from '@mui/lab'
 import PromoCode from './IndividualSubscription/PromoCode'
 import PriceButton, {
   PriceButtonContainer
 } from './IndividualSubscription/PriceButton'
 import { fbPixelTrackViewContent } from 'apis/fbpixel'
-import { OrderInterval } from 'graphql/types'
+import { OrderInterval, OrderType } from 'graphql/types'
 import UpgradeSubscriptionDialog from './IndividualSubscription/UpgradeSubscriptionDialog'
 import CTAButton from 'components/common/CTAButton'
+import TrialButton from './IndividualSubscription/TrialButton'
+import dayjs from 'dayjs'
 
 export default function IndividualSubscription() {
   const { data: session } = useSession()
@@ -31,6 +23,7 @@ export default function IndividualSubscription() {
   const { data, loading, error, refetch } = useUserPricesQuery({
     skip: !session.user
   })
+
   useEffect(() => {
     fbPixelTrackViewContent('Account', 'Subscription Info Page')
     // Check to see if this is a redirect back from Checkout
@@ -43,6 +36,7 @@ export default function IndividualSubscription() {
     if (query.get('canceled')) {
       refetch()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const user = data?.user
@@ -57,14 +51,15 @@ export default function IndividualSubscription() {
   const prices = user.stripeData?.prices
   const stripeId = user.stripeData?.stripeId
   const order = user.activeOrder
-  const trial_order_count = user.stripeData?.trial_order_count
-  const trialsEnabled = user.stripeData?.isTrialsFeatureEnabled ? 1 : 0
-  const trialDuration = user.stripeData?.trialDuration ?? 2
-  const showTrialsForUser = trial_order_count <= 0 && trialsEnabled
+  const trialsAllowed = user.trialsAllowed
+  const trialsEnabled = user.isTrialsFeatureEnabled
+  const trialDuration = user.trialDuration
+  const showTrialsForUser = trialsAllowed && trialsEnabled
   const hasCompletedRegistration = !!user.user_type
-  const canUpgrade = order?.plan_interval !== OrderInterval.Year
+  const isTrialOrder = order?.type === OrderType.Trial
+  const canUpgrade =
+    !isTrialOrder && order?.plan_interval !== OrderInterval.Year
   const yearUpgrade = prices.find((p) => p.interval === OrderInterval.Year)
-
   const getDescription = (nickname, unit_amount, interval) => {
     // transforms "Medical Professional $250/year" to "Medical Professional"
     const baseNickname = nickname.replace(/\$.*/g, '').trim() || user.user_type
@@ -87,7 +82,9 @@ export default function IndividualSubscription() {
 
       {order && (
         <div>
-          <ActiveOrder order={order} onUpdateSubscription={refetch} />
+          {!isTrialOrder && (
+            <ActiveOrder order={order} onUpdateSubscription={refetch} />
+          )}
           {canUpgrade && (
             <div>
               <PriceButtonContainer>
@@ -120,12 +117,18 @@ export default function IndividualSubscription() {
             </Alert>
           </Box>
         )}
-        {!order && hasCompletedRegistration && (
+        {(!order || isTrialOrder) && hasCompletedRegistration && (
           <Box padding={{ xs: '2px', md: '8px' }}>
             <Typography mt={1} mb={2} fontFamily={'Manrope'}>
               Get instant access to over 200 articles spanning a wide range of
               surgical subspecialties. Scrub into the OR from anywhere.{' '}
             </Typography>
+            {isTrialOrder && (
+              <Alert sx={{ my: 2 }}>
+                Your {order.description} will expire on{' '}
+                {dayjs(order.end).format('MM/DD/YYYY HH:mm:ss A')}.
+              </Alert>
+            )}
             {prices?.map((price) => {
               const description = getDescription(
                 price.nickname,
@@ -139,9 +142,6 @@ export default function IndividualSubscription() {
                   nickname={price.nickname}
                   stripeId={stripeId}
                   mode={'subscription'}
-                  trialCount={trial_order_count}
-                  trialDuration={trialDuration}
-                  trialsEnabled={trialsEnabled}
                   promocode={promocode}
                   interval={price.interval}
                   productId={price.product}
@@ -150,9 +150,10 @@ export default function IndividualSubscription() {
                 </PriceButton>
               )
             })}
+            {showTrialsForUser && <TrialButton trialDuration={trialDuration} />}
           </Box>
         )}
-        {!order && (
+        {(!order || isTrialOrder) && (
           <PromoCode
             stripeId={stripeId}
             onStripeCodeChange={(code) => setStripeCode(code)}

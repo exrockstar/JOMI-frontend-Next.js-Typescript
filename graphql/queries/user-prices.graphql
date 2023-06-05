@@ -3,6 +3,9 @@ query UserPrices {
     _id
     user_type
     subActive
+    isTrialsFeatureEnabled
+    trialDuration
+    trialsAllowed
     activeOrder {
       _id
       start
@@ -10,7 +13,7 @@ query UserPrices {
       description
       isCanceled
       plan_interval
-      isTrialPeriod
+      type
       amount
       promoCode
       currency
@@ -34,9 +37,6 @@ query UserPrices {
         unit_decimal
         interval
       }
-      isTrialsFeatureEnabled
-      trialDuration
-      trial_order_count
     }
   }
 }

@@ -6,14 +6,14 @@ const defaultOptions =  {}
 export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn?: boolean | null | undefined, trialDuration?: number | null | undefined, isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type UpdateSiteSettingsMutationVariables = Types.Exact<{
   input: Types.UpdateSiteSettingInput;
 }>;
 
 
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isTrialFeatureOn?: boolean | null | undefined, trialDuration?: number | null | undefined, isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type AddHashToTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -24,8 +24,6 @@ export type AddHashToTranslationsMutation = { __typename?: 'Mutation', addTransl
 export const SiteSettingsDocument = gql`
     query SiteSettings {
   getSiteSettings {
-    isTrialFeatureOn
-    trialDuration
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly
@@ -68,8 +66,6 @@ export type SiteSettingsQueryResult = Apollo.QueryResult<SiteSettingsQuery, Site
 export const UpdateSiteSettingsDocument = gql`
     mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
   updateSiteSettings(input: $input) {
-    isTrialFeatureOn
-    trialDuration
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly

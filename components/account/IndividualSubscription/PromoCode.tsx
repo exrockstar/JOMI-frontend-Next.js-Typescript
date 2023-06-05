@@ -1,10 +1,6 @@
-import { Alert, AlertTitle, LoadingButton } from '@mui/lab'
-import { Box, Card, Stack, TextField, Typography } from '@mui/material'
-import CardContent from '@mui/material/CardContent'
-import {
-  useGetCombinedPromoCodeLazyQuery,
-  useHandleFreePromoCodeMutation
-} from 'graphql/queries/promocode.generated'
+import { Alert } from '@mui/lab'
+import { Box, Stack, TextField, Typography } from '@mui/material'
+import { useGetCombinedPromoCodeLazyQuery, useHandleFreePromoCodeMutation } from 'graphql/queries/promocode.generated'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
@@ -149,9 +145,6 @@ const PromoCode = ({ stripeId, onStripeCodeChange }: Props) => {
             stripeId={stripeId}
             mode={promoCode.isSubscription ? 'subscription' : 'payment'}
             amount={promoCode.price}
-            trialCount={0}
-            trialDuration={0}
-            trialsEnabled={0}
           >
             {promoCode.title}
           </PriceButton>
@@ -175,8 +168,7 @@ const PromoCode = ({ stripeId, onStripeCodeChange }: Props) => {
           }
           <Box sx={{ my: 1 }}>
             <Typography variant="caption">
-              Please select a subscription above. If applicable, this code will
-              be automatically applied at checkout.
+              Please select a subscription above. If applicable, this code will be automatically applied at checkout.
             </Typography>
           </Box>
         </Alert>

@@ -4,7 +4,7 @@ import FormikSelect from 'components/common/formik/FormkSelect'
 import { useUserTypesAndSpecialtiesQuery } from 'graphql/queries/user-types.generated'
 import { UserRoles, EmailPreference } from 'graphql/types'
 import React from 'react'
-import GenerateSlugButton from './GenerateSlug'
+import GenerateSlugButton from '../GenerateSlug'
 
 const BasicInfoSection = () => {
   const { data } = useUserTypesAndSpecialtiesQuery()

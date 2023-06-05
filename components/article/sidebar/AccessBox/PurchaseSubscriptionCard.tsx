@@ -1,12 +1,27 @@
-import { Box, Typography } from '@mui/material'
-import { zinc } from 'tailwindcss/colors'
+import { Typography } from '@mui/material'
 import DefaultButton from './common/DefaultButton'
 import CommonCard from './common/CommonCard'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { analytics } from 'apis/analytics'
-const PurchaseSubscriptionCard = () => {
+import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
+import { useAddTrialOrderForUserMutation } from 'graphql/cms-queries/trials.generated'
+type Props = {
+  data: ArticleAccessQuery
+}
+
+const PurchaseSubscriptionCard = ({ data }: Props) => {
   const router = useRouter()
+  const user = data?.user
+  const isShowTrialButton = user?.isTrialsFeatureEnabled && user?.trialsAllowed
+  const trialDuration = user?.trialDuration
+
+  const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
+    onCompleted() {
+      router.reload()
+      analytics.trackTrial({})
+    }
+  })
   return (
     <CommonCard>
       <Typography
@@ -37,6 +52,19 @@ const PurchaseSubscriptionCard = () => {
           View Plans
         </DefaultButton>
       </Link>
+      {isShowTrialButton && (
+        <DefaultButton
+          sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}
+          fullWidth
+          data-event="article-access-box-trial-button"
+          onClick={(e) => {
+            addTrialOrder()
+          }}
+          loading={loading}
+        >
+          {`Try free for ${trialDuration} days`}
+        </DefaultButton>
+      )}
     </CommonCard>
   )
 }

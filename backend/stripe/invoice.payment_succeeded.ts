@@ -40,9 +40,7 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     return false
   }
 
-  const subscription = await stripe.subscriptions.retrieve(
-    invoice.subscription as string
-  )
+  const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
 
   const created = new Date(0)
   const start = new Date(0)
@@ -64,10 +62,8 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const subscription_metadata = invoice.lines.data[0].metadata as any
   const metadata = price.metadata as unknown as PriceMetadata
 
-  const description =
-    plan.nickname || price.nickname || subscription_metadata?.description
-  const isTrialPeriod =
-    !!subscription_metadata.trial_end && invoice.amount_paid <= 0
+  const description = plan.nickname || price.nickname || subscription_metadata?.description
+
   const discount = invoice.discount
   const order: OrderInput = {
     start,
@@ -80,30 +76,23 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     description: description,
     latest_invoice: invoice.id,
     type: OrderType.Individual,
-    isTrialPeriod: isTrialPeriod,
     promoCode: metadata.Code,
     stripeCoupon: discount?.coupon?.id,
     stripePromoCode: discount?.promotion_code as string
   }
 
-  logger.info(
-    `[WebhookHandler] Invoice.Payment_Succeeded. Creating/Updating Order...`,
-    {
-      plan_id: invoice.subscription,
-      userId: invoice.customer,
-      plan_interval: price.recurring.interval,
-      plan_nickname: plan.nickname,
-      description: description
-    }
-  )
+  logger.info(`[WebhookHandler] Invoice.Payment_Succeeded. Creating/Updating Order...`, {
+    plan_id: invoice.subscription,
+    userId: invoice.customer,
+    plan_interval: price.recurring.interval,
+    plan_nickname: plan.nickname,
+    description: description
+  })
 
   const client = getApolloAdminClient(true)
 
   try {
-    const { data } = await client.mutate<
-      AddOrUpdateOrderMutation,
-      AddOrUpdateOrderMutationVariables
-    >({
+    const { data } = await client.mutate<AddOrUpdateOrderMutation, AddOrUpdateOrderMutationVariables>({
       variables: {
         input: order
       },
@@ -111,10 +100,7 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     })
 
     if (discount.coupon) {
-      await client.mutate<
-        UpdateStripeCodeMutation,
-        UpdateStripeCodeMutationVariables
-      >({
+      await client.mutate<UpdateStripeCodeMutation, UpdateStripeCodeMutationVariables>({
         variables: {
           input: {
             couponId: discount.coupon.id as string,
@@ -127,10 +113,7 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     }
   } catch (e) {
     if (e instanceof ApolloError) {
-      logger.error(
-        `[WebhookHandler] Create/Update order failed. ${e.message}`,
-        e
-      )
+      logger.error(`[WebhookHandler] Create/Update order failed. ${e.message}`, e)
 
       throw Error(`Create/Update order failed. ${e.message}`)
     }
