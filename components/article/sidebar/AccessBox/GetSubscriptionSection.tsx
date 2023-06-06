@@ -1,14 +1,14 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import PurchaseSubscriptionCard from './PurchaseSubscriptionCard'
 import RequestSubscriptionCard from './RequestSubscriptionCard'
-
-const GetSubscriptionSection = () => {
+import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
+type Props = {
+  data: ArticleAccessQuery
+}
+const GetSubscriptionSection = ({ data }: Props) => {
   return (
     <Stack gap={2} p={2}>
-      {/* <Typography fontWeight={800} fontFamily={'Manrope'} color="grey.900">
-        Subscribe
-      </Typography> */}
-      <PurchaseSubscriptionCard />
+      <PurchaseSubscriptionCard data={data} />
       <RequestSubscriptionCard />
     </Stack>
   )

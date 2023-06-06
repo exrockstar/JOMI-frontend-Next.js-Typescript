@@ -13,7 +13,7 @@ mutation UnsubscribeOrder($order_id: String!) {
     start
     end
     description
-    isTrialPeriod
+    type
   }
 }
 
@@ -24,7 +24,7 @@ mutation ResubscribeOrder($order_id: String!) {
     start
     end
     description
-    isTrialPeriod
+    type
   }
 }
 

@@ -2,8 +2,8 @@ import {
   Card,
   CardContent,
   FormGroup,
-  Typography,
   FormControlLabel,
+  Typography,
   Box
 } from '@mui/material'
 import FormikCheckbox from 'components/common/formik/FormikCheckbox'
@@ -14,15 +14,20 @@ const TrialsSettings = () => {
   return (
     <Card>
       <CardContent>
-        <FormGroup sx={{ gap: 2 }}>
+        <FormGroup sx={{ gap: 3 }}>
           <Box>
-            <Typography variant="h5">Trials</Typography>
-            <Typography variant="caption">Trials - global settings</Typography>
+            <FormControlLabel
+              control={<FormikCheckbox name="isTrialFeatureOn" />}
+              label="Display trials button"
+            />
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+            >
+              Shows trials button on the subscription and article pages
+            </Typography>
           </Box>
-          <FormControlLabel
-            control={<FormikCheckbox name="isTrialFeatureOn" />}
-            label="Enable trials"
-          />
           <FormikTextField
             name="trialDuration"
             type="number"

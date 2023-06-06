@@ -3,10 +3,9 @@ import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelper
 import { useUserProfileQuery } from 'graphql/queries/user-profile.generated'
 import { UserRoles } from 'graphql/types'
 import { useSession } from 'next-auth/react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const GOOGLE_GTAG = process.env.GOOGLE_GTAG
 
@@ -39,9 +38,10 @@ const GoogleGtag = ({ metadata }: Props) => {
     if (status === 'loading' || loading) return
     if (typeof gtag === 'undefined') return
     if (initialized) return
-    gtag('config', GOOGLE_GTAG, {
+    type Config = Gtag.ConfigParams | Gtag.CustomParams
+
+    const config: Config = {
       send_page_view: false,
-      debug_mode: true,
       userId: `${user?._id || 'N/A'}`,
       user_properties: {
         user_type,
@@ -53,7 +53,12 @@ const GoogleGtag = ({ metadata }: Props) => {
         userId: `${user?._id || 'N/A'}`
       },
       title: metadata.title
-    })
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+      config.debug_mode = true
+    }
+    gtag('config', GOOGLE_GTAG, config)
 
     setInitialized(true)
   }, [

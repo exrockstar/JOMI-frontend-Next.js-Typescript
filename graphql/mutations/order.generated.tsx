@@ -22,14 +22,14 @@ export type UnsubscribeOrderMutationVariables = Types.Exact<{
 }>;
 
 
-export type UnsubscribeOrderMutation = { __typename?: 'Mutation', unsubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, isTrialPeriod?: boolean | null | undefined } | null | undefined };
+export type UnsubscribeOrderMutation = { __typename?: 'Mutation', unsubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, type: Types.OrderType } | null | undefined };
 
 export type ResubscribeOrderMutationVariables = Types.Exact<{
   order_id: Types.Scalars['String'];
 }>;
 
 
-export type ResubscribeOrderMutation = { __typename?: 'Mutation', resubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, isTrialPeriod?: boolean | null | undefined } | null | undefined };
+export type ResubscribeOrderMutation = { __typename?: 'Mutation', resubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, type: Types.OrderType } | null | undefined };
 
 export type PreviewUpgradeSubscriptionQueryVariables = Types.Exact<{
   price_id: Types.Scalars['String'];
@@ -116,7 +116,7 @@ export const UnsubscribeOrderDocument = gql`
     start
     end
     description
-    isTrialPeriod
+    type
   }
 }
     `;
@@ -154,7 +154,7 @@ export const ResubscribeOrderDocument = gql`
     start
     end
     description
-    isTrialPeriod
+    type
   }
 }
     `;

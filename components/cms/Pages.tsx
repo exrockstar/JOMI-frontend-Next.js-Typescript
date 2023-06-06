@@ -51,6 +51,12 @@ const SidebarItems: SidenavItem[] = [
     disabled: false
   },
   {
+    name: 'Trials Settings',
+    icon: <MonetizationOn />,
+    url: `${CMS_URL}/trials`,
+    disabled: false
+  },
+  {
     name: 'Price Management',
     icon: <MonetizationOn />,
     url: `${CMS_URL}/prices-list`,

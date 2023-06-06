@@ -17,7 +17,7 @@ import axios from 'axios'
 import CmsLayout from 'components/cms/CmsLayout'
 import CircularLoader from 'components/common/CircularLoader'
 
-import TrialsSettings from 'components/settings/TrialsSettings'
+import TrialsSettings from 'components/cms/trials/TrialsSettings'
 import { isServer } from 'components/utils/isServer'
 import dayjs from 'dayjs'
 import { Form, Formik } from 'formik'
@@ -163,9 +163,7 @@ const Settings = () => {
         initialValues={{
           isPurchaseArticleFeatureOn: settings.isPurchaseArticleFeatureOn,
           isRentArticleFeatureOn: settings.isRentArticleFeatureOn,
-          isTrialFeatureOn: settings.isTrialFeatureOn,
           rentDuration: settings.rentDuration,
-          trialDuration: settings.trialDuration,
           displayPurchaseAndRentToAdminOnly:
             settings.displayPurchaseAndRentToAdminOnly
         }}
@@ -196,11 +194,6 @@ const Settings = () => {
             </LoadingButton>
           </Box>
           <Grid container gap={2} sx={{ p: 2 }}>
-            <Grid item lg={4}>
-              <Stack>
-                <TrialsSettings />
-              </Stack>
-            </Grid>
             <Grid item lg={4}>
               <PayPerArticleSettings />
             </Grid>

@@ -1,10 +1,19 @@
-import { Box, Stack, Typography, TextField, List, ListItem, ListItemText, Divider } from '@mui/material'
+import {
+  Box,
+  Stack,
+  Typography,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  Divider
+} from '@mui/material'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 
 import { UserDetailQuery } from 'graphql/cms-queries/user-list.generated'
 
 import React from 'react'
-import UserDetailInstitutionSelector from './UserDetailInstitutionSelector'
+import UserDetailInstitutionSelector from '../UserDetailInstitutionSelector'
 import dayjs from 'dayjs'
 
 type Props = {
@@ -19,9 +28,24 @@ const InstitutionSection = ({ user }: Props) => {
       </Typography>
       <Stack spacing={2}>
         <UserDetailInstitutionSelector />
-        <FormikTextField size="small" name="institution_name" label="Stated Institution" />
-        <FormikTextField name="institution" label="Matched Institution ID" fullWidth size="small" disabled />
-        <FormikTextField name="inst_email" label="Institutional Email" fullWidth size="small" />
+        <FormikTextField
+          size="small"
+          name="institution_name"
+          label="Stated Institution"
+        />
+        <FormikTextField
+          name="institution"
+          label="Matched Institution ID"
+          fullWidth
+          size="small"
+          disabled
+        />
+        <FormikTextField
+          name="inst_email"
+          label="Institutional Email"
+          fullWidth
+          size="small"
+        />
         <FormikTextField
           value={user?.matchedBy}
           name="matchedBy"

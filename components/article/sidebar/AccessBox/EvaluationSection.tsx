@@ -1,11 +1,12 @@
 import { Box, Stack, Typography } from '@mui/material'
-import access from 'pages/access'
 import PurchaseSubscriptionCard from './PurchaseSubscriptionCard'
 import RequestSubscriptionCard from './RequestSubscriptionCard'
-import AccessBoxDivider from './common/AccessBoxDivider'
-import GetSubscriptionSection from './GetSubscriptionSection'
+import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
 
-const EvaluationSection = () => {
+type Props = {
+  data: ArticleAccessQuery
+}
+const EvaluationSection = ({ data }: Props) => {
   return (
     <>
       <Box p={2}>
@@ -15,7 +16,7 @@ const EvaluationSection = () => {
           subscription.
         </Typography>
         <Stack gap={2} mt={2}>
-          <PurchaseSubscriptionCard />
+          <PurchaseSubscriptionCard data={data} />
           <RequestSubscriptionCard />
         </Stack>
       </Box>

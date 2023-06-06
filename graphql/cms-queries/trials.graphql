@@ -1,0 +1,20 @@
+
+query GetTrialsSettings {
+    settings: getTrialSettings {
+        isTrialFeatureOn
+        trialDuration
+        enabledCountries
+    }
+}
+
+mutation UpdateTrialSettings($input: TrialSettingsInput!){
+    settings: updateTrialSettings(input:$input){
+        isTrialFeatureOn
+        trialDuration
+        enabledCountries
+    }
+}
+
+mutation AddTrialOrderForUser {
+    addTrialOrderForUser
+}

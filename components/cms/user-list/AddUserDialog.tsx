@@ -77,6 +77,31 @@ const AddUserDialog: React.FC<Props> = ({
   const roles = Object.keys(UserRoles).filter(
     (role) => role !== UserRoles.Superadmin
   )
+  const handleSubmit = (values, actions) => {
+    const input: AddUserInput = {
+      ...values
+    }
+    if (image) {
+      input.image = {
+        filename: image.name,
+        format: image.name.split('.').pop(),
+        length: image.size
+      }
+    }
+
+    if (values.user_role === UserRoles.Librarian && !values.institution) {
+      actions.setFieldError(
+        'institution',
+        'Institution is required for librarians.'
+      )
+      return
+    }
+    createUser({
+      variables: {
+        input
+      }
+    })
+  }
   return (
     <>
       <MediaLibraryDialog
@@ -105,32 +130,8 @@ const AddUserDialog: React.FC<Props> = ({
           setOpenUploadDialog(false)
         }}
       />
-      <Formik
-        onSubmit={(values, actions) => {
-          const input: AddUserInput = {
-            ...values
-          }
-          if (image) {
-            input.image = {
-              filename: image.name,
-              format: image.name.split('.').pop(),
-              length: image.size
-            }
-          }
-
-          if (values.user_role === UserRoles.Librarian && !values.institution) {
-            actions.setFieldError(
-              'institution',
-              'Institution is required for librarians.'
-            )
-            return
-          }
-          createUser({
-            variables: {
-              input
-            }
-          })
-        }}
+      <Formik<AddUserInput>
+        onSubmit={handleSubmit}
         validationSchema={schema}
         initialValues={{
           display_name: '',
@@ -139,6 +140,7 @@ const AddUserDialog: React.FC<Props> = ({
           firstName: '',
           lastName: '',
           institution: '',
+          matched_institution_name: '',
           user_type: 'Other',
           user_role: !addLibrarian ? UserRoles.User : UserRoles.Librarian
         }}
@@ -235,6 +237,12 @@ const AddUserDialog: React.FC<Props> = ({
                 />
 
                 <UserDetailInstitutionSelector />
+                <FormikTextField
+                  name="institution"
+                  label="Matched Institution ID"
+                  size="small"
+                  disabled
+                />
                 <FormikSelect
                   fullWidth
                   label="User Type"

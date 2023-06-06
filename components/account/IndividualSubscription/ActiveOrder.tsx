@@ -1,19 +1,9 @@
 import { useApolloClient } from '@apollo/client'
 import { LoadingButton } from '@mui/lab'
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Stack,
-  Typography,
-  useMediaQuery
-} from '@mui/material'
+import { Alert, AlertTitle, Box, Stack, Typography, useMediaQuery } from '@mui/material'
 import { styled, useTheme } from '@mui/material/styles'
 import dayjs from 'dayjs'
-import {
-  useUnsubscribeOrderMutation,
-  useResubscribeOrderMutation
-} from 'graphql/mutations/order.generated'
+import { useUnsubscribeOrderMutation, useResubscribeOrderMutation } from 'graphql/mutations/order.generated'
 import { UserPricesQuery } from 'graphql/queries/user-prices.generated'
 import { OrderInterval } from 'graphql/types'
 import { useSnackbar } from 'notistack'
@@ -53,11 +43,9 @@ const defaultConfirmState: ConfirmState = {
 }
 
 const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
-  const [confirmState, setConfirmState] =
-    useState<ConfirmState>(defaultConfirmState)
+  const [confirmState, setConfirmState] = useState<ConfirmState>(defaultConfirmState)
   const [actionLoading, setActionLoading] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
-  const client = useApolloClient()
   const daysFromNow = dayjs(order.end).diff(dayjs(), 'day')
   const end = dayjs(order.end).format('MM/DD/YYYY hh:mm A')
   const canceled = order.isCanceled
@@ -150,17 +138,11 @@ const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
     setConfirmState(defaultConfirmState)
     setActionLoading(false)
   }
-  const recurring =
-    order.plan_interval && order.plan_interval !== OrderInterval.Day
+  const recurring = order.plan_interval && order.plan_interval !== OrderInterval.Day
 
   const renewMessage = useMemo(() => {
     if (!recurring) {
       return `Your subscription will end on ${end}`
-    }
-
-    if (order.isTrialPeriod) {
-      return `Your trial period will end on ${end}. 
-      After which you will automatically be charged for your subscription.`
     }
 
     if (daysFromNow > 1) {
@@ -181,19 +163,13 @@ const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
             <Typography variant="body2" mt={1}>
               {renewMessage}
             </Typography>
-            {order?.discount && (
-              <DiscountInfo
-                discount={order.discount}
-                interval={order.plan_interval}
-              />
-            )}
+            {order?.discount && <DiscountInfo discount={order.discount} interval={order.plan_interval} />}
           </div>
         )}
       </Alert>
       {canceled && (
         <Alert severity="warning" sx={{ my: 2 }}>
-          Your {order.isTrialPeriod ? 'trial period' : 'subscription'} will end
-          on {end}
+          Your subscription will end on {end}
           <Typography variant="body2" mt={1}>
             {`Resubscribe now so you don't lose access!`}
           </Typography>

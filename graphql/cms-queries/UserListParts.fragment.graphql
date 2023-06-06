@@ -115,8 +115,8 @@ fragment UserDetail on User {
     subType
     fromInst
   }
-  isTrialFeatureOn
-  trialDuration
+  trialsAllowed
+  trialAccessAt
   referer
   referrerPath
   anon_link_id

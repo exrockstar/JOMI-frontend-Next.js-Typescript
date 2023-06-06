@@ -1,14 +1,15 @@
-import { Box, Typography, List, ListItem, ListItemText, Divider } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import dayjs from 'dayjs'
 import { PreviouslyStatedInst } from 'graphql/types'
-import React from 'react'
 
 type Props = {
   institutions?: PreviouslyStatedInst[]
 }
 const PreviouslyStatedInstitutions = ({ institutions }: Props) => {
   const filtered = institutions.filter((i) => i.name?.trim() !== 'N/A')
-  filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  filtered.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
   return (
     <Box maxHeight={400}>
       <Typography variant="h5" mt={2}>
@@ -32,7 +33,12 @@ const PreviouslyStatedInstitutions = ({ institutions }: Props) => {
                 <Typography variant="body2" title={inst.name}>
                   {inst.name}
                 </Typography>
-                <Typography key={i} variant="body2" color="text.secondary" flexShrink={0}>
+                <Typography
+                  key={i}
+                  variant="body2"
+                  color="text.secondary"
+                  flexShrink={0}
+                >
                   {dayjs(inst.date).format('L')}
                 </Typography>
               </Box>

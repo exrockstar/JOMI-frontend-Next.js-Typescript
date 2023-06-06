@@ -25,4 +25,9 @@ query ArticleAccess($publication_id: String!) {
     unit_amount
     countryCode
   }
+  user {
+    isTrialsFeatureEnabled
+    trialDuration
+    trialsAllowed
+  }
 }

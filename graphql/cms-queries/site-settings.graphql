@@ -1,8 +1,6 @@
 
 query SiteSettings {
   getSiteSettings {
-    isTrialFeatureOn
-    trialDuration
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly
@@ -18,8 +16,6 @@ query SiteSettings {
 
 mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
   updateSiteSettings(input: $input){
-    isTrialFeatureOn
-    trialDuration
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly

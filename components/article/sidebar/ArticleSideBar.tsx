@@ -3,7 +3,6 @@ import ShareSection from './ShareSection'
 import InfoSection from './InfoSection'
 import AuthorSection from './AuthorSection'
 import HospitalSection from './HospitalSection'
-import ArticleAccessBox from './ArticleAccessBox'
 import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
 import LanguageSwitcher from '../LanguageSwitcher'
 import { memo, useRef } from 'react'
@@ -20,7 +19,6 @@ function ArticleSideBar({ article }: ArticleSideBarProps) {
   return (
     <Box display={'flex'} flexDirection={'column'}>
       <Box ref={myRef}>
-        {/* <ArticleAccessBox article={article} /> */}
         <AccessBox article={article} />
         <Box>
           <Hidden smDown>

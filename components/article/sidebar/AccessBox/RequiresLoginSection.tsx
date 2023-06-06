@@ -1,9 +1,5 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
-import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
-import OutlinedButton from './common/OutlinedButton'
-import AccessBoxDivider from './common/AccessBoxDivider'
-import CTAButton from 'components/common/CTAButton'
 
 type Props = {
   data: ArticleAccessQuery

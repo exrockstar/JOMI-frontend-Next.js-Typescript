@@ -1,11 +1,9 @@
 import { getApolloAdminClient } from 'apis/apollo-admin-client'
-import dayjs from 'dayjs'
 import {
   GetStripePromoCodeByCodeDocument,
   GetStripePromoCodeByCodeQuery,
   GetStripePromoCodeByCodeQueryVariables
 } from 'graphql/cms-queries/stripe-promo-codes.generated'
-import { QueryGetStripePromoCodeByCodeArgs } from 'graphql/types'
 import { snakeCase } from 'lodash'
 import { logger } from 'logger/logger'
 import Stripe from 'stripe'
@@ -18,40 +16,13 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 })
 
 export default async function handler(req, res) {
-  const {
-    priceId,
-    stripeId,
-    mode,
-    description,
-    amount,
-    trialCount,
-    trialsEnabled,
-    trialDuration,
-    promocode,
-    productId,
-    interval
-  } = req.body
+  const { priceId, stripeId, mode, description, amount, promocode, productId, interval } = req.body
 
   if (req.method === 'POST') {
     try {
       let line_items: Stripe.Checkout.SessionCreateParams['line_items']
-      let subscription_data: Stripe.Checkout.SessionCreateParams['subscription_data']
       if (mode === 'subscription') {
         line_items = [{ price: priceId, quantity: 1 }]
-        console.log(trialsEnabled)
-        if (trialCount <= 0 && !!parseInt(trialsEnabled)) {
-          const duration = parseInt(trialDuration) ?? 2
-          const inThreeDays = Math.floor(
-            dayjs().add(duration, 'day').add(1, 'hour').toDate().getTime() /
-              1000
-          )
-          subscription_data = {
-            trial_end: inThreeDays,
-            metadata: {
-              trial_end: inThreeDays
-            }
-          }
-        }
       } else {
         line_items = [
           {
@@ -67,10 +38,7 @@ export default async function handler(req, res) {
       if (promocode && productId && interval) {
         const product = `${snakeCase(productId)}_${interval}`
         const client = getApolloAdminClient(true)
-        const { data } = await client.query<
-          GetStripePromoCodeByCodeQuery,
-          GetStripePromoCodeByCodeQueryVariables
-        >({
+        const { data } = await client.query<GetStripePromoCodeByCodeQuery, GetStripePromoCodeByCodeQueryVariables>({
           query: GetStripePromoCodeByCodeDocument,
           variables: {
             code: promocode
@@ -86,16 +54,13 @@ export default async function handler(req, res) {
             coupon: output.couponId
           })
         } else {
-          throw new Error(
-            `This code cannot be applied to the selected subscription.`
-          )
+          throw new Error(`This code cannot be applied to the selected subscription.`)
         }
       }
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
         customer: stripeId,
         line_items,
-        subscription_data,
         mode: mode,
         discounts,
         success_url: `${req.headers.origin}/account/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -124,22 +89,12 @@ export default async function handler(req, res) {
           break
       }
 
-      logger.error(
-        `[Checkout Session] Failed to create checkout session for user. ${err.message}`,
-        {
-          userId: stripeId,
-          message
-        }
-      )
+      logger.error(`[Checkout Session] Failed to create checkout session for user. ${err.message}`, {
+        userId: stripeId,
+        message
+      })
 
-      res
-        .redirect(
-          303,
-          `${
-            req.headers.origin
-          }/account/subscription/?error=${encodeURIComponent(message)}`
-        )
-        .end()
+      res.redirect(303, `${req.headers.origin}/account/subscription/?error=${encodeURIComponent(message)}`).end()
     }
   } else {
     res.setHeader('Allow', 'POST')

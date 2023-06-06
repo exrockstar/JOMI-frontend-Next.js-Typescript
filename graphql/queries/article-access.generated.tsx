@@ -8,7 +8,7 @@ export type ArticleAccessQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticleAccessQuery = { __typename?: 'Query', article?: { __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, showRentArticle: boolean, rentDuration: number, showPurchaseArticle: boolean, status: string, articleAccessType: { __typename?: 'AccessType', accessType?: Types.AccessTypeEnum | null | undefined, institution_name?: string | null | undefined, shouldRequestInstVerification?: string | null | undefined, viaTemporaryIp?: boolean | null | undefined, isTrial?: boolean | null | undefined, subscriptionExpiresAt?: any | null | undefined, expiry?: any | null | undefined, requireLogin?: boolean | null | undefined } } | null | undefined, getPurchaseAndRentPrices: Array<{ __typename?: 'StripePrice', _id: string, product: string, priceId: string, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined }> };
+export type ArticleAccessQuery = { __typename?: 'Query', article?: { __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, showRentArticle: boolean, rentDuration: number, showPurchaseArticle: boolean, status: string, articleAccessType: { __typename?: 'AccessType', accessType?: Types.AccessTypeEnum | null | undefined, institution_name?: string | null | undefined, shouldRequestInstVerification?: string | null | undefined, viaTemporaryIp?: boolean | null | undefined, isTrial?: boolean | null | undefined, subscriptionExpiresAt?: any | null | undefined, expiry?: any | null | undefined, requireLogin?: boolean | null | undefined } } | null | undefined, getPurchaseAndRentPrices: Array<{ __typename?: 'StripePrice', _id: string, product: string, priceId: string, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined }>, user?: { __typename?: 'User', isTrialsFeatureEnabled: boolean, trialDuration?: number | null | undefined, trialsAllowed: boolean } | null | undefined };
 
 
 export const ArticleAccessDocument = gql`
@@ -38,6 +38,11 @@ export const ArticleAccessDocument = gql`
     priceId
     unit_amount
     countryCode
+  }
+  user {
+    isTrialsFeatureEnabled
+    trialDuration
+    trialsAllowed
   }
 }
     `;

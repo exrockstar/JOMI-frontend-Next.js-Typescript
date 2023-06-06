@@ -119,6 +119,7 @@ export type AddUserInput = {
   image?: InputMaybe<ImageInput>;
   institution?: InputMaybe<Scalars['String']>;
   lastName?: InputMaybe<Scalars['String']>;
+  matched_institution_name?: InputMaybe<Scalars['String']>;
   password: Scalars['String'];
   user_role: UserRoles;
   user_type: Scalars['String'];
@@ -1135,6 +1136,7 @@ export type Mutation = {
   signInUsingOldToken?: Maybe<User>;
   signUp: Scalars['String'];
   syncDefaultPricesToDb: Scalars['Boolean'];
+  toggleTrialAccess: Scalars['Boolean'];
   tokenSignIn?: Maybe<User>;
   trackAnnouncement: Scalars['Boolean'];
   trackAnnouncements: Scalars['Boolean'];
@@ -1436,6 +1438,12 @@ export type MutationSignInUsingOldTokenArgs = {
 
 export type MutationSignUpArgs = {
   input: SignUpInput;
+};
+
+
+export type MutationToggleTrialAccessArgs = {
+  user_id: Scalars['String'];
+  value: Scalars['Boolean'];
 };
 
 
@@ -2014,7 +2022,7 @@ export type PartialRequest = {
 export type PreviouslyStatedInst = {
   __typename?: 'PreviouslyStatedInst';
   date: Scalars['DateTime'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type PriceFilterInput = {
@@ -2676,7 +2684,8 @@ export type SubItemInput = {
 export enum SubType {
   Individual = 'individual',
   Institution = 'institution',
-  NotCreated = 'notCreated'
+  NotCreated = 'notCreated',
+  Trial = 'trial'
 }
 
 export type SubscriptionInput = {
@@ -3034,7 +3043,9 @@ export type UpdateUserInput = {
   slug?: InputMaybe<Scalars['String']>;
   social?: InputMaybe<SocialInput>;
   specialty?: InputMaybe<Scalars['String']>;
+  trialAccessAt?: InputMaybe<Scalars['DateTime']>;
   trialDuration?: InputMaybe<Scalars['Int']>;
+  trialsAllowed: Scalars['Boolean'];
   user_type?: InputMaybe<Scalars['String']>;
 };
 
@@ -3100,8 +3111,9 @@ export type User = {
   subActive: Scalars['Boolean'];
   subscription?: Maybe<SubscriptionType>;
   total_time_watched?: Maybe<Scalars['Float']>;
+  trialAccessAt?: Maybe<Scalars['DateTime']>;
   trialDuration?: Maybe<Scalars['Float']>;
-  trial_order_count?: Maybe<Scalars['Int']>;
+  trialsAllowed: Scalars['Boolean'];
   user_type?: Maybe<Scalars['String']>;
   user_type_other?: Maybe<Scalars['String']>;
 };

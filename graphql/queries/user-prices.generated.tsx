@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type UserPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserPricesQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, user_type?: string | null | undefined, subActive: boolean, activeOrder?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, isCanceled?: boolean | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, isTrialPeriod?: boolean | null | undefined, amount?: number | null | undefined, promoCode?: string | null | undefined, currency?: Types.OrderCurrency | null | undefined, discount?: { __typename?: 'StripePromoCode', code: string, name?: string | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } | null | undefined, stripeData: { __typename?: 'UserStripeData', stripeId: string, isTrialsFeatureEnabled?: boolean | null | undefined, trialDuration?: number | null | undefined, trial_order_count?: number | null | undefined, prices: Array<{ __typename?: 'StripePrice', product: string, currency: string, nickname: string, unit_amount: number, unit_decimal?: string | null | undefined, interval?: Types.OrderInterval | null | undefined, id: string }> } } | null | undefined };
+export type UserPricesQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, user_type?: string | null | undefined, subActive: boolean, isTrialsFeatureEnabled: boolean, trialDuration?: number | null | undefined, trialsAllowed: boolean, activeOrder?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, isCanceled?: boolean | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, type: Types.OrderType, amount?: number | null | undefined, promoCode?: string | null | undefined, currency?: Types.OrderCurrency | null | undefined, discount?: { __typename?: 'StripePromoCode', code: string, name?: string | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } | null | undefined, stripeData: { __typename?: 'UserStripeData', stripeId: string, prices: Array<{ __typename?: 'StripePrice', product: string, currency: string, nickname: string, unit_amount: number, unit_decimal?: string | null | undefined, interval?: Types.OrderInterval | null | undefined, id: string }> } } | null | undefined };
 
 
 export const UserPricesDocument = gql`
@@ -15,6 +15,9 @@ export const UserPricesDocument = gql`
     _id
     user_type
     subActive
+    isTrialsFeatureEnabled
+    trialDuration
+    trialsAllowed
     activeOrder {
       _id
       start
@@ -22,7 +25,7 @@ export const UserPricesDocument = gql`
       description
       isCanceled
       plan_interval
-      isTrialPeriod
+      type
       amount
       promoCode
       currency
@@ -46,9 +49,6 @@ export const UserPricesDocument = gql`
         unit_decimal
         interval
       }
-      isTrialsFeatureEnabled
-      trialDuration
-      trial_order_count
     }
   }
 }
