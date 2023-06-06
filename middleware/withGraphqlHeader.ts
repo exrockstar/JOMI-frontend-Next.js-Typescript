@@ -34,7 +34,11 @@ export const withGraphqlHeader: MiddlewareFactory = (next: NextMiddleware) => {
       } else {
         headers.set('x-client-ip', request.ip ?? '')
       }
-
+      const clientOrigin = headers.get('origin')
+      const origin =
+        process.env.APP_ENV === 'production' ? 'https://jomi.com' : clientOrigin
+      headers.set('x-client-origin', clientOrigin)
+      headers.set('origin', origin)
       headers.set('x-country', request.geo.country ?? '')
       headers.set('x-region', request.geo.region ?? '')
       headers.set('x-city', request.geo.city ?? '')
