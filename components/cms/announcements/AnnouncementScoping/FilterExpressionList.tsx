@@ -6,7 +6,7 @@ const FilterExpressionList = () => {
   const { filters } = useAnnouncementFilters()
   return (
     <div>
-      {filters.map((expression, i) => {
+      {filters?.map((expression, i) => {
         return <FilterExpressionContainer key={i} expression={expression} />
       })}
     </div>

@@ -20,7 +20,10 @@ import FormikSwitch from 'components/common/formik/FormikSwitch'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import FormikTwitterPicker from 'components/common/formik/FormikTwitterPicker'
 import { Form, Formik } from 'formik'
-import { useAnnouncementQuery, useUpdateAnnouncementMutation } from 'graphql/queries/announcements.generated'
+import {
+  useAnnouncementQuery,
+  useUpdateAnnouncementMutation
+} from 'graphql/queries/announcements.generated'
 import { AnnouncementInput, AnnouncementType } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
@@ -50,18 +53,19 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
     skip: !announcementId || !session
   })
 
-  const [updateAnnouncement, { loading: updating, error: updateError }] = useUpdateAnnouncementMutation({
-    onCompleted(data) {
-      enqueueSnackbar('Successfully updated announcement', {
-        variant: 'success'
-      })
-    },
-    onError(error) {
-      enqueueSnackbar(`Could not update announcement ${error.message}`, {
-        variant: 'error'
-      })
-    }
-  })
+  const [updateAnnouncement, { loading: updating, error: updateError }] =
+    useUpdateAnnouncementMutation({
+      onCompleted(data) {
+        enqueueSnackbar('Successfully updated announcement', {
+          variant: 'success'
+        })
+      },
+      onError(error) {
+        enqueueSnackbar(`Could not update announcement ${error.message}`, {
+          variant: 'error'
+        })
+      }
+    })
 
   const handleSave = (values) => {
     updateAnnouncement({
@@ -96,7 +100,7 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
             isPermanent: Boolean(announcement?.isPermanent),
             type: AnnouncementType.Success,
             backgroundColor: announcement?.backgroundColor ?? '#FFFFFF',
-            filters: announcement?.filters.map((filter) => {
+            filters: announcement?.filters?.map((filter) => {
               let copy = { ...filter }
               delete copy.__typename
               return copy
@@ -105,7 +109,12 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
         >
           {({ values }) => (
             <Form>
-              <Stack p={2} direction="row" justifyContent="space-between" alignItems="center">
+              <Stack
+                p={2}
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <Box>
                   <Stack direction="row">
                     <Typography variant="h4">Details</Typography>
@@ -116,7 +125,11 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                 </Box>
               </Stack>
               <Card elevation={5}>
-                <Stack p={2} sx={{ width: { xs: '100%', md: '50%' } }} spacing={2}>
+                <Stack
+                  p={2}
+                  sx={{ width: { xs: '100%', md: '50%' } }}
+                  spacing={2}
+                >
                   <FormControl component="fieldset" variant="standard">
                     <FormLabel>
                       {/* <Typography variant="h5">Title</Typography> */}
@@ -137,7 +150,10 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                     <Stack direction="row" alignItems="center">
                       <FormLabel>Content</FormLabel>
                       <Tooltip title="Preview announcement">
-                        <Button onClick={() => setShowPreview(true)} endIcon={<Visibility />}>
+                        <Button
+                          onClick={() => setShowPreview(true)}
+                          endIcon={<Visibility />}
+                        >
                           Preview
                         </Button>
                       </Tooltip>
@@ -165,7 +181,9 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                           label={values.enabled ? 'Yes' : 'No'}
                         />
                       </FormControl>
-                      <FormHelperText>Publish/Unpublish the announcement</FormHelperText>
+                      <FormHelperText>
+                        Publish/Unpublish the announcement
+                      </FormHelperText>
                     </Box>
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -176,7 +194,10 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                           control={<FormikSwitch name="isPermanent" />}
                           label={values.isPermanent ? 'Yes' : 'No'}
                         />
-                        <FormHelperText>If Yes, it will remove the close button from the announcement</FormHelperText>
+                        <FormHelperText>
+                          If Yes, it will remove the close button from the
+                          announcement
+                        </FormHelperText>
                       </FormControl>
                     </Box>
                   </Grid>
@@ -186,8 +207,10 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
                 <Grid item xs={12} sx={{ p: 2 }}>
                   <Typography variant="h4">Scoping</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Announcement Scoping allows you to target which users, institutions, or geography will be able to
-                    see the announcement. It can also be used as a notification for a specific user.
+                    Announcement Scoping allows you to target which users,
+                    institutions, or geography will be able to see the
+                    announcement. It can also be used as a notification for a
+                    specific user.
                   </Typography>
                   <Typography variant="h6" my={2}>
                     Conditions:
