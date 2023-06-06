@@ -1,15 +1,21 @@
-import { isServer } from 'components/utils/isServer'
 import { useTrackAnnouncementsMutation } from 'graphql/mutations/track-announcement.generated'
 import {
   useSiteWideAnnouncementsQuery,
-  SiteWideAnnouncementsQuery,
   useAnnoucementForUserQuery
 } from 'graphql/queries/announcement-for-user.generated'
 import { useRouter } from 'next/router'
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
-import { useEffectOnce, useLocalStorage } from 'usehooks-ts'
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { useClosedAnnouncements } from './useClosedAnnouncements'
 import { useSession } from 'next-auth/react'
+import uniq from 'lodash/uniq'
+import { useLocalStorage } from 'usehooks-ts'
+
 const defaultValue = {
   thankYouModalShown: false,
   matchedInstitutionModalShown: false,
@@ -18,18 +24,19 @@ const defaultValue = {
   videosViewed: [],
   videosBlocked: [],
   announcementsShown: false,
-
   announcements: []
 }
 
 const context = {
   state: defaultValue,
+  hasGivenFeedback: false,
   personalAnnouncements: {
     show: false,
     count: 0,
     announcements: []
   },
   setShowPersonalAnnouncements(val: boolean) {},
+  setHasGivenFeedback(val: boolean) {},
   setContextState: (state: typeof defaultValue) => {},
   toggleMatchedInstModal: () => {},
   toggleVerifyEmailModal: () => {},
@@ -46,27 +53,36 @@ const AppContext = createContext<typeof context>(context)
 
 export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState(context.state)
+  const [hasGivenFeedback, setHasGivenFeedback] = useLocalStorage(
+    'feedbackDone',
+    false
+  )
   const [trackAnnouncements, { called }] = useTrackAnnouncementsMutation()
   const router = useRouter()
-  const { previouslyClosed, markNotificationAsRead, setPreviouslyClosed } = useClosedAnnouncements()
+  const { previouslyClosed, markNotificationAsRead, setPreviouslyClosed } =
+    useClosedAnnouncements()
   const noAnnouncements = ['/cms', '/access', '/signup', '/login']
-  const shouldSkip = noAnnouncements.some((path) => router.pathname.startsWith(path))
-  const [showPersonalAnnouncements, setShowPersonalAnnouncements] = useState(true)
+  const shouldSkip = noAnnouncements.some((path) =>
+    router.pathname.startsWith(path)
+  )
+  const [showPersonalAnnouncements, setShowPersonalAnnouncements] =
+    useState(true)
 
   const { data: session } = useSession()
-  const { data: personalAnnouncementsData, updateQuery } = useAnnoucementForUserQuery({
-    skip: !session?.user,
-    onCompleted(result) {
-      const ids = result.announcementForUser?.map((a) => a._id)
-      if (!!ids.length) {
-        trackAnnouncements({
-          variables: {
-            _ids: ids
-          }
-        })
+  const { data: personalAnnouncementsData, updateQuery } =
+    useAnnoucementForUserQuery({
+      skip: !session?.user,
+      onCompleted(result) {
+        const ids = result.announcementForUser?.map((a) => a._id)
+        if (!!ids.length) {
+          trackAnnouncements({
+            variables: {
+              _ids: ids
+            }
+          })
+        }
       }
-    }
-  })
+    })
   const personalAnnouncements = personalAnnouncementsData?.announcementForUser
 
   const { data } = useSiteWideAnnouncementsQuery({
@@ -130,14 +146,14 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const setVideosViewed = (pub_id: String) => {
     setState({
       ...state,
-      videosViewed: [...state.videosViewed, pub_id]
+      videosViewed: uniq([...state.videosViewed, pub_id])
     })
   }
 
   const setVideosBlocked = (pub_id: String) => {
     setState({
       ...state,
-      videosBlocked: [...state.videosBlocked, pub_id]
+      videosBlocked: uniq([...state.videosBlocked, pub_id])
     })
   }
 
@@ -148,8 +164,12 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
     })
   }
   const closeAnnouncement = (cacheId: string) => {
-    const closedAnnouncements = Array.from(new Set([...previouslyClosed, cacheId]))
-    const filtered = data.getSiteWideAnnouncements?.filter((a) => !closedAnnouncements?.includes(a.cache_id))
+    const closedAnnouncements = Array.from(
+      new Set([...previouslyClosed, cacheId])
+    )
+    const filtered = data.getSiteWideAnnouncements?.filter(
+      (a) => !closedAnnouncements?.includes(a.cache_id)
+    )
     setPreviouslyClosed(closedAnnouncements)
     setState({
       ...state,
@@ -162,7 +182,9 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
     updateQuery((result) => {
       return {
         __typename: 'Query',
-        announcementForUser: result.announcementForUser.filter((a) => !ids.includes(a.cache_id))
+        announcementForUser: result.announcementForUser.filter(
+          (a) => !ids.includes(a.cache_id)
+        )
       }
     })
   }
@@ -176,6 +198,8 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
           announcements: personalAnnouncements,
           count: personalAnnouncements?.length
         },
+        hasGivenFeedback,
+        setHasGivenFeedback,
         setShowPersonalAnnouncements,
         setContextState,
         toggleMatchedInstModal,

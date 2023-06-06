@@ -754,6 +754,16 @@ export type ExtendedRegistrationOutput = {
   updatedUser: User;
 };
 
+export type Feedback = {
+  __typename?: 'Feedback';
+  _id: Scalars['String'];
+  institution: Scalars['String'];
+  questionId: Scalars['String'];
+  type: Scalars['String'];
+  user: Scalars['String'];
+  value: Scalars['any'];
+};
+
 export enum FileExtensions {
   Jpeg = 'jpeg',
   Jpg = 'jpg',
@@ -1141,6 +1151,7 @@ export type Mutation = {
   trackAnnouncement: Scalars['Boolean'];
   trackAnnouncements: Scalars['Boolean'];
   trackArticle: Scalars['Boolean'];
+  trackFeedack: Feedback;
   trackInitiateCheckout: Scalars['Boolean'];
   trackLogin: Scalars['Boolean'];
   trackRequestInstSubscription: Scalars['Boolean'];
@@ -1464,6 +1475,11 @@ export type MutationTrackAnnouncementsArgs = {
 
 export type MutationTrackArticleArgs = {
   input: TrackArticleInput;
+};
+
+
+export type MutationTrackFeedackArgs = {
+  input: TrackFeedbackInput;
 };
 
 
@@ -2721,6 +2737,12 @@ export type TrackArticleInput = {
   referredFrom?: InputMaybe<Scalars['String']>;
   referrerPath?: InputMaybe<Scalars['String']>;
   uniqueView?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type TrackFeedbackInput = {
+  questionId: Scalars['String'];
+  type: Scalars['String'];
+  value: Scalars['any'];
 };
 
 export type TrackInitiateCheckoutInput = {
