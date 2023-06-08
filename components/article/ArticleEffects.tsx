@@ -36,7 +36,8 @@ const ArticleEffects = ({ article }: Props) => {
         title: article.title,
         authors: article.authors.map((a) => {
           return a.display_name
-        })
+        }),
+        tags: article.tags
       })
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {
