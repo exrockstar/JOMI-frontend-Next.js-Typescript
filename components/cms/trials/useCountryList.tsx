@@ -56,7 +56,9 @@ export const CountryListProvider = (props: PropsWithChildren) => {
   const stage1Filtered = showEnabled ? sorted.filter((c) => c.enabled) : sorted
   // filter using search term
   const filtered = input.searchTerm
-    ? stage1Filtered.filter((c) => new RegExp(input.searchTerm, 'i').exec(c.label))
+    ? stage1Filtered.filter((c) =>
+        new RegExp(input.searchTerm, 'i').exec(c.label)
+      )
     : stage1Filtered
   const count = filtered.length
   const filteredCodes = filtered.map((country) => country.code)
@@ -90,9 +92,14 @@ export const CountryListProvider = (props: PropsWithChildren) => {
   const setValue = (value: boolean) => {
     console.log('value', value)
     if (value) {
-      setFieldValue('enabledCountries', uniq([...field.value, ...selectedCodes]))
+      setFieldValue(
+        'enabledCountries',
+        uniq([...field.value, ...selectedCodes])
+      )
     } else {
-      const newVal = field.value?.filter((code) => !selectedCodes.includes(code))
+      const newVal = field.value?.filter(
+        (code) => !selectedCodes.includes(code)
+      )
       setFieldValue('enabledCountries', newVal)
     }
   }
@@ -101,6 +108,7 @@ export const CountryListProvider = (props: PropsWithChildren) => {
     router.push({
       query: {
         ...query,
+        page: 1,
         showEnabled: !!value
       }
     })
