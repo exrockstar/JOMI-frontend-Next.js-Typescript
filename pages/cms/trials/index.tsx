@@ -22,10 +22,10 @@ import {
 import { TrialSettingsInput } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
+import EnabledCountryNote from 'components/cms/trials/EnabledCountryNote'
 
 const TrialsSettingsPage = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const { data: session } = useSession()
   const { data, error, loading } = useGetTrialsSettingsQuery()
   const [updateTrialSetttings] = useUpdateTrialSettingsMutation()
   const settings = data?.settings
@@ -90,6 +90,7 @@ const TrialsSettingsPage = () => {
                   >
                     Enable/Disable countries from accessing the Trials Feature.
                   </Typography>
+                  <EnabledCountryNote />
                 </Box>
                 <CountryList />
               </Box>
