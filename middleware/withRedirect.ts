@@ -43,10 +43,10 @@ export const withRedirect: MiddlewareFactory = (next: NextMiddleware) => {
       const { pathname, origin } = req.nextUrl
       //fix for /index not rewriting to /article-index in production due to
       //conflicting with pages/[...slug].tsx path
-      // if (pathname.startsWith('/index/index') && isProduction) {
-      //   const url = new URL('/article-index', origin)
-      //   return NextResponse.rewrite(url)
-      // }
+      if (pathname.startsWith('/index/index') && isProduction) {
+        const url = new URL('/article-index', origin)
+        return NextResponse.rewrite(url)
+      }
 
       if (pathname === '/account') {
         const url = new URL('/account/profile', origin)

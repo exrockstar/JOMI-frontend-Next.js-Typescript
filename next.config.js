@@ -64,6 +64,10 @@ const config = {
         destination: '/home'
       },
       {
+        source: '/index',
+        destination: '/article-index'
+      },
+      {
         source: '/request-subscription',
         destination: '/account/request-subscription'
       },
