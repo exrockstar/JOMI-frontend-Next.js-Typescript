@@ -8,7 +8,11 @@ import { DefaultPageProps } from 'backend/seo/MetaData'
 import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { getApolloAdminClient } from 'apis/apollo-admin-client'
 import { logger } from 'logger/logger'
-import { PageBySlugQuery, PageBySlugQueryVariables, PageBySlugDocument } from 'graphql/queries/page-by-slug.generated'
+import {
+  PageBySlugQuery,
+  PageBySlugQueryVariables,
+  PageBySlugDocument
+} from 'graphql/queries/page-by-slug.generated'
 import { PagesQuery, PagesDocument } from 'graphql/queries/pages.generated'
 import cheerio from 'cheerio'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
@@ -17,19 +21,50 @@ import {
   SiteWideAnnouncementsDocument
 } from 'graphql/queries/announcement-for-user.generated'
 const isProduction = process.env.APP_ENV === 'production'
-type Props = {
+import ArticleIndex, {
+  getStaticProps as articleIndexGetStaticProps
+} from './article-index'
+import { useRouter } from 'next/router'
+import { ArticleIndexSection } from 'components/article-index/types'
+type GenericPageProps = {
   page: PageBySlugQuery['pageBySlug']
   scripts: string[]
 } & DefaultPageProps
 
-export default function SinglePage({ page, scripts }: Props) {
+type ExampleCaseItem = {
+  title: string
+  slug: string
+  author: string
+  hospital: string
+  publication_id: string
+  category: string
+}
+type ArticleIndexProps = {
+  indexInfo: string
+  sections: ArticleIndexSection[]
+  exampleCases: ExampleCaseItem[]
+} & DefaultPageProps
+
+export default function SinglePage(
+  props: GenericPageProps | ArticleIndexProps
+) {
+  const router = useRouter()
+  if (router.asPath.startsWith('/index')) {
+    let _props = props as ArticleIndexProps
+    return <ArticleIndex {..._props} />
+  }
+  let _props = props as GenericPageProps
+  const { scripts, page } = _props
   return (
     <Layout>
       {scripts?.map((script, index) => (
         <Script key={index} src={script} />
       ))}
       <Box sx={{ backgroundColor: 'white', wordBreak: 'break-word' }} p={2}>
-        <div dangerouslySetInnerHTML={{ __html: page?.content }} className="generated" />
+        <div
+          dangerouslySetInnerHTML={{ __html: page?.content }}
+          className="generated"
+        />
       </Box>
     </Layout>
   )
@@ -59,16 +94,25 @@ export async function getStaticPaths() {
 }
 
 interface IParams extends ParsedUrlQuery {
-  slug: string[]
+  slug: string[] | string
 }
-export const getStaticProps: GetStaticProps<Props, IParams> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<any, IParams> = async ({
+  params
+}) => {
+  const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug
   logger.info(`Regenerating page ${params.slug}`)
+  console.log(slug)
+  if (slug === 'index') {
+    return articleIndexGetStaticProps({ params })
+  }
+
   try {
     const client = getApolloAdminClient()
-    const { data } = await client.query<PageBySlugQuery, PageBySlugQueryVariables>({
-      variables: {
-        slug: params.slug.join('/')
-      },
+    const { data } = await client.query<
+      PageBySlugQuery,
+      PageBySlugQueryVariables
+    >({
+      variables: { slug },
       query: PageBySlugDocument,
       fetchPolicy: 'no-cache'
     })
