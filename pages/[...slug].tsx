@@ -102,7 +102,7 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug
   logger.info(`Regenerating page ${params.slug}`)
   console.log(slug)
-  if (slug === 'index') {
+  if (slug.startsWith('index')) {
     return articleIndexGetStaticProps({ params })
   }
 
