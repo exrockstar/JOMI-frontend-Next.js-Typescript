@@ -1,5 +1,14 @@
 /* eslint-disable @next/next/no-sync-scripts */
-import { Box, Typography, Link as MuiLink, Button, Stack, FormControlLabel, Tooltip, Checkbox } from '@mui/material'
+import {
+  Box,
+  Typography,
+  Link as MuiLink,
+  Button,
+  Stack,
+  FormControlLabel,
+  Tooltip,
+  Checkbox
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Layout from 'components/layout'
 import Script from 'next/script'
@@ -13,7 +22,11 @@ import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { getApolloAdminClient } from 'apis/apollo-admin-client'
 import { logger } from 'logger/logger'
 
-import { PageBySlugQuery, PageBySlugQueryVariables, PageBySlugDocument } from 'graphql/queries/page-by-slug.generated'
+import {
+  PageBySlugQuery,
+  PageBySlugQueryVariables,
+  PageBySlugDocument
+} from 'graphql/queries/page-by-slug.generated'
 import { transformContent } from 'components/article-index/transformContent'
 import { ArticleIndexSection, Article } from 'components/article-index/types'
 import TableOfContents from 'components/article-index/TableOfContents'
@@ -21,7 +34,11 @@ import ArticleSection from 'components/article-index/ArticleSection'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { BlueLink } from 'components/common/BlueLink'
-import { ArticlesDocument, ArticlesQuery, ArticlesQueryVariables } from 'graphql/queries/articles.generated'
+import {
+  ArticlesDocument,
+  ArticlesQuery,
+  ArticlesQueryVariables
+} from 'graphql/queries/articles.generated'
 import ExampleCases from 'components/article-index/ExampleCases'
 import uniq from 'lodash/uniq'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
@@ -52,7 +69,9 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
   const [availableArticlesShown, setAvailableArticlesShown] = useState(true)
   const [scoreArticlesShown, setScoreArticlesShown] = useState(false)
 
-  const totalArticles = sections.flatMap((section) => section.articles.filter((article) => !article.soon))
+  const totalArticles = sections.flatMap((section) =>
+    section.articles.filter((article) => !article.soon)
+  )
   const numArticles = uniq(totalArticles.map((a) => a.publication_id))
   useEffect(() => {
     if (router.isReady) {
@@ -85,7 +104,9 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
         <Box>
           <ExampleCases cases={exampleCases} />
           <TableOfContents sections={sections} />
-          <Typography variant="body2">Total articles : {numArticles?.length}</Typography>
+          <Typography variant="body2">
+            Total articles : {numArticles?.length}
+          </Typography>
           <Typography variant="body2">Select cases to display</Typography>
           <Stack direction="row" flexWrap="wrap">
             {/* <FormControlLabel
@@ -178,7 +199,10 @@ export default ArticleIndexPage
 export const getStaticProps: GetStaticProps<Props> = async () => {
   logger.info(`Regenerating article-index`)
   const client = getApolloAdminClient()
-  const { data } = await client.query<PageBySlugQuery, PageBySlugQueryVariables>({
+  const { data } = await client.query<
+    PageBySlugQuery,
+    PageBySlugQueryVariables
+  >({
     variables: {
       slug: 'index'
     },
@@ -187,7 +211,10 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   })
   const examplecasesId = ['251', '315', '273', '301']
   const authorIndex = [0, 2, 0, 1]
-  const { data: articles } = await client.query<ArticlesQuery, ArticlesQueryVariables>({
+  const { data: articles } = await client.query<
+    ArticlesQuery,
+    ArticlesQueryVariables
+  >({
     variables: {
       input: {
         page: 1,
@@ -198,10 +225,15 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     fetchPolicy: 'no-cache'
   })
   const exampleCases = examplecasesId.map((id) => {
-    return articles.articleOutput.articles?.find((a) => a?.publication_id === id)
+    return articles.articleOutput.articles?.find(
+      (a) => a?.publication_id === id
+    )
   })
   const content = data.pageBySlug?.content
-  const { indexInfo, sections } = transformContent(content, articles.articleOutput?.articles)
+  const { indexInfo, sections } = transformContent(
+    content,
+    articles.articleOutput?.articles
+  )
   await client.resetStore()
   await client.query<SiteWideAnnouncementsQuery>({
     query: SiteWideAnnouncementsDocument
@@ -230,7 +262,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
           }
         }),
       [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
-      meta_data: buildGenericMetadata(data?.pageBySlug)
+      meta_data: buildGenericMetadata(data?.pageBySlug),
+      scripts: []
     },
     revalidate: 3600
   }
