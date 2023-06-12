@@ -15,14 +15,11 @@ import { setContext } from '@apollo/client/link/context'
 import { useSession } from 'next-auth/react'
 import { logtail } from 'logger/logtail'
 import { getIpAddress } from 'components/utils/getIpAddress'
-import { BASE_URL } from 'common/constants'
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__'
 let apolloClient: ApolloClient<NormalizedCacheObject> | undefined
 export const IS_SERVER = typeof window === 'undefined'
-const url = IS_SERVER
-  ? new URL('/graphql', BASE_URL).toString()
-  : new URL('/graphql', window.location.href).toString()
+const url = IS_SERVER ? process.env.API_URL : '/graphql'
 const retryLink = new RetryLink({
   delay: {
     initial: 1000,
