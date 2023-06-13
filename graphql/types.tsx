@@ -341,6 +341,12 @@ export type Chapter = {
   title: Scalars['String'];
 };
 
+export type Choice = {
+  __typename?: 'Choice';
+  description: Scalars['String'];
+  value: Scalars['Float'];
+};
+
 export type ColumnFilter = {
   columnName: Scalars['String'];
   not?: InputMaybe<Scalars['Boolean']>;
@@ -757,11 +763,24 @@ export type ExtendedRegistrationOutput = {
 export type Feedback = {
   __typename?: 'Feedback';
   _id: Scalars['String'];
+  anon_link_id?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
   institution: Scalars['String'];
   questionId: Scalars['String'];
   type: Scalars['String'];
   user: Scalars['String'];
   value: Scalars['any'];
+};
+
+export type FeedbackQuestion = {
+  __typename?: 'FeedbackQuestion';
+  _id: Scalars['String'];
+  choices?: Maybe<Array<Choice>>;
+  createdAt: Scalars['DateTime'];
+  createdBy: Scalars['String'];
+  legends?: Maybe<Array<Scalars['String']>>;
+  question: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export enum FileExtensions {
@@ -2132,6 +2151,7 @@ export type Query = {
   geolocation?: Maybe<Geolocation>;
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
+  getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
@@ -2273,6 +2293,11 @@ export type QueryGenCounterReportArgs = {
 
 export type QueryGetCombinedPromoCodeArgs = {
   code: Scalars['String'];
+};
+
+
+export type QueryGetFeedbackQuestionsForUserArgs = {
+  anon_link_id: Scalars['String'];
 };
 
 
@@ -2740,8 +2765,11 @@ export type TrackArticleInput = {
 };
 
 export type TrackFeedbackInput = {
+  anon_link_id?: InputMaybe<Scalars['String']>;
+  institution?: InputMaybe<Scalars['String']>;
   questionId: Scalars['String'];
   type: Scalars['String'];
+  user?: InputMaybe<Scalars['String']>;
   value: Scalars['any'];
 };
 

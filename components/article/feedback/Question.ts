@@ -1,15 +1,6 @@
-type Choice = {
-  value: number
-  description: string
-}
+import { GetFeedbackQuestionsQuery } from 'graphql/mutations/collect-feedback.generated'
 
-export type Question = {
-  question: string
-  legends: string[]
-  id: string
-  type: 'likert' | 'yes-no'
-  choices?: Choice[]
-}
+type Question = GetFeedbackQuestionsQuery['question']
 
 type FeedbackComponentProps = {
   question: Question

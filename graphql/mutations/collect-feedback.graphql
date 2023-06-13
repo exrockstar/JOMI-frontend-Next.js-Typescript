@@ -4,3 +4,16 @@ mutation TrackFeedback($input: TrackFeedbackInput!) {
     _id
   }
 }
+
+query GetFeedbackQuestions($anon_link_id: String!){
+  question: getFeedbackQuestionsForUser(anon_link_id: $anon_link_id){
+    _id
+    question
+    legends
+    type
+    choices {
+      value
+      description
+    }
+  }
+}

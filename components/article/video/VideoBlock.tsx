@@ -21,7 +21,10 @@ import { isMobile } from 'components/utils/isMobile'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import FeedbackModal from '../feedback/FeedbackModal'
-import { useTrackFeedbackMutation } from 'graphql/mutations/collect-feedback.generated'
+import {
+  useGetFeedbackQuestionsQuery,
+  useTrackFeedbackMutation
+} from 'graphql/mutations/collect-feedback.generated'
 import difference from 'lodash/difference'
 const ArticleAccessDialog = dynamic(
   () => import('components/ArticleAccessDialog/ArticleAccessDialog'),
@@ -61,6 +64,13 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
+
+  const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
+    skip: status === 'loading',
+    variables: {
+      anon_link_id
+    }
+  })
   const [trackFeedback] = useTrackFeedbackMutation({
     onCompleted() {
       console.debug('track feedback')
@@ -100,7 +110,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const accessType = articleAccess?.accessType
   const isArticlePreviouslyBlocked = videosBlocked.find((id) => id === pubId)
   const isPreviouslyViewed = videosViewed.find((id) => id === pubId)
-
+  const feedbackQuestion = feedbackQuestionData?.question
   const trackBlockInput: TrackVideoInput = {
     publication_id: pubId,
     uniqueView: !isArticlePreviouslyBlocked,
@@ -186,7 +196,11 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   }
 
   // check block for evaluation access
-  const checkEvaluationBlock = (seconds: number, video: WistiaVideo) => {
+  const checkEvaluationBlock = (
+    seconds: number,
+    video: WistiaVideo,
+    trackBlock?: boolean
+  ) => {
     if (!articleAccess) return
 
     const threeMinutes = 60 * 3
@@ -205,9 +219,11 @@ export default function VideoBlock({ article }: VideoBlockProps) {
       setNextBlockTime(seconds + BLOCK_INTERVAL_SECONDS)
     }
 
-    trackVideoBlock({
-      variables: { input: trackBlockInput }
-    })
+    if (trackBlock) {
+      trackVideoBlock({
+        variables: { input: trackBlockInput }
+      })
+    }
 
     setVideosBlocked(pubId)
   }
@@ -222,8 +238,9 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     // remove the ones that was already been shown
     const percentageToCheck = difference([25, 50, 75], percentBlocked)
     const filtered = percentageToCheck.filter((time) => percentWatched >= time)
-    const showFeedback = !!filtered.length && !hasGivenFeedback && isTrial
-    console.log(percentageToCheck)
+    const showFeedback =
+      !!filtered.length && !hasGivenFeedback && isTrial && feedbackQuestion
+
     if (showFeedback) {
       video.pause()
       setShowFeedbackDialog(true)
@@ -255,7 +272,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     setShouldTrackVideoBlock(true)
     handleChapterChange(seconds)
     checkSubscriptionBlock(seconds, video)
-    checkEvaluationBlock(seconds, video)
+    checkEvaluationBlock(seconds, video, true)
     checkFeedbackBlock(seconds, video)
     trackPlayTime(seconds, secondsWatched)
   }
@@ -287,7 +304,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     ''
   )
 
-  console.log('timesBlocked', timesBlocked, accessType)
   //#endregion handlers
 
   return (
@@ -305,13 +321,23 @@ export default function VideoBlock({ article }: VideoBlockProps) {
           onClose={() => {
             setShowFeedbackDialog(false)
           }}
-          onAnswer={async (value, qId) => {
+          question={feedbackQuestionData?.question}
+          onAnswer={async (value, question) => {
+            gtag('event', 'track_feedback', {
+              question_id: question._id,
+              question: question.question,
+              value,
+              type: question.type
+            })
             await trackFeedback({
               variables: {
                 input: {
                   value: value + '',
-                  questionId: qId,
-                  type: 'likert-scale'
+                  questionId: question._id,
+                  type: question.type,
+                  anon_link_id,
+                  user: session?.user?._id,
+                  institution: articleAccess.institution_id
                 }
               },
               onCompleted() {

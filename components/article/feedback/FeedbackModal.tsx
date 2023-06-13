@@ -14,17 +14,20 @@ import { frontPageTheme } from 'components/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CTAButton from 'components/common/CTAButton'
 import { useSnackbar } from 'notistack'
-import { question1 } from './questions'
-import { FeedbackComponent, Question } from './Question'
+import { FeedbackComponent } from './Question'
 import LikertScaleFeedback from './LikertScaleFeedback'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { GetFeedbackQuestionsQuery } from 'graphql/mutations/collect-feedback.generated'
+type Question = GetFeedbackQuestionsQuery['question']
 type Props = DialogProps & {
-  onAnswer(value: any, questionId: string): void
+  onAnswer(value: any, question: Question): void
+  question?: Question
 }
 
 const FeedbackModal = (props: Props) => {
+  const question = props.question
+  console.log(question)
   const { enqueueSnackbar } = useSnackbar()
-  const question = question1
   const getFeedbackComponent = (question: Question): FeedbackComponent => {
     switch (question.type) {
       case 'yes-no':
@@ -35,6 +38,20 @@ const FeedbackModal = (props: Props) => {
     }
   }
   const [answer, setAnswer] = useState<any>(null)
+
+  useEffect(() => {
+    if (props.open) {
+      gtag('event', 'show_feeback_block', {
+        question_id: question?._id
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.open])
+
+  if (!question) {
+    return null
+  }
+
   const Component = getFeedbackComponent(question)
   return (
     <ThemeProvider theme={frontPageTheme}>
@@ -72,7 +89,7 @@ const FeedbackModal = (props: Props) => {
             endIcon={<ArrowRight />}
             onClick={(e) => {
               props.onClose(e, null)
-              props.onAnswer(answer, question.id)
+              props.onAnswer(answer, question)
               enqueueSnackbar('Thank you for your feedback!', {
                 variant: 'info'
               })

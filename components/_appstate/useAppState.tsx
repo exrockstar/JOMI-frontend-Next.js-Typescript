@@ -14,7 +14,7 @@ import {
 import { useClosedAnnouncements } from './useClosedAnnouncements'
 import { useSession } from 'next-auth/react'
 import uniq from 'lodash/uniq'
-import { useLocalStorage } from 'usehooks-ts'
+import { useSessionStorage } from 'usehooks-ts'
 
 const defaultValue = {
   thankYouModalShown: false,
@@ -53,7 +53,7 @@ const AppContext = createContext<typeof context>(context)
 
 export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState(context.state)
-  const [hasGivenFeedback, setHasGivenFeedback] = useLocalStorage(
+  const [hasGivenFeedback, setHasGivenFeedback] = useSessionStorage(
     'feedbackDone',
     false
   )

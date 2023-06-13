@@ -3,6 +3,7 @@ query ArticleAccess($publication_id: String!) {
     articleAccessType {
       accessType
       institution_name
+      institution_id
       shouldRequestInstVerification
       viaTemporaryIp
       isTrial
