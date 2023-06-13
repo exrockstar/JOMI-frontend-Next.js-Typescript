@@ -39,8 +39,6 @@ type VideoBlockProps = {
 }
 
 const BLOCK_INTERVAL_SECONDS = 300 //seconds
-const INITIAL_BLOCK_SECONDS = 180
-const feeback_blocks = ['rate-jomi']
 /**
  * Shows a modal to block the user from watching the video.
  * If user has trial access, displays some feedback modal on certain intervals.
@@ -55,8 +53,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     setVideosViewed,
     setVideosBlocked
   } = useAppState()
-  const [timesBlocked, setTimesBlocked] = useState(0)
-  const [shouldTrackVideoBlock, setShouldTrackVideoBlock] = useState(false)
   const [showDialog, setShowDialog] = useState(false)
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
   // the percentage of the video where feedback modal has been shown
@@ -71,22 +67,11 @@ export default function VideoBlock({ article }: VideoBlockProps) {
       anon_link_id
     }
   })
-  const [trackFeedback] = useTrackFeedbackMutation({
-    onCompleted() {
-      console.debug('track feedback')
-    }
-  })
+  const [trackFeedback] = useTrackFeedbackMutation()
   const [trackVideoPlay] = useTrackVideoPlayMutation()
-  const [trackVideoTime] = useTrackVideoTimeMutation({
-    onCompleted() {
-      console.debug('track video time')
-    }
-  })
-  const [trackVideoBlock] = useTrackVideoBlockMutation({
-    onCompleted() {
-      console.debug('track video block')
-    }
-  })
+  const [trackVideoTime] = useTrackVideoTimeMutation()
+  const [trackVideoBlock] = useTrackVideoBlockMutation()
+
   const [nextBlockTime, setNextBlockTime] = useState(0)
   const router = useRouter()
   const {
@@ -173,7 +158,8 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   // check block for limited access, require subscription
   const checkSubscriptionBlock = async (
     seconds: number,
-    video: WistiaVideo
+    video: WistiaVideo,
+    trackBlock?: boolean
   ) => {
     if (!articleAccess) return
     const threeMinutes = 60 * 3
@@ -187,11 +173,13 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     if (!showBlock) return
     video.pause()
     setShowDialog(true)
-    trackVideoBlock({
-      variables: {
-        input: trackBlockInput
-      }
-    })
+    if (trackBlock) {
+      trackVideoBlock({
+        variables: {
+          input: trackBlockInput
+        }
+      })
+    }
     setVideosBlocked(pubId)
   }
 
@@ -215,7 +203,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
     // need to track the times block to know which feedback block to show
     if (seconds >= nextBlockTime) {
-      setTimesBlocked((prev) => prev + 1)
       setNextBlockTime(seconds + BLOCK_INTERVAL_SECONDS)
     }
 
@@ -269,9 +256,8 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     secondsWatched: number,
     video: WistiaVideo
   ) => {
-    setShouldTrackVideoBlock(true)
     handleChapterChange(seconds)
-    checkSubscriptionBlock(seconds, video)
+    checkSubscriptionBlock(seconds, video, true)
     checkEvaluationBlock(seconds, video, true)
     checkFeedbackBlock(seconds, video)
     trackPlayTime(seconds, secondsWatched)
@@ -281,7 +267,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     secondsWatched: number,
     video: WistiaVideo
   ) => {
-    setShouldTrackVideoBlock(false)
     checkSubscriptionBlock(seconds, video)
     checkEvaluationBlock(seconds, video)
     //do not add tracking id if there's already one
