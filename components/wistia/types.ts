@@ -31,6 +31,7 @@ export interface WistiaVideo {
   remove(): void
   volume(volume?: number): number
   duration(): number
+  percentWatched(): number
   //
 }
 

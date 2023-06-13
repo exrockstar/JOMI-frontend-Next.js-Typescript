@@ -233,10 +233,10 @@ export default function VideoBlock({ article }: VideoBlockProps) {
       AccessTypeEnum.InstitutionalSubscription === accessType &&
       articleAccess?.isTrial
     const isTrial = isInstitutionalTrial
-    const percentWatched = Math.floor((seconds / video.duration()) * 100)
+    const percentWatched = video.percentWatched()
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
-    const percentageToCheck = difference([25, 50, 75], percentBlocked)
+    const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
     const filtered = percentageToCheck.filter((time) => percentWatched >= time)
     const showFeedback =
       !!filtered.length && !hasGivenFeedback && isTrial && feedbackQuestion
