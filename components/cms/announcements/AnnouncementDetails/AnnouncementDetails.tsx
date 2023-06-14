@@ -59,6 +59,13 @@ const AnnouncementDetails = ({ announcementId }: Props) => {
         enqueueSnackbar('Successfully updated announcement', {
           variant: 'success'
         })
+        // If no-filters, it's a sitewide announcement
+        // Revalidate important pages
+        if (!data.updateAnnouncement.filters?.length) {
+          fetch('/api/revalidate?path=/')
+          fetch('/api/revalidate?path=/article-index')
+          fetch('/api/revalidate?path=/index')
+        }
       },
       onError(error) {
         enqueueSnackbar(`Could not update announcement ${error.message}`, {
