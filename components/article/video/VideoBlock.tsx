@@ -172,6 +172,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     const showBlock = isTimeLimitReached && hasNoAccess
     if (!showBlock) return
     video.pause()
+    video.cancelFullscreen()
     setShowDialog(true)
     if (trackBlock) {
       trackVideoBlock({
@@ -199,6 +200,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     if (!shouldShowBlock) return
 
     video.pause()
+    video.cancelFullscreen()
     setShowDialog(true)
 
     // need to track the times block to know which feedback block to show
@@ -230,6 +232,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
     if (showFeedback) {
       video.pause()
+      video.cancelFullscreen()
       setShowFeedbackDialog(true)
       setPercentBlocked([...percentBlocked, ...filtered])
     }
