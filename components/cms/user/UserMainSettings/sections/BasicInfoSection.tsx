@@ -83,6 +83,13 @@ const BasicInfoSection = () => {
         <Box pb={1}>
           <GenerateSlugButton />
         </Box>
+        <FormikTextField
+          name="source_ip"
+          label="Source IP"
+          fullWidth
+          size="small"
+          disabled
+        />
         <FormikSelect
           fullWidth
           label="Email preference"

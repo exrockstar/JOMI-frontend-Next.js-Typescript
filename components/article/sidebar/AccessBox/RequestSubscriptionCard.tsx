@@ -21,23 +21,19 @@ const RequestSubscriptionCard = () => {
       <Typography variant="body2" fontFamily={'Manrope'} color={'grey.600'}>
         {description}
       </Typography>
-      <Link
-        href={{
-          pathname: `/account/request-subscription`,
-          query: { from: router.asPath }
-        }}
-        passHref
-        legacyBehavior
+
+      <DefaultButton
+        sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}
+        fullWidth
+        data-event="article-access-box-request-subscription-link"
+        onClick={analytics.trackClick}
+        LinkComponent={Link}
+        href={`/account/request-subscription?from=${encodeURIComponent(
+          router.asPath
+        )}`}
       >
-        <DefaultButton
-          sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}
-          fullWidth
-          data-event="article-access-box-request-subscription-link"
-          onClick={analytics.trackClick}
-        >
-          Request Access
-        </DefaultButton>
-      </Link>
+        Request Access
+      </DefaultButton>
     </CommonCard>
   )
 }

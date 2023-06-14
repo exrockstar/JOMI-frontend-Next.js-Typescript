@@ -17,9 +17,6 @@ import uniq from 'lodash/uniq'
 import { useSessionStorage } from 'usehooks-ts'
 
 const defaultValue = {
-  thankYouModalShown: false,
-  matchedInstitutionModalShown: false,
-  verifyEmailModal: false,
   articlesViewed: [],
   videosViewed: [],
   videosBlocked: [],
@@ -40,9 +37,6 @@ const context = {
   setHasGivenFeedback(val: boolean) {},
   setShowFeedbackDialog(val: boolean) {},
   setContextState: (state: typeof defaultValue) => {},
-  toggleMatchedInstModal: () => {},
-  toggleVerifyEmailModal: () => {},
-  showVerifyEmailModal: () => {},
   setArticlesViewed: (pub_id: String) => {},
   setVideosViewed: (pub_id: String) => {},
   setVideosBlocked: (pub_id: String) => {},
@@ -119,26 +113,6 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setState(newState)
   }
 
-  const toggleMatchedInstModal = () => {
-    setState({
-      ...state,
-      matchedInstitutionModalShown: !state.matchedInstitutionModalShown
-    })
-  }
-
-  const toggleVerifyEmailModal = () => {
-    setState({
-      ...state,
-      verifyEmailModal: !state.verifyEmailModal
-    })
-  }
-  const showVerifyEmailModal = () => {
-    setState({
-      ...state,
-      verifyEmailModal: true
-    })
-  }
-
   const setArticlesViewed = (pub_id: String) => {
     setState({
       ...state,
@@ -207,9 +181,6 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         setShowFeedbackDialog,
         setShowPersonalAnnouncements,
         setContextState,
-        toggleMatchedInstModal,
-        toggleVerifyEmailModal,
-        showVerifyEmailModal,
         setArticlesViewed,
         setVideosViewed,
         setVideosBlocked,

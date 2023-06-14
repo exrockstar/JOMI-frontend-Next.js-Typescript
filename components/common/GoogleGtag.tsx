@@ -20,7 +20,7 @@ const GoogleGtag = ({ metadata }: Props) => {
     skip: status === 'loading'
   })
   const user = data?.user
-  const access = data?.userAccessType
+  const access = data?.user?.accessType
   const isAdmin = data?.user?.role === UserRoles.Admin
 
   const cmsOrAccess =

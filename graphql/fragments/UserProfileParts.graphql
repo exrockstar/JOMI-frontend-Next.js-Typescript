@@ -17,4 +17,14 @@ fragment UserProfileParts on User {
   subscription {
     subType
   }
+  accessType {
+    accessType
+    institution_name
+    shouldRequestInstVerification
+    viaTemporaryIp
+    expiry
+    subscriptionExpiresAt
+    requireLogin
+    institution_id
+  }
 }

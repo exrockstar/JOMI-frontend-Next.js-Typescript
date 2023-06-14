@@ -90,14 +90,16 @@ const PurchaseArticleSection = ({ data }: Props) => {
             )}
             {showRentArticleButton && (
               <Tooltip title={rentDescription}>
-                <PurchaseArticleButton
-                  userId={userId}
-                  purchaseDescription={rentDescription}
-                  articleId={article._id}
-                  text={`Rent Article`}
-                  type={OrderType.RentArticle}
-                  price={rentPrice.unit_amount / 100}
-                />
+                <div>
+                  <PurchaseArticleButton
+                    userId={userId}
+                    purchaseDescription={rentDescription}
+                    articleId={article._id}
+                    text={`Rent Article`}
+                    type={OrderType.RentArticle}
+                    price={rentPrice.unit_amount / 100}
+                  />
+                </div>
               </Tooltip>
             )}
           </Stack>

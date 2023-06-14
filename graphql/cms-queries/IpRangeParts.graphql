@@ -7,4 +7,5 @@ fragment IpRangeParts on IpRange {
   start_string
   end_string
   lastEditedBy
+  notes
 }

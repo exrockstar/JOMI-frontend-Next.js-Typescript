@@ -43,6 +43,7 @@ query UserDetail($id: String!) {
     ...UserDetail
     accessExpiredAt
     lastSubType
+    
   }
 }
 

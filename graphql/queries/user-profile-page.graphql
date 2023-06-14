@@ -7,7 +7,6 @@ query UserProfilePage {
     }
     display_name
     email
-    emailVerified
     instEmailVerified
     institution
     institution_name

@@ -148,6 +148,7 @@ const IpRangesList = ({ ip_ranges, locationId, institutionId }: Props) => {
                 <TableCell>ID</TableCell>
                 <TableCell>Start</TableCell>
                 <TableCell>End</TableCell>
+                <TableCell>Notes</TableCell>
                 <TableCell>Last Edited By</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -159,6 +160,7 @@ const IpRangesList = ({ ip_ranges, locationId, institutionId }: Props) => {
                     <TableCell>{ip_range._id}</TableCell>
                     <TableCell>{ip_range.start_string}</TableCell>
                     <TableCell>{ip_range.end_string}</TableCell>
+                    <TableCell>{ip_range.notes}</TableCell>
                     <TableCell>
                       {ip_range.lastEditedBy ? (
                         <Link href={`/cms/user/${ip_range.lastEditedBy}`}>

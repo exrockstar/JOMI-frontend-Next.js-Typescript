@@ -100,17 +100,21 @@ const IpRangeDialog = (props: Props) => {
     end: ip_range?.end_string ?? '',
     start: ip_range?.start_string ?? '',
     institution: institutionId,
-    location: locationId
+    location: locationId,
+    notes: ip_range?.notes ?? ''
   }
 
   const submitButtonText = mode === 'add' ? 'Create' : 'Update'
-  const onSubmit = (values: IpRangeInput, helpers: FormikHelpers<IpRangeInput>) => {
-
+  const onSubmit = (
+    values: IpRangeInput,
+    helpers: FormikHelpers<IpRangeInput>
+  ) => {
+    console.log(values)
     if (ipv4ToLong(values.start) > ipv4ToLong(values.end)) {
       helpers.setErrors({
         start: `Make sure the start IP is less than end IP`
       })
-      return;
+      return
     }
 
     if (mode === 'add') {
@@ -151,6 +155,14 @@ const IpRangeDialog = (props: Props) => {
                 label="End"
                 name="end"
                 placeholder="0.0.0.0"
+              />
+              <FormikTextField
+                size="small"
+                multiline
+                rows={4}
+                label="Comment / Notes"
+                name="notes"
+                placeholder="ezproxy, etc."
               />
             </Stack>
           </DialogContent>

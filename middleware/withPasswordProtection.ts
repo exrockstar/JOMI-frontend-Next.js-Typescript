@@ -26,6 +26,7 @@ export const withPasswordProtection: MiddlewareFactory = (
     const isExclutedPath =
       pathname === '/password-protect' ||
       pathname.startsWith('/api') ||
+      pathname.startsWith('/graphql') ||
       PUBLIC_FILE.test(pathname)
 
     if (

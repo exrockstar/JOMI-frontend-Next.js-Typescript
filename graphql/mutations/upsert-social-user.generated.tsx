@@ -9,7 +9,7 @@ export type UpsertSocialUserMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpsertSocialUserMutation = { __typename?: 'Mutation', upsertSocialUser: { __typename?: 'User', _id: string, emailVerified: boolean, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } };
+export type UpsertSocialUserMutation = { __typename?: 'Mutation', upsertSocialUser: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } };
 
 
 export const UpsertSocialUserDocument = gql`

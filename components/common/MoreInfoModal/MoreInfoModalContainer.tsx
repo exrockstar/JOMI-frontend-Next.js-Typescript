@@ -39,9 +39,9 @@ const MoreInfoDialog: React.FC = () => {
     }
   }, [isLackingInfo, router.asPath])
 
-  if (!open) return null
+  if (!open || !data) return null
   return (
-    <MoreInfoDialog2 user={user} open={open} onClose={() => setOpen(false)} />
+    <MoreInfoDialog2 data={data} open={open} onClose={() => setOpen(false)} />
   )
 }
 

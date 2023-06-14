@@ -86,11 +86,15 @@ export enum AccessTypeEnum {
   ArticlePurchase = 'ArticlePurchase',
   ArticleRent = 'ArticleRent',
   AwaitingEmailConfirmation = 'AwaitingEmailConfirmation',
+  EmailConfirmationExpired = 'EmailConfirmationExpired',
   Evaluation = 'Evaluation',
   FreeAccess = 'FreeAccess',
   IndividualSubscription = 'IndividualSubscription',
   IndividualTrial = 'IndividualTrial',
+  InstitutionLoginRequired = 'InstitutionLoginRequired',
+  InstitutionSubscriptionExpired = 'InstitutionSubscriptionExpired',
   InstitutionalSubscription = 'InstitutionalSubscription',
+  InstitutionalTrial = 'InstitutionalTrial',
   LimitedAccess = 'LimitedAccess',
   RequireSubscription = 'RequireSubscription'
 }
@@ -755,7 +759,7 @@ export type ExtendedRegistrationInput = {
 
 export type ExtendedRegistrationOutput = {
   __typename?: 'ExtendedRegistrationOutput';
-  matchedWithInstitution: Scalars['Boolean'];
+  matchedWithInstitution?: Maybe<Scalars['Boolean']>;
   updatedAccess: AccessType;
   updatedUser: User;
 };
@@ -1019,6 +1023,7 @@ export type IpRange = {
   institution: Scalars['String'];
   lastEditedBy?: Maybe<Scalars['String']>;
   location: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
   start: Scalars['Float'];
   start_string: Scalars['String'];
   updated?: Maybe<Scalars['DateTime']>;
@@ -1028,6 +1033,7 @@ export type IpRangeInput = {
   end: Scalars['String'];
   institution: Scalars['String'];
   location: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
   start: Scalars['String'];
 };
 
@@ -1075,7 +1081,8 @@ export enum MatchedBy {
   Ip = 'IP',
   InstitutionName = 'InstitutionName',
   InstitutionalEmail = 'InstitutionalEmail',
-  NotMatched = 'NotMatched'
+  NotMatched = 'NotMatched',
+  OffsiteAccess = 'OffsiteAccess'
 }
 
 export type Media = {
@@ -1155,6 +1162,7 @@ export type Mutation = {
   loginToArticle: Scalars['Boolean'];
   markAnnouncementAsRead: Array<Scalars['String']>;
   redactVote: NewArticleVote;
+  removeTemporaryAccessById: Scalars['Boolean'];
   requestSubscription: Scalars['Boolean'];
   resetPasswordCms?: Maybe<Scalars['String']>;
   resubscribeOrder?: Maybe<Order>;
@@ -1413,6 +1421,11 @@ export type MutationMarkAnnouncementAsReadArgs = {
 
 export type MutationRedactVoteArgs = {
   article_title: Scalars['String'];
+};
+
+
+export type MutationRemoveTemporaryAccessByIdArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -2751,6 +2764,15 @@ export type SubscriptionType = {
   subType?: Maybe<SubType>;
 };
 
+export type TemporaryAccess = {
+  __typename?: 'TemporaryAccess';
+  _id: Scalars['ID'];
+  expiresAt: Scalars['DateTime'];
+  institution: Institution;
+  source_ip: Scalars['String'];
+  user: User;
+};
+
 export type Thumbnail = {
   __typename?: 'Thumbnail';
   height: Scalars['Int'];
@@ -3073,14 +3095,16 @@ export type UpdateTriageResponseInput = {
 export type UpdateUserInput = {
   deleted?: InputMaybe<Scalars['Boolean']>;
   display_name?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
+  email?: InputMaybe<Scalars['String']>;
   emailNeedsConfirm?: InputMaybe<Scalars['Boolean']>;
+  emailVerifiedAt?: InputMaybe<Scalars['DateTime']>;
   email_preference?: InputMaybe<EmailPreference>;
   firstName?: InputMaybe<Scalars['String']>;
   hasManualBlock?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
   image?: InputMaybe<ImageInput>;
   instEmailVerified?: InputMaybe<Scalars['Boolean']>;
+  instEmailVerifiedAt?: InputMaybe<Scalars['DateTime']>;
   inst_email?: InputMaybe<Scalars['String']>;
   institution?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
@@ -3092,13 +3116,14 @@ export type UpdateUserInput = {
   phone?: InputMaybe<Scalars['String']>;
   referer?: InputMaybe<Scalars['String']>;
   referrerPath?: InputMaybe<Scalars['String']>;
-  role: UserRoles;
+  role?: InputMaybe<UserRoles>;
   slug?: InputMaybe<Scalars['String']>;
   social?: InputMaybe<SocialInput>;
+  source_ip?: InputMaybe<Scalars['String']>;
   specialty?: InputMaybe<Scalars['String']>;
   trialAccessAt?: InputMaybe<Scalars['DateTime']>;
   trialDuration?: InputMaybe<Scalars['Int']>;
-  trialsAllowed: Scalars['Boolean'];
+  trialsAllowed?: InputMaybe<Scalars['Boolean']>;
   user_type?: InputMaybe<Scalars['String']>;
 };
 
@@ -3113,6 +3138,7 @@ export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
   accessExpiredAt?: Maybe<Scalars['DateTime']>;
+  accessType: AccessType;
   activeOrder?: Maybe<Order>;
   anon_link_id?: Maybe<Scalars['String']>;
   articleCount?: Maybe<Scalars['Int']>;
@@ -3123,11 +3149,14 @@ export type User = {
   email: Scalars['String'];
   emailNeedsConfirm?: Maybe<Scalars['Boolean']>;
   emailVerified: Scalars['Boolean'];
+  emailVerifiedAt?: Maybe<Scalars['DateTime']>;
   email_preference?: Maybe<EmailPreference>;
   hasManualBlock?: Maybe<Scalars['Boolean']>;
   hasRequestedSubscription?: Maybe<Scalars['Boolean']>;
+  howFound?: Maybe<Scalars['String']>;
   image?: Maybe<Image>;
   instEmailVerified?: Maybe<Scalars['Boolean']>;
+  instEmailVerifiedAt?: Maybe<Scalars['DateTime']>;
   inst_email?: Maybe<Scalars['String']>;
   institution?: Maybe<Scalars['String']>;
   institution_name?: Maybe<Scalars['String']>;
@@ -3147,6 +3176,7 @@ export type User = {
   matched_institution_name?: Maybe<Scalars['String']>;
   name: Name;
   numSearches?: Maybe<Scalars['Int']>;
+  offsiteAccesses: Array<TemporaryAccess>;
   phone?: Maybe<Scalars['String']>;
   previouslyStatedInstitutions?: Maybe<Array<PreviouslyStatedInst>>;
   promo_code?: Maybe<Scalars['String']>;

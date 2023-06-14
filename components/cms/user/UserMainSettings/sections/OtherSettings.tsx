@@ -1,54 +1,54 @@
 import { Checkbox, FormControlLabel, Tooltip, Typography } from '@mui/material'
-import FormikCheckbox from 'components/common/formik/FormikCheckbox'
 import { useField, useFormikContext } from 'formik'
-import React from 'react'
+import VerifyDateText from './VerifyDateText'
+import { InfoOutlined } from '@mui/icons-material'
 
 const OtherSettings = () => {
-  const [emailNeedsConfirmField] = useField('emailNeedsConfirm')
-  const [instEmailField] = useField('inst_email')
+  const [verifiedAt] = useField('emailVerifiedAt')
+  const [instEmailVerifiedAt] = useField('instEmailVerifiedAt')
   const { setFieldValue } = useFormikContext()
   const toggleEmailConfirmation = () => {
-    setFieldValue('emailNeedsConfirm', !emailNeedsConfirmField.value)
+    const newVal = !verifiedAt.value
+    setFieldValue('emailVerifiedAt', newVal ? new Date() : null)
   }
 
-  const confirmed = !emailNeedsConfirmField.value
-  const hasInstEmail = !!instEmailField.value
+  const toggleInstEmailConfirmation = () => {
+    const newVal = !instEmailVerifiedAt.value
+
+    setFieldValue('instEmailVerifiedAt', newVal ? new Date() : null)
+  }
+
   return (
     <div>
-      <Typography variant="h5" my={2}>
-        Email Confirmation
+      <Typography variant="h5" my={2} display="flex" alignItems={'center'}>
+        Email Confirmation{' '}
+        <Tooltip title="To set the email verification date, uncheck and check the checkboxes.">
+          <InfoOutlined color="info" />
+        </Tooltip>
       </Typography>
-
-      <Tooltip
-        title={
-          !hasInstEmail ? 'Set an institutional email to enable this field' : ''
-        }
-        arrow
-      >
-        <FormControlLabel
-          control={
-            <FormikCheckbox
-              name="instEmailVerified"
-              id="instEmailVerified"
-              size="small"
-              disabled={!hasInstEmail}
-            />
-          }
-          label="Has confirmed institution email?"
-        />
-      </Tooltip>
 
       <FormControlLabel
         control={
           <Checkbox
-            value={confirmed}
-            checked={confirmed}
+            checked={!!instEmailVerifiedAt.value}
             size="small"
-            onChange={() => toggleEmailConfirmation()}
+            onChange={toggleInstEmailConfirmation}
           />
         }
-        label="Has confirmed personal email?"
+        label="Has confirmed institution email?"
       />
+      <VerifyDateText date={instEmailVerifiedAt.value} />
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={!!verifiedAt.value}
+            size="small"
+            onChange={toggleEmailConfirmation}
+          />
+        }
+        label="Has confirmed account email?"
+      />
+      <VerifyDateText date={verifiedAt.value} />
     </div>
   )
 }

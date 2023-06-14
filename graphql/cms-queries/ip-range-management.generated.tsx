@@ -9,7 +9,7 @@ export type CreateIpRangeMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined } | null | undefined };
+export type CreateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined, notes?: string | null | undefined } | null | undefined };
 
 export type UpdateIpRangeMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -17,7 +17,7 @@ export type UpdateIpRangeMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined } | null | undefined };
+export type UpdateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined, notes?: string | null | undefined } | null | undefined };
 
 export type DeleteIpRangeMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];

@@ -1,4 +1,4 @@
-import { Edit, InfoOutlined } from '@mui/icons-material'
+import { Edit } from '@mui/icons-material'
 import {
   Card,
   Table,
@@ -10,19 +10,23 @@ import {
   IconButton,
   Typography,
   Chip,
-  Tooltip,
-  Box
+  Box,
+  Stack
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import { StickyTableCell } from 'components/common/StickyTableCell'
 import dayjs from 'dayjs'
 import { UserManagementListQuery } from 'graphql/cms-queries/user-list.generated'
-import { MatchedBy, SubType } from 'graphql/types'
-import { useRouter } from 'next/router'
+import { SubType } from 'graphql/types'
 import React from 'react'
 import UserListTableHeader from './UserListTableHeader'
 import { useUserManagementList } from './useUserManagementList'
 import Link from 'next/link'
+import {
+  subscriptionColor,
+  subscriptionText
+} from 'components/common/subscriptionUtils'
+import VerifyDateText from '../user/UserMainSettings/sections/VerifyDateText'
 type Props = {
   users: UserManagementListQuery['users']['users']
 }
@@ -56,34 +60,6 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
     setSelected(key)
   }
 
-  const subscriptionColor = (subType: SubType, needsConfirmation: boolean) => {
-    switch (subType) {
-      case SubType.Individual:
-        return 'secondary'
-      case SubType.Trial:
-        return 'warning'
-      case SubType.Institution:
-        if (needsConfirmation) {
-          return 'warning'
-        }
-        return 'secondary'
-      case SubType.NotCreated:
-      default:
-        return 'error'
-    }
-  }
-
-  const subscriptionText = (subType: SubType) => {
-    switch (subType) {
-      case SubType.Individual:
-      case SubType.Institution:
-      case SubType.Trial:
-        return subType
-      case SubType.NotCreated:
-      default:
-        return 'No subscription'
-    }
-  }
   return (
     <Card>
       <TableContainer sx={{ minWidth: 1050 }}>
@@ -114,21 +90,10 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                 })
                 .filter((val) => !!val)
                 .join(', ')
+              const access = user?.accessType?.accessType
 
-              const userSub = user.subscription?.subType ?? SubType.NotCreated
-              const isSubscribed = userSub !== SubType.NotCreated
-              const needsInstEmailConfirmation =
-                user?.matchedBy === MatchedBy.InstitutionalEmail &&
-                !user?.instEmailVerified
-              const needsEmailConfirmation =
-                user?.matchedBy === MatchedBy.Email && user?.emailNeedsConfirm
-              const needsConfirmation =
-                needsInstEmailConfirmation || needsEmailConfirmation
-              const color = subscriptionColor(
-                user.subscription.subType,
-                needsConfirmation
-              )
-              const userSubText = subscriptionText(user.subscription.subType)
+              const color = subscriptionColor(access)
+              const userSubText = subscriptionText(access)
               let stickyTableCellColor: string
               i % 2 !== 0
                 ? (stickyTableCellColor = 'white')
@@ -160,45 +125,58 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                 >
                   <StickyTableCell
                     backgroundColor={stickyTableCellColor}
-                    selected={selected === user._id}
                     sx={{ p: 0 }}
                   >
-                    <Box boxShadow={5}>
-                      <TableCell
-                        align="left"
-                        sx={{ minWidth: '6.5em' }}
-                        component="div"
-                      >
-                        <Link
+                    <Stack
+                      direction="row"
+                      alignItems={'stretch'}
+                      pr={2}
+                      py={1.25}
+                      sx={{
+                        borderRightColor: 'grey.100',
+                        borderRightWidth: 2,
+                        borderRightStyle: 'solid'
+                      }}
+                    >
+                      <Box minWidth={105} px={2}>
+                        <IconButton
+                          LinkComponent={Link}
                           href={`/cms/user/${user._id}`}
-                          passHref
-                          legacyBehavior
                         >
-                          <IconButton>
-                            <Edit />
-                          </IconButton>
-                        </Link>
-                      </TableCell>
+                          <Edit />
+                        </IconButton>
+                      </Box>
 
-                      <TableCell
-                        align="left"
-                        component="div"
-                        sx={{ width: '100%', height: '100%' }}
-                      >
-                        <Link
+                      <Box>
+                        <MuiLink
+                          component={Link}
                           href={`/cms/user/${user._id}`}
-                          passHref
-                          legacyBehavior
                         >
-                          <MuiLink>{user.email}</MuiLink>
-                        </Link>
-                        <Typography color="text.secondary" variant="body2">
-                          {user.name.first + ' ' + user.name.last}
+                          {user.email}
+                        </MuiLink>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          fontSize={12}
+                        >
+                          <VerifyDateText date={user.emailVerifiedAt} />
                         </Typography>
-                      </TableCell>
-                    </Box>
+                      </Box>
+                    </Stack>
                   </StickyTableCell>
 
+                  <TableCell>
+                    <Typography variant="body2">
+                      {user.institutionalEmail || NotSpecified}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={12}
+                    >
+                      <VerifyDateText date={user.instEmailVerifiedAt} />
+                    </Typography>
+                  </TableCell>
                   <TableCell>{user.display_name || NotSpecified}</TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>{user.user_type || NotSpecified}</TableCell>
@@ -242,17 +220,6 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                         alignItems="center"
                       >
                         {user.subscription?.fromInst}
-                        {needsConfirmation && (
-                          <Tooltip
-                            title={
-                              needsInstEmailConfirmation
-                                ? 'Needs institutional email confirmation'
-                                : 'Needs personal email confirmation'
-                            }
-                          >
-                            <InfoOutlined color="warning" />
-                          </Tooltip>
-                        )}
                       </Typography>
                     )}
                   </TableCell>

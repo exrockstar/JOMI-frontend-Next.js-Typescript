@@ -19,12 +19,11 @@ import {
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import { useUseUserByInstitutionListQuery } from 'graphql/cms-queries/user-list.generated'
-import { MatchedBy, SubType, UserInput, UserRoles } from 'graphql/types'
+import { AccessTypeEnum, UserInput, UserRoles } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import UserStatsTableHead from './UsersStatsTableHead'
-import UserStatsFilter from './UserStatsFilter'
 import UserStatsHeader from './UserStatsHeader'
 import { useQueryFilters } from '../../../../hooks/useQueryFilters'
 
@@ -121,20 +120,14 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
               )}
               {!!users?.length &&
                 users?.map((user) => {
-                  const access = user?.subscription.subType
+                  const access = user?.accessType?.accessType
                   const lastAccess = user?.subscription.lastSubType
                   const accessExpiry = user?.subscription.lastSubTypeExpiry
-                  console.log(user.subscription.lastSubTypeExpiry)
-                  const needsInstEmailConfirmation =
-                    user?.matchedBy === MatchedBy.InstitutionalEmail &&
-                    !user?.instEmailVerified
-                  const needsEmailConfirmation =
-                    user?.matchedBy === MatchedBy.Email &&
-                    user?.emailNeedsConfirm
 
-                  const needsConfirmation =
-                    lastAccess === SubType.Institution &&
-                    (needsInstEmailConfirmation || needsEmailConfirmation)
+                  const needsConfirmation = [
+                    AccessTypeEnum.AwaitingEmailConfirmation,
+                    AccessTypeEnum.EmailConfirmationExpired
+                  ].includes(access)
 
                   return (
                     <StyledTableRow key={user._id}>
@@ -171,7 +164,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                             </Typography>
                           </Box>
                         )}
-                        {!!accessExpiry && (
+                        {!!accessExpiry && dayjs().isAfter(accessExpiry) && (
                           <Box width={'100%'}>
                             <Typography variant="caption" color="error.main">
                               Expired: {dayjs(accessExpiry).format('L LT')}

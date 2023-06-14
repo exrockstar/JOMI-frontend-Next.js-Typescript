@@ -38,7 +38,7 @@ function GoogleAnalytics({ metadata }: Props) {
   const user = data?.user
   const hasData = !!data
   const url = router.asPath
-  const access = data?.userAccessType
+  const access = user?.accessType
   const onPageView = useCallback(
     (url) => {
       const isAdmin = user?.role === UserRoles.Admin

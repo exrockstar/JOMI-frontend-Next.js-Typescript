@@ -42,23 +42,17 @@ const PurchaseSubscriptionCard = ({ data }: Props) => {
       <Typography variant="body2" fontFamily={'Manrope'} color={'grey.600'}>
         Purchase monthly/annual access to the entire collection.
       </Typography>
-      <Link
-        href={{
-          pathname: `/account/subscription`,
-          query: { from: router.asPath }
-        }}
-        passHref
-        legacyBehavior
+      <DefaultButton
+        sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}
+        fullWidth
+        data-event="article-access-box-view-plans"
+        onClick={analytics.trackClick}
+        LinkComponent={Link}
+        href={`/account/subscription?from=${router.asPath}`}
       >
-        <DefaultButton
-          sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}
-          fullWidth
-          data-event="article-access-box-view-plans"
-          onClick={analytics.trackClick}
-        >
-          View Plans
-        </DefaultButton>
-      </Link>
+        View Plans
+      </DefaultButton>
+
       {isShowTrialButton && (
         <DefaultButton
           sx={{ mt: 2, fontWeight: 600, color: 'grey.600' }}

@@ -27,8 +27,6 @@ fragment UserListParts on User {
   last_visited
   matchStatus
   matchedBy
-  emailNeedsConfirm
-  instEmailVerified
   institutionalEmail
 
   subscription {
@@ -57,6 +55,11 @@ fragment UserListParts on User {
     name
     date
   }
+  accessType {
+    accessType
+  }
+  emailVerifiedAt
+  instEmailVerifiedAt
 }
 
 fragment UserDetail on User {
@@ -81,8 +84,6 @@ fragment UserDetail on User {
   matchedBy
   matchStatus
   interests
-  emailNeedsConfirm
-  instEmailVerified
   hasManualBlock
   manualBlockMessage
   deleted
@@ -123,5 +124,16 @@ fragment UserDetail on User {
   previouslyStatedInstitutions {
     name
     date
+  }
+  emailVerifiedAt
+  instEmailVerifiedAt
+  accessType {
+    accessType
+  }
+  source_ip
+  offsiteAccesses {
+    _id
+    source_ip
+    expiresAt
   }
 }

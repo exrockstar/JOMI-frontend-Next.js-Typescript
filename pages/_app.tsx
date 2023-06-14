@@ -20,8 +20,6 @@ import { AppStateProvider, useAppState } from 'components/_appstate/useAppState'
 import { CacheProvider, EmotionCache } from '@emotion/react'
 import createEmotionCache from 'common/emotionCache'
 import Script from 'next/script'
-import NeedEmailVerificationModal from 'components/common/NeedEmailVerificationModal'
-import MatchedInstitutionModal from 'components/common/MatchedInstitutionModal'
 import router, { useRouter } from 'next/router'
 import GoogleGtag from 'components/common/GoogleGtag'
 import PageStructuredData from 'components/utils/PageStructuredData'
@@ -42,7 +40,11 @@ interface MyAppProps extends AppProps {
   emotionCache: EmotionCache
 }
 const clientSideEmotionCache = createEmotionCache()
-function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
+function MyApp({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache
+}: MyAppProps) {
   const apolloClient = useApollo(pageProps)
   const _pageProps = pageProps as any
   const meta: MetaData = _pageProps.meta_data ?? defaultMeta
@@ -67,8 +69,6 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
                 <LinkedInInsightTag />
                 <HotJar />
                 <MoreInfoDialog />
-                <MatchedInstitutionModal />
-                <NeedEmailVerificationModal />
                 <Component {...pageProps} />
                 <noscript>
                   <iframe

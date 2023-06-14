@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type UserProfilePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserProfilePageQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, display_name?: string | null | undefined, email: string, emailVerified: boolean, instEmailVerified?: boolean | null | undefined, institution?: string | null | undefined, institution_name?: string | null | undefined, institutionalEmail?: string | null | undefined, interests?: Array<string> | null | undefined, isPasswordSet: boolean, phone?: string | null | undefined, specialty?: string | null | undefined, subActive: boolean, user_type?: string | null | undefined, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type UserProfilePageQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, display_name?: string | null | undefined, email: string, instEmailVerified?: boolean | null | undefined, institution?: string | null | undefined, institution_name?: string | null | undefined, institutionalEmail?: string | null | undefined, interests?: Array<string> | null | undefined, isPasswordSet: boolean, phone?: string | null | undefined, specialty?: string | null | undefined, subActive: boolean, user_type?: string | null | undefined, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
 
 
 export const UserProfilePageDocument = gql`
@@ -19,7 +19,6 @@ export const UserProfilePageDocument = gql`
     }
     display_name
     email
-    emailVerified
     instEmailVerified
     institution
     institution_name

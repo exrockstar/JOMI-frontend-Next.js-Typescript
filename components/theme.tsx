@@ -202,12 +202,12 @@ export const frontPageTheme = createTheme({
       lineHeight: 1.5,
       fontWeight: 400
     },
-    h6: {
-      fontSize: '0.8rem',
-      '@media (max-width:800px)': {
-        fontSize: '0.5rem'
-      }
-    },
+    // h6: {
+    //   fontSize: '0.8rem',
+    //   '@media (max-width:800px)': {
+    //     fontSize: '0.5rem'
+    //   }
+    // },
     caption: {
       fontSize: '.75rem',
       lineHeight: 1.25

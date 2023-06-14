@@ -11,7 +11,7 @@ type Props = {
   article: ArticlesBySlugQuery['articleBySlug']
 }
 const ArticleEffects = ({ article }: Props) => {
-  const {data: session} = useSession()
+  const { data: session } = useSession()
   const { state, setArticlesViewed } = useAppState()
   const router = useRouter()
   const [trackArticle, { data }] = useTrackArticleMutation({})
@@ -27,6 +27,18 @@ const ArticleEffects = ({ article }: Props) => {
     }
   }, [article.publication_id, article.slug, router, router.query])
 
+  useEffect(() => {
+    analytics.trackArticleView({
+      categories: article.categories.map((c) => {
+        return c.displayName
+      }),
+      title: article.title,
+      authors: article.authors.map((a) => {
+        return a.display_name
+      }),
+      tags: article.tags
+    })
+  }, [article.authors, article.categories, article.tags, article.title])
   useEffect(() => {
     const handler = () => {
       if (hasTracked) return
@@ -52,7 +64,7 @@ const ArticleEffects = ({ article }: Props) => {
           return a.display_name
         }),
         tags: article.tags,
-        userId: session && session.user ? session.user._id : 'anon',
+        userId: session && session.user ? session.user._id : 'anon'
       })
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {
@@ -81,15 +93,7 @@ const ArticleEffects = ({ article }: Props) => {
         setArticlesViewed(article.publication_id)
       }
     }
-    document.addEventListener('touch', handler)
-    document.addEventListener('scroll', handler)
-    document.addEventListener('click', handler)
-
-    return () => {
-      document.removeEventListener('touch', handler)
-      document.removeEventListener('scroll', handler)
-      document.removeEventListener('click', handler)
-    }
+    handler()
   }, [
     article.publication_id,
     hasTracked,

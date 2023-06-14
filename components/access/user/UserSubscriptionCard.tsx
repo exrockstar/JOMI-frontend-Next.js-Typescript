@@ -1,7 +1,7 @@
 import { Card, Typography, Divider, CardContent, Box } from '@mui/material'
 import dayjs from 'dayjs'
 import { useUserDetailQuery } from 'graphql/cms-queries/user-list.generated'
-import { SubType, MatchedBy } from 'graphql/types'
+import { SubType, MatchedBy, AccessTypeEnum } from 'graphql/types'
 
 type Props = {
   userId: string
@@ -27,14 +27,11 @@ const UserSubscriptionCard = ({ userId }: Props) => {
       ? user.lastSubType
       : subType
     : 'No Access'
-  const needsInstEmailConfirmation =
-    user?.matchedBy === MatchedBy.InstitutionalEmail && !user?.instEmailVerified
-  const needsEmailConfirmation =
-    user?.matchedBy === MatchedBy.Email && user?.emailNeedsConfirm
 
-  const needsConfirmation =
-    access === SubType.Institution &&
-    (needsInstEmailConfirmation || needsEmailConfirmation)
+  const needsConfirmation = [
+    AccessTypeEnum.AwaitingEmailConfirmation,
+    AccessTypeEnum.EmailConfirmationExpired
+  ].includes(user?.accessType?.accessType)
   return (
     <Card sx={{ mr: 2 }}>
       <Typography variant="h4" p={2}>
@@ -50,7 +47,7 @@ const UserSubscriptionCard = ({ userId }: Props) => {
             </Typography>
           </Box>
         )}
-        {!!user.accessExpiredAt && (
+        {!!user.accessExpiredAt && dayjs().isAfter(user.accessExpiredAt) && (
           <Box width={'100%'}>
             <Typography variant="caption" color="error.main">
               Expired: {dayjs(user.accessExpiredAt).format('L LT')}

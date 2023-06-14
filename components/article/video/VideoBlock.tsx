@@ -26,13 +26,7 @@ import {
   useTrackFeedbackMutation
 } from 'graphql/mutations/collect-feedback.generated'
 import difference from 'lodash/difference'
-import { amplitudeTrackFeedback } from 'apis/amplitude'
-const ArticleAccessDialog = dynamic(
-  () => import('components/ArticleAccessDialog/ArticleAccessDialog'),
-  {
-    ssr: false
-  }
-)
+import ArticleAccessDialog from 'components/ArticleAccessDialog'
 
 const TRACK_TIME_INTERVAL = 15
 type VideoBlockProps = {
@@ -155,11 +149,16 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   ) => {
     if (!articleAccess) return
     const threeMinutes = 60 * 3
+
     const hasNoAccess = [
       AccessTypeEnum.LimitedAccess,
       AccessTypeEnum.RequireSubscription,
-      AccessTypeEnum.AwaitingEmailConfirmation
+      AccessTypeEnum.AwaitingEmailConfirmation,
+      AccessTypeEnum.EmailConfirmationExpired,
+      AccessTypeEnum.InstitutionLoginRequired,
+      AccessTypeEnum.InstitutionSubscriptionExpired
     ].includes(accessType)
+
     const isTimeLimitReached = seconds >= threeMinutes
     const showBlock = isTimeLimitReached && hasNoAccess
     if (!showBlock) return
@@ -183,7 +182,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     trackBlock?: boolean
   ) => {
     if (!articleAccess) return
-
     const threeMinutes = 60 * 3
     const hasReachedTimeLimit =
       seconds > threeMinutes && seconds >= nextBlockTime
@@ -193,12 +191,8 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
     video.pause()
     video.cancelFullscreen()
+    setVideoTime(seconds)
     setShowDialog(true)
-
-    // need to track the times block to know which feedback block to show
-    if (seconds >= nextBlockTime) {
-      setNextBlockTime(seconds + BLOCK_INTERVAL_SECONDS)
-    }
 
     if (trackBlock) {
       trackVideoBlock({
@@ -210,11 +204,8 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   }
 
   const checkFeedbackBlock = (seconds: number, video: WistiaVideo) => {
-    const isInstitutionalTrial =
-      AccessTypeEnum.InstitutionalSubscription === accessType &&
-      articleAccess?.isTrial
-    const isTrial = isInstitutionalTrial
-    const percentWatched = seconds / video.duration()
+    const isTrial = accessType === AccessTypeEnum.InstitutionalTrial
+    const percentWatched = video.percentWatched()
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
     const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
@@ -278,6 +269,13 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
   const handleAccessDialog = (open: boolean) => {
     setShowDialog(open)
+    const isEvaluationAccess = accessType === AccessTypeEnum.Evaluation
+    // need to track the times block to know which feedback block to show
+    if (!open && isEvaluationAccess) {
+      if (videoTime >= nextBlockTime) {
+        setNextBlockTime(videoTime + BLOCK_INTERVAL_SECONDS)
+      }
+    }
   }
   const imageUrl = article?.wistia?.thumbnail?.url.replace(
     /\?image_crop_resized.*/,
@@ -293,6 +291,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
           open={showDialog}
           handleState={handleAccessDialog}
           publication_id={article.publication_id}
+          accessData={data}
         />
       )}
 
