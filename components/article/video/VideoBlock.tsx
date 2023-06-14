@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 // import ArticleAccessDialog from 'components/ArticleAccessDialog/ArticleAccessDialog'
 
@@ -12,7 +12,7 @@ import {
 } from 'graphql/mutations/track-article.generated'
 import { useArticleAccessQuery } from 'graphql/queries/article-access.generated'
 import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
-import { AccessTypeEnum } from 'graphql/types'
+import { AccessTypeEnum, TrackVideoInput } from 'graphql/types'
 import { useRouter } from 'next/router'
 import VideoPlayer from 'components/common/VideoPlayer/VideoPlayer'
 import { useSession } from 'next-auth/react'
@@ -20,6 +20,12 @@ import dynamic from 'next/dynamic'
 import { isMobile } from 'components/utils/isMobile'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import FeedbackModal from '../feedback/FeedbackModal'
+import {
+  useGetFeedbackQuestionsQuery,
+  useTrackFeedbackMutation
+} from 'graphql/mutations/collect-feedback.generated'
+import difference from 'lodash/difference'
 const ArticleAccessDialog = dynamic(
   () => import('components/ArticleAccessDialog/ArticleAccessDialog'),
   {
@@ -33,29 +39,40 @@ type VideoBlockProps = {
 }
 
 const BLOCK_INTERVAL_SECONDS = 300 //seconds
-const INITIAL_BLOCK_SECONDS = 180
+/**
+ * Shows a modal to block the user from watching the video.
+ * If user has trial access, displays some feedback modal on certain intervals.
+ * @param param0
+ * @returns
+ */
 export default function VideoBlock({ article }: VideoBlockProps) {
-  const { state, setVideosViewed, setVideosBlocked } = useAppState()
-  const [shouldTrackVideoBlock, setShouldTrackVideoBlock] = useState(false)
+  const {
+    state: { videosBlocked, videosViewed },
+    hasGivenFeedback,
+    setHasGivenFeedback,
+    setVideosViewed,
+    setVideosBlocked
+  } = useAppState()
   const [showDialog, setShowDialog] = useState(false)
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
+  // the percentage of the video where feedback modal has been shown
+  const [percentBlocked, setPercentBlocked] = useState<number[]>([])
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
+
+  const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
+    skip: status === 'loading',
+    variables: {
+      anon_link_id
+    }
+  })
+  const [trackFeedback] = useTrackFeedbackMutation()
   const [trackVideoPlay] = useTrackVideoPlayMutation()
-  const [trackVideoTime] = useTrackVideoTimeMutation({
-    onCompleted() {
-      console.debug('track video time')
-    }
-  })
-  const [trackVideoBlock] = useTrackVideoBlockMutation({
-    onCompleted() {
-      console.debug('track video block')
-    }
-  })
-  const [lastTimeLogged, setLastTimeLogged] = useState(0)
+  const [trackVideoTime] = useTrackVideoTimeMutation()
+  const [trackVideoBlock] = useTrackVideoBlockMutation()
+
   const [nextBlockTime, setNextBlockTime] = useState(0)
-  // const theme = useTheme()
-  // const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const router = useRouter()
   const {
     chapters,
@@ -69,13 +86,28 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
   const [vidWatchId, setVidwatchId] = useState<string>(null)
 
+  const pubId = article.publication_id
   const { data, refetch } = useArticleAccessQuery({
     skip: status === 'loading',
-    variables: {
-      publication_id: article.publication_id
-    }
+    variables: { publication_id: pubId }
   })
   const articleAccess = data?.article?.articleAccessType
+  const accessType = articleAccess?.accessType
+  const isArticlePreviouslyBlocked = videosBlocked.find((id) => id === pubId)
+  const isPreviouslyViewed = videosViewed.find((id) => id === pubId)
+  const feedbackQuestion = feedbackQuestionData?.question
+  const trackBlockInput: TrackVideoInput = {
+    publication_id: pubId,
+    uniqueView: !isArticlePreviouslyBlocked,
+    referredFrom,
+    referrerPath,
+    anon_link_id
+  }
+
+  const trackPlayInput: TrackVideoInput = {
+    ...trackBlockInput,
+    uniqueView: !isPreviouslyViewed
+  }
 
   useEffect(() => {
     refetch()
@@ -89,249 +121,179 @@ export default function VideoBlock({ article }: VideoBlockProps) {
         setVideoTime(time)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady])
 
-  const handleChapterChange = useCallback(
-    async (seconds: number) => {
-      const chapter =
-        chapters.find((c, index) => {
-          const next = chapters[index + 1]
-          if (!next) return c.time <= seconds
-          return c.time <= seconds && next.time > seconds
-        }) ?? chapters[0]
-
-      setActiveChapter(chapter)
-
-      if (chapter?.subchapters.length <= 0) {
-        setActiveSubChapter(null)
-        return
-      }
-
-      const subchapter = subchapters.find((c, index) => {
-        const next = subchapters[index + 1]
+  const handleChapterChange = async (seconds: number) => {
+    const chapter =
+      chapters.find((c, index) => {
+        const next = chapters[index + 1]
         if (!next) return c.time <= seconds
-
         return c.time <= seconds && next.time > seconds
-      })
+      }) ?? chapters[0]
 
-      if (
-        subchapter &&
-        subchapter !== activeSubChapter &&
-        chapter.subchapters.includes(subchapter)
-      ) {
-        setActiveSubChapter(subchapter)
-      }
-    },
-    [
-      activeSubChapter,
-      chapters,
-      setActiveChapter,
-      setActiveSubChapter,
-      subchapters
-    ]
-  )
+    setActiveChapter(chapter)
 
-  const checkBlock = useCallback(
-    async (seconds: number, secondsWatched: number, video: WistiaVideo) => {
-      const threeMinutes = 60 * 3
+    if (chapter?.subchapters.length <= 0) {
+      setActiveSubChapter(null)
+      return
+    }
 
-      const hasServiceInCountry =
-        articleAccess &&
-        (articleAccess.accessType === AccessTypeEnum.LimitedAccess ||
-          articleAccess.accessType === AccessTypeEnum.RequireSubscription ||
-          articleAccess.accessType === AccessTypeEnum.AwaitingEmailConfirmation)
+    const subchapter = subchapters.find((c, index) => {
+      const next = subchapters[index + 1]
+      if (!next) return c.time <= seconds
 
-      if (hasServiceInCountry) {
-        const shouldPause = seconds >= threeMinutes
-        if (shouldPause) {
-          video.pause()
-          setShowDialog(true)
-          if (
-            state.videosBlocked.find((id) => id === article.publication_id) &&
-            shouldTrackVideoBlock === true
-          ) {
-            trackVideoBlock({
-              variables: {
-                input: {
-                  publication_id: article.publication_id,
-                  uniqueView: false,
-                  referredFrom,
-                  referrerPath,
-                  anon_link_id
-                }
-              }
-            })
-          } else if (shouldTrackVideoBlock) {
-            trackVideoBlock({
-              variables: {
-                input: {
-                  publication_id: article.publication_id,
-                  uniqueView: true,
-                  referredFrom,
-                  referrerPath,
-                  anon_link_id
-                }
-              }
-            })
-            setVideosBlocked(article.publication_id)
-          }
-        } else {
-          setShowDialog(false)
-        }
-      } else if (
-        articleAccess &&
-        articleAccess.accessType === AccessTypeEnum.Evaluation
-      ) {
-        const shouldPause =
-          seconds > threeMinutes && secondsWatched >= nextBlockTime
-        console.log(secondsWatched, nextBlockTime)
+      return c.time <= seconds && next.time > seconds
+    })
 
-        if (shouldPause) {
-          video.pause()
-          setVideoTime(seconds)
-          setShowDialog(true)
-          if (
-            state.videosBlocked.find((id) => id === article.publication_id) &&
-            shouldTrackVideoBlock === true
-          ) {
-            trackVideoBlock({
-              variables: {
-                input: {
-                  publication_id: article.publication_id,
-                  uniqueView: false,
-                  referredFrom,
-                  referrerPath,
-                  anon_link_id
-                }
-              }
-            })
-          } else if (shouldTrackVideoBlock) {
-            trackVideoBlock({
-              variables: {
-                input: {
-                  publication_id: article.publication_id,
-                  uniqueView: true,
-                  referredFrom,
-                  referrerPath,
-                  anon_link_id
-                }
-              }
-            })
-            setVideosBlocked(article.publication_id)
-          }
-        } else {
-          setShowDialog(false)
-        }
-      }
-    },
-    [
-      anon_link_id,
-      article.publication_id,
-      articleAccess,
-      nextBlockTime,
-      referredFrom,
-      referrerPath,
-      setVideoTime,
-      setVideosBlocked,
-      shouldTrackVideoBlock,
-      state.videosBlocked,
-      trackVideoBlock
-    ]
-  )
+    if (
+      subchapter &&
+      subchapter !== activeSubChapter &&
+      chapter.subchapters.includes(subchapter)
+    ) {
+      setActiveSubChapter(subchapter)
+    }
+  }
 
-  const trackPlayTime = useCallback(
-    async (_, secondsWatched: number) => {
-      if (!vidWatchId) return
-      const diff = secondsWatched - lastTimeLogged
-      if (secondsWatched % TRACK_TIME_INTERVAL !== 0) return
-
-      setLastTimeLogged(secondsWatched)
-      trackVideoTime({
+  // check block for limited access, require subscription
+  const checkSubscriptionBlock = async (
+    seconds: number,
+    video: WistiaVideo,
+    trackBlock?: boolean
+  ) => {
+    if (!articleAccess) return
+    const threeMinutes = 60 * 3
+    const hasNoAccess = [
+      AccessTypeEnum.LimitedAccess,
+      AccessTypeEnum.RequireSubscription,
+      AccessTypeEnum.AwaitingEmailConfirmation
+    ].includes(accessType)
+    const isTimeLimitReached = seconds >= threeMinutes
+    const showBlock = isTimeLimitReached && hasNoAccess
+    if (!showBlock) return
+    video.pause()
+    video.cancelFullscreen()
+    setShowDialog(true)
+    if (trackBlock) {
+      trackVideoBlock({
         variables: {
-          input: {
-            time_watched: secondsWatched,
-            vidWatchId: vidWatchId,
-            increment: TRACK_TIME_INTERVAL
-          }
+          input: trackBlockInput
         }
       })
-    },
-    [lastTimeLogged, trackVideoTime, vidWatchId]
-  )
+    }
+    setVideosBlocked(pubId)
+  }
+
+  // check block for evaluation access
+  const checkEvaluationBlock = (
+    seconds: number,
+    video: WistiaVideo,
+    trackBlock?: boolean
+  ) => {
+    if (!articleAccess) return
+
+    const threeMinutes = 60 * 3
+    const hasReachedTimeLimit =
+      seconds > threeMinutes && seconds >= nextBlockTime
+    const isEvaluationAccess = accessType === AccessTypeEnum.Evaluation
+    const shouldShowBlock = hasReachedTimeLimit && isEvaluationAccess
+    if (!shouldShowBlock) return
+
+    video.pause()
+    video.cancelFullscreen()
+    setShowDialog(true)
+
+    // need to track the times block to know which feedback block to show
+    if (seconds >= nextBlockTime) {
+      setNextBlockTime(seconds + BLOCK_INTERVAL_SECONDS)
+    }
+
+    if (trackBlock) {
+      trackVideoBlock({
+        variables: { input: trackBlockInput }
+      })
+    }
+
+    setVideosBlocked(pubId)
+  }
+
+  const checkFeedbackBlock = (seconds: number, video: WistiaVideo) => {
+    const isInstitutionalTrial =
+      AccessTypeEnum.InstitutionalSubscription === accessType &&
+      articleAccess?.isTrial
+    const isTrial = isInstitutionalTrial
+    const percentWatched = video.percentWatched()
+    // track which percentage of the video has the feedback modal been shown to the user.
+    // remove the ones that was already been shown
+    const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
+    const filtered = percentageToCheck.filter((time) => percentWatched >= time)
+    const showFeedback =
+      !!filtered.length && !hasGivenFeedback && isTrial && feedbackQuestion
+
+    if (showFeedback) {
+      video.pause()
+      video.cancelFullscreen()
+      setShowFeedbackDialog(true)
+      setPercentBlocked([...percentBlocked, ...filtered])
+    }
+  }
+
+  const trackPlayTime = async (_, secondsWatched: number) => {
+    if (!vidWatchId) return
+    if (secondsWatched % TRACK_TIME_INTERVAL !== 0) return
+
+    trackVideoTime({
+      variables: {
+        input: {
+          time_watched: secondsWatched,
+          vidWatchId: vidWatchId,
+          increment: TRACK_TIME_INTERVAL
+        }
+      }
+    })
+  }
 
   //#region handlers
-  const handleSecondChange = useCallback(
-    (seconds: number, secondsWatched: number, video: WistiaVideo) => {
-      setShouldTrackVideoBlock(true)
-      handleChapterChange(seconds)
-      checkBlock(seconds, secondsWatched, video)
-      trackPlayTime(seconds, secondsWatched)
-    },
-    [checkBlock, handleChapterChange, trackPlayTime]
-  )
-  const onPlayHandler = useCallback(
-    async (seconds: number, secondsWatched: number, video: WistiaVideo) => {
-      setShouldTrackVideoBlock(false)
-      checkBlock(seconds, secondsWatched, video)
-      //do not add tracking id if there's already one
-      if (vidWatchId) return
-      if (state.videosViewed.find((id) => id === article.publication_id)) {
-        const { data } = await trackVideoPlay({
-          variables: {
-            input: {
-              publication_id: article.publication_id,
-              uniqueView: false,
-              referredFrom,
-              referrerPath,
-              anon_link_id
-            }
-          }
-        })
-        console.log('setting  video watch id')
-        setVidwatchId(data.trackVideoPlay)
-      } else {
-        setVideosViewed(article.publication_id)
-        const { data } = await trackVideoPlay({
-          variables: {
-            input: {
-              publication_id: article.publication_id,
-              uniqueView: true,
-              referredFrom,
-              referrerPath,
-              anon_link_id
-            }
-          }
-        })
-        console.log('setting  video watch id')
-        setVidwatchId(data.trackVideoPlay)
+  const handleSecondChange = (
+    seconds: number,
+    secondsWatched: number,
+    video: WistiaVideo
+  ) => {
+    handleChapterChange(seconds)
+    checkSubscriptionBlock(seconds, video, true)
+    checkEvaluationBlock(seconds, video, true)
+    checkFeedbackBlock(seconds, video)
+    trackPlayTime(seconds, secondsWatched)
+  }
+  const onPlayHandler = async (
+    seconds: number,
+    secondsWatched: number,
+    video: WistiaVideo
+  ) => {
+    checkSubscriptionBlock(seconds, video)
+    checkEvaluationBlock(seconds, video)
+    //do not add tracking id if there's already one
+    if (vidWatchId) return
+
+    const { data } = await trackVideoPlay({
+      variables: {
+        input: trackPlayInput
       }
-    },
-    [
-      anon_link_id,
-      article.publication_id,
-      checkBlock,
-      referredFrom,
-      referrerPath,
-      setVideosViewed,
-      state.videosViewed,
-      trackVideoPlay,
-      vidWatchId
-    ]
-  )
+    })
+    setVidwatchId(data.trackVideoPlay)
+    setVideosViewed(pubId)
+  }
 
   const handleAccessDialog = (open: boolean) => {
     setShowDialog(open)
-    if (!open) {
-      setNextBlockTime(nextBlockTime + BLOCK_INTERVAL_SECONDS)
-    }
   }
   const imageUrl = article?.wistia?.thumbnail?.url.replace(
     /\?image_crop_resized.*/,
     ''
   )
-  // if (status === 'loading') return null
 
   //#endregion handlers
+
   return (
     <Box>
       {showDialog && (
@@ -339,6 +301,39 @@ export default function VideoBlock({ article }: VideoBlockProps) {
           open={showDialog}
           handleState={handleAccessDialog}
           publication_id={article.publication_id}
+        />
+      )}
+      {showFeedbackDialog && (
+        <FeedbackModal
+          open={true}
+          onClose={() => {
+            setShowFeedbackDialog(false)
+          }}
+          question={feedbackQuestionData?.question}
+          onAnswer={async (value, question) => {
+            gtag('event', 'track_feedback', {
+              question_id: question._id,
+              question: question.question,
+              value,
+              type: question.type
+            })
+            await trackFeedback({
+              variables: {
+                input: {
+                  value: value + '',
+                  questionId: question._id,
+                  type: question.type,
+                  anon_link_id,
+                  user: session?.user?._id,
+                  institution: articleAccess.institution_id
+                }
+              },
+              onCompleted() {
+                setShowFeedbackDialog(false)
+                setHasGivenFeedback(true)
+              }
+            })
+          }}
         />
       )}
       <VideoPlayer

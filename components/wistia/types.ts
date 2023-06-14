@@ -30,7 +30,9 @@ export interface WistiaVideo {
   inFullScreen(): boolean
   remove(): void
   volume(volume?: number): number
-
+  duration(): number
+  percentWatched(): number
+  cancelFullscreen(): void
   //
 }
 
