@@ -64,8 +64,8 @@ const UserTypeSelector = () => {
           ))}
         </Select>
         <Typography variant="caption" color="text.secondary">
-          Selected user types will be removed from subscription. Leave blank for
-          no restriction
+          Only the selected user type(s) will have access. Leave blank for
+          no restrictions.
         </Typography>
       </FormControl>
     </div>

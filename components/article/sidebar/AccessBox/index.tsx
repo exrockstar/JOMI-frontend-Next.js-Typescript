@@ -57,6 +57,8 @@ const AccessBox = ({ article }: AccessBoxProps) => {
   }, [router.query])
 
   const components = useMemo(() => {
+    console.log("HERE HERE HERE")
+    console.log(access)
     if (!access) return []
     const isExpired = access.subscriptionExpiresAt && dayjs(access.subscriptionExpiresAt).isBefore(new Date())
 

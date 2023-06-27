@@ -73,8 +73,8 @@ const SpecialtySelector = () => {
           </MenuItem>
         </Select>
         <Typography variant="caption" color="text.secondary">
-          Selected specialization will be removed from subscription. Leave blank
-          for no restriction
+          Only the selected specialization(s) will have access. Leave blank
+          for no restrictions.
         </Typography>
       </FormControl>
     </div>
