@@ -41,7 +41,8 @@ const AccessBox = ({ article }: AccessBoxProps) => {
   })
   const theme = useTheme()
   const access = data?.article?.articleAccessType
-  const showPayPerArticle = data?.article?.showRentArticle || data?.article?.showPurchaseArticle
+  const showPayPerArticle =
+    data?.article?.showRentArticle || data?.article?.showPurchaseArticle
   useEffect(() => {
     refetch()
   }, [session?.user, refetch])
@@ -57,24 +58,44 @@ const AccessBox = ({ article }: AccessBoxProps) => {
   }, [router.query])
 
   const components = useMemo(() => {
-    console.log("HERE HERE HERE")
-    console.log(access)
     if (!access) return []
-    const isExpired = access.subscriptionExpiresAt && dayjs(access.subscriptionExpiresAt).isBefore(new Date())
+    const isExpired =
+      access.subscriptionExpiresAt &&
+      dayjs(access.subscriptionExpiresAt).isBefore(new Date())
 
-    const purchaseSections = showPayPerArticle ? [DividerWithPadding, PurchaseArticleSection] : []
+    const purchaseSections = showPayPerArticle
+      ? [DividerWithPadding, PurchaseArticleSection]
+      : []
     switch (access.accessType) {
       case AccessTypeEnum.LimitedAccess:
         if (access.requireLogin) {
-          return [AccessBoxHeading, RequiresLoginSection, CreateAccountOrLoginSection]
+          return [
+            AccessBoxHeading,
+            RequiresLoginSection,
+            CreateAccountOrLoginSection
+          ]
         }
         if (isExpired) {
-          return [AccessBoxHeading, SubscriptionExpiredSection, GetSubscriptionSection, ...purchaseSections]
+          return [
+            AccessBoxHeading,
+            SubscriptionExpiredSection,
+            GetSubscriptionSection,
+            ...purchaseSections
+          ]
         }
-        return [AccessBoxHeading, LimitedAccessSection, CreateAccountOrLoginSection]
+        return [
+          AccessBoxHeading,
+          LimitedAccessSection,
+          CreateAccountOrLoginSection
+        ]
       case AccessTypeEnum.InstitutionalSubscription:
         if (access.isTrial) {
-          return [AccessBoxHeading, ProvidedBySection, GetSubscriptionSection, ...purchaseSections]
+          return [
+            AccessBoxHeading,
+            ProvidedBySection,
+            GetSubscriptionSection,
+            ...purchaseSections
+          ]
         }
         return [AccessBoxHeading, ProvidedBySection]
       case AccessTypeEnum.Evaluation:
