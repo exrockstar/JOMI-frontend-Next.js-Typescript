@@ -885,6 +885,7 @@ export type Institution = {
   accessSettings: AccessSettings;
   aliases: Array<Scalars['String']>;
   aliases_str: Scalars['String'];
+  articleViewsOverTime: Array<InstitutionAccessTraffic>;
   article_count: Scalars['Int'];
   article_count_anon: Scalars['Int'];
   automated_status: Scalars['String'];

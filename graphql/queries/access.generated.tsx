@@ -8,7 +8,7 @@ export type InstitutionsAccessListQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null | undefined, sent_requests: number, created?: any | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined } }> } };
+export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null | undefined, sent_requests: number, created?: any | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined }, articleViewsOverTime: Array<{ __typename?: 'InstitutionAccessTraffic', _id: string, count: number }> }> } };
 
 export type AccessEventsQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.AccessFilterInput>;
@@ -67,6 +67,10 @@ export const InstitutionsAccessListDocument = gql`
       created
       subscription {
         status
+      }
+      articleViewsOverTime {
+        _id
+        count
       }
     }
     count

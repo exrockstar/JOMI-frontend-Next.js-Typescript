@@ -48,7 +48,8 @@ export const InstitutionAccessProvider: React.FC<PropsWithChildren> = ({
         filters: state.filters,
         search: state.searchTerm
       }
-    }
+    },
+    fetchPolicy: 'no-cache'
   })
 
   // perserve previous count

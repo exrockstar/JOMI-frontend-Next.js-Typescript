@@ -82,6 +82,7 @@ const InstitutionTableHead = () => {
             </TableCell>
           )
         })}
+        <TableCell>Traffic Over Time (Past 2 Years)</TableCell>
       </TableRow>
     </TableHead>
   )
