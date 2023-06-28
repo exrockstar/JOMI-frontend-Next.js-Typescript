@@ -21,6 +21,7 @@ import Link from 'next/link'
 import { bool } from 'yup'
 import InstitutionTableHead from './InstitutionTableHead'
 import { useInstitutionAccessList } from './useInstitutionAccessList'
+import ArticleViewsOverTime from './ArticleViewsOverTime'
 /**
  * Institution list for access page
  * @returns
@@ -51,6 +52,10 @@ const InstitutionAccessList = () => {
           <InstitutionTableHead />
           <TableBody>
             {institutions?.map((institution) => {
+              console.log(
+                institution._id,
+                institution.articleViewsOverTime.map((d) => d.count)
+              )
               return (
                 <StyledTableRow key={institution._id}>
                   <TableCell>
@@ -70,6 +75,12 @@ const InstitutionAccessList = () => {
                     {dayjs(institution.created).format('MM/DD/YYYY')}
                   </TableCell>
                   <TableCell>{institution.subscription.status}</TableCell>
+                  <TableCell>
+                    <ArticleViewsOverTime
+                      institutionId={institution._id}
+                      data={institution.articleViewsOverTime}
+                    />
+                  </TableCell>
                 </StyledTableRow>
               )
             })}

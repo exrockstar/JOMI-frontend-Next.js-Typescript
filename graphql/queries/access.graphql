@@ -11,6 +11,10 @@ query InstitutionsAccessList($input: InstitutionInput!) {
       subscription {
         status
       }
+      articleViewsOverTime{
+        _id
+        count
+      }
     }
     count
   }
