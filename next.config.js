@@ -14,7 +14,8 @@ const config = {
     V4_URL: process.env.V4_URL,
     GOOGLE_GTM: process.env.GOOGLE_GTM,
     FACEBOOK_PIXEL_ID: process.env.FACEBOOK_PIXEL_ID,
-    NEXT_PUBLIC_LINKEDIN_PARTNER_ID: process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID
+    NEXT_PUBLIC_LINKEDIN_PARTNER_ID: process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID,
+    AMPLITUDE_API_KEY: process.env.AMPLITUDE_API_KEY
   },
   images: {
     domains: [
