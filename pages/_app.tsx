@@ -32,6 +32,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import AppErrorFallback from 'components/fallbacks/AppErrorFallback'
 import { CookiesProvider } from 'react-cookie'
 import { NextPage } from 'next'
+import AmplitudeAnalytics from 'components/utils/AmplitudeAnalytics'
 
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -60,6 +61,7 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
             <PageMetadata meta_data={meta} />
             <ThemeProvider theme={theme}>
               <MySnackbarProvider>
+                <AmplitudeAnalytics />
                 <GoogleAnalytics metadata={meta} />
                 <GoogleGtag metadata={meta} />
                 <LinkedInInsightTag />

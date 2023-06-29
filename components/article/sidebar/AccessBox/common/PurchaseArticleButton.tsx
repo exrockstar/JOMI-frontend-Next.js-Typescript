@@ -7,6 +7,7 @@ import PromocodeModal from './PromocodeModal'
 import { OrderType } from 'graphql/types'
 import { analytics } from 'apis/analytics'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import { amplitudeTrackInitiateCheckout } from 'apis/amplitude'
 
 type Props = {
   userId: string
@@ -47,6 +48,10 @@ const PurchaseArticleButton = (props: Props) => {
       url.searchParams.append('promocode', promocode)
     }
     return url.toString()
+  }
+
+  function amplitude(arg0: string, arg1: {}) {
+    throw new Error('Function not implemented.')
   }
 
   return (
@@ -95,6 +100,11 @@ const PurchaseArticleButton = (props: Props) => {
                 userId,
                 value: price
               })
+              amplitudeTrackInitiateCheckout({
+                label: "Purchase Article",
+                userId,
+                value: price
+              })
               analytics.trackClick(e)
             }}
             type="button"
@@ -112,6 +122,11 @@ const PurchaseArticleButton = (props: Props) => {
                 referredFrom,
                 referrerPath,
                 anon_link_id,
+                userId,
+                value: price
+              })
+              amplitudeTrackInitiateCheckout({
+                label: "Rent Article",
                 userId,
                 value: price
               })

@@ -21,6 +21,7 @@ import { getApolloUserClient } from 'apis/apollo-admin-client'
 import Cookies from 'cookies'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import { OrderType } from 'graphql/types'
+import { amplitudeTrackPurchase } from 'apis/amplitude'
 const CheckoutSuccessPage = () => {
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -55,6 +56,20 @@ const CheckoutSuccessPage = () => {
       referrerPath,
       anon_link_id,
       event_label: OrderType.Individual,
+      items: [
+        {
+          item_id: order._id,
+          item_name: order.description,
+          price: order.amount,
+          quantity: 1
+        }
+      ]
+    })
+    amplitudeTrackPurchase({
+      transaction_id: order._id,
+      value: order.amount,
+      currency: order.currency,
+      type: OrderType.Individual,
       items: [
         {
           item_id: order._id,

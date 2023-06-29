@@ -20,6 +20,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import dayjs from 'dayjs'
+import { amplitudeTrackPurchase } from 'apis/amplitude'
 
 /**
  * Page to track article purchase and rent events
@@ -59,7 +60,20 @@ const PurchaseSuccessPage = () => {
           }
         ]
       })
-
+      amplitudeTrackPurchase({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: order.type,
+        items: [
+          {
+            item_id: order._id,
+            item_name: order.description,
+            price: order.amount,
+            quantity: 1
+          }
+        ]
+      })
       setTimeout(() => {
         router.replace(redirectUrl)
       }, 2000)

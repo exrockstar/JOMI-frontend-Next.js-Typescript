@@ -1,7 +1,9 @@
 import { Box, BoxProps } from '@mui/material'
+import { amplitudeTrackTrial } from 'apis/amplitude'
 import { analytics } from 'apis/analytics'
 import CTAButton from 'components/common/CTAButton'
 import { useAddTrialOrderForUserMutation } from 'graphql/cms-queries/trials.generated'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -11,10 +13,15 @@ type Props = {
 const TrialButton = ({ trialDuration }: Props) => {
   const description = `Try free for ${trialDuration} days`
   const router = useRouter()
+  const {data: session } = useSession()
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
       router.reload()
       analytics.trackTrial({})
+      amplitudeTrackTrial({
+        user_id: session.user ? session.user._id : 'none',
+        duration: trialDuration
+      })
     }
   })
   return (

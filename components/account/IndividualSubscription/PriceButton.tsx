@@ -9,6 +9,7 @@ import { OrderInterval } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import React, { PropsWithChildren } from 'react'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import { amplitudeTrackInitiateCheckout } from 'apis/amplitude'
 
 type Props = {
   priceId: string
@@ -62,6 +63,14 @@ const PriceButton = ({
             data-event={`Subscription Button - ${nickname}`}
             onClick={(e) => {
               analytics.trackCheckout(e)
+              amplitudeTrackInitiateCheckout({
+                label: 'Individual Subscription',
+                priceId,
+                value: amount,
+                userId: session.user.id,
+                description: nickname,
+                promocode: promocode ? promocode : 'none'
+              })
               trackInitiateCheckoutMutation()
               fbPixelTrackInitiateCheckout('SubscriptionInitiate', [priceId], 'USD', amount, session.user.id)
             }}

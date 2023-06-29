@@ -16,6 +16,7 @@ import { object, string, TypeOf } from 'yup'
 import { fbPixelTrackCustom, fbPixelTrackViewContent } from 'apis/fbpixel'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
+import { amplitudeTrackRequestSubscription } from 'apis/amplitude'
 const forbiddenInst = ['N/A', 'n/a', 'college', 'none']
 
 const schema = object({
@@ -44,16 +45,15 @@ export default function Request() {
         enqueueSnackbar(error.message, { variant: 'error' })
       },
       onCompleted: () => {
-        console.log("TRACKING REQUEST")
         setShowSuccessMessage(true)
-        console.log(isClient? localStorage.getItem('referrer') ?? '': '')
-        console.log(isClient? localStorage.getItem('referrerPath') ?? '': '')
-        console.log(isClient? localStorage.getItem('anon_link_id') ?? '': '')
         gtag('event', 'request_subscription', {
           event_label: data?.user?.institution_name,
           referredFrom,
           referrerPath,
           anon_link_id
+        })
+        amplitudeTrackRequestSubscription({
+          institution: data?.user?.institution_name ? data.user.institution_name : 'none',
         })
         fbPixelTrackCustom('Requests', {
           institution: `${data?.user?.institution_name}`

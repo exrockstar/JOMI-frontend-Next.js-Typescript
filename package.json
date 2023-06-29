@@ -10,6 +10,7 @@
     "gen": "graphql-codegen --config graphql.config.yml -r dotenv/config"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.1.0",
     "@apollo/client": "^3.7.1",
     "@emotion/react": "^11.5.0",
     "@emotion/server": "^11.4.0",
