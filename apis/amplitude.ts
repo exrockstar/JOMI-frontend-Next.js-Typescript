@@ -25,8 +25,8 @@ export const testingEvents = (): EnrichmentPlugin => {
 export const amplitudeInit = () => {
   console.log("INITIALIZING AMPLITUDE!!!!!!")
   //TODO replace with env api key
-  amplitude.init('5f1937759baf64c9030ad6caae203275');
-  amplitude.add(testingEvents());
+  amplitude.init(process.env.AMPLITUDE_API_KEY);
+  // amplitude.add(testingEvents()); enable only for testing
 }
 
 /**
