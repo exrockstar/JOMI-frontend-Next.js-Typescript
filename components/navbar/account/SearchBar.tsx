@@ -9,6 +9,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/router'
 import { analytics } from 'apis/analytics'
+import { amplitudeTrackSearch } from 'apis/amplitude'
 
 function SearchBar(props: PaperProps) {
   const router = useRouter()
@@ -26,6 +27,9 @@ function SearchBar(props: PaperProps) {
     if (!!searchTerm) {
       router.push(`/search?q=${searchTerm}`)
       analytics.trackSearch(searchTerm as string)
+      amplitudeTrackSearch({
+        search_term: searchTerm as string
+      })
     } else {
       router.push('/articles')
     }

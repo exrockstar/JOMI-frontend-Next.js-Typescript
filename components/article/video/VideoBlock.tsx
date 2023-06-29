@@ -26,6 +26,7 @@ import {
   useTrackFeedbackMutation
 } from 'graphql/mutations/collect-feedback.generated'
 import difference from 'lodash/difference'
+import { amplitudeTrackFeedback } from 'apis/amplitude'
 const ArticleAccessDialog = dynamic(
   () => import('components/ArticleAccessDialog/ArticleAccessDialog'),
   {
@@ -312,6 +313,12 @@ export default function VideoBlock({ article }: VideoBlockProps) {
           question={feedbackQuestionData?.question}
           onAnswer={async (value, question) => {
             gtag('event', 'track_feedback', {
+              question_id: question._id,
+              question: question.question,
+              value,
+              type: question.type
+            })
+            amplitudeTrackFeedback({
               question_id: question._id,
               question: question.question,
               value,

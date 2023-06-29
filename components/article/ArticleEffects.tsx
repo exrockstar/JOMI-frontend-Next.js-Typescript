@@ -1,3 +1,4 @@
+import { amplitudeTrackArticleView } from 'apis/amplitude'
 import { analytics } from 'apis/analytics'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
@@ -30,6 +31,17 @@ const ArticleEffects = ({ article }: Props) => {
       setHasTracked(true)
       //track in GA4
       analytics.trackArticleView({
+        categories: article.categories.map((c) => {
+          return c.displayName
+        }),
+        title: article.title,
+        authors: article.authors.map((a) => {
+          return a.display_name
+        }),
+        tags: article.tags
+      })
+      //track in amplitude
+      amplitudeTrackArticleView({
         categories: article.categories.map((c) => {
           return c.displayName
         }),

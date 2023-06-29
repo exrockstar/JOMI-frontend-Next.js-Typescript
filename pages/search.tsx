@@ -56,7 +56,6 @@ function SearchPage({ categories, articleOutput }: Props) {
   const { referredFrom, referrerPath, anon_link_id } =
     useGoogleAnalyticsHelpers()
   useEffectOnce(() => {
-    console.log('Tracking search')
     trackSearch({
       variables: {
         input: {

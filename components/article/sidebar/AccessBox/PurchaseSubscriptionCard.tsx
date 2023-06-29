@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 import { analytics } from 'apis/analytics'
 import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
 import { useAddTrialOrderForUserMutation } from 'graphql/cms-queries/trials.generated'
+import { amplitudeTrackTrial } from 'apis/amplitude'
+import { useSession } from 'next-auth/react'
 type Props = {
   data: ArticleAccessQuery
 }
@@ -13,6 +15,7 @@ type Props = {
 const PurchaseSubscriptionCard = ({ data }: Props) => {
   const router = useRouter()
   const user = data?.user
+  const {data: session } = useSession()
   const isShowTrialButton = user?.isTrialsFeatureEnabled && user?.trialsAllowed
   const trialDuration = user?.trialDuration
 
@@ -20,6 +23,10 @@ const PurchaseSubscriptionCard = ({ data }: Props) => {
     onCompleted() {
       router.reload()
       analytics.trackTrial({})
+      amplitudeTrackTrial({
+        user_id: session.user ? session.user._id : 'none',
+        duration: trialDuration
+      })
     }
   })
   return (

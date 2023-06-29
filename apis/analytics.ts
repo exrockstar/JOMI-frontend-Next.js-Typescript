@@ -2,6 +2,7 @@ import { isProduction } from 'common/constants'
 import { slugify } from 'components/utils/helpers'
 import { MouseEventHandler } from 'react'
 import ReactGA from 'react-ga'
+import * as amplitude from '@amplitude/analytics-browser';
 // import ReactGA4 from 'react-ga4'
 
 const init = () => {
@@ -47,6 +48,10 @@ const trackClick: MouseEventHandler = (e) => {
       referrerPath: isClient ? localStorage.getItem('referrerPath') ?? '' : '',
       anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
     })
+    amplitude.track('Click', {
+      target: slugify(eventName),
+      anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+    })
   }
 }
 
@@ -62,11 +67,14 @@ const trackOutboundClick: MouseEventHandler = (e) => {
       referrerPath: isClient ? localStorage.getItem('referrerPath') ?? '' : '',
       anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
     })
+    amplitude.track('Outbound Click', {
+      target: slugify(eventName),
+      anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+    })
   }
 }
 
 const trackCheckout: MouseEventHandler = (e) => {
-  console.log('TRACKING CHECKOUT')
   const eventName = (e.target as HTMLElement).dataset['event']
   const isClient = typeof window !== 'undefined'
   if (!!eventName) {
@@ -79,6 +87,7 @@ const trackCheckout: MouseEventHandler = (e) => {
     })
   }
 }
+
 const trackPurchase = (params: any) => {
   // event('purchase', params)
   const isClient = typeof window !== 'undefined'
@@ -89,6 +98,7 @@ const trackPurchase = (params: any) => {
     anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   })
 }
+
 const trackSearch = (query: string) => {
   if (!!query) {
     const isClient = typeof window !== 'undefined'
