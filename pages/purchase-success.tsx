@@ -65,7 +65,7 @@ const PurchaseSuccessPage = () => {
         value: order.amount,
         currency: order.currency,
         type: order.type,
-        userId: session.user ? session.user._id : 'anon',
+        userId: session && session.user ? session.user._id : 'anon',
         items: [
           {
             item_id: order._id,

@@ -82,7 +82,7 @@ export const amplitudeTrackSearch = (params: Object) => {
  * Purpose: Track when a user signs up for a trial
  */
 export const amplitudeTrackTrial = (params: Object) => {
-  amplitude.track('Search', {
+  amplitude.track('Trial', {
     ...params,
     anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   })
