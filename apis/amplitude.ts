@@ -7,7 +7,7 @@ const isClient = typeof window !== 'undefined'
  * Purpose: to set all events as a 'test' event when testing in localhost
  * @returns EnrichmentPlugin
  */
-export const testingEvents = (): EnrichmentPlugin => {
+const testingEvents = (): EnrichmentPlugin => {
   console.log("TESTING EVENTS FUNC!")
   return {
     name: 'testing-enrichment',
@@ -22,11 +22,18 @@ export const testingEvents = (): EnrichmentPlugin => {
   };
 };
 
+/**
+ * Purpose: Initialize Amplitude
+ */
 export const amplitudeInit = () => {
-  console.log("INITIALIZING AMPLITUDE!!!!!!")
-  //TODO replace with env api key
-  amplitude.init(process.env.AMPLITUDE_API_KEY);
-  // amplitude.add(testingEvents()); enable only for testing
+  if(process.env.NODE_ENV === 'development') {
+    amplitude.init(process.env.AMPLITUDE_API_KEY, {
+      logLevel: amplitude.Types.LogLevel.Debug,
+    });
+    amplitude.add(testingEvents());
+  } else {
+    amplitude.init(process.env.AMPLITUDE_API_KEY);
+  }
 }
 
 /**
