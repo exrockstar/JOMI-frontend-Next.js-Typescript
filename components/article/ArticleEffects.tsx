@@ -4,12 +4,14 @@ import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import { useTrackArticleMutation } from 'graphql/mutations/track-article.generated'
 import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
+import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 type Props = {
   article: ArticlesBySlugQuery['articleBySlug']
 }
 const ArticleEffects = ({ article }: Props) => {
+  const {data: session} = useSession()
   const { state, setArticlesViewed } = useAppState()
   const router = useRouter()
   const [trackArticle, { data }] = useTrackArticleMutation({})
@@ -49,7 +51,8 @@ const ArticleEffects = ({ article }: Props) => {
         authors: article.authors.map((a) => {
           return a.display_name
         }),
-        tags: article.tags
+        tags: article.tags,
+        userId: session.user ? session.user._id : 'anon'
       })
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {

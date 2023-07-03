@@ -19,7 +19,7 @@ const TrialButton = ({ trialDuration }: Props) => {
       router.reload()
       analytics.trackTrial({})
       amplitudeTrackTrial({
-        user_id: session.user ? session.user._id : 'none',
+        userId: session.user ? session.user._id : 'anon',
         duration: trialDuration
       })
     }

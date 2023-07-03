@@ -10,8 +10,10 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useRouter } from 'next/router'
 import { analytics } from 'apis/analytics'
 import { amplitudeTrackSearch } from 'apis/amplitude'
+import { useSession } from 'next-auth/react'
 
 function SearchBar(props: PaperProps) {
+  const {data: session} = useSession()
   const router = useRouter()
   const [focused, setFocused] = useState(false)
   const { q } = router.query
@@ -28,7 +30,8 @@ function SearchBar(props: PaperProps) {
       router.push(`/search?q=${searchTerm}`)
       analytics.trackSearch(searchTerm as string)
       amplitudeTrackSearch({
-        search_term: searchTerm as string
+        search_term: searchTerm as string,
+        userId: session.user ? session.user._id : 'anon'
       })
     } else {
       router.push('/articles')
