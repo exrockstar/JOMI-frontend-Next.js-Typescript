@@ -323,7 +323,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
               question: question.question,
               value,
               type: question.type,
-              userId: session.user ? session.user._id : 'anon'
+              userId: session && session.user ? session.user._id : 'anon',
             })
             await trackFeedback({
               variables: {

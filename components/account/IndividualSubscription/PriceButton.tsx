@@ -67,7 +67,7 @@ const PriceButton = ({
                 label: 'Individual Subscription',
                 priceId,
                 value: amount,
-                userId: session.user.id,
+                userId: session && session.user ? session.user._id : 'anon',
                 description: nickname,
                 promocode: promocode ? promocode : 'none'
               })

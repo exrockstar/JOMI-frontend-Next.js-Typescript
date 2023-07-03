@@ -52,7 +52,7 @@ const ArticleEffects = ({ article }: Props) => {
           return a.display_name
         }),
         tags: article.tags,
-        userId: session.user ? session.user._id : 'anon'
+        userId: session && session.user ? session.user._id : 'anon',
       })
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {

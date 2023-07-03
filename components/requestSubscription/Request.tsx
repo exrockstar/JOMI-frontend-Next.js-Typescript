@@ -54,7 +54,7 @@ export default function Request() {
         })
         amplitudeTrackRequestSubscription({
           institution: data?.user?.institution_name ? data.user.institution_name : 'none',
-          userId: session.user ? session.user._id : 'anon'
+          userId: session && session.user ? session.user._id : 'anon',
         })
         fbPixelTrackCustom('Requests', {
           institution: `${data?.user?.institution_name}`

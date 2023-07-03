@@ -16,12 +16,12 @@ const TrialButton = ({ trialDuration }: Props) => {
   const {data: session } = useSession()
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
-      router.reload()
       analytics.trackTrial({})
       amplitudeTrackTrial({
-        userId: session.user ? session.user._id : 'anon',
+        userId: session && session.user ? session.user._id : 'anon',
         duration: trialDuration
       })
+      router.reload()
     }
   })
   return (

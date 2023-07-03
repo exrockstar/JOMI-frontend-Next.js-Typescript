@@ -31,7 +31,7 @@ function SearchBar(props: PaperProps) {
       analytics.trackSearch(searchTerm as string)
       amplitudeTrackSearch({
         search_term: searchTerm as string,
-        userId: session.user ? session.user._id : 'anon'
+        userId: session && session.user ? session.user._id : 'anon',
       })
     } else {
       router.push('/articles')
