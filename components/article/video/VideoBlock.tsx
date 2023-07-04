@@ -50,29 +50,20 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const {
     state: { videosBlocked, videosViewed },
     hasGivenFeedback,
-    setHasGivenFeedback,
+    setShowFeedbackDialog,
     setVideosViewed,
     setVideosBlocked
   } = useAppState()
   const [showDialog, setShowDialog] = useState(false)
-  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
-  // the percentage of the video where feedback modal has been shown
   const [percentBlocked, setPercentBlocked] = useState<number[]>([])
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
 
-  const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
-    skip: status === 'loading',
-    variables: {
-      anon_link_id
-    }
-  })
-  const [trackFeedback] = useTrackFeedbackMutation()
   const [trackVideoPlay] = useTrackVideoPlayMutation()
   const [trackVideoTime] = useTrackVideoTimeMutation()
   const [trackVideoBlock] = useTrackVideoBlockMutation()
-
+  // TODO: Create backend endpoint
   const [nextBlockTime, setNextBlockTime] = useState(0)
   const router = useRouter()
   const {
@@ -93,10 +84,10 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     variables: { publication_id: pubId }
   })
   const articleAccess = data?.article?.articleAccessType
+  const showFeedbackQuestions = data?.user?.showFeedbackQuestions
   const accessType = articleAccess?.accessType
   const isArticlePreviouslyBlocked = videosBlocked.find((id) => id === pubId)
   const isPreviouslyViewed = videosViewed.find((id) => id === pubId)
-  const feedbackQuestion = feedbackQuestionData?.question
   const trackBlockInput: TrackVideoInput = {
     publication_id: pubId,
     uniqueView: !isArticlePreviouslyBlocked,
@@ -223,14 +214,14 @@ export default function VideoBlock({ article }: VideoBlockProps) {
       AccessTypeEnum.InstitutionalSubscription === accessType &&
       articleAccess?.isTrial
     const isTrial = isInstitutionalTrial
-    const percentWatched = video.percentWatched()
+    const percentWatched = seconds / video.duration()
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
     const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
     const filtered = percentageToCheck.filter((time) => percentWatched >= time)
     const showFeedback =
-      !!filtered.length && !hasGivenFeedback && isTrial && feedbackQuestion
-
+      !!filtered.length && !hasGivenFeedback && isTrial && showFeedbackQuestions
+    console.log(percentWatched, showFeedback)
     if (showFeedback) {
       video.pause()
       video.cancelFullscreen()
@@ -304,46 +295,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
           publication_id={article.publication_id}
         />
       )}
-      {showFeedbackDialog && (
-        <FeedbackModal
-          open={true}
-          onClose={() => {
-            setShowFeedbackDialog(false)
-          }}
-          question={feedbackQuestionData?.question}
-          onAnswer={async (value, question) => {
-            gtag('event', 'track_feedback', {
-              question_id: question._id,
-              question: question.question,
-              value,
-              type: question.type
-            })
-            amplitudeTrackFeedback({
-              question_id: question._id,
-              question: question.question,
-              value,
-              type: question.type,
-              userId: session && session.user ? session.user._id : 'anon',
-            })
-            await trackFeedback({
-              variables: {
-                input: {
-                  value: value + '',
-                  questionId: question._id,
-                  type: question.type,
-                  anon_link_id,
-                  user: session?.user?._id,
-                  institution: articleAccess.institution_id
-                }
-              },
-              onCompleted() {
-                setShowFeedbackDialog(false)
-                setHasGivenFeedback(true)
-              }
-            })
-          }}
-        />
-      )}
+
       <VideoPlayer
         chapters={chapters}
         thumbnailUrl={imageUrl}

@@ -30,5 +30,6 @@ query ArticleAccess($publication_id: String!) {
     isTrialsFeatureEnabled
     trialDuration
     trialsAllowed
+    showFeedbackQuestions
   }
 }

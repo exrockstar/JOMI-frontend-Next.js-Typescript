@@ -20,13 +20,12 @@ import { useEffect, useState } from 'react'
 import { GetFeedbackQuestionsQuery } from 'graphql/mutations/collect-feedback.generated'
 type Question = GetFeedbackQuestionsQuery['question']
 type Props = DialogProps & {
-  onAnswer(value: any, question: Question): void
+  onAnswer(value: any, question: Question, comment?: string): void
   question?: Question
 }
 
 const FeedbackModal = (props: Props) => {
   const question = props.question
-  console.log(question)
   const { enqueueSnackbar } = useSnackbar()
   const getFeedbackComponent = (question: Question): FeedbackComponent => {
     switch (question.type) {
@@ -38,6 +37,7 @@ const FeedbackModal = (props: Props) => {
     }
   }
   const [answer, setAnswer] = useState<any>(null)
+  const [comment, setComment] = useState('')
 
   useEffect(() => {
     if (props.open) {
@@ -71,8 +71,9 @@ const FeedbackModal = (props: Props) => {
         <DialogContent>
           <Component
             question={question}
-            onAnswer={(value) => {
+            onAnswer={(value, qId, comment) => {
               setAnswer(value)
+              setComment(comment)
             }}
           />
         </DialogContent>
@@ -89,11 +90,12 @@ const FeedbackModal = (props: Props) => {
             endIcon={<ArrowRight />}
             onClick={(e) => {
               props.onClose(e, null)
-              props.onAnswer(answer, question)
+              props.onAnswer(answer, question, comment)
               enqueueSnackbar('Thank you for your feedback!', {
                 variant: 'info'
               })
             }}
+            disabled={!answer}
           >
             Send Feedback
           </CTAButton>

@@ -764,6 +764,7 @@ export type Feedback = {
   __typename?: 'Feedback';
   _id: Scalars['String'];
   anon_link_id?: Maybe<Scalars['String']>;
+  comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   institution: Scalars['String'];
   questionId: Scalars['String'];
@@ -2767,6 +2768,7 @@ export type TrackArticleInput = {
 
 export type TrackFeedbackInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  comment?: InputMaybe<Scalars['String']>;
   institution?: InputMaybe<Scalars['String']>;
   questionId: Scalars['String'];
   type: Scalars['String'];
@@ -3153,6 +3155,7 @@ export type User = {
   regionName?: Maybe<Scalars['String']>;
   requestSubscriptionCount?: Maybe<Scalars['Float']>;
   role: UserRoles;
+  showFeedbackQuestions: Scalars['Boolean'];
   signInToken?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
   social?: Maybe<Social>;

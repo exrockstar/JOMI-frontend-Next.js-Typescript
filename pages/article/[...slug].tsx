@@ -30,7 +30,10 @@ import TitleSection from 'components/article/TitleSection'
 import PreprintNotice from 'components/article/PreprintNotice'
 import TranslationDisclaimer from 'components/article/TranslationDisclaimer'
 import dynamic from 'next/dynamic'
-import { ArticlesForSlugDocument, ArticlesForSlugQuery } from 'graphql/queries/articles-for-slug.generated'
+import {
+  ArticlesForSlugDocument,
+  ArticlesForSlugQuery
+} from 'graphql/queries/articles-for-slug.generated'
 import ArticleEffects from 'components/article/ArticleEffects'
 import { fixImages } from 'components/article/fixImages'
 import cheerio from 'cheerio'
@@ -40,7 +43,10 @@ import {
 } from 'graphql/queries/announcement-for-user.generated'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import Error404 from 'components/error-pages/Error404'
-const ArticlePassword = dynamic(() => import('components/article/ArticlePassword'))
+import FeedbackContainer from 'components/article/feedback/FeedbackContainer'
+const ArticlePassword = dynamic(
+  () => import('components/article/ArticlePassword')
+)
 
 type SingleArticleProps = {
   article: ArticlesBySlugQuery['articleBySlug']
@@ -69,7 +75,7 @@ function SingleArticle({ article }: SingleArticleProps) {
         <ChapterProvider chapters={article?.chapters}>
           <ArticleVideo article={article} />
         </ChapterProvider>
-
+        <FeedbackContainer />
         <Box display={{ xs: 'block', md: 'none' }}>
           <LanguageSwitcher enabledLanguages={article.enabled_languages} />
         </Box>
@@ -115,7 +121,12 @@ function SingleArticle({ article }: SingleArticleProps) {
   }, [article])
 
   if (article?.isPasswordProtected && !showArticle) {
-    return <ArticlePassword onComplete={onComplete} publication_id={article.publication_id} />
+    return (
+      <ArticlePassword
+        onComplete={onComplete}
+        publication_id={article.publication_id}
+      />
+    )
   }
 
   return <Layout>{ArticleContent}</Layout>
@@ -132,13 +143,15 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
     fetchPolicy: 'no-cache'
   })
 
-  const paths = data?.articlesForSlug?.map(({ slug, title, publication_id }) => {
-    return {
-      params: {
-        slug: [publication_id, slug]
+  const paths = data?.articlesForSlug?.map(
+    ({ slug, title, publication_id }) => {
+      return {
+        params: {
+          slug: [publication_id, slug]
+        }
       }
     }
-  })
+  )
 
   return {
     paths: isProduction ? paths : [],
@@ -146,7 +159,10 @@ export const getStaticPaths: GetStaticPaths = async ({ locales }) => {
   }
 }
 
-export const getStaticProps: GetStaticProps<SingleArticleProps, IParams> = async ({ params }) => {
+export const getStaticProps: GetStaticProps<
+  SingleArticleProps,
+  IParams
+> = async ({ params }) => {
   try {
     let param = Array.isArray(params.slug) ? params.slug : [params.slug]
     const [publication_id] = params.slug
@@ -154,7 +170,10 @@ export const getStaticProps: GetStaticProps<SingleArticleProps, IParams> = async
 
     const client = getApolloAdminClient()
     const lang = param.find((param) => LOCALES.includes(param)) ?? 'en'
-    const { data } = await client.query<ArticlesBySlugQuery, ArticlesBySlugQueryVariables>({
+    const { data } = await client.query<
+      ArticlesBySlugQuery,
+      ArticlesBySlugQueryVariables
+    >({
       variables: {
         publication_id,
         locale: lang
@@ -164,7 +183,8 @@ export const getStaticProps: GetStaticProps<SingleArticleProps, IParams> = async
     })
 
     const article = data.articleBySlug
-    const enabled_languages = article?.enabled_languages?.map((l) => l.toLowerCase()) ?? []
+    const enabled_languages =
+      article?.enabled_languages?.map((l) => l.toLowerCase()) ?? []
     if (!article) {
       throw new Error(`Article /${param.join('/')} not found`)
     }

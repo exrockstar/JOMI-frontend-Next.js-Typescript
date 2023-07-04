@@ -30,6 +30,7 @@ const defaultValue = {
 const context = {
   state: defaultValue,
   hasGivenFeedback: false,
+  showFeedbackDialog: false,
   personalAnnouncements: {
     show: false,
     count: 0,
@@ -37,6 +38,7 @@ const context = {
   },
   setShowPersonalAnnouncements(val: boolean) {},
   setHasGivenFeedback(val: boolean) {},
+  setShowFeedbackDialog(val: boolean) {},
   setContextState: (state: typeof defaultValue) => {},
   toggleMatchedInstModal: () => {},
   toggleVerifyEmailModal: () => {},
@@ -57,6 +59,7 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
     'feedbackDone',
     false
   )
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
   const [trackAnnouncements, { called }] = useTrackAnnouncementsMutation()
   const router = useRouter()
   const { previouslyClosed, markNotificationAsRead, setPreviouslyClosed } =
@@ -199,7 +202,9 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
           count: personalAnnouncements?.length
         },
         hasGivenFeedback,
+        showFeedbackDialog,
         setHasGivenFeedback,
+        setShowFeedbackDialog,
         setShowPersonalAnnouncements,
         setContextState,
         toggleMatchedInstModal,
