@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Box, FormControl, Stack, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem'
@@ -10,8 +10,6 @@ import { interests } from './data'
 import SubmitButton from '../SubmitButton'
 
 import { LoadingButton } from '@mui/lab'
-import { useSnackbar } from 'notistack'
-import { useSendInstitutionEmailConfirmationMutation } from 'graphql/mutations/inst-email-confirm.generated'
 import { useProfileOptionsQuery } from 'graphql/queries/profile-options.generated'
 import { UserProfilePageQuery } from 'graphql/queries/user-profile-page.generated'
 import { UpdateProfileInput } from 'graphql/types'
@@ -22,33 +20,12 @@ type Props = {
   userData?: UserProfilePageQuery['user']
   loading?: boolean
 }
-function ProfileForm({ loading, userData }: Props) {
-  const { enqueueSnackbar } = useSnackbar()
-  const [sendConfirmEmail, { loading: confirmInstEmailLoading }] =
-    useSendInstitutionEmailConfirmationMutation({
-      onCompleted: () => {
-        enqueueSnackbar(`Email sent. Please check your institution email.`, {
-          variant: 'success'
-        })
-      },
-      onError: (error) => {
-        enqueueSnackbar(error.message, { variant: 'error' })
-      }
-    })
-
+function ProfileForm({ loading }: Props) {
   const { data: formData } = useProfileOptionsQuery()
 
   const context = useFormikContext<typeof initialValues>()
-  const values = context.values
   const userTypes = formData?.profileOptions?.userTypes
   const specialties = formData?.profileOptions?.specialties
-  const isSameAsAccountEmail =
-    userData?.institutionalEmail === userData?.email && userData?.emailVerified
-
-  const isVerifiedAndUnchanged =
-    values.institutional_email === context.initialValues.institutional_email &&
-    userData?.instEmailVerified
-  const disabledVerify = isSameAsAccountEmail || isVerifiedAndUnchanged
 
   useEffect(() => {
     const errors = Object.keys(context.errors).filter((i) => context.errors[i])
@@ -142,23 +119,6 @@ function ProfileForm({ loading, userData }: Props) {
               fullWidth
               sx={{ flex: 2 }}
             />
-            <EmailVerifyButton
-              sx={{ flex: 1 }}
-              variant="outlined"
-              title="You need to verify email to connect with your institution"
-              disabled={disabledVerify}
-              loading={confirmInstEmailLoading}
-              onClick={() => {
-                context.handleSubmit()
-                sendConfirmEmail({
-                  variables: {
-                    email: values.institutional_email
-                  }
-                })
-              }}
-            >
-              {disabledVerify ? 'Verified' : 'Verify Email'}
-            </EmailVerifyButton>
           </Stack>
         </Box>
         <Stack direction={{ xs: 'column', md: 'row' }} m={1} spacing={2}>
@@ -256,13 +216,3 @@ export default function ProfileFormWrapper(props: Props) {
     </Formik>
   )
 }
-
-const EmailVerifyButton = styled(LoadingButton)(({ theme }) => ({
-  padding: '5px 12px',
-  borderRadius: (theme.shape.borderRadius as number) * 1,
-  color: '#31cb80',
-  border: '1px solid #31cb80',
-  '&:hover': {
-    border: '1px solid #37d487'
-  }
-}))

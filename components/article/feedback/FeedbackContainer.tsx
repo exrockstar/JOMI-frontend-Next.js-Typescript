@@ -20,10 +20,13 @@ const FeedbackContainer = () => {
     useAppState()
 
   const { data: session, status } = useSession()
-  const { data: userData } = useUserProfileQuery()
+  const isSessionLoading = status === 'loading'
+  const { data: userData } = useUserProfileQuery({
+    skip: isSessionLoading
+  })
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
-    skip: status === 'loading',
+    skip: isSessionLoading,
     variables: {
       anon_link_id
     }
@@ -67,7 +70,7 @@ const FeedbackContainer = () => {
                 type: question.type,
                 anon_link_id,
                 user: session?.user?._id,
-                institution: userData?.userAccessType?.institution_id,
+                institution: userData?.user?.accessType.institution_id,
                 comment: comment
               }
             },

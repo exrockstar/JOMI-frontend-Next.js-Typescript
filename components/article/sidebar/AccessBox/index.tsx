@@ -59,51 +59,51 @@ const AccessBox = ({ article }: AccessBoxProps) => {
 
   const components = useMemo(() => {
     if (!access) return []
-    const isExpired =
-      access.subscriptionExpiresAt &&
-      dayjs(access.subscriptionExpiresAt).isBefore(new Date())
-
     const purchaseSections = showPayPerArticle
       ? [DividerWithPadding, PurchaseArticleSection]
       : []
     switch (access.accessType) {
       case AccessTypeEnum.LimitedAccess:
-        if (access.requireLogin) {
-          return [
-            AccessBoxHeading,
-            RequiresLoginSection,
-            CreateAccountOrLoginSection
-          ]
-        }
-        if (isExpired) {
-          return [
-            AccessBoxHeading,
-            SubscriptionExpiredSection,
-            GetSubscriptionSection,
-            ...purchaseSections
-          ]
-        }
         return [
           AccessBoxHeading,
           LimitedAccessSection,
           CreateAccountOrLoginSection
         ]
+      case AccessTypeEnum.InstitutionSubscriptionExpired:
+        return [
+          AccessBoxHeading,
+          SubscriptionExpiredSection,
+          GetSubscriptionSection,
+          ...purchaseSections
+        ]
+      case AccessTypeEnum.InstitutionLoginRequired:
+        return [
+          AccessBoxHeading,
+          RequiresLoginSection,
+          CreateAccountOrLoginSection
+        ]
+
+      case AccessTypeEnum.InstitutionalTrial:
+        return [
+          AccessBoxHeading,
+          ProvidedBySection,
+          GetSubscriptionSection,
+          ...purchaseSections
+        ]
       case AccessTypeEnum.InstitutionalSubscription:
-        if (access.isTrial) {
-          return [
-            AccessBoxHeading,
-            ProvidedBySection,
-            GetSubscriptionSection,
-            ...purchaseSections
-          ]
-        }
         return [AccessBoxHeading, ProvidedBySection]
       case AccessTypeEnum.Evaluation:
         return [AccessBoxHeading, EvaluationSection, ...purchaseSections]
       case AccessTypeEnum.RequireSubscription:
         return [AccessBoxHeading, GetSubscriptionSection, ...purchaseSections]
       case AccessTypeEnum.AwaitingEmailConfirmation:
-        return [AccessBoxHeading, AwaitingEmailConfirmationSection]
+      case AccessTypeEnum.EmailConfirmationExpired:
+        return [
+          AccessBoxHeading,
+          AwaitingEmailConfirmationSection,
+          GetSubscriptionSection,
+          ...purchaseSections
+        ]
       case AccessTypeEnum.ArticleRent:
         return [AccessBoxHeading, RentAccessSection]
       case AccessTypeEnum.IndividualTrial:
@@ -116,6 +116,7 @@ const AccessBox = ({ article }: AccessBoxProps) => {
         return [AccessBoxHeading]
     }
   }, [access, showPayPerArticle])
+
   if (loading || status === 'loading' || !data) {
     return null
   }

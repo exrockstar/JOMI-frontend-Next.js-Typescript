@@ -29,6 +29,13 @@ type Props = {
 
 const EditPriceDialog = ({ price, ...props }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
+  const product = price?.product
+
+  const isDefaultPrice = price?.countryCodes?.length <= 0
+  const isPurchaseOrRent = [
+    'product_rent_article',
+    'product_purchase_article'
+  ].includes(product)
   const [updatePrice, { client, loading: updatingPrice }] =
     useUpdateGeographicPriceMutation({
       onCompleted(result) {
@@ -78,22 +85,26 @@ const EditPriceDialog = ({ price, ...props }: Props) => {
           <Divider />
           <DialogContent>
             <Stack spacing={2} sx={{ minWidth: { xs: '100%', md: 600 } }}>
-              <Box>
-                <CountrySelector name="countryCode" />
-              </Box>
+              {!isDefaultPrice && (
+                <Box>
+                  <CountrySelector name="countryCode" />
+                </Box>
+              )}
               <FormikTextField
                 name="unit_amount"
                 label="Subscription Amount"
                 type="number"
               />
-              <FormikSelect
-                name="interval"
-                label="Interval"
-                id={'edit-price-interval'}
-              >
-                <MenuItem value={OrderInterval.Month}>Month</MenuItem>
-                <MenuItem value={OrderInterval.Year}>Year</MenuItem>
-              </FormikSelect>
+              {!isPurchaseOrRent && (
+                <FormikSelect
+                  name="interval"
+                  label="Interval"
+                  id={'edit-price-interval'}
+                >
+                  <MenuItem value={OrderInterval.Month}>Month</MenuItem>
+                  <MenuItem value={OrderInterval.Year}>Year</MenuItem>
+                </FormikSelect>
+              )}
             </Stack>
           </DialogContent>
           <Divider />

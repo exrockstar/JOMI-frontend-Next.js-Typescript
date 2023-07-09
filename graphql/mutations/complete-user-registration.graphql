@@ -4,12 +4,12 @@ mutation CompleteRegistration($input: ExtendedRegistrationInput!) {
       ...UserProfileParts
     }
     updatedAccess {
+      institution_id
       accessType
       institution_name
       shouldRequestInstVerification
       viaTemporaryIp
       expiry
-    }
-    matchedWithInstitution
+    }    
   }
 }

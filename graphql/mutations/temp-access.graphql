@@ -1,0 +1,4 @@
+
+mutation RemoveTemporaryAccessById($_id: String!){
+    result:removeTemporaryAccessById(_id:$_id)
+}

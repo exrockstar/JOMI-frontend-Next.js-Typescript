@@ -4,7 +4,6 @@ fragment UserParts on User {
     first
     last
   }
-  emailVerified
   subActive
   email
   role

@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogProps,
   DialogTitle,
+  Divider,
   Stack,
   TextField,
   Typography
@@ -78,8 +79,11 @@ const PromocodeModal = ({
   }
   return (
     <Dialog {...props} disablePortal maxWidth="lg">
-      <DialogTitle>Do you have a promocode?</DialogTitle>
-      <DialogContent sx={{ minWidth: 480 }}>
+      <DialogTitle>
+        <Typography variant="h5">Do you have a promocode?</Typography>
+      </DialogTitle>
+      <Divider />
+      <DialogContent sx={{ minWidth: { md: 480 } }}>
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -105,13 +109,13 @@ const PromocodeModal = ({
             </Typography>
           )}
           <Stack direction={'column'} alignItems={'stretch'} mt={1}>
-            <DefaultButton
+            <CTAButtonOutlined
               type="submit"
               data-event="promocode-modal-apply-code-button"
               onClick={analytics.trackClick}
             >
               Apply Promocode
-            </DefaultButton>
+            </CTAButtonOutlined>
           </Stack>
         </form>
         <Stack direction={'column'} alignItems={'stretch'} gap={1} my={2}>

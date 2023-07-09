@@ -1,4 +1,10 @@
-import { TableHead, TableRow, TableCell, TableSortLabel, Box } from '@mui/material'
+import {
+  TableHead,
+  TableRow,
+  TableCell,
+  TableSortLabel,
+  Box
+} from '@mui/material'
 import { PreviouslyStatedInst, User } from 'graphql/types'
 import React from 'react'
 import { visuallyHidden } from '@mui/utils'
@@ -14,7 +20,11 @@ interface HeadCell {
 const headCells: readonly HeadCell[] = [
   {
     id: 'email',
-    label: 'Email & Name'
+    label: 'Email'
+  },
+  {
+    id: 'inst_email',
+    label: 'Institutional Email'
   },
   {
     id: 'display_name',
@@ -100,16 +110,15 @@ const headCells: readonly HeadCell[] = [
 
 const UserListTableHeader = () => {
   const { sortBy, sortOrder, setSort } = useUserManagementList()
-  const createSortHandler = (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-    setSort(property, -sortOrder)
-  }
+  const createSortHandler =
+    (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
+      setSort(property, -sortOrder)
+    }
   return (
     <TableHead>
       <TableRow>
         <StickyTableCell backgroundColor={'#efefef'}>
-          <TableCell component="div" sx={{ pl: 0 }}>
-            Actions
-          </TableCell>
+          <TableCell component="div">Actions</TableCell>
           {headCells.slice(0, 1).map((headCell) => {
             const order = sortOrder >= 1 ? 'asc' : 'desc'
             return (
@@ -131,7 +140,9 @@ const UserListTableHeader = () => {
                   {headCell.label}
                   {sortBy === headCell.id ? (
                     <Box component="span" sx={visuallyHidden}>
-                      {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                      {order === 'desc'
+                        ? 'sorted descending'
+                        : 'sorted ascending'}
                     </Box>
                   ) : null}
                 </TableSortLabel>
@@ -155,7 +166,9 @@ const UserListTableHeader = () => {
                 {headCell.label}
                 {sortBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
                   </Box>
                 ) : null}
               </TableSortLabel>

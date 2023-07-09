@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Button,
   Card,
   CircularProgress,
   FormControl,
@@ -16,25 +15,13 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TableRow,
   Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
-import {
-  useAccessEventsQuery,
-  useInstArticleEventLogsQuery
-} from 'graphql/queries/access.generated'
-import {
-  ColumnFilter,
-  AccessFilterInput,
-  QueryOperation,
-  AccessTypeEnum,
-  ActivityType
-} from 'graphql/types'
+import { useInstArticleEventLogsQuery } from 'graphql/queries/access.generated'
+import { AccessFilterInput, QueryOperation } from 'graphql/types'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 import dayjs from 'dayjs'
 import ArticleActivityTableHead from './ArticleActivityTableHead'
 import { useInstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.generated'
@@ -42,6 +29,7 @@ import SearchInput from '../SearchInput'
 import { ArrowBack } from '@mui/icons-material'
 import Link from 'next/link'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
+
 const ArticleActivityDetailsPanel = () => {
   const router = useRouter()
   const sort_by = (router.query.sort_by as string) ?? 'created'

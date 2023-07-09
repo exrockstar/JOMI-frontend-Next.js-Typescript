@@ -12,7 +12,6 @@ import {
   Divider
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { _id } from '@next-auth/mongodb-adapter'
 import { IS_SERVER } from 'common/constants'
 import CmsLayout from 'components/cms/CmsLayout'
 import ActivityPanel from 'components/cms/user/ActivityTab/ActivityPanel'
@@ -21,12 +20,14 @@ import UserMainSettings from 'components/cms/user/UserMainSettings/UserMainSetti
 import TabPanel, { a11yProps } from 'components/common/TabPanel'
 import dayjs from 'dayjs'
 import { useUserDetailQuery } from 'graphql/cms-queries/user-list.generated'
-import { MatchedBy, SubType } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles'
-import { InfoOutlined } from '@mui/icons-material'
+import {
+  subscriptionText,
+  subscriptionColor
+} from 'components/common/subscriptionUtils'
 
 const UserDetails = () => {
   const [value, setValue] = useState(0)
@@ -71,51 +72,17 @@ const UserDetails = () => {
     }
   }, [router.isReady, router.asPath])
 
+  const user = data?.userById
   const tabId = `user-tab`
   const tabPanelId = tabId + '-panel'
-  const user = data?.userById
-  const needsInstEmailConfirmation =
-    user?.matchedBy === MatchedBy.InstitutionalEmail && !user?.instEmailVerified
-  const needsEmailConfirmation =
-    user?.matchedBy === MatchedBy.Email && user?.emailNeedsConfirm
-  const needsConfirmation =
-    user?.subscription.subType === SubType.Institution &&
-    (needsInstEmailConfirmation || needsEmailConfirmation)
+  const accessType = user?.accessType?.accessType
+
   const LoadingOrError = (
     <Stack alignItems="center" justifyContent="center" height="90vh">
       {loading && <CircularProgress />}
       {error && <Alert severity="error">{error.message}</Alert>}
     </Stack>
   )
-
-  const subscriptionColor = (subType: SubType) => {
-    switch (subType) {
-      case SubType.Individual:
-        return 'secondary'
-      case SubType.Trial:
-        return 'warning'
-      case SubType.Institution:
-        if (needsEmailConfirmation || needsInstEmailConfirmation) {
-          return 'warning'
-        }
-        return 'secondary'
-      case SubType.NotCreated:
-      default:
-        return 'error'
-    }
-  }
-
-  const subscriptionText = (subType: SubType) => {
-    switch (subType) {
-      case SubType.Individual:
-      case SubType.Institution:
-      case SubType.Trial:
-        return subType
-      case SubType.NotCreated:
-      default:
-        return 'No subscription'
-    }
-  }
 
   const getUserStatus = () => {
     if (!user) return 'NORMAL'
@@ -144,8 +111,6 @@ const UserDetails = () => {
   }
   const userStatusColor = userStatus === 'NORMAL' ? 'success' : 'error'
   const statusMessage = getStatusBarMessage()
-  const subType = user?.subscription?.subType
-
   return (
     <CmsLayout>
       {!user ? (
@@ -161,7 +126,14 @@ const UserDetails = () => {
               <Divider sx={{ my: 2 }} />
             </Grid>
 
-            <Grid item xs={12} lg={3}>
+            <Box
+              display={'flex'}
+              alignItems={'center'}
+              flexWrap={'wrap'}
+              justifyContent={'space-between'}
+              gap={4}
+              width={'100%'}
+            >
               <Stack direction="row" spacing={2} alignItems="center">
                 <Typography variant="overline" color="textSecondary">
                   State:
@@ -172,43 +144,24 @@ const UserDetails = () => {
                   size="small"
                 />
               </Stack>
-            </Grid>
-
-            <Grid item xs={12} lg={3}>
               <Typography variant="overline" color="textSecondary">
                 Created at: {dayjs(user.created).format('MM/DD/YYYY')}
               </Typography>
-            </Grid>
-            <Grid item xs={12} lg={3}>
               <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="overline">Subscription:</Typography>
+                <Typography color="textSecondary" variant="overline">
+                  Access:
+                </Typography>
                 <MyChip
-                  label={subscriptionText(subType)}
-                  color={subscriptionColor(subType)}
+                  label={subscriptionText(accessType)}
+                  color={subscriptionColor(accessType)}
                   size="small"
                 />
               </Stack>
-              {needsConfirmation && (
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  alignItems="center"
-                  display="flex"
-                  gap={1}
-                >
-                  <InfoOutlined color="warning" />
-                  {needsInstEmailConfirmation &&
-                    'Needs institutional email confirmation'}
-                  {needsEmailConfirmation &&
-                    'Needs personal email confirmation'}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item xs={12} lg={3}>
               <Typography variant="overline" color="textSecondary">
                 Last Visited: {dayjs(user.last_visited).format('MM/DD/YYYY')}
               </Typography>
-            </Grid>
+            </Box>
+
             {statusMessage && (
               <Grid item xs={12}>
                 <Alert severity="error" sx={{ mt: 2 }}>

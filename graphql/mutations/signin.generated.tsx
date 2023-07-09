@@ -9,21 +9,21 @@ export type SignInMutationVariables = Types.Exact<{
 }>;
 
 
-export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'User', _id: string, emailVerified: boolean, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
 
 export type SignInViaTokenMutationVariables = Types.Exact<{
   token: Types.Scalars['String'];
 }>;
 
 
-export type SignInViaTokenMutation = { __typename?: 'Mutation', tokenSignIn?: { __typename?: 'User', _id: string, emailVerified: boolean, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInViaTokenMutation = { __typename?: 'Mutation', tokenSignIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
 
 export type SignInViaOldTokenMutationVariables = Types.Exact<{
   tokenId: Types.Scalars['String'];
 }>;
 
 
-export type SignInViaOldTokenMutation = { __typename?: 'Mutation', user?: { __typename?: 'User', _id: string, emailVerified: boolean, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInViaOldTokenMutation = { __typename?: 'Mutation', user?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
 
 
 export const SignInDocument = gql`

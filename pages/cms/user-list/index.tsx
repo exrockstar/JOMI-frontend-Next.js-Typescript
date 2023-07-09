@@ -57,6 +57,12 @@ const columnOptions: ColumnOption[] = [
     operations: StringOperations
   },
   {
+    label: 'Institutional Email',
+    columnName: 'inst_email',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
     label: 'Role',
     columnName: 'role',
     type: 'select',
@@ -137,12 +143,7 @@ const columnOptions: ColumnOption[] = [
     type: 'boolean',
     operations: [QueryOperation.Equal, QueryOperation.NotEqual]
   },
-  // {
-  //   label: 'Social',
-  //   columnName: 'social',
-  //   type: 'text',
-  //   operations: StringOperations
-  // },
+
   {
     label: 'Match Status',
     columnName: 'matchStatus',
@@ -217,6 +218,18 @@ const columnOptions: ColumnOption[] = [
     columnName: 'requestSubscriptionCount',
     type: 'number',
     operations: NumericOperations
+  },
+  {
+    label: 'Email Verify Date',
+    columnName: 'emailVerifiedAt',
+    type: 'date',
+    operations: DateOperations
+  },
+  {
+    label: 'Institution Email Verified At',
+    columnName: 'instEmailVerifiedAt',
+    type: 'date',
+    operations: DateOperations
   }
 ]
 const UserManagementListPage = () => {
