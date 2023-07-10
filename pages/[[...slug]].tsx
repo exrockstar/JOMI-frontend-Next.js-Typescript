@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 import Layout from 'components/layout'
 import Script from 'next/script'
 
-import { GetServerSideProps, GetStaticProps } from 'next'
+import { GetStaticProps } from 'next'
 import { DefaultPageProps } from 'backend/seo/MetaData'
 import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
 import { getApolloAdminClient } from 'apis/apollo-admin-client'
@@ -26,9 +26,12 @@ import ArticleIndex, {
 } from './article-index'
 import { useRouter } from 'next/router'
 import { ArticleIndexSection } from 'components/article-index/types'
+
+import HomePage, { getStaticProps as homeGetStaticProps } from './home'
 type GenericPageProps = {
   page: PageBySlugQuery['pageBySlug']
   scripts: string[]
+  _name: 'generic'
 } & DefaultPageProps
 
 type ExampleCaseItem = {
@@ -43,16 +46,25 @@ type ArticleIndexProps = {
   indexInfo: string
   sections: ArticleIndexSection[]
   exampleCases: ExampleCaseItem[]
+  _name: 'index'
 } & DefaultPageProps
 
 export default function SinglePage(
   props: GenericPageProps | ArticleIndexProps
 ) {
-  const router = useRouter()
-  if (router.asPath.startsWith('/index')) {
+  // when a proxy such as ezproxy is used, sometimmes nextjs matches /[[...slug ]] route instead of
+  // /home route. Hence, we have thes condition below. Same with /article-index or /index.
+  if (!props._name) {
+    let _props = props as any
+    return <HomePage {..._props} />
+  }
+
+  if (props._name === 'index') {
     let _props = props as ArticleIndexProps
     return <ArticleIndex {..._props} />
   }
+
+  // render generic page
   let _props = props as GenericPageProps
   const { scripts, page } = _props
   return (
@@ -82,7 +94,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        slug: [...splitSlug],
+        slug: [undefined, '/index', ...splitSlug],
         id: _id
       }
     }
@@ -101,9 +113,16 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
 }) => {
   const slug = Array.isArray(params.slug) ? params.slug.join('/') : params.slug
   logger.info(`Regenerating page ${params.slug}`)
-  console.log(slug)
+  // when a proxy such as ezproxy is used, sometimmes nextjs matches /[[...slug ]] route instead of
+  // /home route. Hence, we have thes condition below. Same with /article-index or /index.
+
+  if (!slug) {
+    const props = await homeGetStaticProps({ params })
+    return props
+  }
+
   if (slug.startsWith('index')) {
-    return articleIndexGetStaticProps({ params })
+    return await articleIndexGetStaticProps({ params })
   }
 
   try {
