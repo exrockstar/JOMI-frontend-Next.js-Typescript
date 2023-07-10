@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/index",
+      "destination": "/article-index"
+    },
+    {
+      "source": "/",
+      "destination": "/home"
+    }
+  ]
+}

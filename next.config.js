@@ -51,23 +51,11 @@ const config = {
   async redirects() {
     return [
       { source: '/account', destination: '/account/profile', permanent: true },
-      {
-        source: '/article-index',
-        destination: '/index',
-        statusCode: 301
-      }
     ]
   },
   async rewrites() {
     return [
-      {
-        source: '/',
-        destination: '/home'
-      },
-      {
-        source: '/index',
-        destination: '/article-index'
-      },
+    
       {
         source: '/request-subscription',
         destination: '/account/request-subscription'
