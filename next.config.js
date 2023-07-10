@@ -14,7 +14,8 @@ const config = {
     V4_URL: process.env.V4_URL,
     GOOGLE_GTM: process.env.GOOGLE_GTM,
     FACEBOOK_PIXEL_ID: process.env.FACEBOOK_PIXEL_ID,
-    NEXT_PUBLIC_LINKEDIN_PARTNER_ID: process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID,
+    NEXT_PUBLIC_LINKEDIN_PARTNER_ID:
+      process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID,
     AMPLITUDE_API_KEY: process.env.AMPLITUDE_API_KEY
   },
   images: {
@@ -50,11 +51,19 @@ const config = {
   },
   async redirects() {
     return [
-      { source: '/account', destination: '/account/profile', permanent: true },
+      { source: '/account', destination: '/account/profile', permanent: true }
     ]
   },
   async rewrites() {
-    let rewrites = [
+    return [
+      {
+        source: '/index',
+        destination: '/article-index'
+      },
+      {
+        source: '/',
+        destination: '/home'
+      },
       {
         source: '/request-subscription',
         destination: '/account/request-subscription'
@@ -68,21 +77,6 @@ const config = {
         destination: '/api/request-publication'
       }
     ]
-
-    // add /home and /index rewrites locally for development since it's not deployed in vercel yet
-    if(process.env.NODE_ENV === "development"){
-      rewrites = rewrites.concat([
-        {
-          "source": "/index",
-          "destination": "/article-index"
-        },
-        {
-          "source": "/",
-          "destination": "/home"
-        }
-      ])
-    }
-    return rewrites
   },
   pwa: {
     dest: 'public',

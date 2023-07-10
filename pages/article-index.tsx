@@ -240,6 +240,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   })
   return {
     props: {
+      _name: 'index',
       indexInfo: indexInfo,
       sections: sections,
       exampleCases: exampleCases

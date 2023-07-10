@@ -32,7 +32,6 @@ async function getRedirect(from: string) {
   return data
 }
 const PUBLIC_FILE = /\.(.*)$/
-const isProduction = process.env.NODE_ENV === 'production'
 /**
  * Middleware function to redirect based on the redirects stored in the database
  *
@@ -41,12 +40,6 @@ export const withRedirect: MiddlewareFactory = (next: NextMiddleware) => {
   return async function (req: NextRequest, _next: NextFetchEvent) {
     try {
       const { pathname, origin } = req.nextUrl
-      //fix for /index not rewriting to /article-index in production due to
-      //conflicting with pages/[...slug].tsx path
-      if (pathname.startsWith('/index/index') && isProduction) {
-        const url = new URL('/article-index', origin)
-        return NextResponse.rewrite(url)
-      }
 
       if (pathname === '/account') {
         const url = new URL('/account/profile', origin)
