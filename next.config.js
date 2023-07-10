@@ -54,8 +54,7 @@ const config = {
     ]
   },
   async rewrites() {
-    return [
-    
+    let rewrites = [
       {
         source: '/request-subscription',
         destination: '/account/request-subscription'
@@ -69,6 +68,21 @@ const config = {
         destination: '/api/request-publication'
       }
     ]
+
+    // add /home and /index rewrites locally for development since it's not deployed in vercel yet
+    if(process.env.NODE_ENV === "development"){
+      rewrites = rewrites.concat([
+        {
+          "source": "/index",
+          "destination": "/article-index"
+        },
+        {
+          "source": "/",
+          "destination": "/home"
+        }
+      ])
+    }
+    return rewrites
   },
   pwa: {
     dest: 'public',
