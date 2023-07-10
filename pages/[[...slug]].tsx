@@ -94,7 +94,7 @@ export async function getStaticPaths() {
 
     return {
       params: {
-        slug: [undefined, '/index', ...splitSlug],
+        slug: [...splitSlug],
         id: _id
       }
     }
