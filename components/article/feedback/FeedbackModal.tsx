@@ -22,6 +22,7 @@ type Question = GetFeedbackQuestionsQuery['question']
 type Props = DialogProps & {
   onAnswer(value: any, question: Question, comment?: string): void
   question?: Question
+  hideSkipButton?: boolean
 }
 
 const FeedbackModal = (props: Props) => {
@@ -99,16 +100,18 @@ const FeedbackModal = (props: Props) => {
           >
             Send Feedback
           </CTAButton>
-          <Button
-            onClick={(e) => {
-              props.onClose(e, null)
-            }}
-            color="secondary"
-            variant="outlined"
-            sx={{ textTransform: 'none' }}
-          >
-            Continue Watching Video
-          </Button>
+          {!props.hideSkipButton && (
+            <Button
+              onClick={(e) => {
+                props.onClose(e, null)
+              }}
+              color="secondary"
+              variant="outlined"
+              sx={{ textTransform: 'none' }}
+            >
+              Continue Watching Video
+            </Button>
+          )}
         </Box>
       </Dialog>
     </ThemeProvider>

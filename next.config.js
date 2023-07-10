@@ -51,23 +51,10 @@ const config = {
   async redirects() {
     return [
       { source: '/account', destination: '/account/profile', permanent: true },
-      {
-        source: '/article-index',
-        destination: '/index',
-        statusCode: 301
-      }
     ]
   },
   async rewrites() {
-    return [
-      {
-        source: '/',
-        destination: '/home'
-      },
-      {
-        source: '/index',
-        destination: '/article-index'
-      },
+    let rewrites = [
       {
         source: '/request-subscription',
         destination: '/account/request-subscription'
@@ -81,6 +68,21 @@ const config = {
         destination: '/api/request-publication'
       }
     ]
+
+    // add /home and /index rewrites locally for development since it's not deployed in vercel yet
+    if(process.env.NODE_ENV === "development"){
+      rewrites = rewrites.concat([
+        {
+          "source": "/index",
+          "destination": "/article-index"
+        },
+        {
+          "source": "/",
+          "destination": "/home"
+        }
+      ])
+    }
+    return rewrites
   },
   pwa: {
     dest: 'public',

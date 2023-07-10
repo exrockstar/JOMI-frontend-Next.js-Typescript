@@ -11,11 +11,14 @@ import { useEffect, useState } from 'react'
 import { useUserProfileQuery } from 'graphql/queries/user-profile.generated'
 import { useRouter } from 'next/router'
 
+type FeedbackContainerProps = {
+  hideSkipButton?: boolean
+}
 /**
  *
  * @returns
  */
-const FeedbackContainer = () => {
+const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   const { setHasGivenFeedback, showFeedbackDialog, setShowFeedbackDialog } =
     useAppState()
 
@@ -33,12 +36,12 @@ const FeedbackContainer = () => {
   })
   const [trackFeedback] = useTrackFeedbackMutation()
   const router = useRouter()
+  const forceShowFeedback = Boolean(router.query.feedback as string)
   useEffect(() => {
-    const getFeedback = router.query.feedback as string
-    if (!!getFeedback) {
+    if (!!forceShowFeedback) {
       setShowFeedbackDialog(true)
     }
-  }, [router])
+  }, [forceShowFeedback, setShowFeedbackDialog])
   return (
     <>
       <FeedbackModal
@@ -46,6 +49,7 @@ const FeedbackContainer = () => {
         onClose={() => {
           setShowFeedbackDialog(false)
         }}
+        hideSkipButton={forceShowFeedback || hideSkipButton}
         question={feedbackQuestionData?.question}
         onAnswer={async (value, question, comment) => {
           gtag('event', 'track_feedback', {
