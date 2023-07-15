@@ -162,6 +162,7 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
     })
     return {
       props: {
+        _name: 'generic',
         page: {
           ...data?.pageBySlug,
           content: content
