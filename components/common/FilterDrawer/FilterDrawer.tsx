@@ -105,6 +105,12 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
           (option) => filter.columnName === option.columnName
         )
         if (!columnOption) return
+        const hideInput = [
+          QueryOperation.IsNull,
+          QueryOperation.IsNullOrEmpty,
+          QueryOperation.IsNotNull,
+          QueryOperation.IsNotNullOrEmpty
+        ].includes(filter.operation)
         return (
           <Stack
             key={filter.columnName + index}
@@ -142,58 +148,62 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                 )
               })}
             </Select>
-            {(columnOption.type === 'text' ||
-              columnOption.type === 'number') && (
-              <TextField
-                placeholder="Value"
-                size="small"
-                value={filter.value}
-                type={columnOption.type}
-                onChange={(e) => {
-                  const val =
-                    columnOption.type === 'number'
-                      ? parseFloat(e.target.value)
-                      : e.target.value
-                  handleValueChange(index, val)
-                }}
-              />
-            )}
-            {columnOption.type === 'date' && (
-              <CustomDatePicker
-                defaultLabel="Date filter"
-                value={filter.value}
-                onChange={(val?: Dayjs) => {
-                  handleValueChange(index, val.format('MM-DD-YYYY'))
-                }}
-              />
-            )}
-            {columnOption.type === 'select' && (
-              <Select
-                placeholder="Value"
-                size="small"
-                value={filter.value}
-                onChange={(e) => handleValueChange(index, e.target.value)}
-              >
-                {columnOption.values?.map((value) => (
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-            {columnOption.type === 'boolean' && (
-              <Select
-                placeholder="Value"
-                size="small"
-                value={filter.value}
-                onChange={(e) =>
-                  handleValueChange(index, e.target.value === 'true')
-                }
-              >
-                <MenuItem value={'true'}>True</MenuItem>
-                <MenuItem value={'false'}>False</MenuItem>
-              </Select>
-            )}
+            {!hideInput ? (
+              <>
+                {(columnOption.type === 'text' ||
+                  columnOption.type === 'number') && (
+                  <TextField
+                    placeholder="Value"
+                    size="small"
+                    value={filter.value}
+                    type={columnOption.type}
+                    onChange={(e) => {
+                      const val =
+                        columnOption.type === 'number'
+                          ? parseFloat(e.target.value)
+                          : e.target.value
+                      handleValueChange(index, val)
+                    }}
+                  />
+                )}
+                {columnOption.type === 'date' && (
+                  <CustomDatePicker
+                    defaultLabel="Date filter"
+                    value={filter.value}
+                    onChange={(val?: Dayjs) => {
+                      handleValueChange(index, val.format('MM-DD-YYYY'))
+                    }}
+                  />
+                )}
+                {columnOption.type === 'select' && (
+                  <Select
+                    placeholder="Value"
+                    size="small"
+                    value={filter.value}
+                    onChange={(e) => handleValueChange(index, e.target.value)}
+                  >
+                    {columnOption.values?.map((value) => (
+                      <MenuItem key={value} value={value}>
+                        {value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+                {columnOption.type === 'boolean' && (
+                  <Select
+                    placeholder="Value"
+                    size="small"
+                    value={filter.value}
+                    onChange={(e) =>
+                      handleValueChange(index, e.target.value === 'true')
+                    }
+                  >
+                    <MenuItem value={'true'}>True</MenuItem>
+                    <MenuItem value={'false'}>False</MenuItem>
+                  </Select>
+                )}
+              </>
+            ) : null}
             <IconButton color="error" onClick={() => removeFilter(index)}>
               <Delete />
             </IconButton>

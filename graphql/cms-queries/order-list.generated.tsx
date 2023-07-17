@@ -9,22 +9,29 @@ export type OrdersByUserIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type OrdersByUserIdQuery = { __typename?: 'Query', ordersByUserId?: Array<{ __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type: Types.OrderType, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, renewals?: number | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined }> | null | undefined };
+export type OrdersByUserIdQuery = { __typename?: 'Query', ordersByUserId?: Array<{ __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, renewals?: number | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined, institution?: string | null | undefined, user_id?: string | null | undefined, location?: string | null | undefined }> | null | undefined };
 
 export type OrderByIdQueryVariables = Types.Exact<{
   order_id: Types.Scalars['String'];
 }>;
 
 
-export type OrderByIdQuery = { __typename?: 'Query', orderById?: { __typename?: 'Order', _id: string, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, renewals?: number | null | undefined, createdBy?: string | null | undefined, lastEditedBy?: string | null | undefined, created: any, updated: any, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, type: Types.OrderType, plan_interval?: Types.OrderInterval | null | undefined, amount?: number | null | undefined, institution?: string | null | undefined, user_id?: string | null | undefined, promoCode?: string | null | undefined, latest_invoice?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, plan_id?: string | null | undefined, deleted?: boolean | null | undefined } | null | undefined };
+export type OrderByIdQuery = { __typename?: 'Query', orderById?: { __typename?: 'Order', _id: string, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, renewals?: number | null | undefined, createdBy?: string | null | undefined, lastEditedBy?: string | null | undefined, created: any, updated: any, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, type?: Types.OrderType | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, amount?: number | null | undefined, institution?: string | null | undefined, user_id?: string | null | undefined, promoCode?: string | null | undefined, latest_invoice?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, plan_id?: string | null | undefined, deleted?: boolean | null | undefined, restricted_user_types: Array<string>, restricted_specialties: Array<string>, articleId?: string | null | undefined, notes?: string | null | undefined, institutionObject?: { __typename?: 'Institution', name: string, _id: string } | null | undefined } | null | undefined };
 
 export type UpdateOrderByUserMutationVariables = Types.Exact<{
   id: Types.Scalars['String'];
-  input: Types.OrderInputForUser;
+  input: Types.UpdateOrderInput;
 }>;
 
 
-export type UpdateOrderByUserMutation = { __typename?: 'Mutation', updateOrderForUser?: { __typename?: 'Order', _id: string, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, renewals?: number | null | undefined, createdBy?: string | null | undefined, lastEditedBy?: string | null | undefined, created: any, updated: any, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, type: Types.OrderType, plan_interval?: Types.OrderInterval | null | undefined, amount?: number | null | undefined, institution?: string | null | undefined, user_id?: string | null | undefined, promoCode?: string | null | undefined, latest_invoice?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, plan_id?: string | null | undefined, deleted?: boolean | null | undefined } | null | undefined };
+export type UpdateOrderByUserMutation = { __typename?: 'Mutation', updateOrderCms?: { __typename?: 'Order', _id: string, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, renewals?: number | null | undefined, createdBy?: string | null | undefined, lastEditedBy?: string | null | undefined, created: any, updated: any, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, type?: Types.OrderType | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, amount?: number | null | undefined, institution?: string | null | undefined, user_id?: string | null | undefined, promoCode?: string | null | undefined, latest_invoice?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, plan_id?: string | null | undefined, deleted?: boolean | null | undefined, restricted_user_types: Array<string>, restricted_specialties: Array<string>, articleId?: string | null | undefined, notes?: string | null | undefined, institutionObject?: { __typename?: 'Institution', name: string, _id: string } | null | undefined } | null | undefined };
+
+export type OrderListQueryVariables = Types.Exact<{
+  input: Types.OrderListInput;
+}>;
+
+
+export type OrderListQuery = { __typename?: 'Query', output: { __typename?: 'OrderListOutput', count: number, dbQueryString: string, orders: Array<{ __typename?: 'Order', _id: string, institution?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, location?: string | null | undefined, start?: any | null | undefined, end?: any | null | undefined, created: any, plan_id?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, user_id?: string | null | undefined, db_user_id?: string | null | undefined, description?: string | null | undefined, promoCode?: string | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, latest_invoice?: string | null | undefined, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, renewals?: number | null | undefined, amount?: number | null | undefined, type?: Types.OrderType | null | undefined, notes?: string | null | undefined, user?: { __typename?: 'User', _id: string, email: string } | null | undefined, institutionObject?: { __typename?: 'Institution', name: string, _id: string } | null | undefined }> } };
 
 
 export const OrdersByUserIdDocument = gql`
@@ -48,6 +55,9 @@ export const OrdersByUserIdDocument = gql`
     renewals
     status
     payment_status
+    institution
+    user_id
+    location
   }
 }
     `;
@@ -115,8 +125,8 @@ export type OrderByIdQueryHookResult = ReturnType<typeof useOrderByIdQuery>;
 export type OrderByIdLazyQueryHookResult = ReturnType<typeof useOrderByIdLazyQuery>;
 export type OrderByIdQueryResult = Apollo.QueryResult<OrderByIdQuery, OrderByIdQueryVariables>;
 export const UpdateOrderByUserDocument = gql`
-    mutation UpdateOrderByUser($id: String!, $input: OrderInputForUser!) {
-  updateOrderForUser(id: $id, input: $input) {
+    mutation UpdateOrderByUser($id: String!, $input: UpdateOrderInput!) {
+  updateOrderCms(id: $id, input: $input) {
     ...OrderByIdParts
   }
 }
@@ -148,3 +158,73 @@ export function useUpdateOrderByUserMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateOrderByUserMutationHookResult = ReturnType<typeof useUpdateOrderByUserMutation>;
 export type UpdateOrderByUserMutationResult = Apollo.MutationResult<UpdateOrderByUserMutation>;
 export type UpdateOrderByUserMutationOptions = Apollo.BaseMutationOptions<UpdateOrderByUserMutation, UpdateOrderByUserMutationVariables>;
+export const OrderListDocument = gql`
+    query OrderList($input: OrderListInput!) {
+  output: getAllOrders(input: $input) {
+    orders {
+      _id
+      institution
+      require_login
+      location
+      start
+      end
+      created
+      require_login
+      plan_id
+      plan_interval
+      user_id
+      db_user_id
+      description
+      promoCode
+      payment_status
+      status
+      currency
+      latest_invoice
+      lastEditedBy
+      createdBy
+      renewals
+      amount
+      user {
+        _id
+        email
+      }
+      institutionObject {
+        name
+        _id
+      }
+      type
+      notes
+    }
+    count
+    dbQueryString
+  }
+}
+    `;
+
+/**
+ * __useOrderListQuery__
+ *
+ * To run a query within a React component, call `useOrderListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderListQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOrderListQuery(baseOptions: Apollo.QueryHookOptions<OrderListQuery, OrderListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderListQuery, OrderListQueryVariables>(OrderListDocument, options);
+      }
+export function useOrderListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderListQuery, OrderListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderListQuery, OrderListQueryVariables>(OrderListDocument, options);
+        }
+export type OrderListQueryHookResult = ReturnType<typeof useOrderListQuery>;
+export type OrderListLazyQueryHookResult = ReturnType<typeof useOrderListLazyQuery>;
+export type OrderListQueryResult = Apollo.QueryResult<OrderListQuery, OrderListQueryVariables>;

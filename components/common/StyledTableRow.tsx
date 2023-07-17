@@ -5,6 +5,6 @@ export const StyledTableRow = styled(TableRow)(({ theme, selected }) => ({
     backgroundColor: !selected ? theme.palette.grey[50] : null
   },
   '&:last-child td, &:last-child th': {
-    border: 0
+    borderBottom: 0
   }
 }))

@@ -6,7 +6,8 @@ import {
   Stack,
   Typography,
   Link as MuiLink,
-  Chip
+  Chip,
+  Box
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import dayjs from 'dayjs'
@@ -24,7 +25,8 @@ const OrderDetails = () => {
     skip: !id,
     variables: {
       order_id: id
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 
   if (loading || !data) {
@@ -75,30 +77,84 @@ const OrderDetails = () => {
     <>
       <Typography variant="h4">Order Details </Typography>
       <div>
-        <Typography variant="overline" color="text.secondary" component="span">
-          Database ID:
+        <Typography variant="body2" color="text.secondary" component="span">
+          Database ID: {id}
         </Typography>
-        {id}
       </div>
-
-      <Grid container>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Divider sx={{ my: 1 }} />
+      <Stack
+        direction="row"
+        flexWrap={'wrap'}
+        sx={{ '> div': { minWidth: 250, maxWidth: 400, flexGrow: 1 } }}
+      >
+        <Box>
           <Typography variant="overline" color="textSecondary">
             Created: {dayjs(order.created).format('MM/DD/YYYY')}
           </Typography>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        </Box>
+        <Box>
+          <Typography variant="overline" color="textSecondary">
+            Updated: {dayjs(order.updated).format('MM/DD/YYYY')}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="overline" color="textSecondary">
+            Created By:{' '}
+            <MuiLink
+              variant="body2"
+              href={`/cms/user/${order.createdBy}`}
+              component={Link}
+            >
+              {order.createdBy}
+            </MuiLink>
+          </Typography>
+        </Box>
+        <Box>
+          <Typography variant="overline" color="textSecondary">
+            Last edited By:{' '}
+            <MuiLink
+              variant="body2"
+              href={`/cms/user/${order.lastEditedBy}`}
+              component={Link}
+              sx={{ typography: 'secondary' }}
+            >
+              {order.lastEditedBy}
+            </MuiLink>
+          </Typography>
+        </Box>
+      </Stack>
+      <Stack
+        direction="row"
+        flexWrap={'wrap'}
+        sx={{ '> div': { minWidth: 250, maxWidth: 400, flexGrow: 1 } }}
+      >
+        <Box>
           <Typography
             variant="overline"
             color="textSecondary"
             component="span"
             mr={1}
           >
-            Status:{' '}
+            Order Status:{' '}
           </Typography>
-          <MyChip label={order.status} color={statusColor()} size="small" />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <MyChip
+            label={order.status ?? 'Unknown'}
+            color={statusColor()}
+            size="small"
+          />
+        </Box>
+        <Box>
+          <Typography
+            variant="overline"
+            color="textSecondary"
+            component="span"
+            mr={1}
+          >
+            Order Type:{' '}
+          </Typography>
+          <MyChip label={order.type ?? 'Unknown'} size="small" />
+        </Box>
+        <Box>
           <Typography
             variant="overline"
             color="textSecondary"
@@ -108,12 +164,12 @@ const OrderDetails = () => {
             Payment Status:
           </Typography>
           <MyChip
-            label={order.payment_status}
+            label={order.payment_status ?? 'Unknown'}
             color={paymentStatusColor()}
             size="small"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3}>
+        </Box>
+        <Box>
           <Typography
             variant="overline"
             color="textSecondary"
@@ -123,9 +179,9 @@ const OrderDetails = () => {
             Will cancel:{' '}
           </Typography>
           <MyChip label={cancelText} color={cancelColor} size="small" />
-        </Grid>
-      </Grid>
-      <Divider sx={{ my: 2 }} />
+        </Box>
+      </Stack>
+      <Divider sx={{ my: 1 }} />
       {order.deleted && (
         <Alert severity="error">
           Subscription been deleted/canceled on Stripe

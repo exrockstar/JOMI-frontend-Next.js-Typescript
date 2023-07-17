@@ -20,6 +20,10 @@ query OrdersByUserId($user_id: String!) {
     renewals
     status
     payment_status
+    institution
+    user_id
+    location
+    
   }
 }
 
@@ -30,8 +34,49 @@ query OrderById($order_id: String!) {
 }
 
 
-mutation UpdateOrderByUser($id: String!, $input: OrderInputForUser!){
-  updateOrderForUser(id: $id, input:$input) {
+mutation UpdateOrderByUser($id: String!, $input: UpdateOrderInput!){
+  updateOrderCms(id: $id, input:$input) {
     ...OrderByIdParts
+  }
+}
+
+query OrderList($input:OrderListInput!) {
+  output:getAllOrders(input: $input){
+    orders{
+      _id
+      institution
+      require_login
+      location
+      start
+      end
+      created
+      require_login
+      plan_id
+      plan_interval
+      user_id
+      db_user_id
+      description
+      promoCode
+      payment_status
+      status
+      currency
+      latest_invoice
+      lastEditedBy
+      createdBy
+      renewals
+      amount
+      user {
+        _id
+        email
+      }
+      institutionObject {
+        name
+        _id
+      }
+      type
+      notes
+    }
+    count
+    dbQueryString
   }
 }

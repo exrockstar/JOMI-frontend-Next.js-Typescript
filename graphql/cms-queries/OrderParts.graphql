@@ -17,6 +17,7 @@ fragment OrderParts on Order {
   restricted_user_types
   restricted_specialties
   deleted
+  notes
 }
 
 fragment OrderByIdParts on Order {
@@ -45,4 +46,13 @@ fragment OrderByIdParts on Order {
   isCanceled
   plan_id
   deleted
+  restricted_user_types
+  restricted_specialties
+  articleId
+  require_login
+  notes
+  institutionObject {
+    name
+    _id
+  }
 }

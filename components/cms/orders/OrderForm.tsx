@@ -21,7 +21,7 @@ import {
 
 import {
   OrderCurrency,
-  OrderInputForUser,
+  UpdateOrderInput,
   OrderInterval,
   OrderPaymentStatus,
   OrderStatus,
@@ -29,30 +29,53 @@ import {
   RequireLogin
 } from 'graphql/types'
 import { useSnackbar } from 'notistack'
-import { boolean, date, number, object, string, TypeOf } from 'yup'
+import yup, { boolean, date, number, object, string, TypeOf } from 'yup'
 import SubmitOrderButton from './SubmitOrderButton'
 import Link from 'next/link'
 import OrderActions from './OrderActions'
 import FormikCheckbox from 'components/common/formik/FormikCheckbox'
 import { useRouter } from 'next/router'
-import { Info } from '@mui/icons-material'
+import OrderFormErrors from './OrderFormErrors'
+import dayjs from 'dayjs'
+import UserTypeSelector from '../institution-details/Orders/UserTypeSelector'
+import SpecialtySelector from '../institution-details/Orders/SpecialtySelector'
 
 type Props = {
   order: OrderByIdQuery['orderById']
 }
 
 const schema = object({
-  description: string().required(),
-  start: date().required('Start date is required'),
-  end: date().required('End date is required'),
+  description: string().optional(),
+  start: date().when('type', {
+    is: OrderType.PurchaseArticle,
+    then: date().optional().nullable(),
+    otherwise: date().required('Start date is required')
+  }),
+  end: date().when('type', {
+    is: OrderType.PurchaseArticle,
+    then: date().optional().nullable(),
+    otherwise: date().required('Start date is required')
+  }),
   type: string().oneOf(Object.values(OrderType)),
-  plan_interval: string().required().oneOf(Object.values(OrderInterval)),
+  plan_interval: string()
+    .optional()
+    .nullable()
+    .oneOf(Object.values(OrderInterval).concat(null)),
   amount: number().required().typeError('Invalid amount'),
-  currency: string().oneOf(Object.values(OrderCurrency)),
-  payment_status: string().oneOf(Object.values(OrderPaymentStatus)),
-  status: string().oneOf(Object.values(OrderStatus)),
+
+  currency: string()
+    .required('Currency is a required field.')
+    .nullable()
+    .oneOf(Object.values(OrderCurrency)),
+  payment_status: string()
+    .required('Payment status is a required field.')
+    .nullable()
+    .oneOf(Object.values(OrderPaymentStatus)),
+  status: string()
+    .required('Status is a required field.')
+    .nullable()
+    .oneOf(Object.values(OrderStatus)),
   require_login: string().oneOf(Object.values(RequireLogin)),
-  user_id: string().required(),
   isCanceled: boolean().optional()
 })
 
@@ -73,29 +96,31 @@ const OrderForm = ({ order }: Props) => {
     }
   })
 
-  const initialValues: OrderInputForUser = {
+  const initialValues: UpdateOrderInput = {
     description: order.description,
     start: order.start,
     end: order.end,
     type: order.type,
     plan_interval: order.plan_interval,
     amount: order.amount,
+    promoCode: order.promoCode,
     currency: order.currency,
     payment_status: order.payment_status,
     status: order.status,
     require_login: order.require_login,
     user_id: order.user_id,
-    isCanceled: !!order.isCanceled
+    institution: order.institution,
+    articleId: order.articleId,
+    restricted_specialties: order.restricted_specialties,
+    restricted_user_types: order.restricted_user_types,
+    isCanceled: !!order.isCanceled,
+    notes: order.notes
   }
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
-      onSubmit={(
-        values: OrderInputForUser,
-        formikHelpers: FormikHelpers<{}>
-      ) => {
-        console.log('submitting', values)
+      onSubmit={(values: UpdateOrderInput) => {
         updateOrder({
           variables: {
             id: order._id,
@@ -108,6 +133,7 @@ const OrderForm = ({ order }: Props) => {
       }}
     >
       <>
+        <OrderFormErrors></OrderFormErrors>
         <Form>
           <Box position="relative">
             <Grid container my={2} spacing={2}>
@@ -134,20 +160,20 @@ const OrderForm = ({ order }: Props) => {
                     label="Order Type"
                     size="small"
                   >
-                    <MenuItem value={OrderType.Standard}>Standard</MenuItem>
-                    <MenuItem value={OrderType.Trial}>Trial</MenuItem>
-                    <MenuItem value={OrderType.Default}>Default</MenuItem>
-                    <MenuItem value={OrderType.Individual}>Individual</MenuItem>
-                    <MenuItem value={OrderType.StandardStripe}>
-                      Standard-Stripe
-                    </MenuItem>
+                    {Object.values(OrderType).map((val) => (
+                      <MenuItem value={val} key={val}>
+                        {val}
+                      </MenuItem>
+                    ))}
                   </FormikSelect>
                   <FormikSelect
                     name="plan_interval"
                     id="order-type"
                     label="Interval"
                     size="small"
+                    defaultValue={OrderInterval.NotApplicable}
                   >
+                    <MenuItem value={OrderInterval.NotApplicable}>N/A</MenuItem>
                     <MenuItem value={OrderInterval.Day}>Day</MenuItem>
                     <MenuItem value={OrderInterval.Week}>Week</MenuItem>
                     <MenuItem value={OrderInterval.Month}>Month</MenuItem>
@@ -158,7 +184,6 @@ const OrderForm = ({ order }: Props) => {
                     id="currency"
                     label="Currency"
                     size="small"
-                    defaultValue={OrderCurrency.Usd}
                   >
                     {Object.values(OrderCurrency).map((curr) => {
                       return (
@@ -173,7 +198,6 @@ const OrderForm = ({ order }: Props) => {
                     id="payment-status"
                     label="Payment Status"
                     size="small"
-                    defaultValue={OrderPaymentStatus.Processing}
                   >
                     {Object.values(OrderPaymentStatus).map((val) => {
                       return (
@@ -189,7 +213,6 @@ const OrderForm = ({ order }: Props) => {
                     id="status"
                     label="Status"
                     size="small"
-                    defaultValue={OrderStatus.Incomplete}
                   >
                     {Object.values(OrderStatus).map((val) => {
                       return (
@@ -199,18 +222,28 @@ const OrderForm = ({ order }: Props) => {
                       )
                     })}
                   </FormikSelect>
-                  <FormControlLabel
-                    control={<FormikCheckbox size="small" name="isCanceled" />}
-                    label={
-                      <Typography variant="body2" color="text.secondary">
-                        Cancel on period end
-                      </Typography>
-                    }
-                  />
-                  <Alert severity="info">
-                    Checking <b>Cancel on period</b> end will unsubscribe the
-                    stripe subscription if any.
-                  </Alert>
+                  {order.plan_id && (
+                    <div>
+                      <FormControlLabel
+                        control={
+                          <FormikCheckbox
+                            size="small"
+                            name="isCanceled"
+                            disabled={dayjs().isAfter(order.end)}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" color="text.secondary">
+                            Cancel on period end
+                          </Typography>
+                        }
+                      />
+                      <Alert severity="info">
+                        Checking <b>Cancel on period</b> end will unsubscribe
+                        the stripe subscription if any.
+                      </Alert>
+                    </div>
+                  )}
                 </Stack>
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
@@ -221,16 +254,19 @@ const OrderForm = ({ order }: Props) => {
                       color="text.secondary"
                       fontWeight="bold"
                     >
-                      Institution ID
+                      Institution
                     </Typography>
-                    {order.institution ? (
-                      <Link
-                        href={`/cms/institutions-list/${order.institution}`}
-                        passHref
-                        legacyBehavior
+                    {order.institutionObject ? (
+                      <MuiLink
+                        href={`/cms/institutions-list/${order.institutionObject._id}`}
+                        component={Link}
                       >
-                        <MuiLink>{order.institution}</MuiLink>
-                      </Link>
+                        {order.institutionObject?.name}
+                      </MuiLink>
+                    ) : order.institution ? (
+                      <Typography variant="body2" color="text.secondary">
+                        {order.institution}
+                      </Typography>
                     ) : (
                       <Typography variant="body2" color="text.secondary">
                         N/A
@@ -246,22 +282,34 @@ const OrderForm = ({ order }: Props) => {
                       >
                         User ID
                       </Typography>
-                      <Link
+                      <MuiLink
+                        variant="body2"
                         href={`/cms/user/${order.user_id}`}
-                        passHref
-                        legacyBehavior
+                        component={Link}
                       >
-                        <MuiLink variant="body2">{order.user_id}</MuiLink>
-                      </Link>
+                        {order.user_id}
+                      </MuiLink>
+                    </div>
+                  ) : null}
+                  {order.articleId ? (
+                    <div>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        fontWeight="bold"
+                      >
+                        Article ID
+                      </Typography>
+                      {order.articleId}
                     </div>
                   ) : null}
 
-                  <TextField
-                    value={order.promoCode ?? 'N/A'}
+                  <FormikTextField
+                    name="promoCode"
                     label="Promo code"
                     size="small"
-                    disabled
                   />
+
                   {order.plan_id ? (
                     <div>
                       <Typography
@@ -269,7 +317,7 @@ const OrderForm = ({ order }: Props) => {
                         color="text.secondary"
                         fontWeight="bold"
                       >
-                        Stripe ID
+                        Stripe Subscription ID
                       </Typography>
                       <MuiLink
                         href={`https://dashboard.stripe.com/subscriptions/${order.plan_id}`}
@@ -280,30 +328,34 @@ const OrderForm = ({ order }: Props) => {
                       </MuiLink>
                     </div>
                   ) : null}
-                  <div>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      fontWeight="bold"
-                    >
-                      Latest Stripe Invoice
-                    </Typography>
-                    <MuiLink
-                      href={`https://dashboard.stripe.com/invoices/${order.latest_invoice}`}
-                      target="_blank"
-                      variant="body2"
-                    >
-                      {order.latest_invoice}
-                    </MuiLink>
-                  </div>
+                  {!!order.latest_invoice && (
+                    <div>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        fontWeight="bold"
+                      >
+                        Latest Stripe Invoice
+                      </Typography>
+                      <MuiLink
+                        href={`https://dashboard.stripe.com/invoices/${order.latest_invoice}`}
+                        target="_blank"
+                        variant="body2"
+                      >
+                        {order.latest_invoice}
+                      </MuiLink>
+                    </div>
+                  )}
 
-                  <TextField
-                    value={order.renewals ?? ''}
-                    label="Renewals"
-                    size="small"
-                    helperText="Amount of times subscription has renewed"
-                    disabled
-                  />
+                  {!!order.latest_invoice && (
+                    <TextField
+                      value={order.renewals ?? ''}
+                      label="Renewals"
+                      size="small"
+                      helperText="Amount of times subscription has renewed"
+                      disabled
+                    />
+                  )}
 
                   <DateTimePicker
                     value={order.created}
@@ -321,38 +373,27 @@ const OrderForm = ({ order }: Props) => {
                     disabled
                     onChange={() => {}}
                   />
-                  <div>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      fontWeight="bold"
-                    >
-                      Created By:
-                    </Typography>
-                    <Link
-                      href={`/cms/user/${order.createdBy}`}
-                      passHref
-                      legacyBehavior
-                    >
-                      <MuiLink variant="body2">{order.createdBy}</MuiLink>
-                    </Link>
-                  </div>
-                  <div>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      fontWeight="bold"
-                    >
-                      Last edited By:
-                    </Typography>
-                    <Link
-                      href={`/cms/user/${order.lastEditedBy}`}
-                      passHref
-                      legacyBehavior
-                    >
-                      <MuiLink variant="body2">{order.lastEditedBy}</MuiLink>
-                    </Link>
-                  </div>
+                  {order.institution && order.type !== OrderType.Individual && (
+                    <>
+                      <FormikSelect
+                        name="require_login"
+                        id="require-login"
+                        label="Require Login"
+                        size="small"
+                      >
+                        <MenuItem value={RequireLogin.True}>True</MenuItem>
+                        <MenuItem value={RequireLogin.False}>False</MenuItem>
+                      </FormikSelect>
+                      <UserTypeSelector />
+                      <SpecialtySelector />
+                    </>
+                  )}
+                  <FormikTextField
+                    label="Internal Notes"
+                    name="notes"
+                    rows={4}
+                    multiline
+                  />
                 </Stack>
               </Grid>
               <Grid item>
