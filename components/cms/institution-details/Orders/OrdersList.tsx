@@ -27,7 +27,7 @@ import { Order, OrderType, StatusType } from 'graphql/types'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import OrderDialog from './OrderDialog'
-
+import NextLink from 'next/link'
 type Props = {
   orders: Order[]
   locationId: string
@@ -200,7 +200,7 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                 <TableCell>End Date</TableCell>
                 <TableCell>Created</TableCell>
                 <TableCell>Last updated</TableCell>
-                <TableCell>Notes</TableCell>
+                <TableCell>Internal Notes</TableCell>
                 <TableCell>Restricted User Types</TableCell>
                 <TableCell>Restricted Specialties</TableCell>
                 <TableCell>Actions</TableCell>
@@ -210,7 +210,7 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
               {orders?.map((order) => {
                 return (
                   <StyledTableRow key={order._id}>
-                    <TableCell>{order._id}</TableCell>
+                    <TableCell sx={{ minWidth: 150 }}>{order._id}</TableCell>
                     <TableCell>
                       <Typography variant="body2" color="text.secondary">
                         {order.amount} {order.currency}
@@ -252,10 +252,10 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                         {dayjs(order.updated).format('MM/DD/YYYY')}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ maxWidth: 200 }}>
-                      <Tooltip title={order.description}>
+                    <TableCell sx={{ width: 250 }}>
+                      <Tooltip title={order.notes}>
                         <Typography variant="body2" color="text.secondary">
-                          {order.description}
+                          {order.notes}
                         </Typography>
                       </Tooltip>
                     </TableCell>
@@ -281,12 +281,19 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                         })}
                       </Stack>
                     </TableCell>
-                    <TableCell>
+                    <TableCell
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        minWidth: 200
+                      }}
+                    >
                       <Button
                         size="small"
                         startIcon={<Edit />}
-                        onClick={() => startEditOrder(order)}
                         variant="outlined"
+                        href={`/cms/orders/${order._id}`}
+                        LinkComponent={NextLink}
                       >
                         Edit Order
                       </Button>

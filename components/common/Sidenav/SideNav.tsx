@@ -1,4 +1,3 @@
-import { OpenInNew } from '@mui/icons-material'
 import {
   useMediaQuery,
   Drawer,
@@ -11,11 +10,10 @@ import {
 import { useTheme } from '@mui/material/styles'
 import Logo from 'components/common/Logo'
 import NextLink from 'next/link'
-import React, { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 
 import NavItem from './NavItem'
 import { SidenavItem } from './SideNavItem'
-import { useRouter } from 'next/router'
 
 type Props = {
   open: boolean

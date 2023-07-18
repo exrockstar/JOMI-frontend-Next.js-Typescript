@@ -15,7 +15,7 @@ const FormikDateTimePicker = ({ name, helperText, ...props }: Props) => {
 
   return (
     <DateTimePicker
-      value={field.value ?? dayjs()}
+      value={field.value}
       onChange={(newValue) => {
         if (!newValue) {
           setFieldValue(name, '')

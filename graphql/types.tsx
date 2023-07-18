@@ -1204,7 +1204,7 @@ export type Mutation = {
   updateLocation?: Maybe<Location>;
   updateMediaLibrary?: Maybe<Media>;
   updateOrder?: Maybe<Order>;
-  updateOrderForUser?: Maybe<Order>;
+  updateOrderCms?: Maybe<Order>;
   updatePage?: Maybe<Page>;
   updatePassword: Scalars['Boolean'];
   updatePreference: Scalars['Boolean'];
@@ -1299,7 +1299,7 @@ export type MutationCreateOrderArgs = {
 
 
 export type MutationCreateOrderForUserArgs = {
-  input: OrderInputForUser;
+  input: UpdateOrderInput;
 };
 
 
@@ -1615,9 +1615,9 @@ export type MutationUpdateOrderArgs = {
 };
 
 
-export type MutationUpdateOrderForUserArgs = {
+export type MutationUpdateOrderCmsArgs = {
   id: Scalars['String'];
-  input: OrderInputForUser;
+  input: UpdateOrderInput;
 };
 
 
@@ -1754,11 +1754,13 @@ export type Order = {
   discount?: Maybe<StripePromoCode>;
   end?: Maybe<Scalars['DateTime']>;
   institution?: Maybe<Scalars['String']>;
+  institutionObject?: Maybe<Institution>;
   isCanceled?: Maybe<Scalars['Boolean']>;
   isTrialPeriod?: Maybe<Scalars['Boolean']>;
   lastEditedBy?: Maybe<Scalars['String']>;
   latest_invoice?: Maybe<Scalars['String']>;
   location?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
   payment_status?: Maybe<OrderPaymentStatus>;
   plan_id?: Maybe<Scalars['String']>;
   plan_interval?: Maybe<OrderInterval>;
@@ -1771,7 +1773,7 @@ export type Order = {
   status?: Maybe<OrderStatus>;
   stripeCoupon?: Maybe<Scalars['String']>;
   stripePromoCode?: Maybe<Scalars['String']>;
-  type: OrderType;
+  type?: Maybe<OrderType>;
   updated: Scalars['DateTime'];
   user?: Maybe<User>;
   user_id?: Maybe<Scalars['String']>;
@@ -1968,27 +1970,29 @@ export type OrderInputForLocation = {
   type: OrderType;
 };
 
-export type OrderInputForUser = {
-  amount: Scalars['Float'];
-  currency?: InputMaybe<OrderCurrency>;
-  description?: InputMaybe<Scalars['String']>;
-  end: Scalars['DateTime'];
-  isCanceled?: InputMaybe<Scalars['Boolean']>;
-  payment_status: OrderPaymentStatus;
-  plan_interval?: InputMaybe<OrderInterval>;
-  require_login: RequireLogin;
-  start: Scalars['DateTime'];
-  status: OrderStatus;
-  type: OrderType;
-  user_id: Scalars['String'];
-};
-
 export enum OrderInterval {
   Day = 'Day',
   Month = 'Month',
+  NotApplicable = 'NotApplicable',
   Week = 'Week',
   Year = 'Year'
 }
+
+export type OrderListInput = {
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type OrderListOutput = {
+  __typename?: 'OrderListOutput';
+  count: Scalars['Int'];
+  dbQueryString: Scalars['String'];
+  orders: Array<Order>;
+};
 
 export enum OrderPaymentStatus {
   AmountCapturableUpdated = 'AmountCapturableUpdated',
@@ -2001,6 +2005,7 @@ export enum OrderPaymentStatus {
 export enum OrderStatus {
   Active = 'Active',
   Canceled = 'Canceled',
+  Expired = 'Expired',
   Incomplete = 'Incomplete',
   IncompleteExpired = 'IncompleteExpired',
   PastDue = 'PastDue',
@@ -2164,6 +2169,7 @@ export type Query = {
   files: MediaOutput;
   genCounterReport: Scalars['String'];
   geolocation?: Maybe<Geolocation>;
+  getAllOrders: OrderListOutput;
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
@@ -2303,6 +2309,11 @@ export type QueryFilesArgs = {
 
 export type QueryGenCounterReportArgs = {
   input: CounterInput;
+};
+
+
+export type QueryGetAllOrdersArgs = {
+  input: OrderListInput;
 };
 
 
@@ -2476,6 +2487,10 @@ export enum QueryOperation {
   Equal = 'equal',
   GreaterThan = 'greater_than',
   GreaterThanOrEqual = 'greater_than_or_equal',
+  IsNotNull = 'is_not_null',
+  IsNotNullOrEmpty = 'is_not_null_or_empty',
+  IsNull = 'is_null',
+  IsNullOrEmpty = 'is_null_or_empty',
   LessThan = 'less_than',
   LessThanOrEqual = 'less_than_or_equal',
   NotContains = 'not_contains',
@@ -3004,6 +3019,28 @@ export type UpdateMediaLibraryInput = {
   title: Scalars['String'];
 };
 
+export type UpdateOrderInput = {
+  amount?: InputMaybe<Scalars['Float']>;
+  articleId?: InputMaybe<Scalars['String']>;
+  currency?: InputMaybe<OrderCurrency>;
+  description?: InputMaybe<Scalars['String']>;
+  end?: InputMaybe<Scalars['DateTime']>;
+  institution?: InputMaybe<Scalars['String']>;
+  isCanceled?: InputMaybe<Scalars['Boolean']>;
+  location?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+  payment_status?: InputMaybe<OrderPaymentStatus>;
+  plan_interval?: InputMaybe<OrderInterval>;
+  promoCode?: InputMaybe<Scalars['String']>;
+  require_login?: InputMaybe<RequireLogin>;
+  restricted_specialties?: InputMaybe<Array<Scalars['String']>>;
+  restricted_user_types?: InputMaybe<Array<Scalars['String']>>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  status?: InputMaybe<OrderStatus>;
+  type?: InputMaybe<OrderType>;
+  user_id?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdatePageInput = {
   content?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -3178,6 +3215,7 @@ export type User = {
   numSearches?: Maybe<Scalars['Int']>;
   offsiteAccesses: Array<TemporaryAccess>;
   phone?: Maybe<Scalars['String']>;
+  prev_source_ip?: Maybe<Scalars['String']>;
   previouslyStatedInstitutions?: Maybe<Array<PreviouslyStatedInst>>;
   promo_code?: Maybe<Scalars['String']>;
   referer?: Maybe<Scalars['String']>;

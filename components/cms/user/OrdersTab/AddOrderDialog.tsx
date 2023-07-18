@@ -15,7 +15,7 @@ import React from 'react'
 import { Close, Refresh } from '@mui/icons-material'
 import {
   OrderCurrency,
-  OrderInputForUser,
+  UpdateOrderInput,
   OrderInterval,
   OrderPaymentStatus,
   OrderStatus,
@@ -72,7 +72,7 @@ const AddOrderDialog = ({ user_id, ...props }: Props) => {
     }
   })
 
-  const defaultValues: OrderInputForUser = {
+  const defaultValues: UpdateOrderInput = {
     description: '',
     start: dayjs(),
     end: dayjs(),
@@ -86,7 +86,7 @@ const AddOrderDialog = ({ user_id, ...props }: Props) => {
     status: OrderStatus.Active
   }
 
-  const handleSubmit = (values: OrderInputForUser) => {
+  const handleSubmit = (values: UpdateOrderInput) => {
     addOrderForUser({
       variables: {
         input: values

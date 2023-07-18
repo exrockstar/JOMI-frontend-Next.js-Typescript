@@ -13,6 +13,7 @@ import {
   People,
   PhotoLibrary,
   Settings,
+  ShoppingBasket,
   Subject
 } from '@mui/icons-material'
 import { SidenavItem } from 'components/common/Sidenav/SideNavItem'
@@ -67,6 +68,11 @@ const SidebarItems: SidenavItem[] = [
     icon: <LocalOffer />,
     url: `${CMS_URL}/promocodes-list`,
     disabled: false
+  },
+  {
+    name: 'Orders',
+    icon: <ShoppingBasket />,
+    url: `${CMS_URL}/orders`
   },
   {
     name: 'Comments',

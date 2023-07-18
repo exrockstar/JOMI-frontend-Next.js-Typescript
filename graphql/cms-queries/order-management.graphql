@@ -16,7 +16,7 @@ mutation DeleteOrder($id: String!) {
   }
 }
 
-mutation CreateOrderForUser($input: OrderInputForUser!) {
+mutation CreateOrderForUser($input: UpdateOrderInput!) {
   order: createOrderForUser(input: $input) {
     _id
     start
