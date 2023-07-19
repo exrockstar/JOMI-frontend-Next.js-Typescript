@@ -31,7 +31,8 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
       if (i === index) {
         return {
           ...filter,
-          operation: operation as QueryOperation
+          operation: operation as QueryOperation,
+          value: ''
         }
       }
       return filter
@@ -123,11 +124,16 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
               size="small"
               onChange={(e) => handleColumnChange(index, e.target.value)}
             >
-              {columnOptions.map(({ columnName, label }) => (
-                <MenuItem key={columnName} value={columnName}>
-                  {label}
-                </MenuItem>
-              ))}
+              {columnOptions.map(({ columnName, label, type }) => {
+                if (type === 'divider') {
+                  return <Divider sx={{ fontSize: 12, my: 2 }}>{label}</Divider>
+                }
+                return (
+                  <MenuItem key={columnName} value={columnName}>
+                    {label}
+                  </MenuItem>
+                )
+              })}
             </Select>
             <Select
               value={filter.operation}

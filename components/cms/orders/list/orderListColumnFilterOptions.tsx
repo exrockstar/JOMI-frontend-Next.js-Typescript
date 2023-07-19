@@ -15,6 +15,12 @@ import { snakeCase } from 'lodash'
 
 export const orderListColumnFilterOptions: ColumnOption[] = [
   {
+    label: 'Order Properties',
+    type: 'divider',
+    operations: [],
+    columnName: '-'
+  },
+  {
     label: 'Database ID',
     columnName: '_id',
     type: 'text',
@@ -81,36 +87,6 @@ export const orderListColumnFilterOptions: ColumnOption[] = [
     operations: NumericOperations
   },
   {
-    label: 'Institution ID',
-    columnName: '_institution._id',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Institution Name',
-    columnName: '_institution.name',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Institution Category',
-    columnName: '_institution.category',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'User ID',
-    columnName: 'user._id',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'User Email',
-    columnName: 'user.email',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
     label: 'Promo code',
     columnName: 'promoCode',
     type: 'text',
@@ -134,5 +110,59 @@ export const orderListColumnFilterOptions: ColumnOption[] = [
     type: 'select',
     operations: SelectOperations,
     values: ['t', 'f']
+  },
+  {
+    label: 'Institution Properties',
+    type: 'divider',
+    operations: [],
+    columnName: '-'
+  },
+  {
+    label: 'Institution ID',
+    columnName: '_institution._id',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'Institution Name',
+    columnName: '_institution.name',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'Institution Category',
+    columnName: '_institution.category',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'User Properties',
+    type: 'divider',
+    operations: [],
+    columnName: '-'
+  },
+  {
+    label: 'User ID',
+    columnName: 'user._id',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'User Email',
+    columnName: 'user.email',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'User Type',
+    columnName: 'user.user_type',
+    type: 'text',
+    operations: StringOperations
+  },
+  {
+    label: 'User Specialization',
+    columnName: 'user.specialty',
+    type: 'text',
+    operations: StringOperations
   }
 ]

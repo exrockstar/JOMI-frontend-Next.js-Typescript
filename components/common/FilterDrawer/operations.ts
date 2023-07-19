@@ -14,6 +14,8 @@ export const NumericOperations = [
 export const DateOperations = [QueryOperation.Before, QueryOperation.After]
 
 export const StringOperations = [
+  QueryOperation.Equal,
+  QueryOperation.NotEqual,
   QueryOperation.Contains,
   QueryOperation.NotContains,
   QueryOperation.IsNull,
