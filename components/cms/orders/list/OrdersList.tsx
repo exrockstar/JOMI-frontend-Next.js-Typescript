@@ -125,7 +125,14 @@ const OrdersList = () => {
                       NotApplicable
                     )}
                   </TableCell>
-                  <TableCell>{order.promoCode ?? NotApplicable}</TableCell>
+                  <TableCell
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      maxWidth: 200
+                    }}
+                  >
+                    {order.promoCode ?? NotApplicable}
+                  </TableCell>
 
                   <TableCell
                     sx={{
