@@ -68,6 +68,8 @@ query OrderList($input:OrderListInput!) {
       user {
         _id
         email
+        user_type
+        specialty
       }
       institutionObject {
         name
