@@ -107,6 +107,7 @@ const OrdersList = () => {
                       NotApplicable
                     )}
                   </TableCell>
+
                   <TableCell
                     sx={{
                       whiteSpace: 'nowrap',
@@ -124,6 +125,12 @@ const OrdersList = () => {
                     ) : (
                       NotApplicable
                     )}
+                  </TableCell>
+                  <TableCell title={order.user?.user_type}>
+                    {order.user?.user_type ?? ''}
+                  </TableCell>
+                  <TableCell title={order.user?.specialty}>
+                    {order.user?.specialty ?? ''}
                   </TableCell>
                   <TableCell
                     sx={{

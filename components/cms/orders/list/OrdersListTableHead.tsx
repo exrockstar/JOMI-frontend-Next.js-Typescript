@@ -61,6 +61,14 @@ const headCells: readonly HeadCell[] = [
     label: 'User Email'
   },
   {
+    id: 'user.user_type',
+    label: 'User Type'
+  },
+  {
+    id: 'user.specialty',
+    label: 'User Specialty'
+  },
+  {
     id: 'promoCode',
     label: 'Promo Code'
   },
