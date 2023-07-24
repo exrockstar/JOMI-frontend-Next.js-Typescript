@@ -1180,7 +1180,7 @@ export type Mutation = {
   trackAnnouncement: Scalars['Boolean'];
   trackAnnouncements: Scalars['Boolean'];
   trackArticle: Scalars['Boolean'];
-  trackFeedack: Feedback;
+  trackFeedack?: Maybe<Feedback>;
   trackInitiateCheckout: Scalars['Boolean'];
   trackLogin: Scalars['Boolean'];
   trackRequestInstSubscription: Scalars['Boolean'];
@@ -2806,6 +2806,7 @@ export type TrackArticleInput = {
 export type TrackFeedbackInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   comment?: InputMaybe<Scalars['String']>;
+  feedback_id?: InputMaybe<Scalars['String']>;
   institution?: InputMaybe<Scalars['String']>;
   questionId: Scalars['String'];
   type: Scalars['String'];

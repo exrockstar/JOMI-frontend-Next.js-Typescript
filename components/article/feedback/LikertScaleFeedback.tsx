@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
 import { FeedbackComponent } from './Question'
-import { Typography, Box, Button, TextField } from '@mui/material'
+import { Typography, Box, Button } from '@mui/material'
 import FeedbackButton from './FeedbackButton'
+import { useField, useFormikContext } from 'formik'
+import FormikTextField from 'components/common/formik/FormikTextFIeld'
 
 const LikertScaleFeedback: FeedbackComponent = (props) => {
   const { question } = props
   const { _id, choices } = question
-  const [selected, setSelected] = useState(null)
-  const [comment, setComment] = useState('')
-  const handleClick = (value: number) => {
-    props.onAnswer(value, _id, comment)
-    setSelected(value)
+  const [value] = useField<any>('value')
+  const { setFieldValue } = useFormikContext()
+  const handleSelect = (value: number) => {
+    setFieldValue('value', value)
   }
   const hasDescription = !!choices?.at(0)?.description
   return (
@@ -23,7 +23,7 @@ const LikertScaleFeedback: FeedbackComponent = (props) => {
         flexDirection={{ xs: hasDescription ? 'column' : 'row', md: 'row' }}
       >
         {choices.map((input, i) => {
-          const variant = selected === input.value ? 'contained' : 'outlined'
+          const variant = value.value === input.value ? 'contained' : 'outlined'
           const text = input.description
             ? `${input.value} - ${input.description}`
             : input.value
@@ -34,14 +34,14 @@ const LikertScaleFeedback: FeedbackComponent = (props) => {
                   color="warning"
                   variant={variant}
                   sx={{ textTransform: 'none' }}
-                  onClick={() => handleClick(input.value)}
+                  onClick={() => handleSelect(input.value)}
                   fullWidth
                 >
                   {text}
                 </Button>
               ) : (
                 <FeedbackButton
-                  onClick={() => handleClick(input.value)}
+                  onClick={() => handleSelect(input.value)}
                   variant={variant}
                 >
                   {text}
@@ -64,16 +64,7 @@ const LikertScaleFeedback: FeedbackComponent = (props) => {
       )}
       <Box my={2}>
         <Typography my={1}>Leave a comment</Typography>
-        <TextField
-          multiline
-          rows={4}
-          fullWidth
-          value={comment}
-          onChange={(e) => {
-            props.onAnswer(selected, _id, comment)
-            setComment(e.target.value)
-          }}
-        ></TextField>
+        <FormikTextField multiline rows={4} fullWidth name="comment" />
       </Box>
     </div>
   )

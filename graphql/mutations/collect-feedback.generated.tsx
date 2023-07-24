@@ -8,7 +8,7 @@ export type TrackFeedbackMutationVariables = Types.Exact<{
 }>;
 
 
-export type TrackFeedbackMutation = { __typename?: 'Mutation', trackFeedack: { __typename?: 'Feedback', _id: string } };
+export type TrackFeedbackMutation = { __typename?: 'Mutation', trackFeedack?: { __typename?: 'Feedback', _id: string } | null | undefined };
 
 export type GetFeedbackQuestionsQueryVariables = Types.Exact<{
   anon_link_id: Types.Scalars['String'];

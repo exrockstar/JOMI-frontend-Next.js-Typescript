@@ -209,10 +209,13 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
     const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
+    const isTenSeconds = seconds === 10
     const filtered = percentageToCheck.filter((time) => percentWatched >= time)
     const showFeedback =
-      !!filtered.length && !hasGivenFeedback && isTrial && showFeedbackQuestions
-    console.log(percentWatched, showFeedback)
+      (!!filtered.length || isTenSeconds) &&
+      !hasGivenFeedback &&
+      isTrial &&
+      showFeedbackQuestions
     if (showFeedback) {
       video.pause()
       video.cancelFullscreen()
