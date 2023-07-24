@@ -28,18 +28,6 @@ const ArticleEffects = ({ article }: Props) => {
   }, [article.publication_id, article.slug, router, router.query])
 
   useEffect(() => {
-    analytics.trackArticleView({
-      categories: article.categories.map((c) => {
-        return c.displayName
-      }),
-      title: article.title,
-      authors: article.authors.map((a) => {
-        return a.display_name
-      }),
-      tags: article.tags
-    })
-  }, [article.authors, article.categories, article.tags, article.title])
-  useEffect(() => {
     const handler = () => {
       if (hasTracked) return
       setHasTracked(true)
