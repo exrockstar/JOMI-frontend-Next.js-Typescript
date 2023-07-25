@@ -771,10 +771,27 @@ export type Feedback = {
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   institution: Scalars['String'];
+  question?: Maybe<FeedbackQuestion>;
   questionId: Scalars['String'];
   type: Scalars['String'];
-  user: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<User>;
   value: Scalars['any'];
+};
+
+export type FeedbackListInput = {
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type FeedbackListOutput = {
+  __typename?: 'FeedbackListOutput';
+  count: Scalars['Int'];
+  dbQueryString?: Maybe<Scalars['String']>;
+  items: Array<Feedback>;
 };
 
 export type FeedbackQuestion = {
@@ -2173,6 +2190,7 @@ export type Query = {
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
+  getFeedbacksByInstitutionId: FeedbackListOutput;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
@@ -2324,6 +2342,12 @@ export type QueryGetCombinedPromoCodeArgs = {
 
 export type QueryGetFeedbackQuestionsForUserArgs = {
   anon_link_id: Scalars['String'];
+};
+
+
+export type QueryGetFeedbacksByInstitutionIdArgs = {
+  input: FeedbackListInput;
+  institution_id: Scalars['String'];
 };
 
 

@@ -36,7 +36,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
 
   const { data: session, status } = useSession()
   const isSessionLoading = status === 'loading'
-  const { data: userData } = useUserProfileQuery({
+  const { data: userData, loading } = useUserProfileQuery({
     skip: isSessionLoading
   })
   //button at the bottom right of the screen.
@@ -61,7 +61,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   }, [forceShowFeedback, setShowFeedbackDialog])
   const question = feedbackQuestionData?.question
   const user = userData?.user
-  if (!question) return null
+  if (!question || loading) return null
   return (
     <ThemeProvider theme={frontPageTheme}>
       <Formik<TrackFeedbackInput>

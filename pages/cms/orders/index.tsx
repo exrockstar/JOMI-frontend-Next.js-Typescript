@@ -19,7 +19,6 @@ import {
   OrdersListProvider,
   useOrdersList
 } from 'components/cms/orders/list/useOrdersList'
-import DbQueryDialog from 'components/common/DbQueryDialog'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import TableFilters from 'components/common/TableFilters'
 import { ColumnFilter } from 'graphql/types'

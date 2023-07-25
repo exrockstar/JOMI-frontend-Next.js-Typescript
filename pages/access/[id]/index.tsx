@@ -2,6 +2,7 @@ import { Box, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { IS_SERVER } from 'common/constants'
 import AccessLayout from 'components/access/AccessLayout'
 import Counter from 'components/access/institution/counter/Counter'
+import InstitutionFeedbackPanel from 'components/access/institution/feedback/InstitutionFeedbackPanel'
 import RequestsTable from 'components/access/institution/requests/RequestsTable'
 import ArticleActivityPanel from 'components/access/institution/stats/ArticleActivity/ArticleActivityPanel'
 import InstituitonOverviewStats from 'components/access/institution/stats/InstitutionOverview/InstituitonOverviewStats'
@@ -45,7 +46,7 @@ const InstitutionAccessPage = () => {
   const { data: session } = useSession()
   const id = router.query.id as string
   const [value, setValue] = useState(0)
-  const tabs = ['', 'users', 'articles', 'reports', 'requests']
+  const tabs = ['', 'users', 'articles', 'reports', 'requests', 'feedback']
   const { data } = useInstitutionByIdQuery({
     variables: {
       id
@@ -96,7 +97,7 @@ const InstitutionAccessPage = () => {
           <Tab label="Article Activity" {...a11yProps(2)} />
           <Tab label="Reports" {...a11yProps(3)} />
           <Tab label="Requests" {...a11yProps(4)} />
-          {/* <Tab label="Polling" {...a11yProps(2)} /> */}
+          <Tab label="Feedback" {...a11yProps(5)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -119,6 +120,9 @@ const InstitutionAccessPage = () => {
       </TabPanel>
       <TabPanel value={value} index={4}>
         <RequestsTable institutionID={id} />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
+        <InstitutionFeedbackPanel institutionId={id} />
       </TabPanel>
     </Stack>
   )
