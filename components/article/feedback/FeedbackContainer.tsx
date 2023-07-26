@@ -41,7 +41,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   })
   //button at the bottom right of the screen.
   const [feedbackButtonText, setFeedbackButtonText] = useState<
-    '' | 'Submit' | 'Update'
+    '' | 'Leave' | 'Adjust'
   >('')
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
@@ -103,7 +103,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
               const feedback_id = result.trackFeedack?._id
               helpers.setFieldValue('feedback_id', feedback_id)
 
-              setFeedbackButtonText('Update')
+              setFeedbackButtonText('Adjust')
             }
           })
         }}
@@ -115,9 +115,9 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
               setShowFeedbackDialog(false)
               const event = e as any
               if (event.feedback_id) {
-                setFeedbackButtonText('Update')
+                setFeedbackButtonText('Adjust')
               } else {
-                setFeedbackButtonText('Submit')
+                setFeedbackButtonText('Leave')
               }
             }}
             hideSkipButton={forceShowFeedback || hideSkipButton}

@@ -130,6 +130,9 @@ query InstFeedbackList($institution_id: String!, $input: FeedbackListInput!){
       questionId
       question {
         question
+        choices {
+          value
+        }
       }
       value
       comment

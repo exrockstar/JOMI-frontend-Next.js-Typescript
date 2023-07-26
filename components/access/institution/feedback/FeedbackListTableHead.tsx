@@ -11,7 +11,11 @@ import { StickyTableCell } from 'components/common/StickyTableCell'
 import { useInstitutionFeedbackList } from './useInstitutionFeedbackList'
 
 interface HeadCell {
-  id: keyof Feedback | `user.${keyof User}` | `question.question`
+  id:
+    | keyof Feedback
+    | `user.${keyof User}`
+    | `question.question`
+    | `question.maxRating`
   sticky?: boolean
   label: string
 }
@@ -19,7 +23,8 @@ interface HeadCell {
 const headCells: readonly HeadCell[] = [
   {
     id: 'user.email',
-    label: 'User Email'
+    label: 'User Email',
+    sticky: true
   },
   {
     id: 'createdAt',
@@ -35,9 +40,12 @@ const headCells: readonly HeadCell[] = [
   },
   {
     id: 'value',
-    label: 'Value'
+    label: 'Rating'
   },
-
+  {
+    id: 'question.maxRating',
+    label: 'Max Rating'
+  },
   {
     id: 'comment',
     label: 'Comment'

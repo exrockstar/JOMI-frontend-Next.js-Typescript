@@ -88,12 +88,13 @@ const InstitutionFeedbackList = () => {
             <TableBody>
               {items?.map((item, index) => {
                 const isEven = index % 2 === 0
+                const maxRating = item.question?.choices?.at(-1)
                 return (
                   <StyledTableRow key={item._id}>
                     <StickyTableCell
                       sx={{
                         p: 0,
-
+                        maxWidth: 150,
                         backgroundColor: isEven ? '#fafafa' : 'white'
                       }}
                     >
@@ -102,12 +103,11 @@ const InstitutionFeedbackList = () => {
                           p: 2,
                           borderRightColor: 'grey.100',
                           borderRightWidth: 2,
-                          width: 250,
                           borderRightStyle: 'solid',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis'
                         }}
-                        title={item._id}
+                        title={item.user?.email}
                       >
                         {item.user ? item.user?.email : 'anonymous'}
                       </Box>
@@ -120,6 +120,7 @@ const InstitutionFeedbackList = () => {
                       sx={{
                         whiteSpace: 'nowrap',
                         minWidth: 150,
+                        maxWidth: 180,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
                       }}
@@ -128,10 +129,12 @@ const InstitutionFeedbackList = () => {
                       {item.question?.question ?? NotApplicable}
                     </TableCell>
                     <TableCell title={item.value}>{item.value ?? ''}</TableCell>
+                    <TableCell>{maxRating?.value ?? ''}</TableCell>
                     <TableCell
                       sx={{
                         whiteSpace: 'nowrap',
                         minWidth: 150,
+                        maxWidth: 300,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
                       }}

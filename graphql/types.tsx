@@ -10,8 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Any Value */
-  AnyValue: any;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
   /** Mongo object id scalar type */
@@ -355,7 +353,7 @@ export type ColumnFilter = {
   columnName: Scalars['String'];
   not?: InputMaybe<Scalars['Boolean']>;
   operation: QueryOperation;
-  value: Scalars['AnyValue'];
+  value?: InputMaybe<Scalars['any']>;
 };
 
 export type CombinedCodeOutput = {
@@ -749,6 +747,7 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  howFound?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
   referredFrom?: InputMaybe<Scalars['String']>;
