@@ -41,8 +41,8 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   })
   //button at the bottom right of the screen.
   const [feedbackButtonText, setFeedbackButtonText] = useState<
-    '' | 'Leave' | 'Adjust'
-  >('')
+    'Leave' | 'Adjust'
+  >('Leave')
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
     skip: isSessionLoading,
@@ -124,7 +124,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
             question={feedbackQuestionData?.question}
           />
           {!!feedbackButtonText && (
-            <Box position="fixed" right={16} bottom={16}>
+            <Box position="fixed" right={16} bottom={16} sx={{ zIndex: 500 }}>
               <CTAButton
                 onClick={() => {
                   setShowFeedbackDialog(true)
