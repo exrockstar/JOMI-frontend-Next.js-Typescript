@@ -32,7 +32,7 @@ const GoogleGtag = ({ metadata }: Props) => {
   const user_role = user?.role || 'N/A'
   const institution_id = access?.institution_id || 'N/A'
   const institution_name = access?.institution_name || 'N/A'
-  const sub_type = user?.subscription?.subType || 'none'
+  const sub_type = user?.subscription?.subType || 'anon'
   useEffect(() => {
     if (cmsOrAccess) return
     if (status === 'loading' || loading) return

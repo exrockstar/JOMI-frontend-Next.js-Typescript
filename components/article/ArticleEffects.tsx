@@ -11,13 +11,12 @@ type Props = {
   article: ArticlesBySlugQuery['articleBySlug']
 }
 const ArticleEffects = ({ article }: Props) => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const { state, setArticlesViewed } = useAppState()
   const router = useRouter()
   const [trackArticle, { data }] = useTrackArticleMutation({})
   const { referredFrom, referrerPath, anon_link_id } =
     useGoogleAnalyticsHelpers()
-  const [hasTracked, setHasTracked] = useState(false)
   useEffect(() => {
     if (router.query.slug.length < 2) {
       const query = {
@@ -29,8 +28,8 @@ const ArticleEffects = ({ article }: Props) => {
 
   useEffect(() => {
     const handler = () => {
-      if (hasTracked) return
-      setHasTracked(true)
+      if(status === "loading") return;
+
       //track in GA4
       analytics.trackArticleView({
         categories: article.categories.map((c) => {
@@ -40,7 +39,9 @@ const ArticleEffects = ({ article }: Props) => {
         authors: article.authors.map((a) => {
           return a.display_name
         }),
-        tags: article.tags
+        tags: article.tags,
+        publicationId: article.publication_id ?? article.production_id,
+        userId: session && session.user ? session.user._id : 'anon',
       })
       //track in amplitude
       amplitudeTrackArticleView({
@@ -52,7 +53,8 @@ const ArticleEffects = ({ article }: Props) => {
           return a.display_name
         }),
         tags: article.tags,
-        userId: session && session.user ? session.user._id : 'anon'
+        userId: session && session.user ? session.user._id : 'anon',
+        publicationId: article.publication_id ?? article.production_id
       })
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {
@@ -82,16 +84,7 @@ const ArticleEffects = ({ article }: Props) => {
       }
     }
     handler()
-  }, [
-    article.publication_id,
-    hasTracked,
-    state.articlesViewed,
-    trackArticle,
-    referredFrom,
-    referrerPath,
-    anon_link_id,
-    setArticlesViewed
-  ])
+  }, [status, session])
   return null
 }
 
