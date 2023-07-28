@@ -10,8 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** Any Value */
-  AnyValue: any;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
   /** Mongo object id scalar type */
@@ -355,7 +353,7 @@ export type ColumnFilter = {
   columnName: Scalars['String'];
   not?: InputMaybe<Scalars['Boolean']>;
   operation: QueryOperation;
-  value: Scalars['AnyValue'];
+  value?: InputMaybe<Scalars['any']>;
 };
 
 export type CombinedCodeOutput = {
@@ -749,6 +747,7 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  howFound?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
   referredFrom?: InputMaybe<Scalars['String']>;
@@ -771,10 +770,27 @@ export type Feedback = {
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   institution: Scalars['String'];
+  question?: Maybe<FeedbackQuestion>;
   questionId: Scalars['String'];
   type: Scalars['String'];
-  user: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  user?: Maybe<User>;
   value: Scalars['any'];
+};
+
+export type FeedbackListInput = {
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type FeedbackListOutput = {
+  __typename?: 'FeedbackListOutput';
+  count: Scalars['Int'];
+  dbQueryString?: Maybe<Scalars['String']>;
+  items: Array<Feedback>;
 };
 
 export type FeedbackQuestion = {
@@ -1180,7 +1196,7 @@ export type Mutation = {
   trackAnnouncement: Scalars['Boolean'];
   trackAnnouncements: Scalars['Boolean'];
   trackArticle: Scalars['Boolean'];
-  trackFeedack: Feedback;
+  trackFeedack?: Maybe<Feedback>;
   trackInitiateCheckout: Scalars['Boolean'];
   trackLogin: Scalars['Boolean'];
   trackRequestInstSubscription: Scalars['Boolean'];
@@ -2173,6 +2189,7 @@ export type Query = {
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
+  getFeedbacksByInstitutionId: FeedbackListOutput;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
@@ -2324,6 +2341,12 @@ export type QueryGetCombinedPromoCodeArgs = {
 
 export type QueryGetFeedbackQuestionsForUserArgs = {
   anon_link_id: Scalars['String'];
+};
+
+
+export type QueryGetFeedbacksByInstitutionIdArgs = {
+  input: FeedbackListInput;
+  institution_id: Scalars['String'];
 };
 
 
@@ -2806,6 +2829,7 @@ export type TrackArticleInput = {
 export type TrackFeedbackInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   comment?: InputMaybe<Scalars['String']>;
+  feedback_id?: InputMaybe<Scalars['String']>;
   institution?: InputMaybe<Scalars['String']>;
   questionId: Scalars['String'];
   type: Scalars['String'];

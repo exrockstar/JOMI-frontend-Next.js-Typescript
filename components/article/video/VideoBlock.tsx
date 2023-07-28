@@ -205,14 +205,23 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
   const checkFeedbackBlock = (seconds: number, video: WistiaVideo) => {
     const isTrial = accessType === AccessTypeEnum.InstitutionalTrial
-    const percentWatched = video.percentWatched()
+    const percentWatched = seconds / video.duration()
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
     const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
-    const filtered = percentageToCheck.filter((time) => percentWatched >= time)
+    const isTenSeconds = seconds === 10
+    const filtered = percentageToCheck.filter((percent, index, arr) => {
+      if (arr[index + 1]) {
+        return percentWatched >= percent && percentWatched <= arr[index + 1]
+      }
+      return percentWatched >= percent
+    })
+
     const showFeedback =
-      !!filtered.length && !hasGivenFeedback && isTrial && showFeedbackQuestions
-    console.log(percentWatched, showFeedback)
+      (!!filtered.length || isTenSeconds) &&
+      !hasGivenFeedback &&
+      isTrial &&
+      showFeedbackQuestions
     if (showFeedback) {
       video.pause()
       video.cancelFullscreen()

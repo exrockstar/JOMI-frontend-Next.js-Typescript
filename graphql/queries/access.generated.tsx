@@ -53,6 +53,14 @@ export type GenCounterReportQueryVariables = Types.Exact<{
 
 export type GenCounterReportQuery = { __typename?: 'Query', genCounterReport: string };
 
+export type InstFeedbackListQueryVariables = Types.Exact<{
+  institution_id: Types.Scalars['String'];
+  input: Types.FeedbackListInput;
+}>;
+
+
+export type InstFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null | undefined, anon_link_id?: string | null | undefined, createdAt: any, updatedAt?: any | null | undefined, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null | undefined } | null | undefined, user?: { __typename?: 'User', email: string, user_type?: string | null | undefined, _id: string } | null | undefined }> } };
+
 
 export const InstitutionsAccessListDocument = gql`
     query InstitutionsAccessList($input: InstitutionInput!) {
@@ -379,3 +387,63 @@ export function useGenCounterReportLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GenCounterReportQueryHookResult = ReturnType<typeof useGenCounterReportQuery>;
 export type GenCounterReportLazyQueryHookResult = ReturnType<typeof useGenCounterReportLazyQuery>;
 export type GenCounterReportQueryResult = Apollo.QueryResult<GenCounterReportQuery, GenCounterReportQueryVariables>;
+export const InstFeedbackListDocument = gql`
+    query InstFeedbackList($institution_id: String!, $input: FeedbackListInput!) {
+  output: getFeedbacksByInstitutionId(
+    institution_id: $institution_id
+    input: $input
+  ) {
+    items {
+      _id
+      type
+      questionId
+      question {
+        question
+        choices {
+          value
+        }
+      }
+      value
+      comment
+      user {
+        email
+        user_type
+        _id
+      }
+      anon_link_id
+      createdAt
+      updatedAt
+    }
+    count
+  }
+}
+    `;
+
+/**
+ * __useInstFeedbackListQuery__
+ *
+ * To run a query within a React component, call `useInstFeedbackListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInstFeedbackListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInstFeedbackListQuery({
+ *   variables: {
+ *      institution_id: // value for 'institution_id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useInstFeedbackListQuery(baseOptions: Apollo.QueryHookOptions<InstFeedbackListQuery, InstFeedbackListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InstFeedbackListQuery, InstFeedbackListQueryVariables>(InstFeedbackListDocument, options);
+      }
+export function useInstFeedbackListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstFeedbackListQuery, InstFeedbackListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InstFeedbackListQuery, InstFeedbackListQueryVariables>(InstFeedbackListDocument, options);
+        }
+export type InstFeedbackListQueryHookResult = ReturnType<typeof useInstFeedbackListQuery>;
+export type InstFeedbackListLazyQueryHookResult = ReturnType<typeof useInstFeedbackListLazyQuery>;
+export type InstFeedbackListQueryResult = Apollo.QueryResult<InstFeedbackListQuery, InstFeedbackListQueryVariables>;

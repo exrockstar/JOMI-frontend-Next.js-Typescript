@@ -10,7 +10,7 @@ function formatTableFilters(filters: ColumnFilter[]) {
     .map((filter) => {
       return `${filter.columnName} ${filter.operation} ${filter.value}`
     })
-    .join('and ')
+    .join(' and ')
 }
 
 const TableFilters = ({ filters }: Props) => {

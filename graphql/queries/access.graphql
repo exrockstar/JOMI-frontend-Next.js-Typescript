@@ -121,3 +121,30 @@ query InstArticleEventLogs($input: AccessFilterInput!) {
 query GenCounterReport($input: CounterInput!) {
   genCounterReport(input: $input)
 }
+
+query InstFeedbackList($institution_id: String!, $input: FeedbackListInput!){
+  output: getFeedbacksByInstitutionId(institution_id: $institution_id, input: $input){
+    items {
+      _id
+      type 
+      questionId
+      question {
+        question
+        choices {
+          value
+        }
+      }
+      value
+      comment
+      user {
+        email
+        user_type
+        _id
+      }
+      anon_link_id      
+      createdAt
+      updatedAt
+    }
+    count
+  }
+}
