@@ -28,6 +28,7 @@ const context = {
   state: defaultValue,
   hasGivenFeedback: false,
   showFeedbackDialog: false,
+  feedbackButtonText: '',
   personalAnnouncements: {
     show: false,
     count: 0,
@@ -35,6 +36,7 @@ const context = {
   },
   setShowPersonalAnnouncements(val: boolean) {},
   setHasGivenFeedback(val: boolean) {},
+  setFeedbackButtonText(val: string) {},
   setShowFeedbackDialog(val: boolean) {},
   setContextState: (state: typeof defaultValue) => {},
   setArticlesViewed: (pub_id: String) => {},
@@ -53,6 +55,7 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
     'feedbackDone',
     false
   )
+  const [feedbackButtonText, setFeedbackButtonText] = useState('Leave')
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
   const [trackAnnouncements, { called }] = useTrackAnnouncementsMutation()
   const router = useRouter()
@@ -177,6 +180,8 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         },
         hasGivenFeedback,
         showFeedbackDialog,
+        feedbackButtonText,
+        setFeedbackButtonText,
         setHasGivenFeedback,
         setShowFeedbackDialog,
         setShowPersonalAnnouncements,

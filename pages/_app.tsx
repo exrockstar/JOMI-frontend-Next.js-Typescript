@@ -31,6 +31,7 @@ import AppErrorFallback from 'components/fallbacks/AppErrorFallback'
 import { CookiesProvider } from 'react-cookie'
 import { NextPage } from 'next'
 import AmplitudeAnalytics from 'components/utils/AmplitudeAnalytics'
+import FeedbackContainer from 'components/article/feedback/FeedbackContainer'
 
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -70,6 +71,7 @@ function MyApp({
                 <HotJar />
                 <MoreInfoDialog />
                 <Component {...pageProps} />
+                <FeedbackContainer />
                 <noscript>
                   <iframe
                     src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_GTM}`}

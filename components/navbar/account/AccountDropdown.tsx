@@ -30,9 +30,11 @@ import { analytics } from 'apis/analytics'
 import { NavButton } from '../NavMenu'
 import { CTAMenuItem } from 'components/common/CTAButton'
 import { UserRoles } from 'graphql/types'
+import { useAppState } from 'components/_appstate/useAppState'
 
 function AccountDropdown() {
   const { data: session } = useSession()
+  const { setShowFeedbackDialog } = useAppState()
   const { data, refetch, loading, client } = useUserProfileQuery({
     skip: !session?.user
   })
@@ -172,24 +174,24 @@ function AccountDropdown() {
         </Typography>
       </SignOutMenuItem>
 
-      <Link href="/account/feedback" passHref legacyBehavior>
-        <FeedBackMenuItem
-          onClick={handleClose}
-          title="Click to give feedback"
+      <FeedBackMenuItem
+        onClick={(e) => {
+          setShowFeedbackDialog(true)
+        }}
+        title="Click to give feedback"
+        data-event="Account Dropdown - Feedback"
+      >
+        <ListItemIcon data-event="Account Dropdown - Feedback">
+          <FeedbackOutlined fontSize="small" />
+        </ListItemIcon>
+        <Typography
+          variant="body1"
+          fontSize={15}
           data-event="Account Dropdown - Feedback"
         >
-          <ListItemIcon data-event="Account Dropdown - Feedback">
-            <FeedbackOutlined fontSize="small" />
-          </ListItemIcon>
-          <Typography
-            variant="body1"
-            fontSize={15}
-            data-event="Account Dropdown - Feedback"
-          >
-            Send Feedback
-          </Typography>
-        </FeedBackMenuItem>
-      </Link>
+          Send Feedback
+        </Typography>
+      </FeedBackMenuItem>
     </MenuList>
   )
 

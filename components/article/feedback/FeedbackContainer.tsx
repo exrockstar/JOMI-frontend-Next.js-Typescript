@@ -31,28 +31,32 @@ type TrackFeedbackResult = {
  * @returns
  */
 const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
-  const { setHasGivenFeedback, showFeedbackDialog, setShowFeedbackDialog } =
-    useAppState()
+  const {
+    setHasGivenFeedback,
+    showFeedbackDialog,
+    setShowFeedbackDialog,
+    setFeedbackButtonText
+  } = useAppState()
 
   const { data: session, status } = useSession()
+  const router = useRouter()
   const isSessionLoading = status === 'loading'
   const { data: userData, loading } = useUserProfileQuery({
     skip: isSessionLoading
   })
-  //button at the bottom right of the screen.
-  const [feedbackButtonText, setFeedbackButtonText] = useState<
-    'Leave' | 'Adjust'
-  >('Leave')
+  const isCMSOrAccess = ['/cms', '/access'].some((path) =>
+    router.pathname.startsWith(path)
+  )
+
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
-    skip: isSessionLoading,
+    skip: isSessionLoading || isCMSOrAccess,
     variables: {
       anon_link_id
     }
   })
   const [trackFeedback] = useTrackFeedbackMutation()
 
-  const router = useRouter()
   const forceShowFeedback = Boolean(router.query.feedback as string)
   useEffect(() => {
     if (!!forceShowFeedback) {
@@ -61,7 +65,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   }, [forceShowFeedback, setShowFeedbackDialog])
   const question = feedbackQuestionData?.question
   const user = userData?.user
-  if (!question || loading) return null
+  if (!question || loading || isCMSOrAccess) return null
   return (
     <ThemeProvider theme={frontPageTheme}>
       <Formik<TrackFeedbackInput>
@@ -108,33 +112,20 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
           })
         }}
       >
-        <div>
-          <FeedbackModal
-            open={showFeedbackDialog}
-            onClose={(e) => {
-              setShowFeedbackDialog(false)
-              const event = e as any
-              if (event.feedback_id) {
-                setFeedbackButtonText('Adjust')
-              } else {
-                setFeedbackButtonText('Leave')
-              }
-            }}
-            hideSkipButton={forceShowFeedback || hideSkipButton}
-            question={feedbackQuestionData?.question}
-          />
-          {!!feedbackButtonText && (
-            <Box position="fixed" right={16} bottom={16} sx={{ zIndex: 500 }}>
-              <CTAButton
-                onClick={() => {
-                  setShowFeedbackDialog(true)
-                }}
-              >
-                {feedbackButtonText} Feedback
-              </CTAButton>
-            </Box>
-          )}
-        </div>
+        <FeedbackModal
+          open={showFeedbackDialog}
+          onClose={(e) => {
+            setShowFeedbackDialog(false)
+            const event = e as any
+            if (event.feedback_id) {
+              setFeedbackButtonText('Adjust')
+            } else {
+              setFeedbackButtonText('Leave')
+            }
+          }}
+          hideSkipButton={forceShowFeedback || hideSkipButton}
+          question={feedbackQuestionData?.question}
+        />
       </Formik>
     </ThemeProvider>
   )

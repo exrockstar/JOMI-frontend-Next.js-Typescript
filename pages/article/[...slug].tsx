@@ -43,7 +43,8 @@ import {
 } from 'graphql/queries/announcement-for-user.generated'
 import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import Error404 from 'components/error-pages/Error404'
-import FeedbackContainer from 'components/article/feedback/FeedbackContainer'
+import { useAppState } from 'components/_appstate/useAppState'
+import CTAButton from 'components/common/CTAButton'
 const ArticlePassword = dynamic(
   () => import('components/article/ArticlePassword')
 )
@@ -60,7 +61,7 @@ const isProduction = process.env.APP_ENV === 'production'
  */
 function SingleArticle({ article }: SingleArticleProps) {
   const [showArticle, setShowArticle] = useState(!article?.isPasswordProtected)
-
+  const { feedbackButtonText, setShowFeedbackDialog } = useAppState()
   const onComplete = () => {
     setShowArticle(true)
   }
@@ -75,7 +76,7 @@ function SingleArticle({ article }: SingleArticleProps) {
         <ChapterProvider chapters={article?.chapters}>
           <ArticleVideo article={article} />
         </ChapterProvider>
-        <FeedbackContainer />
+
         <Box display={{ xs: 'block', md: 'none' }}>
           <LanguageSwitcher enabledLanguages={article.enabled_languages} />
         </Box>
@@ -116,6 +117,13 @@ function SingleArticle({ article }: SingleArticleProps) {
             <ArticleSideBar article={article} />
           </Grid>
         </Grid>
+        {!!feedbackButtonText && (
+          <Box position="fixed" right={16} bottom={16} sx={{ zIndex: 500 }}>
+            <CTAButton onClick={() => setShowFeedbackDialog(true)}>
+              {feedbackButtonText} Feedback
+            </CTAButton>
+          </Box>
+        )}
       </div>
     )
   }, [article])
