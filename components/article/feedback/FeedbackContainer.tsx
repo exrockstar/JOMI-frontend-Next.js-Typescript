@@ -116,12 +116,6 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
           open={showFeedbackDialog}
           onClose={(e) => {
             setShowFeedbackDialog(false)
-            const event = e as any
-            if (event.feedback_id) {
-              setFeedbackButtonText('Adjust')
-            } else {
-              setFeedbackButtonText('Leave')
-            }
           }}
           hideSkipButton={forceShowFeedback || hideSkipButton}
           question={feedbackQuestionData?.question}

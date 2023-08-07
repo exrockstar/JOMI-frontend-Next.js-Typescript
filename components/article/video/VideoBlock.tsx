@@ -78,7 +78,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     variables: { publication_id: pubId }
   })
   const articleAccess = data?.article?.articleAccessType
-  const showFeedbackQuestions = data?.user?.showFeedbackQuestions
+  const showFeedbackQuestions = !data?.user || data.user.showFeedbackQuestions
   const accessType = articleAccess?.accessType
   const isArticlePreviouslyBlocked = videosBlocked.find((id) => id === pubId)
   const isPreviouslyViewed = videosViewed.find((id) => id === pubId)

@@ -126,7 +126,7 @@ function SingleArticle({ article }: SingleArticleProps) {
         )}
       </div>
     )
-  }, [article])
+  }, [article, feedbackButtonText, setShowFeedbackDialog])
 
   if (article?.isPasswordProtected && !showArticle) {
     return (
