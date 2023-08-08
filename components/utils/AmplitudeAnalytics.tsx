@@ -41,7 +41,7 @@ function AmplitudeAnalytics() {
   useEffect(() => {
     if (cmsOrAccess) return
     if(status === "loading" || loading) return;
-    amplitudeSetUserID(user_id)
+    user_id !== 'anon' && amplitudeSetUserID(user_id)
     amplitudeSetUserPropsOnce({
       anonLinkID: anon_link_id,
       referredFrom: referredFrom,
