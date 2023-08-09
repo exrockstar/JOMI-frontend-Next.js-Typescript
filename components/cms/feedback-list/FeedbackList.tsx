@@ -42,7 +42,7 @@ const FeedbackList = () => {
                     <StickyTableCell
                       sx={{
                         p: 0,
-                        maxWidth: 150,
+                        maxWidth: 200,
                         backgroundColor: isEven ? '#fafafa' : 'white'
                       }}
                     >
@@ -57,9 +57,19 @@ const FeedbackList = () => {
                         }}
                         title={item.user?.email}
                       >
-                        {item.user ? item.user?.email : 'anonymous'}
+                        {item.user ? (
+                          <Link
+                            component={NextLink}
+                            href={`/cms/user/${item.user._id}`}
+                          >
+                            {item.user.email}
+                          </Link>
+                        ) : (
+                          'anonymous'
+                        )}
                       </Box>
                     </StickyTableCell>
+                    <TableCell>{item.anon_link_id}</TableCell>
                     <TableCell
                       sx={{
                         maxWidth: 200,
