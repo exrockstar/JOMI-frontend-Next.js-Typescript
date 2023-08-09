@@ -747,7 +747,6 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
-  howFound?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
   referredFrom?: InputMaybe<Scalars['String']>;
@@ -766,6 +765,7 @@ export type ExtendedRegistrationOutput = {
 export type Feedback = {
   __typename?: 'Feedback';
   _id: Scalars['String'];
+  _institution?: Maybe<Institution>;
   anon_link_id?: Maybe<Scalars['String']>;
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -2188,6 +2188,7 @@ export type Query = {
   getAllOrders: OrderListOutput;
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
+  getFeedbackList: FeedbackListOutput;
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getFeedbacksByInstitutionId: FeedbackListOutput;
   getPriceByProductId: StripePrice;
@@ -2336,6 +2337,11 @@ export type QueryGetAllOrdersArgs = {
 
 export type QueryGetCombinedPromoCodeArgs = {
   code: Scalars['String'];
+};
+
+
+export type QueryGetFeedbackListArgs = {
+  input: FeedbackListInput;
 };
 
 
