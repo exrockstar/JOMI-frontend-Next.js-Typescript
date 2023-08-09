@@ -1,10 +1,25 @@
-import { TableRow } from '@mui/material'
-import { styled } from '@mui/material/styles'
-export const StyledTableRow = styled(TableRow)(({ theme, selected }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: !selected ? theme.palette.grey[50] : null
-  },
-  '&:last-child td, &:last-child th': {
-    borderBottom: 0
-  }
-}))
+import { useTheme } from '@mui/material/styles'
+import { TableRow, TableRowProps } from '@mui/material'
+export const StyledTableRow = (props: TableRowProps) => {
+  const theme = useTheme()
+  //@ts-ignore
+  const bgColor = props.sx?.backgroundColor
+  return (
+    <TableRow
+      sx={{
+        ...props.sx,
+        '&:nth-of-type(odd)': {
+          backgroundColor: bgColor
+            ? bgColor
+            : !props.selected
+            ? theme.palette.grey[50]
+            : null
+        },
+        '&:last-child td, &:last-child th': {
+          borderBottom: 0
+        }
+      }}
+      {...props}
+    />
+  )
+}

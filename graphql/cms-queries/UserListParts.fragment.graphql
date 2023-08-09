@@ -25,8 +25,7 @@ fragment UserListParts on User {
   promo_code
   isSubscribed
   last_visited
-  matchStatus
-  matchedBy
+
   institutionalEmail
 
   subscription {
@@ -57,6 +56,10 @@ fragment UserListParts on User {
   }
   accessType {
     accessType
+    matchStatus
+    matchedBy
+    institution_id
+    institution_name
   }
   emailVerifiedAt
   instEmailVerifiedAt
@@ -129,6 +132,10 @@ fragment UserDetail on User {
   instEmailVerifiedAt
   accessType {
     accessType
+    matchedBy
+    matchStatus
+    institution_id
+    institution_name
   }
   source_ip
   offsiteAccesses {

@@ -1,4 +1,4 @@
-import { Info, Visibility } from '@mui/icons-material'
+import { Info, InfoOutlined, Visibility } from '@mui/icons-material'
 import {
   Stack,
   CircularProgress,
@@ -12,20 +12,26 @@ import {
   TableRow,
   TableContainer,
   TableFooter,
-  Pagination,
   Button,
-  Chip
+  Chip,
+  TablePagination
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import { useUseUserByInstitutionListQuery } from 'graphql/cms-queries/user-list.generated'
-import { AccessTypeEnum, UserInput, UserRoles } from 'graphql/types'
+import {
+  AccessTypeEnum,
+  QueryOperation,
+  UserInput,
+  UserRoles
+} from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import UserStatsTableHead from './UsersStatsTableHead'
 import UserStatsHeader from './UserStatsHeader'
 import { useQueryFilters } from '../../../../hooks/useQueryFilters'
+import { StickyTableCell } from 'components/common/StickyTableCell'
 
 type Props = {
   institutionId: string
@@ -39,9 +45,12 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const search = router.query.search as string
   const page = parseInt((router.query.page as string) ?? '1')
-  const perPage = 40
-  const skip = (page - 1) * 40
+  const perPage = parseInt((router.query.page_size as string) ?? '10')
+  const skip = (page - 1) * perPage
   const sort_order = sort_order_str === 'desc' ? -1 : 1
+
+  const start = router.query.start as string | null
+  const end = router.query.end as string | null
   const input: UserInput = {
     sort_by: sort_by,
     sort_order: sort_order,
@@ -53,6 +62,15 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   if (search) {
     input.search = search
   }
+
+  if (start) {
+    input.startDate = new Date(start)
+  }
+
+  if (end) {
+    input.endDate = new Date(end)
+  }
+
   const { data, loading, error } = useUseUserByInstitutionListQuery({
     variables: {
       instId: institutionId,
@@ -64,42 +82,70 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const users = output?.users
   const filterCount = output?.count ?? 0
   const pageCount = Math.ceil(filterCount / 40)
-  const handlePageChange = (page: number) => {
+  const handleChangePage = (event: unknown, newPage: number) => {
     router.push({
       query: {
         ...router.query,
-        page: page
+        page_size: perPage,
+        page: newPage + 1
+      }
+    })
+  }
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    router.push({
+      query: {
+        ...router.query,
+        page_size: +event.target.value,
+        page: 1
       }
     })
   }
   const isAdmin = session?.user?.role === UserRoles.Admin
-  const TablePagination = (
-    <TableFooter>
-      <Box p={1} display="flex" alignItems="center" gap={2}>
-        <Pagination
-          count={pageCount}
-          shape="rounded"
-          page={page}
-          onChange={(event, newPage) => handlePageChange(newPage)}
-        />
-        {filterCount && (
-          <Typography color="text.secondary">
-            {skip + 1} to {Math.min(skip + perPage, filterCount)} of{' '}
-            {filterCount} users
-          </Typography>
-        )}
-        {filters?.length > 0 && (
-          <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
-        )}
-      </Box>
-    </TableFooter>
+  const _TablePagination = (
+    <Box display="flex" alignItems="center" gap={2} position="sticky" left={0}>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={filterCount}
+        rowsPerPage={perPage}
+        page={page - 1}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton={true}
+        showLastButton={true}
+      />
+      {filters?.length > 0 && (
+        <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
+      )}
+      {}
+    </Box>
   )
   return (
     <>
+      <Typography color="text.secondary" variant="caption">
+        {' '}
+        NOTE: Users highlighted in{' '}
+        <Box
+          component="span"
+          sx={{
+            backgroundColor: 'warning.main',
+            color: 'text.primary',
+            px: 1,
+            borderRadius: 0.5
+          }}
+        >
+          yellow
+        </Box>{' '}
+        are no longer matched with the institution but were active during the
+        specified period
+      </Typography>
       <UserStatsHeader count={users?.length || 0} pageCount={pageCount} />
       <Card>
         <TableContainer>
-          {TablePagination}
+          {_TablePagination}
           <Table sx={{ minWidth: 1050 }}>
             <UserStatsTableHead />
             <TableBody>
@@ -119,40 +165,82 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                 </Stack>
               )}
               {!!users?.length &&
-                users?.map((user) => {
+                users?.map((user, i) => {
                   const access = user?.accessType?.accessType
-                  const lastAccess = user?.subscription.lastSubType
-                  const accessExpiry = user?.subscription.lastSubTypeExpiry
+                  const lastAccess = user?.subscription?.lastSubType
+                  const accessExpiry = user?.subscription?.lastSubTypeExpiry
 
                   const needsConfirmation = [
                     AccessTypeEnum.AwaitingEmailConfirmation,
                     AccessTypeEnum.EmailConfirmationExpired
                   ].includes(access)
 
+                  let stickyTableCellColor = i % 2 !== 0 ? 'white' : '#fafafa'
+                  const isNoLongerMatched =
+                    user.accessType.institution_id !== institutionId
+
                   return (
-                    <StyledTableRow key={user._id}>
-                      <TableCell>
-                        {isAdmin ? (
-                          <Link
-                            href={`/cms/user/${user._id}`}
-                            target="_blank"
-                            passHref
-                          >
+                    <StyledTableRow
+                      key={user._id}
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        backgroundColor: isNoLongerMatched
+                          ? 'warning.light'
+                          : undefined
+                      }}
+                    >
+                      <StickyTableCell
+                        sx={{
+                          p: 0,
+                          backgroundColor: stickyTableCellColor
+                        }}
+                      >
+                        <TableCell
+                          component={'div'}
+                          sx={{ borderBottom: 'none' }}
+                        >
+                          {isAdmin ? (
+                            <Link
+                              href={`/cms/user/${user._id}`}
+                              target="_blank"
+                              passHref
+                            >
+                              <Typography>{user.email}</Typography>
+                            </Link>
+                          ) : (
                             <Typography>{user.email}</Typography>
-                          </Link>
-                        ) : (
-                          <Typography>{user.email}</Typography>
-                        )}
-                        <Typography variant="body2" color="text.secondary">
-                          {user.display_name}
-                        </Typography>
+                          )}
+                          <Typography variant="body2" color="text.secondary">
+                            {user.display_name}
+                          </Typography>
+                        </TableCell>
+                      </StickyTableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: 200,
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden'
+                        }}
+                        title={user.institution_name}
+                      >
+                        {user.institution_name}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: 200,
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden'
+                        }}
+                        title={user.accessType.institution_name}
+                      >
+                        {user.accessType.institution_name}
                       </TableCell>
                       <TableCell>
                         <Box display="flex" alignItems="center" gap={1}>
                           {user.institutionalEmail}
                         </Box>
                       </TableCell>
-                      <TableCell>{user.matchedBy}</TableCell>
+                      <TableCell>{user.accessType.matchedBy}</TableCell>
                       <TableCell sx={{ minWidth: 200 }}>
                         <Typography sx={{ textTransform: 'capitalize' }}>
                           {lastAccess}
@@ -184,7 +272,12 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                       <TableCell>{user.articleCount}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/access/${institutionId}/users/${user._id}`}
+                          href={{
+                            pathname: `/access/${institutionId}/users/${user._id}`,
+                            query: {
+                              ...router.query
+                            }
+                          }}
                           passHref
                           legacyBehavior
                         >
@@ -196,7 +289,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                 })}
             </TableBody>
           </Table>
-          {TablePagination}
+          {_TablePagination}
         </TableContainer>
       </Card>
     </>

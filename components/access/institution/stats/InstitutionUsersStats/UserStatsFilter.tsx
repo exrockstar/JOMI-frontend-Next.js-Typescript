@@ -98,12 +98,6 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       type: 'select',
       operations: [QueryOperation.Equal, QueryOperation.NotEqual],
       values: Object.values(SubType)
-    },
-    {
-      columnName: 'accesses.created',
-      label: 'Active On',
-      type: 'date',
-      operations: [QueryOperation.Before, QueryOperation.After]
     }
   ]
   return (

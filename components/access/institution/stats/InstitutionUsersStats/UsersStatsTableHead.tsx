@@ -9,16 +9,27 @@ import { User } from 'graphql/types'
 import { visuallyHidden } from '@mui/utils'
 import React from 'react'
 import { useRouter } from 'next/router'
+import { StickyTableCell } from 'components/common/StickyTableCell'
 
 interface HeadCell {
   id: keyof User | `subscription.${keyof User['subscription']}`
   label: string
+  sticky?: boolean
 }
 
 const headCells: readonly HeadCell[] = [
   {
     id: 'email',
-    label: 'Email & Name'
+    label: 'Email & Name',
+    sticky: true
+  },
+  {
+    id: 'institution_name',
+    label: 'Stated Institution'
+  },
+  {
+    id: 'matched_institution_name',
+    label: 'Matched Institution'
   },
   {
     id: 'inst_email',
@@ -80,10 +91,12 @@ const UserStatsTableHead = () => {
       <TableRow>
         {headCells.map((headCell) => {
           const order = sort_order >= 1 ? 'asc' : 'desc'
-          return (
+
+          const content = (
             <TableCell
               key={headCell.id}
               sortDirection={sort_by === headCell.id ? order : false}
+              component={headCell.sticky ? 'div' : 'th'}
             >
               <TableSortLabel
                 active={sort_by === headCell.id}
@@ -100,6 +113,19 @@ const UserStatsTableHead = () => {
                 ) : null}
               </TableSortLabel>
             </TableCell>
+          )
+
+          return headCell.sticky ? (
+            <StickyTableCell
+              key={headCell.id}
+              component="th"
+              sx={{ p: 0, maxWidth: 150 }}
+              backgroundColor={'#efefef'}
+            >
+              {content}
+            </StickyTableCell>
+          ) : (
+            content
           )
         })}
         <TableCell key={'details'}>Details</TableCell>

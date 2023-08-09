@@ -49,12 +49,15 @@ export type AccessEventsOutput = {
 };
 
 export type AccessFilterInput = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
+  institution_id?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort_by?: InputMaybe<Scalars['String']>;
   sort_order?: InputMaybe<Scalars['Int']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type AccessSettings = {
@@ -73,6 +76,8 @@ export type AccessType = {
   institution_id?: Maybe<Scalars['String']>;
   institution_name?: Maybe<Scalars['String']>;
   isTrial?: Maybe<Scalars['Boolean']>;
+  matchStatus?: Maybe<MatchStatus>;
+  matchedBy?: Maybe<MatchedBy>;
   orderId?: Maybe<Scalars['String']>;
   requireLogin?: Maybe<Scalars['Boolean']>;
   shouldRequestInstVerification?: Maybe<Scalars['String']>;
@@ -3318,12 +3323,14 @@ export type User = {
 };
 
 export type UserInput = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   limit?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort_by?: InputMaybe<Scalars['String']>;
   sort_order?: InputMaybe<Scalars['Int']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type UserOutput = {

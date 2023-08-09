@@ -56,6 +56,9 @@ const UserTypesCard = ({ user_types, title }: Props) => {
                 title: {
                   display: true,
                   text: title
+                },
+                legend: {
+                  display: false
                 }
               },
               responsive: true,

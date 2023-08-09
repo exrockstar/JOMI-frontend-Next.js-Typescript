@@ -47,7 +47,7 @@ const InstitutionSection = ({ user }: Props) => {
           size="small"
         />
         <FormikTextField
-          value={user?.matchedBy}
+          value={user?.accessType?.matchedBy}
           name="matchedBy"
           label="Matched By"
           fullWidth
@@ -58,7 +58,7 @@ const InstitutionSection = ({ user }: Props) => {
         />
 
         <FormikTextField
-          value={user?.matchStatus}
+          value={user?.accessType?.matchStatus}
           name="matchStatus"
           label="Match Status"
           fullWidth
