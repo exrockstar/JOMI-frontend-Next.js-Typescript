@@ -105,6 +105,12 @@ const columnOptions: ColumnOption[] = [
     type: 'text',
     label: 'Expired Order Status',
     operations: StringOperations
+  },
+  {
+    columnName: 'triagequeue.created',
+    type: 'date',
+    label: 'Total Requests after date',
+    operations: [QueryOperation.After]
   }
 ]
 
