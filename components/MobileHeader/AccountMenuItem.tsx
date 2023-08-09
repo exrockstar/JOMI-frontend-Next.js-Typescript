@@ -23,11 +23,12 @@ import { analytics } from 'apis/analytics'
 import { UserRoles } from 'graphql/types'
 import { CTAMenuItem } from 'components/common/CTAButton'
 import PurchaseSubscriptionItem from './PurchaseSubscriptionItem'
+import { useAppState } from 'components/_appstate/useAppState'
 
 const AccountMenuItem = (props: MobileMenuItemProps) => {
   const { data: session } = useSession()
   const client = useApolloClient()
-
+  const { setShowFeedbackDialog } = useAppState()
   const { data, refetch } = useUserProfileQuery({
     skip: !session?.user
   })
@@ -38,7 +39,7 @@ const AccountMenuItem = (props: MobileMenuItemProps) => {
     }
   }, [session?.user, refetch, data?.user])
 
-  function getDisplayName(user: typeof data['user']) {
+  function getDisplayName(user: (typeof data)['user']) {
     if (!user) return 'N/A'
 
     if (user.display_name) return user.display_name
@@ -109,25 +110,26 @@ const AccountMenuItem = (props: MobileMenuItemProps) => {
           </Typography>
         </ListItemButton>
 
-        <Link href="/account/feedback" passHref legacyBehavior>
-          <ListItemButton
-            title="Click to give feedback"
-            divider
+        <ListItemButton
+          title="Click to give feedback"
+          divider
+          data-event={`Mobile Menu - Feedback`}
+          onClick={(e) => {
+            setShowFeedbackDialog(true)
+            analytics.trackClick(e)
+          }}
+        >
+          <ListItemIcon data-event={`Mobile Menu - Feedback`}>
+            <FeedbackOutlined />
+          </ListItemIcon>
+          <Typography
+            variant="body1"
+            fontSize={15}
             data-event={`Mobile Menu - Feedback`}
-            onClick={analytics.trackClick}
           >
-            <ListItemIcon data-event={`Mobile Menu - Feedback`}>
-              <FeedbackOutlined />
-            </ListItemIcon>
-            <Typography
-              variant="body1"
-              fontSize={15}
-              data-event={`Mobile Menu - Feedback`}
-            >
-              Send Feedback
-            </Typography>
-          </ListItemButton>
-        </Link>
+            Send Feedback
+          </Typography>
+        </ListItemButton>
       </List>
     </MobileMenuItem>
   )
