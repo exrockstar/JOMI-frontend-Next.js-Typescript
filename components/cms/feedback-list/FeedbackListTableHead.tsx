@@ -28,6 +28,10 @@ const headCells: readonly HeadCell[] = [
     sticky: true
   },
   {
+    id: 'anon_link_id',
+    label: 'Anon Link ID'
+  },
+  {
     id: 'institution',
     label: 'Institution'
   },
