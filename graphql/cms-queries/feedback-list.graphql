@@ -1,0 +1,31 @@
+
+query GetFeedbackList($input: FeedbackListInput!){
+  output: getFeedbackList(input: $input){
+    items {
+      _id
+      type 
+      questionId
+      question {
+        question
+        choices {
+          value
+        }
+      }
+      value
+      comment
+      user {
+        email
+        user_type
+        _id
+      }
+      _institution {
+        _id
+        name
+      }
+      anon_link_id      
+      createdAt
+      updatedAt
+    }
+    count
+  }
+}

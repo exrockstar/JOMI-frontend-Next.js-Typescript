@@ -75,6 +75,11 @@ const SidebarItems: SidenavItem[] = [
     url: `${CMS_URL}/orders`
   },
   {
+    name: 'User Feedback',
+    icon: <Message />,
+    url: `${CMS_URL}/feedback-list`
+  },
+  {
     name: 'Comments',
     icon: <Message />,
     url: `${CMS_URL}/comments`,
