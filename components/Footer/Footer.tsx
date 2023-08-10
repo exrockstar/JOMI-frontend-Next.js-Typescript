@@ -3,7 +3,7 @@ import { Box, Container, Grid, Hidden, SvgIcon, Typography } from '@mui/material
 import Image from 'next/image'
 import FooterImage from 'public/img/footer-phone.png'
 import FooterLink from './FooterLink'
-import { LinkedIn, Twitter } from '@mui/icons-material'
+import { Instagram, LinkedIn, Twitter } from '@mui/icons-material'
 import FacebookIcon from 'public/icons/facebook-icon.svg'
 import SocialLink from './SocialLink'
 import Link from 'next/link'
@@ -169,6 +169,12 @@ const Footer2 = () => {
                   Connect with us
                 </Typography>
                 <Box display="flex" flexDirection={{ xs: 'row', md: 'column' }} gap={2}>
+                  <SocialLink href="https://instagram.com/jomijournal">
+                    <Instagram />
+                    <Typography component="span" color="inherit">
+                      Instagram
+                    </Typography>
+                  </SocialLink>
                   <SocialLink href="https://www.facebook.com/JoMIJournal/">
                     <SvgIcon component={FacebookIcon} inheritViewBox />
                     <Typography component="span" color="inherit">
