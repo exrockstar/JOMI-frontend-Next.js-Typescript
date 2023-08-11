@@ -204,8 +204,13 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   }
 
   const checkFeedbackBlock = (seconds: number, video: WistiaVideo) => {
-    // comment to display feedback to all users
-    // const isTrial = accessType === AccessTypeEnum.InstitutionalTrial
+    // comment to display feedback to trial/evaluation users
+    const isTrial = [
+      AccessTypeEnum.InstitutionalTrial,
+      AccessTypeEnum.IndividualTrial,
+      AccessTypeEnum.Evaluation
+    ].includes(accessType)
+
     const percentWatched = seconds / video.duration()
     // track which percentage of the video has the feedback modal been shown to the user.
     // remove the ones that was already been shown
@@ -221,6 +226,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     const showFeedback =
       (!!filtered.length || isTenSeconds) &&
       !hasGivenFeedback &&
+      isTrial &&
       showFeedbackQuestions
     if (showFeedback) {
       video.pause()
