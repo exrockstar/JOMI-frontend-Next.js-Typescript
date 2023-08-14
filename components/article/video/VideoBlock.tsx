@@ -260,7 +260,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     handleChapterChange(seconds)
     checkSubscriptionBlock(seconds, video, true)
     checkEvaluationBlock(seconds, video, true)
-    checkFeedbackBlock(seconds, video)
+    // checkFeedbackBlock(seconds, video) disabling the feedback modal popping up in the video until the team comes to an agreement on how it should function.
     trackPlayTime(seconds, secondsWatched)
   }
   const onPlayHandler = async (
