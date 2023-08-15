@@ -1,4 +1,4 @@
-import { FilterList } from '@mui/icons-material'
+import { FilterList, Settings } from '@mui/icons-material'
 import { LocalizationProvider } from '@mui/lab'
 import AdapterDayjs from '@mui/lab/AdapterDayjs'
 import {
@@ -9,7 +9,9 @@ import {
   Stack,
   Tooltip,
   Typography,
-  Drawer
+  Drawer,
+  Button,
+  Box
 } from '@mui/material'
 import { feedbackListColumnFilterOptions } from 'components/access/institution/feedback/feedbacklistColumnFilterOptions'
 import CmsLayout from 'components/cms/CmsLayout'
@@ -24,6 +26,7 @@ import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import FeedbackList from 'components/cms/feedback-list/FeedbackList'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { StringOperations } from 'components/common/FilterDrawer/operations'
+import FeedbackSettingsModal from 'components/cms/feedback-list/FeedbackSettingsModal'
 
 const columnFilterOptions: ColumnOption[] = [
   ...feedbackListColumnFilterOptions,
@@ -43,6 +46,7 @@ const columnFilterOptions: ColumnOption[] = [
 const FeedbackListPage = () => {
   const { loading, error, filters, setFilters } = useFeedbackList()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
 
@@ -63,7 +67,13 @@ const FeedbackListPage = () => {
             filters={filters}
           />
         </Drawer>
-        <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
+        <FeedbackSettingsModal
+          open={showSettings}
+          onClose={() => {
+            setShowSettings(false)
+          }}
+        />
+        <Stack direction={'row'} justifyContent="space-between" px={2} pt={5}>
           <Typography variant="h4">User Feedback</Typography>
           <Tooltip title="Filter list">
             <Badge
@@ -87,7 +97,19 @@ const FeedbackListPage = () => {
             </Badge>
           </Tooltip>
         </Stack>
-        <Stack px={2}>
+        <Box px={2}>
+          <Button
+            startIcon={<Settings />}
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              setShowSettings(true)
+            }}
+          >
+            Settings{' '}
+          </Button>
+        </Box>
+        <Stack px={2} mt={2}>
           <TableFilters filters={filters} />
         </Stack>
         {loading ? (

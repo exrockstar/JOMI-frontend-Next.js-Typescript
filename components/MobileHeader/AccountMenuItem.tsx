@@ -115,7 +115,7 @@ const AccountMenuItem = (props: MobileMenuItemProps) => {
           divider
           data-event={`Mobile Menu - Feedback`}
           onClick={(e) => {
-            setShowFeedbackDialog(true)
+            setShowFeedbackDialog('click-account-dropdown')
             analytics.trackClick(e)
           }}
         >

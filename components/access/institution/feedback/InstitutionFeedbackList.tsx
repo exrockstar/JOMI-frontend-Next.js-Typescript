@@ -11,7 +11,8 @@ import {
   Drawer,
   IconButton,
   Stack,
-  Tooltip
+  Tooltip,
+  Button
 } from '@mui/material'
 import FeedbackListTableHead from './FeedbackListTableHead'
 import { useInstitutionFeedbackList } from './useInstitutionFeedbackList'
@@ -21,13 +22,15 @@ import dayjs from 'dayjs'
 import FeedbackListPagination from './FeedbackListPagination'
 import { useState } from 'react'
 import { ColumnFilter } from 'graphql/types'
-import { FilterList } from '@mui/icons-material'
+import { FilterList, Settings } from '@mui/icons-material'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import TableFilters from 'components/common/TableFilters'
 import { feedbackListColumnFilterOptions } from './feedbacklistColumnFilterOptions'
+import { useGetFeedbackSettingsQuery } from 'graphql/cms-queries/feedback-list.generated'
 const InstitutionFeedbackList = () => {
   const { items, setFilters, filters } = useInstitutionFeedbackList()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const { data: settingsData } = useGetFeedbackSettingsQuery()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
 
@@ -77,6 +80,7 @@ const InstitutionFeedbackList = () => {
           </Badge>
         </Tooltip>
       </Stack>
+
       <Stack my={2}>
         <TableFilters filters={filters} />
       </Stack>

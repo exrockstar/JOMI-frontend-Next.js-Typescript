@@ -22,6 +22,7 @@ import DividerWithPadding from './common/DividerWithPadding'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import IndividualTrialSection from './IndividualTrialSection'
+import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 
 type Article = ArticlesBySlugQuery['articleBySlug']
 
@@ -32,12 +33,12 @@ const AccessBox = ({ article }: AccessBoxProps) => {
   const { data: session, status } = useSession()
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()
+  const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data, loading, refetch } = useArticleAccessQuery({
     skip: status === 'loading',
     variables: {
       publication_id: article.publication_id
-    },
-    fetchPolicy: 'network-only'
+    }
   })
   const theme = useTheme()
   const access = data?.article?.articleAccessType

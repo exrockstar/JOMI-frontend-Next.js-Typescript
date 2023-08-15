@@ -64,9 +64,9 @@ const UserDetails = () => {
   useEffect(() => {
     if (!IS_SERVER && router.isReady) {
       //set the tab based on the URL
-      const url = router.asPath.split('/')
+      const url = new URL(router.asPath, location.origin).pathname.split('/')
       const tabUrl = url[4] ?? ''
-
+      console.log(url)
       const val = getValue(tabUrl)
       setValue(val)
     }
