@@ -13,14 +13,14 @@ export type GetFeedbackListQuery = { __typename?: 'Query', output: { __typename?
 export type GetFeedbackSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetFeedbackSettingsQuery = { __typename?: 'Query', settings: { __typename?: 'FeedbackSettings', updatedAt: any, updatedBy: string, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
+export type GetFeedbackSettingsQuery = { __typename?: 'Query', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null | undefined, updatedBy?: string | null | undefined, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
 
 export type UpdateFeedbackSettingsMutationVariables = Types.Exact<{
   input: Types.FeedbackSettingsInput;
 }>;
 
 
-export type UpdateFeedbackSettingsMutation = { __typename?: 'Mutation', settings: { __typename?: 'FeedbackSettings', updatedAt: any, updatedBy: string, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
+export type UpdateFeedbackSettingsMutation = { __typename?: 'Mutation', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null | undefined, updatedBy?: string | null | undefined, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
 
 
 export const GetFeedbackListDocument = gql`

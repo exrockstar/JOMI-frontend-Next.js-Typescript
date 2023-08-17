@@ -15,17 +15,12 @@ import { Box, Button } from '@mui/material'
 import { frontPageTheme } from 'components/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CTAButton from 'components/common/CTAButton'
-import { Feedback, TrackFeedbackInput } from 'graphql/types'
+import { TrackFeedbackInput } from 'graphql/types'
 import { Formik } from 'formik'
 type FeedbackContainerProps = {
   hideSkipButton?: boolean
 }
 
-type TrackFeedbackResult = {
-  _id: string
-  value: any
-  comment?: string
-}
 /**
  *
  * @returns
@@ -43,6 +38,8 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   const isCMSOrAccess = ['/cms', '/access'].some((path) =>
     router.pathname.startsWith(path)
   )
+  const isArticlePage = router.pathname.startsWith('/article')
+  const article_publication_id = isArticlePage ? router.query.slug?.at(0) : ''
 
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
@@ -93,7 +90,9 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
             variables: {
               input: {
                 ...values,
-                value: values.value + ''
+                value: values.value + '',
+                method: showFeedbackDialog,
+                article_publication_id: article_publication_id
               }
             },
             onCompleted(result) {

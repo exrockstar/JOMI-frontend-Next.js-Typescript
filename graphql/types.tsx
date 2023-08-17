@@ -116,6 +116,7 @@ export enum ActivityType {
   Login = 'Login',
   RequestInstSubscription = 'RequestInstSubscription',
   Search = 'Search',
+  ShowFeedback = 'ShowFeedback',
   Subscribe = 'Subscribe',
   VideoBlock = 'VideoBlock',
   VideoPlay = 'VideoPlay'
@@ -815,8 +816,8 @@ export type FeedbackQuestion = {
 export type FeedbackSettings = {
   __typename?: 'FeedbackSettings';
   selectedAccessTypes: Array<AccessTypeEnum>;
-  updatedAt: Scalars['DateTime'];
-  updatedBy: Scalars['String'];
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedBy?: Maybe<Scalars['String']>;
 };
 
 export type FeedbackSettingsInput = {
@@ -1570,7 +1571,7 @@ export type MutationTrackSearchArgs = {
 
 
 export type MutationTrackShowFeedbackArgs = {
-  input: TrackSubscribeInput;
+  input: TrackVideoInput;
 };
 
 
@@ -2879,6 +2880,7 @@ export type TrackArticleInput = {
 
 export type TrackFeedbackInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  article_publication_id?: InputMaybe<Scalars['String']>;
   comment?: InputMaybe<Scalars['String']>;
   feedback_id?: InputMaybe<Scalars['String']>;
   method?: InputMaybe<Scalars['String']>;

@@ -10,6 +10,13 @@ export type TrackFeedbackMutationVariables = Types.Exact<{
 
 export type TrackFeedbackMutation = { __typename?: 'Mutation', trackFeedack?: { __typename?: 'Feedback', _id: string } | null | undefined };
 
+export type TrackShowFeedbackMutationVariables = Types.Exact<{
+  input: Types.TrackVideoInput;
+}>;
+
+
+export type TrackShowFeedbackMutation = { __typename?: 'Mutation', trackShowFeedback: boolean };
+
 export type GetFeedbackQuestionsQueryVariables = Types.Exact<{
   anon_link_id: Types.Scalars['String'];
 }>;
@@ -51,6 +58,37 @@ export function useTrackFeedbackMutation(baseOptions?: Apollo.MutationHookOption
 export type TrackFeedbackMutationHookResult = ReturnType<typeof useTrackFeedbackMutation>;
 export type TrackFeedbackMutationResult = Apollo.MutationResult<TrackFeedbackMutation>;
 export type TrackFeedbackMutationOptions = Apollo.BaseMutationOptions<TrackFeedbackMutation, TrackFeedbackMutationVariables>;
+export const TrackShowFeedbackDocument = gql`
+    mutation TrackShowFeedback($input: TrackVideoInput!) {
+  trackShowFeedback(input: $input)
+}
+    `;
+export type TrackShowFeedbackMutationFn = Apollo.MutationFunction<TrackShowFeedbackMutation, TrackShowFeedbackMutationVariables>;
+
+/**
+ * __useTrackShowFeedbackMutation__
+ *
+ * To run a mutation, you first call `useTrackShowFeedbackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTrackShowFeedbackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [trackShowFeedbackMutation, { data, loading, error }] = useTrackShowFeedbackMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTrackShowFeedbackMutation(baseOptions?: Apollo.MutationHookOptions<TrackShowFeedbackMutation, TrackShowFeedbackMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TrackShowFeedbackMutation, TrackShowFeedbackMutationVariables>(TrackShowFeedbackDocument, options);
+      }
+export type TrackShowFeedbackMutationHookResult = ReturnType<typeof useTrackShowFeedbackMutation>;
+export type TrackShowFeedbackMutationResult = Apollo.MutationResult<TrackShowFeedbackMutation>;
+export type TrackShowFeedbackMutationOptions = Apollo.BaseMutationOptions<TrackShowFeedbackMutation, TrackShowFeedbackMutationVariables>;
 export const GetFeedbackQuestionsDocument = gql`
     query GetFeedbackQuestions($anon_link_id: String!) {
   question: getFeedbackQuestionsForUser(anon_link_id: $anon_link_id) {

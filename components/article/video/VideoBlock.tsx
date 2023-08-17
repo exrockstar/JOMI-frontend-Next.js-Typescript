@@ -26,6 +26,7 @@ import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelper
 
 import ArticleAccessDialog from 'components/ArticleAccessDialog'
 import { kebabCase } from 'lodash'
+import { useTrackShowFeedbackMutation } from 'graphql/mutations/collect-feedback.generated'
 
 const TRACK_TIME_INTERVAL = 15
 type VideoBlockProps = {
@@ -54,6 +55,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const [trackVideoPlay] = useTrackVideoPlayMutation()
   const [trackVideoTime] = useTrackVideoTimeMutation()
   const [trackVideoBlock] = useTrackVideoBlockMutation()
+  const [trackShowFeedback] = useTrackShowFeedbackMutation()
   // TODO: Create backend endpoint
   const [nextBlockTime, setNextBlockTime] = useState(0)
   const router = useRouter()
@@ -244,18 +246,15 @@ export default function VideoBlock({ article }: VideoBlockProps) {
       show &&
       isMoreThanFiveMinutesSinceLastShown &&
       isInTimeStamp
-    console.log(showFeedbackToUserAccessType, accessType)
+
     if (showFeedback) {
       video.pause()
       video.cancelFullscreen()
       setShowFeedbackDialog('feedback-block')
 
-      trackVideoBlock({
+      trackShowFeedback({
         variables: {
-          input: {
-            ...trackBlockInput,
-            block_type: 'show-feedback'
-          }
+          input: trackBlockInput
         }
       }).then(() => {
         refetchShowFeedbackModalQuery({
