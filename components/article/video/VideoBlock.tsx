@@ -10,7 +10,10 @@ import {
   useTrackVideoPlayMutation,
   useTrackVideoTimeMutation
 } from 'graphql/mutations/track-article.generated'
-import { useArticleAccessQuery } from 'graphql/queries/article-access.generated'
+import {
+  useArticleAccessQuery,
+  useShowFeedbackModalQuery
+} from 'graphql/queries/article-access.generated'
 import { ArticlesBySlugQuery } from 'graphql/queries/article-by-slug.generated'
 import { AccessTypeEnum, TrackVideoInput } from 'graphql/types'
 import { useRouter } from 'next/router'
@@ -20,13 +23,10 @@ import dynamic from 'next/dynamic'
 import { isMobile } from 'components/utils/isMobile'
 import { useAppState } from 'components/_appstate/useAppState'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
-import FeedbackModal from '../feedback/FeedbackModal'
-import {
-  useGetFeedbackQuestionsQuery,
-  useTrackFeedbackMutation
-} from 'graphql/mutations/collect-feedback.generated'
-import difference from 'lodash/difference'
+
 import ArticleAccessDialog from 'components/ArticleAccessDialog'
+import { kebabCase } from 'lodash'
+import { useTrackShowFeedbackMutation } from 'graphql/mutations/collect-feedback.generated'
 
 const TRACK_TIME_INTERVAL = 15
 type VideoBlockProps = {
@@ -43,13 +43,11 @@ const BLOCK_INTERVAL_SECONDS = 300 //seconds
 export default function VideoBlock({ article }: VideoBlockProps) {
   const {
     state: { videosBlocked, videosViewed },
-    hasGivenFeedback,
     setShowFeedbackDialog,
     setVideosViewed,
     setVideosBlocked
   } = useAppState()
   const [showDialog, setShowDialog] = useState(false)
-  const [percentBlocked, setPercentBlocked] = useState<number[]>([])
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
@@ -57,6 +55,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const [trackVideoPlay] = useTrackVideoPlayMutation()
   const [trackVideoTime] = useTrackVideoTimeMutation()
   const [trackVideoBlock] = useTrackVideoBlockMutation()
+  const [trackShowFeedback] = useTrackShowFeedbackMutation()
   // TODO: Create backend endpoint
   const [nextBlockTime, setNextBlockTime] = useState(0)
   const router = useRouter()
@@ -77,8 +76,16 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     skip: status === 'loading',
     variables: { publication_id: pubId }
   })
+  const {
+    data: showFeedbackModalData,
+    refetch: refetchShowFeedbackModalQuery
+  } = useShowFeedbackModalQuery({
+    skip: status === 'loading',
+    variables: { anon_link_id },
+    nextFetchPolicy: 'network-only'
+  })
   const articleAccess = data?.article?.articleAccessType
-  const showFeedbackQuestions = !data?.user || data.user.showFeedbackQuestions
+
   const accessType = articleAccess?.accessType
   const isArticlePreviouslyBlocked = videosBlocked.find((id) => id === pubId)
   const isPreviouslyViewed = videosViewed.find((id) => id === pubId)
@@ -168,7 +175,10 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     if (trackBlock) {
       trackVideoBlock({
         variables: {
-          input: trackBlockInput
+          input: {
+            ...trackBlockInput,
+            block_type: kebabCase(accessType)
+          }
         }
       })
     }
@@ -196,43 +206,61 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
     if (trackBlock) {
       trackVideoBlock({
-        variables: { input: trackBlockInput }
+        variables: {
+          input: {
+            ...trackBlockInput,
+            block_type: 'evaluation-block'
+          }
+        }
       })
     }
 
     setVideosBlocked(pubId)
   }
 
+  /**
+   * Show feedback modal at 1 minute, then every subsequent 5 minutes
+   * If the user is fast forwarding or skipping, check `showNextAt` which is the time when the last modal was shown + 5 minutes
+   * @param seconds
+   * @param video
+   */
   const checkFeedbackBlock = (seconds: number, video: WistiaVideo) => {
-    // comment to display feedback to trial/evaluation users
-    const isTrial = [
-      AccessTypeEnum.InstitutionalTrial,
-      AccessTypeEnum.IndividualTrial,
-      AccessTypeEnum.Evaluation
-    ].includes(accessType)
+    // TODO: initialTime and interval could also be set in the backend
+    const initialTime = 60 // 1-minute
+    const interval = 300 // 5-minutes
 
-    const percentWatched = seconds / video.duration()
-    // track which percentage of the video has the feedback modal been shown to the user.
-    // remove the ones that was already been shown
-    const percentageToCheck = difference([0.25, 0.5, 0.75], percentBlocked)
-    const isTenSeconds = seconds === 10
-    const filtered = percentageToCheck.filter((percent, index, arr) => {
-      if (arr[index + 1]) {
-        return percentWatched >= percent && percentWatched <= arr[index + 1]
-      }
-      return percentWatched >= percent
-    })
+    // video.time() / seconds is at 60, 360, 660, etc. discussed in the meeting
+    const isInTimeStamp = (seconds - initialTime) % interval === 0
+
+    const { show, showNextAt } = showFeedbackModalData.result
+
+    // check if access type is included in the setting
+    const showFeedbackToUserAccessType =
+      showFeedbackModalData.feedbackAccesses?.includes(accessType)
+
+    const isMoreThanFiveMinutesSinceLastShown =
+      Math.floor(Date.now() / 1000) >= showNextAt
 
     const showFeedback =
-      (!!filtered.length || isTenSeconds) &&
-      !hasGivenFeedback &&
-      isTrial &&
-      showFeedbackQuestions
+      showFeedbackToUserAccessType &&
+      show &&
+      isMoreThanFiveMinutesSinceLastShown &&
+      isInTimeStamp
+
     if (showFeedback) {
       video.pause()
       video.cancelFullscreen()
-      setShowFeedbackDialog(true)
-      setPercentBlocked([...percentBlocked, ...filtered])
+      setShowFeedbackDialog('feedback-block')
+
+      trackShowFeedback({
+        variables: {
+          input: trackBlockInput
+        }
+      }).then(() => {
+        refetchShowFeedbackModalQuery({
+          anon_link_id
+        })
+      })
     }
   }
 
@@ -260,7 +288,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     handleChapterChange(seconds)
     checkSubscriptionBlock(seconds, video, true)
     checkEvaluationBlock(seconds, video, true)
-    // checkFeedbackBlock(seconds, video) disabling the feedback modal popping up in the video until the team comes to an agreement on how it should function.
+    checkFeedbackBlock(seconds, video) // disabling the feedback modal popping up in the video until the team comes to an agreement on how it should function.
     trackPlayTime(seconds, secondsWatched)
   }
   const onPlayHandler = async (

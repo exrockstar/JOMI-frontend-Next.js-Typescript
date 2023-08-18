@@ -29,3 +29,20 @@ query GetFeedbackList($input: FeedbackListInput!){
     count
   }
 }
+
+
+query GetFeedbackSettings {
+  settings:getFeedbackSettings {
+    updatedAt
+    updatedBy
+    selectedAccessTypes
+  }
+}
+
+mutation UpdateFeedbackSettings($input: FeedbackSettingsInput!) {
+  settings:updateFeedbackSettings(input: $input) {
+    updatedAt
+    updatedBy
+    selectedAccessTypes
+  }
+}

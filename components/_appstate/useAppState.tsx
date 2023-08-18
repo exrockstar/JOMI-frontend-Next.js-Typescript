@@ -24,10 +24,18 @@ const defaultValue = {
   announcements: []
 }
 
+type ShowFeedbackDialogMethod =
+  | 'feedback-page'
+  | 'feedback-link'
+  | 'feedback-block'
+  | 'click-leave-feedback'
+  | 'click-account-dropdown'
+  | false
+
 const context = {
   state: defaultValue,
-  hasGivenFeedback: false,
-  showFeedbackDialog: false,
+  showFeedbackDialog: null,
+  showFeedbackTime: 0,
   feedbackButtonText: '',
   personalAnnouncements: {
     show: false,
@@ -35,9 +43,9 @@ const context = {
     announcements: []
   },
   setShowPersonalAnnouncements(val: boolean) {},
-  setHasGivenFeedback(val: boolean) {},
   setFeedbackButtonText(val: string) {},
-  setShowFeedbackDialog(val: boolean) {},
+  setShowFeedbackDialog(val: ShowFeedbackDialogMethod) {},
+  setShowFeedbackTime(val: number) {},
   setContextState: (state: typeof defaultValue) => {},
   setArticlesViewed: (pub_id: String) => {},
   setVideosViewed: (pub_id: String) => {},
@@ -51,12 +59,11 @@ const AppContext = createContext<typeof context>(context)
 
 export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState(context.state)
-  const [hasGivenFeedback, setHasGivenFeedback] = useSessionStorage(
-    'feedbackDone',
-    false
-  )
+
   const [feedbackButtonText, setFeedbackButtonText] = useState('Leave')
-  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false)
+  const [showFeedbackDialog, setShowFeedbackDialog] =
+    useState<ShowFeedbackDialogMethod>(false)
+  const [showFeedbackTime, setShowFeedbackTime] = useState(0)
   const [trackAnnouncements, { called }] = useTrackAnnouncementsMutation()
   const router = useRouter()
   const { previouslyClosed, markNotificationAsRead, setPreviouslyClosed } =
@@ -178,11 +185,11 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
           announcements: personalAnnouncements,
           count: personalAnnouncements?.length
         },
-        hasGivenFeedback,
         showFeedbackDialog,
         feedbackButtonText,
+        showFeedbackTime,
+        setShowFeedbackTime,
         setFeedbackButtonText,
-        setHasGivenFeedback,
         setShowFeedbackDialog,
         setShowPersonalAnnouncements,
         setContextState,

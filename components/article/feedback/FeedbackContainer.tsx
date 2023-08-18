@@ -15,28 +15,19 @@ import { Box, Button } from '@mui/material'
 import { frontPageTheme } from 'components/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CTAButton from 'components/common/CTAButton'
-import { Feedback, TrackFeedbackInput } from 'graphql/types'
+import { TrackFeedbackInput } from 'graphql/types'
 import { Formik } from 'formik'
 type FeedbackContainerProps = {
   hideSkipButton?: boolean
 }
 
-type TrackFeedbackResult = {
-  _id: string
-  value: any
-  comment?: string
-}
 /**
  *
  * @returns
  */
 const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
-  const {
-    setHasGivenFeedback,
-    showFeedbackDialog,
-    setShowFeedbackDialog,
-    setFeedbackButtonText
-  } = useAppState()
+  const { showFeedbackDialog, setShowFeedbackDialog, setFeedbackButtonText } =
+    useAppState()
 
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -47,6 +38,8 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   const isCMSOrAccess = ['/cms', '/access'].some((path) =>
     router.pathname.startsWith(path)
   )
+  const isArticlePage = router.pathname.startsWith('/article')
+  const article_publication_id = isArticlePage ? router.query.slug?.at(0) : ''
 
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
@@ -60,7 +53,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
   const forceShowFeedback = Boolean(router.query.feedback as string)
   useEffect(() => {
     if (!!forceShowFeedback) {
-      setShowFeedbackDialog(true)
+      setShowFeedbackDialog('feedback-link')
     }
   }, [forceShowFeedback, setShowFeedbackDialog])
   const question = feedbackQuestionData?.question
@@ -74,7 +67,6 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
           type: question?.type,
           value: '',
           anon_link_id: anon_link_id,
-          institution: user?.institution,
           user: user?._id
         }}
         onSubmit={async (values, helpers) => {
@@ -82,7 +74,8 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
             question_id: question._id,
             question: question.question,
             value: values.value,
-            type: question.type
+            type: question.type,
+            method: showFeedbackDialog
           })
           amplitudeTrackFeedback({
             question_id: question._id,
@@ -90,19 +83,20 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
             value: values.value,
             type: question.type,
             userId: session && session.user ? session.user._id : 'anon',
-            comment: values.comment
+            comment: values.comment,
+            method: showFeedbackDialog
           })
           await trackFeedback({
             variables: {
               input: {
                 ...values,
-                value: values.value + ''
+                value: values.value + '',
+                method: showFeedbackDialog,
+                article_publication_id: article_publication_id
               }
             },
             onCompleted(result) {
               setShowFeedbackDialog(false)
-              setHasGivenFeedback(true)
-
               //set the feedback id so that it can be updated later on
               const feedback_id = result.trackFeedack?._id
               helpers.setFieldValue('feedback_id', feedback_id)

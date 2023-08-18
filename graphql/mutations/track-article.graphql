@@ -11,7 +11,7 @@ mutation TrackVideoTime($input: TrackVideoTimeInput!) {
 }
 
 mutation TrackVideoBlock($input: TrackVideoInput!) {
-  trackVideoBlock(input: $input)
+  trackVideoBlock(input: $input) 
 }
 
 mutation TrackSubscribe($input: TrackSubscribeInput!) {

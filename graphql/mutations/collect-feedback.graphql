@@ -5,6 +5,11 @@ mutation TrackFeedback($input: TrackFeedbackInput!) {
   }
 }
 
+mutation TrackShowFeedback($input: TrackVideoInput!) {
+  trackShowFeedback(input: $input)
+}
+
+
 query GetFeedbackQuestions($anon_link_id: String!){
   question: getFeedbackQuestionsForUser(anon_link_id: $anon_link_id){
     _id

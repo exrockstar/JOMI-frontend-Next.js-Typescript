@@ -176,7 +176,7 @@ function AccountDropdown() {
 
       <FeedBackMenuItem
         onClick={(e) => {
-          setShowFeedbackDialog(true)
+          setShowFeedbackDialog('click-leave-feedback')
         }}
         title="Click to give feedback"
         data-event="Account Dropdown - Feedback"

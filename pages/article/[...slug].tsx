@@ -119,7 +119,9 @@ function SingleArticle({ article }: SingleArticleProps) {
         </Grid>
         {!!feedbackButtonText && (
           <Box position="fixed" right={16} bottom={16} sx={{ zIndex: 500 }}>
-            <CTAButton onClick={() => setShowFeedbackDialog(true)}>
+            <CTAButton
+              onClick={() => setShowFeedbackDialog('click-leave-feedback')}
+            >
               {feedbackButtonText} Feedback
             </CTAButton>
           </Box>

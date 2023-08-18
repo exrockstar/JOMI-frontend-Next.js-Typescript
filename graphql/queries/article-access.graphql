@@ -19,6 +19,7 @@ query ArticleAccess($publication_id: String!) {
     showPurchaseArticle
     status
   }
+  
   getPurchaseAndRentPrices {
     _id
     product
@@ -30,6 +31,13 @@ query ArticleAccess($publication_id: String!) {
     isTrialsFeatureEnabled
     trialDuration
     trialsAllowed
-    showFeedbackQuestions
   }
+}
+
+query ShowFeedbackModal($anon_link_id: String!){
+  result:showFeedbackModal(anon_link_id: $anon_link_id){
+    show
+    showNextAt
+  }
+  feedbackAccesses: getFeedbackModalAccessTypes
 }

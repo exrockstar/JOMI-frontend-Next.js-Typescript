@@ -20,11 +20,13 @@ export type Scalars = {
 
 export type Access = {
   __typename?: 'Access';
+  accessType?: Maybe<AccessTypeEnum>;
   activity: ActivityType;
   anon_link_id?: Maybe<Scalars['String']>;
   article_categories_flat: Scalars['String'];
   article_publication_id?: Maybe<Scalars['String']>;
   article_title?: Maybe<Scalars['String']>;
+  block_type?: Maybe<Scalars['String']>;
   created: Scalars['DateTime'];
   geolocation?: Maybe<GeoLocation>;
   institution?: Maybe<Institution>;
@@ -99,6 +101,10 @@ export enum AccessTypeEnum {
 
 export type AccessesByUserIdInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
   userID: Scalars['String'];
 };
 
@@ -106,9 +112,11 @@ export enum ActivityType {
   Article = 'Article',
   CreateAccount = 'CreateAccount',
   InitiateCheckout = 'InitiateCheckout',
+  LeaveFeedback = 'LeaveFeedback',
   Login = 'Login',
   RequestInstSubscription = 'RequestInstSubscription',
   Search = 'Search',
+  ShowFeedback = 'ShowFeedback',
   Subscribe = 'Subscribe',
   VideoBlock = 'VideoBlock',
   VideoPlay = 'VideoPlay'
@@ -770,6 +778,7 @@ export type Feedback = {
   comment?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   institution: Scalars['String'];
+  method?: Maybe<Scalars['String']>;
   question?: Maybe<FeedbackQuestion>;
   questionId: Scalars['String'];
   type: Scalars['String'];
@@ -802,6 +811,17 @@ export type FeedbackQuestion = {
   legends?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type FeedbackSettings = {
+  __typename?: 'FeedbackSettings';
+  selectedAccessTypes: Array<AccessTypeEnum>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedBy?: Maybe<Scalars['String']>;
+};
+
+export type FeedbackSettingsInput = {
+  selectedAccessTypes: Array<AccessTypeEnum>;
 };
 
 export enum FileExtensions {
@@ -1201,6 +1221,7 @@ export type Mutation = {
   trackLogin: Scalars['Boolean'];
   trackRequestInstSubscription: Scalars['Boolean'];
   trackSearch: Scalars['Boolean'];
+  trackShowFeedback: Scalars['Boolean'];
   trackSubscribe: Scalars['Boolean'];
   trackVideoBlock?: Maybe<Scalars['String']>;
   trackVideoPlay?: Maybe<Scalars['String']>;
@@ -1212,6 +1233,7 @@ export type Mutation = {
   updateAnnouncement: Announcement;
   updateArticle?: Maybe<Article>;
   updateContentLength: Scalars['String'];
+  updateFeedbackSettings: FeedbackSettings;
   updateInstEmail: Scalars['Boolean'];
   updateInstStats: Institution;
   updateInstitution?: Maybe<Institution>;
@@ -1548,6 +1570,11 @@ export type MutationTrackSearchArgs = {
 };
 
 
+export type MutationTrackShowFeedbackArgs = {
+  input: TrackVideoInput;
+};
+
+
 export type MutationTrackSubscribeArgs = {
   input: TrackSubscribeInput;
 };
@@ -1585,6 +1612,11 @@ export type MutationUpdateAnnouncementArgs = {
 
 export type MutationUpdateArticleArgs = {
   input: UpdateArticleInput;
+};
+
+
+export type MutationUpdateFeedbackSettingsArgs = {
+  input: FeedbackSettingsInput;
 };
 
 
@@ -2158,7 +2190,7 @@ export type PublicationRequestInput = {
 export type Query = {
   __typename?: 'Query';
   accessEvents: AccessEventsOutput;
-  accessesByUserId?: Maybe<Array<Access>>;
+  accessesByUserId?: Maybe<AccessEventsOutput>;
   allArticleIds: Array<Scalars['String']>;
   allArticleVotes: Array<NewArticleVote>;
   allInstitutionsList: Array<Scalars['String']>;
@@ -2189,7 +2221,9 @@ export type Query = {
   getCombinedPromoCode: CombinedCodeOutput;
   getDefaultPrices: Array<StripePrice>;
   getFeedbackList: FeedbackListOutput;
+  getFeedbackModalAccessTypes: Array<AccessTypeEnum>;
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
+  getFeedbackSettings: FeedbackSettings;
   getFeedbacksByInstitutionId: FeedbackListOutput;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
@@ -2226,6 +2260,7 @@ export type Query = {
   promoCode?: Maybe<PromoCode>;
   redirectFor?: Maybe<Redirect>;
   scienceOpenLastGeneratedAt?: Maybe<Scalars['DateTime']>;
+  showFeedbackModal: ShowFeedbackModalOutput;
   specialties?: Maybe<Array<Specialty>>;
   testUpdateArticleStatsJob: Scalars['String'];
   triageQueueById?: Maybe<TriageQueue>;
@@ -2463,6 +2498,11 @@ export type QueryRedirectForArgs = {
 };
 
 
+export type QueryShowFeedbackModalArgs = {
+  anon_link_id: Scalars['String'];
+};
+
+
 export type QueryTriageQueueByIdArgs = {
   id: Scalars['String'];
 };
@@ -2598,6 +2638,12 @@ export type ScienceOpenXml = {
   articlePublicationId: Scalars['String'];
   generatedAt: Scalars['DateTime'];
   generatedXml: Scalars['String'];
+};
+
+export type ShowFeedbackModalOutput = {
+  __typename?: 'ShowFeedbackModalOutput';
+  show: Scalars['Boolean'];
+  showNextAt: Scalars['Int'];
 };
 
 export type SignInInput = {
@@ -2834,9 +2880,10 @@ export type TrackArticleInput = {
 
 export type TrackFeedbackInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  article_publication_id?: InputMaybe<Scalars['String']>;
   comment?: InputMaybe<Scalars['String']>;
   feedback_id?: InputMaybe<Scalars['String']>;
-  institution?: InputMaybe<Scalars['String']>;
+  method?: InputMaybe<Scalars['String']>;
   questionId: Scalars['String'];
   type: Scalars['String'];
   user?: InputMaybe<Scalars['String']>;

@@ -8,7 +8,7 @@ const FeedbackPage = () => {
   const { setShowFeedbackDialog } = useAppState()
 
   useEffect(() => {
-    setShowFeedbackDialog(true)
+    setShowFeedbackDialog('feedback-page')
   }, [])
   return (
     <Layout>

@@ -62,8 +62,9 @@ const AccessBoxHeading = ({ data }: Props) => {
       case AccessTypeEnum.InstitutionLoginRequired:
         return 'Requires Login'
       case AccessTypeEnum.Evaluation:
-      case AccessTypeEnum.LimitedAccess:
         return 'Evaluation'
+      case AccessTypeEnum.LimitedAccess:
+        return 'Limited Access'
       case AccessTypeEnum.AwaitingEmailConfirmation:
         return 'Requires Email Confirmation'
       case AccessTypeEnum.EmailConfirmationExpired:
