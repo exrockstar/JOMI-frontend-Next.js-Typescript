@@ -50,10 +50,6 @@ const PurchaseArticleButton = (props: Props) => {
     return url.toString()
   }
 
-  function amplitude(arg0: string, arg1: {}) {
-    throw new Error('Function not implemented.')
-  }
-
   return (
     <>
       <PromocodeModal
