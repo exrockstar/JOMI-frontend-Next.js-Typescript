@@ -29,10 +29,17 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
   const handleOperationChange = (index: number, operation: string) => {
     const newFilter = filtersLocal.map((filter, i) => {
       if (i === index) {
+        const resetValue = [
+          QueryOperation.IsNull.toString(),
+          QueryOperation.IsNullOrEmpty.toString(),
+          QueryOperation.IsNotNull.toString(),
+          QueryOperation.IsNotNullOrEmpty.toString()
+        ].includes(operation)
+
         return {
           ...filter,
           operation: operation as QueryOperation,
-          value: ''
+          value: resetValue ? '' : filter.value
         }
       }
       return filter
