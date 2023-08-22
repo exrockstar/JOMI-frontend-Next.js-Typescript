@@ -1,5 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { EnrichmentPlugin } from '@amplitude/analytics-types';
+import { logger } from 'logger/logger';
 
 const isClient = typeof window !== 'undefined'
 /**
@@ -24,21 +25,12 @@ const testingEvents = (): EnrichmentPlugin => {
  * Purpose: Initialize Amplitude
  */
 export const amplitudeInit = () => {
-  if(process.env.NODE_ENV === 'development') {
-    amplitude.init(process.env.AMPLITUDE_API_KEY, 
-      {
-        logLevel: amplitude.Types.LogLevel.Debug,
-        minIdLength: 4
-      },
-    );
-    amplitude.add(testingEvents());
-  } else {
+  process.env.AMPLITUDE_API_KEY &&
     amplitude.init(process.env.AMPLITUDE_API_KEY, 
       {
         minIdLength: 4
       },
-    );
-  }
+    )
 }
 
 /**
@@ -63,7 +55,7 @@ export const amplitudeSetUserProps = (props: Object) => {
 
 /**
  * Purpose: Set additional user properties once. Subsequent calls to setOnce are ignored.
- * Useful for setting properties that you do not want to override (anon-link-id) and may change
+ * Useful for setting properties that you do not want to override (anon-link-id) and may unexpectedly change
  * at some point.
  * @param props: an object representing the properties we want to set for the user
  */
