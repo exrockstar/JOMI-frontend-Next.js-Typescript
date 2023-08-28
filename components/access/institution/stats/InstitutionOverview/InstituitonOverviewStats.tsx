@@ -1,5 +1,6 @@
 import { DatePicker } from '@mui/lab'
 import {
+  Alert,
   Box,
   CircularProgress,
   Grid,
@@ -43,24 +44,6 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
     skip: !institutionId
   })
 
-  const handleChange = (newVal: Dayjs, prop: 'end' | 'start') => {
-    const query = router.query
-    if (!newVal) {
-      delete query[prop]
-      router.push({ query })
-      return
-    }
-    if (newVal.isValid()) {
-      const formatted = newVal?.format('YYYY-MM-DD')
-      router.push({
-        query: {
-          ...query,
-          [prop]: formatted
-        }
-      })
-    }
-  }
-
   const accessStats = data?.institutionAccessStats
 
   return (
@@ -74,24 +57,6 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
             <InfoOutlined color="info" />
           </Tooltip>
         </Box>
-
-        <Stack direction="row" gap={2} alignItems="center" mb={2}>
-          <Typography fontWeight={600}>Period</Typography>
-          <CustomDatePicker
-            defaultLabel="Start date"
-            value={start}
-            onChange={(val?: Dayjs) => {
-              handleChange(val, 'start')
-            }}
-          />
-          <CustomDatePicker
-            defaultLabel="End date"
-            value={end}
-            onChange={(val?: Dayjs) => {
-              handleChange(val, 'end')
-            }}
-          />
-        </Stack>
       </Stack>
       {loading && (
         <Stack py={10} alignItems="center">
@@ -100,9 +65,9 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
         </Stack>
       )}
       {error && (
-        <Stack py={10} alignItems="center">
+        <Alert sx={{ my: 10 }} severity="error">
           <Typography>{error.message}</Typography>
-        </Stack>
+        </Alert>
       )}
       {data && (
         <Grid container gap={2}>

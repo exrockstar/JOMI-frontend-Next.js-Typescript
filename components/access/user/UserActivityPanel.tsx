@@ -6,6 +6,8 @@ import UserActivityTable from './UserActivityTable'
 import UserDetailsCard from './UserDetailsCard'
 import Link from 'next/link'
 import UserSubscriptionCard from './UserSubscriptionCard'
+import { useRouter } from 'next/router'
+import { cleanObj } from 'common/utils'
 
 type Props = {
   userId: string
@@ -19,8 +21,8 @@ const UserActivityPanel = ({ userId, instId }: Props) => {
     },
     skip: !userId
   })
+  const router = useRouter()
   const user = data?.userById
-
   if (!user) {
     return null
   }
@@ -29,7 +31,17 @@ const UserActivityPanel = ({ userId, instId }: Props) => {
   return (
     <Stack p={2} minHeight="100vh">
       <Box mb={2}>
-        <Link href={`/access/${instId}/users`} passHref legacyBehavior>
+        <Link
+          href={{
+            pathname: `/access/${instId}/users`,
+            query: cleanObj({
+              start: router.query.start,
+              end: router.query.end
+            })
+          }}
+          passHref
+          legacyBehavior
+        >
           <Button startIcon={<ArrowBack />}>Back to Institution</Button>
         </Link>
       </Box>

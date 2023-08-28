@@ -17,28 +17,32 @@ import {
   TableCell,
   TableContainer,
   TableFooter,
+  TablePagination,
   Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { useAccessEventsQuery } from 'graphql/queries/access.generated'
 import { AccessFilterInput, ActivityType, QueryOperation } from 'graphql/types'
 import { useRouter } from 'next/router'
 import React from 'react'
 import UserActivityTableHead from './UserActivityTableHead'
 import Link from 'next/link'
+import CustomDatePicker from 'components/common/CustomDatePicker'
 
 const UserActivityTable = () => {
   const router = useRouter()
   const userId = router.query.userId as string
-  const instId = router.query.id as string
   const sort_by = (router.query.sort_by as string) ?? 'created'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const sort_order = sort_order_str === 'desc' ? -1 : 1
   const page = parseInt((router.query.page as string) ?? '1')
   const activity = (router.query.activity as string) ?? 'All'
-  const perPage = 10
+  const perPage = parseInt((router.query.page_size as string) ?? '10')
   const skip = (page - 1) * perPage
+  const start = router.query.start as string | null
+  const end = router.query.end as string | null
+
   const input: AccessFilterInput = {
     sort_by,
     sort_order,
@@ -52,6 +56,23 @@ const UserActivityTable = () => {
       }
     ]
   }
+
+  if (start) {
+    input.filters?.push({
+      columnName: 'created',
+      value: start,
+      operation: QueryOperation.After
+    })
+  }
+
+  if (end) {
+    input.filters?.push({
+      columnName: 'created',
+      value: end,
+      operation: QueryOperation.Before
+    })
+  }
+
   if (activity !== 'All') {
     input.filters.push({
       columnName: 'activity',
@@ -66,12 +87,24 @@ const UserActivityTable = () => {
   const events = data?.output.events
 
   const filterCount = data?.output.count ?? 0
-  const pageCount = Math.ceil(filterCount / 40)
-  const handlePageChange = (page: number) => {
+
+  const handleChangePage = (event: unknown, newPage: number) => {
     router.push({
       query: {
         ...router.query,
-        page: page
+        page: newPage + 1
+      }
+    })
+  }
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    router.push({
+      query: {
+        ...router.query,
+        page: 1,
+        page_size: +event.target.value
       }
     })
   }
@@ -86,6 +119,24 @@ const UserActivityTable = () => {
     })
   }
 
+  const handleDateChange = (newVal: Dayjs, prop: 'end' | 'start') => {
+    const query = router.query
+    if (!newVal) {
+      delete query[prop]
+      router.push({ query })
+      return
+    }
+    if (newVal.isValid()) {
+      const formatted = newVal?.format('YYYY-MM-DD')
+      router.push({
+        query: {
+          ...query,
+          [prop]: formatted
+        }
+      })
+    }
+  }
+
   const TableFoot = (
     <Box
       py={1}
@@ -94,19 +145,18 @@ const UserActivityTable = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Box py={1} display="flex" alignItems="center">
-        <Pagination
-          count={pageCount}
-          shape="rounded"
-          page={page}
-          onChange={(event, newPage) => handlePageChange(newPage)}
+      <Box display="flex" alignItems="center">
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={filterCount}
+          page={page - 1}
+          rowsPerPage={perPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          showFirstButton={true}
+          showLastButton={true}
         />
-        {filterCount && (
-          <Typography color="text.secondary">
-            {skip} to {Math.min(skip + perPage, filterCount)} of {filterCount}{' '}
-            activity logs
-          </Typography>
-        )}
       </Box>
       <FormControl sx={{ width: 140 }}>
         <InputLabel id="select-label">Filter by Activity</InputLabel>
@@ -145,6 +195,23 @@ const UserActivityTable = () => {
         <Typography variant="h4" p={2}>
           Activity{' '}
         </Typography>
+        <Stack direction="row" gap={2} alignItems="center" mb={2}>
+          <Typography fontWeight={600}>Period</Typography>
+          <CustomDatePicker
+            defaultLabel="Start date"
+            value={start}
+            onChange={(val?: Dayjs) => {
+              handleDateChange(val, 'start')
+            }}
+          />
+          <CustomDatePicker
+            defaultLabel="End date"
+            value={end}
+            onChange={(val?: Dayjs) => {
+              handleDateChange(val, 'end')
+            }}
+          />
+        </Stack>
       </Stack>
       <Divider />
       <Card>

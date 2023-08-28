@@ -1,7 +1,7 @@
 import { DatePicker, DatePickerProps } from '@mui/lab'
 import { TextField } from '@mui/material'
 import dayjs, { Dayjs } from 'dayjs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   defaultLabel: string
@@ -18,13 +18,19 @@ const CustomDatePicker = ({ defaultLabel, ...props }: Props) => {
     }
   }
   const isValid = !date || date.isValid()
+
+  useEffect(() => {
+    setDate(props.value ? dayjs(props.value as Dayjs) : null)
+  }, [props.value])
   return (
     <DatePicker
       clearable
       value={date ?? null}
       label={isValid ? defaultLabel : `${defaultLabel} (Invalid Format)`}
       onChange={onChange}
-      renderInput={(params) => <TextField {...params} size="small" />}
+      renderInput={(params) => (
+        <TextField {...params} size="small" sx={{ maxWidth: 160 }} />
+      )}
       mask=""
     />
   )

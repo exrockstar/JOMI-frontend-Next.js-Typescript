@@ -3,6 +3,7 @@ import {
   Box,
   Card,
   CircularProgress,
+  Divider,
   FormControl,
   IconButton,
   InputLabel,
@@ -22,13 +23,16 @@ import { StyledTableRow } from 'components/common/StyledTableRow'
 import { useInstArticleEventLogsQuery } from 'graphql/queries/access.generated'
 import { AccessFilterInput, QueryOperation } from 'graphql/types'
 import { useRouter } from 'next/router'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import ArticleActivityTableHead from './ArticleActivityTableHead'
 import { useInstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.generated'
 import SearchInput from '../SearchInput'
 import { ArrowBack } from '@mui/icons-material'
 import Link from 'next/link'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
+import { end } from 'cheerio/lib/api/traversing'
+import CustomDatePicker from 'components/common/CustomDatePicker'
+import { cleanObj } from 'common/utils'
 
 const ArticleActivityDetailsPanel = () => {
   const router = useRouter()
@@ -43,7 +47,8 @@ const ArticleActivityDetailsPanel = () => {
   const skip = (page - 1) * perPage
   const sort_order = sort_order_str === 'desc' ? -1 : 1
   const { filters } = useQueryFilters()
-
+  const start = router.query.start as string | null
+  const end = router.query.end as string | null
   const id = router.query.id as string
   const { data: institutionData } = useInstitutionByIdQuery({
     variables: {
@@ -55,12 +60,10 @@ const ArticleActivityDetailsPanel = () => {
     sort_order,
     limit: perPage,
     skip,
+    institution_id: institution,
+    startDate: start,
+    endDate: end,
     filters: [
-      {
-        columnName: 'institution',
-        operation: QueryOperation.Equal,
-        value: institution
-      },
       {
         columnName: 'article_id',
         operation: QueryOperation.Equal,
@@ -69,6 +72,7 @@ const ArticleActivityDetailsPanel = () => {
       ...filters
     ]
   }
+
   if (activity !== 'All') {
     input.filters.push({
       columnName: 'activity',
@@ -114,6 +118,24 @@ const ArticleActivityDetailsPanel = () => {
       }
     })
   }
+  const handleDateChange = (newVal: Dayjs, prop: 'end' | 'start') => {
+    const query = router.query
+    if (!newVal) {
+      delete query[prop]
+      router.push({ query })
+      return
+    }
+    if (newVal.isValid()) {
+      const formatted = newVal?.format('YYYY-MM-DD')
+      router.push({
+        query: {
+          ...query,
+          [prop]: formatted
+        }
+      })
+    }
+  }
+
   const TablePagination = (
     <Box
       p={1}
@@ -134,21 +156,41 @@ const ArticleActivityDetailsPanel = () => {
           </Typography>
         )}
       </Box>
-      <FormControl sx={{ width: 140 }}>
-        <InputLabel id="select-label">Filter by Activity</InputLabel>
-        <Select
-          value={activity}
-          label="Filter by Activity"
-          labelId="select-label"
-          id="simple-select"
-          size="small"
-          onChange={handleActivityChange}
-        >
-          <MenuItem value={'All'}>All</MenuItem>
-          <MenuItem value={'article'}>Article View</MenuItem>
-          <MenuItem value={'video-play'}>Video Play</MenuItem>
-        </Select>
-      </FormControl>
+      <Box display={'flex'} gap={4}>
+        <Stack direction="row" gap={2} alignItems="center" mb={2}>
+          <Typography fontWeight={600}>Period</Typography>
+          <CustomDatePicker
+            defaultLabel="Start date"
+            value={start}
+            onChange={(val?: Dayjs) => {
+              handleDateChange(val, 'start')
+            }}
+          />
+          <CustomDatePicker
+            defaultLabel="End date"
+            value={end}
+            onChange={(val?: Dayjs) => {
+              handleDateChange(val, 'end')
+            }}
+          />
+        </Stack>
+
+        <FormControl sx={{ width: 140 }}>
+          <InputLabel id="select-label">Filter by Activity</InputLabel>
+          <Select
+            value={activity}
+            label="Filter by Activity"
+            labelId="select-label"
+            id="simple-select"
+            size="small"
+            onChange={handleActivityChange}
+          >
+            <MenuItem value={'All'}>All</MenuItem>
+            <MenuItem value={'article'}>Article View</MenuItem>
+            <MenuItem value={'video-play'}>Video Play</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
     </Box>
   )
 
@@ -158,7 +200,13 @@ const ArticleActivityDetailsPanel = () => {
       <Box py={2}>
         <Typography variant="h3" component="h1">
           <Link
-            href={`/access/${institution}/articles`}
+            href={{
+              pathname: `/access/${institution}/articles`,
+              query: cleanObj({
+                start,
+                end
+              })
+            }}
             passHref
             legacyBehavior
           >
@@ -207,8 +255,8 @@ const ArticleActivityDetailsPanel = () => {
                         {dayjs(item.created).format('MM/DD/YYYY hh:mm A')}
                       </TableCell>
                       <TableCell>{item.activity}</TableCell>
-                      <TableCell>{user?.email}</TableCell>
-                      <TableCell>{user?.display_name}</TableCell>
+                      <TableCell>{user?.email ?? 'anonymous'}</TableCell>
+                      <TableCell>{user?.display_name ?? 'anonymous'}</TableCell>
                       <TableCell>{item.ip_address_str}</TableCell>
                     </StyledTableRow>
                   )

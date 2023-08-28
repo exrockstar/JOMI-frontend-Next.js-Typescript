@@ -28,6 +28,7 @@ import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
 import ArticleActivityFilter from './ArticleActivityFilter'
 import { Info, Visibility } from '@mui/icons-material'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
+import { cleanObj } from 'common/utils'
 
 type Props = {
   institution: InstitutionByIdQuery['institution']
@@ -43,30 +44,33 @@ const ArticleActivityPanel = ({ institution }: Props) => {
   const perPage = 20
   const skip = (page - 1) * perPage
   const sort_order = sort_order_str === 'desc' ? -1 : 1
-
+  const start = router.query.start as string | null
+  const end = router.query.end as string | null
   const input: AccessFilterInput = {
     sort_by,
     sort_order,
     limit: perPage,
     skip,
-    filters: [
-      {
-        columnName: 'institution',
-        operation: QueryOperation.Equal,
-        value: institution._id
-      },
-      ...filters
-    ]
+    filters: filters,
+    institution_id: institution._id
   }
   if (search) {
     input.search = search
   }
+  if (start) {
+    input.startDate = start
+  }
+  if (end) {
+    input.endDate = end
+  }
+
   const { data, loading, error } = useArticleActivityStatsQuery({
     variables: { input }
   })
 
   const articles = data?.articleAccessStats?.items || []
   const count = data?.articleAccessStats?.totalCount || 0
+  const hasFilters = input.filters?.length > 0
   const pageCount = Math.ceil(count / perPage)
   const handlePageChange = (page: number) => {
     router.push({
@@ -90,7 +94,7 @@ const ArticleActivityPanel = ({ institution }: Props) => {
             {skip} to {Math.min(skip + perPage, count)} of {count} articles
           </Typography>
         )}
-        {filters?.length > 0 && (
+        {hasFilters && (
           <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
         )}
       </Box>
@@ -139,7 +143,13 @@ const ArticleActivityPanel = ({ institution }: Props) => {
                       <TableCell>{item.uniqueViews}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/access/${institution._id}/articles/${item._id}`}
+                          href={{
+                            pathname: `/access/${institution._id}/articles/${item._id}`,
+                            query: cleanObj({
+                              start: router.query.start,
+                              end: router.query.end
+                            })
+                          }}
                           passHref
                           legacyBehavior
                         >

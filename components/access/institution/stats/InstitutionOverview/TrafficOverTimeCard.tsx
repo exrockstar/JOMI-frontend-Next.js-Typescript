@@ -1,11 +1,14 @@
 import {
+  Alert,
   Box,
   Card,
   CardContent,
+  CircularProgress,
   FormControl,
   MenuItem,
   OutlinedInput,
   Select,
+  Stack,
   Typography
 } from '@mui/material'
 import React, { useState } from 'react'
@@ -25,7 +28,7 @@ const TrafficOverTimeCard = () => {
   const end = router.query.end as string | null
   const instId = router.query.id as string | null
   const [groupBy, setGroupBy] = useState('month') //day ,month, year
-  const { data } = useInstitutionTrafficOverTimeQuery({
+  const { data, loading, error } = useInstitutionTrafficOverTimeQuery({
     variables: {
       input: {
         startDate: start,
@@ -48,15 +51,37 @@ const TrafficOverTimeCard = () => {
     }
   }
   const array = data?.institutionTrafficOverTime
-  if (!data) {
-    return null
+  if (!data || !array.length || loading || error) {
+    return (
+      <Card>
+        <Box p={2}>
+          <Typography color="text.secondary" gutterBottom variant="overline">
+            Article Views Over Time
+          </Typography>
+          <CardContent>
+            {loading ? (
+              <Stack alignItems="center">
+                <CircularProgress />
+                <Typography>Loading</Typography>
+              </Stack>
+            ) : error ? (
+              <Alert severity="error">{error.message}</Alert>
+            ) : (
+              <Alert severity="info">No Data</Alert>
+            )}
+          </CardContent>
+        </Box>
+      </Card>
+    )
   }
 
   const first = start || array[0]?._id
   const last = end || array.at(-1)?._id
 
   const dataLength = (dayjs(last).diff(first, groupBy as any) || 1) + 1
+
   const format = getFormat(groupBy)
+
   const labels = new Array(dataLength).fill('x').map((x, index) => {
     return dayjs(first).add(index, groupBy).format(format)
   })
@@ -104,7 +129,7 @@ const TrafficOverTimeCard = () => {
               datasets: [
                 {
                   data: datasetData,
-                  label: 'Count',
+                  label: 'Article Views',
                   backgroundColor: color,
                   borderColor: 'black',
                   tension: 0.4

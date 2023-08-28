@@ -200,7 +200,7 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
                   >
                     {user.matched_institution_name || NotApplicable}
                   </TableCell>
-                  <TableCell>{user.matchStatus}</TableCell>
+                  <TableCell>{user.accessType?.matchStatus}</TableCell>
                   <TableCell>{last_visited}</TableCell>
                   <TableCell>{created}</TableCell>
                   <TableCell>
