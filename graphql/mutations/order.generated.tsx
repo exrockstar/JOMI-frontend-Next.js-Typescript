@@ -33,13 +33,15 @@ export type ResubscribeOrderMutation = { __typename?: 'Mutation', resubscribeOrd
 
 export type PreviewUpgradeSubscriptionQueryVariables = Types.Exact<{
   price_id: Types.Scalars['String'];
+  promocode?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
-export type PreviewUpgradeSubscriptionQuery = { __typename?: 'Query', upgradeSubscriptionPreview?: { __typename?: 'UpgradeSubscriptionPreview', amount: number, description: string, cardLast4: string } | null | undefined };
+export type PreviewUpgradeSubscriptionQuery = { __typename?: 'Query', upgradeSubscriptionPreview?: { __typename?: 'UpgradeSubscriptionPreview', amount: number, description: string, cardLast4: string, type: string, promocodeApplied: boolean } | null | undefined };
 
 export type UpgradeSubscriptionMutationVariables = Types.Exact<{
   price_id: Types.Scalars['String'];
+  promocode?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
@@ -185,11 +187,13 @@ export type ResubscribeOrderMutationHookResult = ReturnType<typeof useResubscrib
 export type ResubscribeOrderMutationResult = Apollo.MutationResult<ResubscribeOrderMutation>;
 export type ResubscribeOrderMutationOptions = Apollo.BaseMutationOptions<ResubscribeOrderMutation, ResubscribeOrderMutationVariables>;
 export const PreviewUpgradeSubscriptionDocument = gql`
-    query PreviewUpgradeSubscription($price_id: String!) {
-  upgradeSubscriptionPreview(price_id: $price_id) {
+    query PreviewUpgradeSubscription($price_id: String!, $promocode: String) {
+  upgradeSubscriptionPreview(price_id: $price_id, promocode: $promocode) {
     amount
     description
     cardLast4
+    type
+    promocodeApplied
   }
 }
     `;
@@ -207,6 +211,7 @@ export const PreviewUpgradeSubscriptionDocument = gql`
  * const { data, loading, error } = usePreviewUpgradeSubscriptionQuery({
  *   variables: {
  *      price_id: // value for 'price_id'
+ *      promocode: // value for 'promocode'
  *   },
  * });
  */
@@ -222,8 +227,8 @@ export type PreviewUpgradeSubscriptionQueryHookResult = ReturnType<typeof usePre
 export type PreviewUpgradeSubscriptionLazyQueryHookResult = ReturnType<typeof usePreviewUpgradeSubscriptionLazyQuery>;
 export type PreviewUpgradeSubscriptionQueryResult = Apollo.QueryResult<PreviewUpgradeSubscriptionQuery, PreviewUpgradeSubscriptionQueryVariables>;
 export const UpgradeSubscriptionDocument = gql`
-    mutation UpgradeSubscription($price_id: String!) {
-  upgradeSubscription(price_id: $price_id)
+    mutation UpgradeSubscription($price_id: String!, $promocode: String) {
+  upgradeSubscription(price_id: $price_id, promocode: $promocode)
 }
     `;
 export type UpgradeSubscriptionMutationFn = Apollo.MutationFunction<UpgradeSubscriptionMutation, UpgradeSubscriptionMutationVariables>;
@@ -242,6 +247,7 @@ export type UpgradeSubscriptionMutationFn = Apollo.MutationFunction<UpgradeSubsc
  * const [upgradeSubscriptionMutation, { data, loading, error }] = useUpgradeSubscriptionMutation({
  *   variables: {
  *      price_id: // value for 'price_id'
+ *      promocode: // value for 'promocode'
  *   },
  * });
  */
