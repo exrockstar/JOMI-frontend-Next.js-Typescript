@@ -105,6 +105,11 @@ export default function IndividualSubscription() {
               />
             </div>
           )}
+          {order.error_code === 'payment_failed' && (
+            <Alert severity="warning" sx={{ my: 2 }} onClose={() => {}}>
+              Payment to renew or upgrade your subscription has failed.
+            </Alert>
+          )}
         </div>
       )}
 

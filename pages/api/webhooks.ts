@@ -6,6 +6,7 @@ import { handleInvoicePaymentSucceeded } from 'backend/stripe/invoice.payment_su
 import { handleCustomerSubscriptonDeleted } from 'backend/stripe/customer.subscription.deleted'
 import { handleCheckoutSessionCompleted } from 'backend/stripe/checkout.session.completed'
 import { handleCouponUpdated } from 'backend/stripe/coupon.updated'
+import { handlePaymentFailed } from 'backend/stripe/invoice.payment_failed'
 
 //@ts-ignore
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -96,6 +97,19 @@ const webhookHandler = async (req, res) => {
         const invoice = event.data.object as Stripe.Invoice
         try {
           await handleInvoicePaymentSucceeded(invoice)
+        } catch (e) {
+          res.status(500).json({
+            message: `Invoice Subscription Error: ${e.message}`
+          })
+          res.end()
+          return
+        }
+        break
+      }
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as Stripe.Invoice
+        try {
+          await handlePaymentFailed(invoice)
         } catch (e) {
           res.status(500).json({
             message: `Invoice Subscription Error: ${e.message}`

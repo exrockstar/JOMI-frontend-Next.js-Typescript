@@ -1,4 +1,4 @@
-import { Check, Close } from '@mui/icons-material'
+import { Add, Check, Close } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
@@ -23,12 +23,14 @@ import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { frontPageTheme } from 'components/theme'
+import { useSession } from 'next-auth/react'
 type Props = {
   priceId: string
   priceNickname: string
 } & DialogProps
 const UpgradeSubscriptionDialog = (props: Props) => {
   const { priceId, priceNickname, ...otherProps } = props
+  const { data: session } = useSession()
   const [promocode, setPromocode] = useState('')
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()

@@ -47,6 +47,14 @@ export type UpgradeSubscriptionMutationVariables = Types.Exact<{
 
 export type UpgradeSubscriptionMutation = { __typename?: 'Mutation', upgradeSubscription?: boolean | null | undefined };
 
+export type HandlePaymentFailedMutationVariables = Types.Exact<{
+  order_id: Types.Scalars['String'];
+  error_code: Types.Scalars['String'];
+}>;
+
+
+export type HandlePaymentFailedMutation = { __typename?: 'Mutation', handleFailedOrderPayment: boolean };
+
 
 export const AddOrUpdateOrderDocument = gql`
     mutation AddOrUpdateOrder($input: OrderInput!) {
@@ -258,3 +266,35 @@ export function useUpgradeSubscriptionMutation(baseOptions?: Apollo.MutationHook
 export type UpgradeSubscriptionMutationHookResult = ReturnType<typeof useUpgradeSubscriptionMutation>;
 export type UpgradeSubscriptionMutationResult = Apollo.MutationResult<UpgradeSubscriptionMutation>;
 export type UpgradeSubscriptionMutationOptions = Apollo.BaseMutationOptions<UpgradeSubscriptionMutation, UpgradeSubscriptionMutationVariables>;
+export const HandlePaymentFailedDocument = gql`
+    mutation HandlePaymentFailed($order_id: String!, $error_code: String!) {
+  handleFailedOrderPayment(order_id: $order_id, error_code: $error_code)
+}
+    `;
+export type HandlePaymentFailedMutationFn = Apollo.MutationFunction<HandlePaymentFailedMutation, HandlePaymentFailedMutationVariables>;
+
+/**
+ * __useHandlePaymentFailedMutation__
+ *
+ * To run a mutation, you first call `useHandlePaymentFailedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandlePaymentFailedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handlePaymentFailedMutation, { data, loading, error }] = useHandlePaymentFailedMutation({
+ *   variables: {
+ *      order_id: // value for 'order_id'
+ *      error_code: // value for 'error_code'
+ *   },
+ * });
+ */
+export function useHandlePaymentFailedMutation(baseOptions?: Apollo.MutationHookOptions<HandlePaymentFailedMutation, HandlePaymentFailedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<HandlePaymentFailedMutation, HandlePaymentFailedMutationVariables>(HandlePaymentFailedDocument, options);
+      }
+export type HandlePaymentFailedMutationHookResult = ReturnType<typeof useHandlePaymentFailedMutation>;
+export type HandlePaymentFailedMutationResult = Apollo.MutationResult<HandlePaymentFailedMutation>;
+export type HandlePaymentFailedMutationOptions = Apollo.BaseMutationOptions<HandlePaymentFailedMutation, HandlePaymentFailedMutationVariables>;

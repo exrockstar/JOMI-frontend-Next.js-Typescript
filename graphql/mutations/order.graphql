@@ -41,3 +41,7 @@ query PreviewUpgradeSubscription($price_id:String!, $promocode: String){
 mutation UpgradeSubscription($price_id:String!,$promocode: String){
   upgradeSubscription(price_id: $price_id,promocode: $promocode)
 }
+
+mutation HandlePaymentFailed($order_id:String!,$error_code: String!){
+  handleFailedOrderPayment(order_id: $order_id,error_code: $error_code)
+}

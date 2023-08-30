@@ -1201,6 +1201,7 @@ export type Mutation = {
   generateDOI: Article;
   generateScienceOpenXmlByArticle: Scalars['String'];
   getInstitution: Institution;
+  handleFailedOrderPayment: Scalars['Boolean'];
   handleFreePromoCode: Scalars['Boolean'];
   loginToArticle: Scalars['Boolean'];
   markAnnouncementAsRead: Array<Scalars['String']>;
@@ -1444,6 +1445,12 @@ export type MutationGenerateScienceOpenXmlByArticleArgs = {
 
 export type MutationGetInstitutionArgs = {
   input: GetInstitutionInput;
+};
+
+
+export type MutationHandleFailedOrderPaymentArgs = {
+  error_code: Scalars['String'];
+  order_id: Scalars['String'];
 };
 
 
@@ -1803,6 +1810,7 @@ export type Order = {
   description?: Maybe<Scalars['String']>;
   discount?: Maybe<StripePromoCode>;
   end?: Maybe<Scalars['DateTime']>;
+  error_code?: Maybe<Scalars['String']>;
   institution?: Maybe<Scalars['String']>;
   institutionObject?: Maybe<Institution>;
   isCanceled?: Maybe<Scalars['Boolean']>;
