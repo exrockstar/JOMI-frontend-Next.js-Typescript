@@ -15,6 +15,7 @@ import UpgradeSubscriptionDialog from './IndividualSubscription/UpgradeSubscript
 import CTAButton from 'components/common/CTAButton'
 import TrialButton from './IndividualSubscription/TrialButton'
 import dayjs from 'dayjs'
+import { useLocalStorage } from 'usehooks-ts'
 
 export default function IndividualSubscription() {
   const { data: session } = useSession()
@@ -23,7 +24,7 @@ export default function IndividualSubscription() {
   const { data, loading, error, refetch } = useUserPricesQuery({
     skip: !session.user
   })
-
+  const [errorHidden, setErrorHidden] = useLocalStorage('order.error-at', null)
   useEffect(() => {
     fbPixelTrackViewContent('Account', 'Subscription Info Page')
     // Check to see if this is a redirect back from Checkout
@@ -74,6 +75,9 @@ export default function IndividualSubscription() {
       </Typography>
     )
   }
+  const displayOrderError =
+    order.error_code === 'payment_failed' &&
+    (!errorHidden || errorHidden !== order.erroredAt)
   return (
     <Wrapper p={2} pt={0}>
       <SubscriptionHeaderText px={{ md: 1 }} pt={1}>
@@ -105,8 +109,14 @@ export default function IndividualSubscription() {
               />
             </div>
           )}
-          {order.error_code === 'payment_failed' && (
-            <Alert severity="warning" sx={{ my: 2 }} onClose={() => {}}>
+          {displayOrderError && (
+            <Alert
+              severity="warning"
+              sx={{ my: 2 }}
+              onClose={() => {
+                setErrorHidden(order.erroredAt)
+              }}
+            >
               Payment to renew or upgrade your subscription has failed.
             </Alert>
           )}

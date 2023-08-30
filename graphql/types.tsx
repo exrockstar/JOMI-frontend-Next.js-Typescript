@@ -1811,6 +1811,7 @@ export type Order = {
   discount?: Maybe<StripePromoCode>;
   end?: Maybe<Scalars['DateTime']>;
   error_code?: Maybe<Scalars['String']>;
+  erroredAt?: Maybe<Scalars['DateTime']>;
   institution?: Maybe<Scalars['String']>;
   institutionObject?: Maybe<Institution>;
   isCanceled?: Maybe<Scalars['Boolean']>;

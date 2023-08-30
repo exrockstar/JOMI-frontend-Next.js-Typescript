@@ -36,6 +36,8 @@ export async function handlePaymentFailed(invoice: Stripe.Invoice) {
       variables: {
         error_code: 'payment_failed',
         order_id: invoice.subscription as string
+        // * for testing: change `order_id` when testing locally to force an order to be updated.
+        // order_id: 'sub_1NkiBuIw6yL7ypXoNWuR8rpj'
       }
     })
   } catch (e) {

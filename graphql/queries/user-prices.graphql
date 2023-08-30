@@ -26,6 +26,7 @@ query UserPrices {
         percent_off
       }
       error_code
+      erroredAt
     }
     stripeData {
       stripeId
