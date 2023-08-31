@@ -75,8 +75,9 @@ export default function IndividualSubscription() {
       </Typography>
     )
   }
+  //display error if the order.erroredAt date is different from when the error was hidden.
   const displayOrderError =
-    order.error_code === 'payment_failed' &&
+    order?.error_code === 'payment_failed' &&
     (!errorHidden || errorHidden !== order.erroredAt)
   return (
     <Wrapper p={2} pt={0}>
