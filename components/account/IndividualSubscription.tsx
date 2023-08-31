@@ -3,7 +3,10 @@ import { Box, Typography, Link, CircularProgress, Alert } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import ActiveOrder from './IndividualSubscription/ActiveOrder'
 import { useSession } from 'next-auth/react'
-import { useUserPricesQuery } from 'graphql/queries/user-prices.generated'
+import {
+  useGetPaymentStatusQuery,
+  useUserPricesQuery
+} from 'graphql/queries/user-prices.generated'
 import { analytics } from 'apis/analytics'
 import PromoCode from './IndividualSubscription/PromoCode'
 import PriceButton, {
@@ -16,6 +19,7 @@ import CTAButton from 'components/common/CTAButton'
 import TrialButton from './IndividualSubscription/TrialButton'
 import dayjs from 'dayjs'
 import { useLocalStorage } from 'usehooks-ts'
+import PaymentStatus from './IndividualSubscription/PaymentStatus'
 
 export default function IndividualSubscription() {
   const { data: session } = useSession()
@@ -24,6 +28,7 @@ export default function IndividualSubscription() {
   const { data, loading, error, refetch } = useUserPricesQuery({
     skip: !session.user
   })
+
   const [errorHidden, setErrorHidden] = useLocalStorage('order.error-at', null)
   useEffect(() => {
     fbPixelTrackViewContent('Account', 'Subscription Info Page')
@@ -84,7 +89,7 @@ export default function IndividualSubscription() {
       <SubscriptionHeaderText px={{ md: 1 }} pt={1}>
         Individual Subscription
       </SubscriptionHeaderText>
-
+      <PaymentStatus />
       {order && (
         <div>
           {!isTrialOrder && (
@@ -123,7 +128,6 @@ export default function IndividualSubscription() {
           )}
         </div>
       )}
-
       <Box>
         {!order && !hasCompletedRegistration && (
           <Box>

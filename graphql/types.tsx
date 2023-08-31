@@ -2236,6 +2236,7 @@ export type Query = {
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getFeedbackSettings: FeedbackSettings;
   getFeedbacksByInstitutionId: FeedbackListOutput;
+  getPaymentIntentStatus?: Maybe<Scalars['String']>;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;

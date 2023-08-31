@@ -1,4 +1,4 @@
-query UserPrices {
+query UserPrices {  
   user {
     _id
     user_type
@@ -28,6 +28,7 @@ query UserPrices {
       error_code
       erroredAt
     }
+    
     stripeData {
       stripeId
       prices {
@@ -41,4 +42,8 @@ query UserPrices {
       }
     }
   }
+}
+
+query GetPaymentStatus {
+  paymentStatus: getPaymentIntentStatus
 }
