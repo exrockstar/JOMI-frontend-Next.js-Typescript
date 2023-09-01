@@ -39,7 +39,7 @@ export const withAuthorization: MiddlewareFactory = (next) => {
 
       if (!token) {
         const url = new URL(`/api/auth/signin`, request.url)
-        url.searchParams.set('callbackUrl', encodeURI(request.url))
+        url.searchParams.set('from', encodeURI(request.url))
         return NextResponse.redirect(url)
       }
 

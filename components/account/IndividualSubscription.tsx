@@ -3,7 +3,10 @@ import { Box, Typography, Link, CircularProgress, Alert } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import ActiveOrder from './IndividualSubscription/ActiveOrder'
 import { useSession } from 'next-auth/react'
-import { useUserPricesQuery } from 'graphql/queries/user-prices.generated'
+import {
+  useGetPaymentStatusQuery,
+  useUserPricesQuery
+} from 'graphql/queries/user-prices.generated'
 import { analytics } from 'apis/analytics'
 import PromoCode from './IndividualSubscription/PromoCode'
 import PriceButton, {
@@ -15,6 +18,8 @@ import UpgradeSubscriptionDialog from './IndividualSubscription/UpgradeSubscript
 import CTAButton from 'components/common/CTAButton'
 import TrialButton from './IndividualSubscription/TrialButton'
 import dayjs from 'dayjs'
+import { useLocalStorage } from 'usehooks-ts'
+import PaymentStatus from './IndividualSubscription/PaymentStatus'
 
 export default function IndividualSubscription() {
   const { data: session } = useSession()
@@ -24,6 +29,7 @@ export default function IndividualSubscription() {
     skip: !session.user
   })
 
+  const [errorHidden, setErrorHidden] = useLocalStorage('order.error-at', null)
   useEffect(() => {
     fbPixelTrackViewContent('Account', 'Subscription Info Page')
     // Check to see if this is a redirect back from Checkout
@@ -74,12 +80,16 @@ export default function IndividualSubscription() {
       </Typography>
     )
   }
+  //display error if the order.erroredAt date is different from when the error was hidden.
+  const displayOrderError =
+    order?.error_code === 'payment_failed' &&
+    (!errorHidden || errorHidden !== order.erroredAt)
   return (
     <Wrapper p={2} pt={0}>
       <SubscriptionHeaderText px={{ md: 1 }} pt={1}>
         Individual Subscription
       </SubscriptionHeaderText>
-
+      <PaymentStatus refetchPrices={refetch} />
       {order && (
         <div>
           {!isTrialOrder && (
@@ -105,9 +115,19 @@ export default function IndividualSubscription() {
               />
             </div>
           )}
+          {displayOrderError && (
+            <Alert
+              severity="warning"
+              sx={{ my: 2 }}
+              onClose={() => {
+                setErrorHidden(order.erroredAt)
+              }}
+            >
+              Payment to renew or upgrade your subscription has failed.
+            </Alert>
+          )}
         </div>
       )}
-
       <Box>
         {!order && !hasCompletedRegistration && (
           <Box>

@@ -254,6 +254,7 @@ export type ArticleInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   authorId?: InputMaybe<Scalars['String']>;
   categoryId?: InputMaybe<Scalars['String']>;
+  categoryIds?: InputMaybe<Scalars['String']>;
   display?: InputMaybe<Scalars['String']>;
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
@@ -760,6 +761,7 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  howFound?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
   referredFrom?: InputMaybe<Scalars['String']>;
@@ -1199,6 +1201,7 @@ export type Mutation = {
   generateDOI: Article;
   generateScienceOpenXmlByArticle: Scalars['String'];
   getInstitution: Institution;
+  handleFailedOrderPayment: Scalars['Boolean'];
   handleFreePromoCode: Scalars['Boolean'];
   loginToArticle: Scalars['Boolean'];
   markAnnouncementAsRead: Array<Scalars['String']>;
@@ -1240,7 +1243,6 @@ export type Mutation = {
   updateContentLength: Scalars['String'];
   updateFeedbackSettings: FeedbackSettings;
   updateInstEmail: Scalars['Boolean'];
-  updateInstStats: Institution;
   updateInstitution?: Maybe<Institution>;
   updateInstitutionContacts?: Maybe<Institution>;
   updateIpRange?: Maybe<IpRange>;
@@ -1446,6 +1448,12 @@ export type MutationGetInstitutionArgs = {
 };
 
 
+export type MutationHandleFailedOrderPaymentArgs = {
+  error_code: Scalars['String'];
+  order_id: Scalars['String'];
+};
+
+
 export type MutationHandleFreePromoCodeArgs = {
   code: Scalars['String'];
 };
@@ -1630,11 +1638,6 @@ export type MutationUpdateInstEmailArgs = {
 };
 
 
-export type MutationUpdateInstStatsArgs = {
-  instId: Scalars['String'];
-};
-
-
 export type MutationUpdateInstitutionArgs = {
   input: UpdateInstitutionInput;
 };
@@ -1747,6 +1750,7 @@ export type MutationUpdateUserCmsArgs = {
 
 export type MutationUpgradeSubscriptionArgs = {
   price_id: Scalars['String'];
+  promocode?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1806,6 +1810,8 @@ export type Order = {
   description?: Maybe<Scalars['String']>;
   discount?: Maybe<StripePromoCode>;
   end?: Maybe<Scalars['DateTime']>;
+  error_code?: Maybe<Scalars['String']>;
+  erroredAt?: Maybe<Scalars['DateTime']>;
   institution?: Maybe<Scalars['String']>;
   institutionObject?: Maybe<Institution>;
   isCanceled?: Maybe<Scalars['Boolean']>;
@@ -2230,6 +2236,7 @@ export type Query = {
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getFeedbackSettings: FeedbackSettings;
   getFeedbacksByInstitutionId: FeedbackListOutput;
+  getPaymentIntentStatus?: Maybe<Scalars['String']>;
   getPriceByProductId: StripePrice;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
@@ -2526,6 +2533,7 @@ export type QueryTriageQueueRequestsByInstitutionArgs = {
 
 export type QueryUpgradeSubscriptionPreviewArgs = {
   price_id: Scalars['String'];
+  promocode?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -3251,6 +3259,8 @@ export type UpgradeSubscriptionPreview = {
   amount: Scalars['Float'];
   cardLast4: Scalars['String'];
   description: Scalars['String'];
+  promocodeApplied: Scalars['Boolean'];
+  type: Scalars['String'];
 };
 
 export type User = {

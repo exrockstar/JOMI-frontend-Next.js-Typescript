@@ -1,9 +1,19 @@
 import { useApolloClient } from '@apollo/client'
 import { LoadingButton } from '@mui/lab'
-import { Alert, AlertTitle, Box, Stack, Typography, useMediaQuery } from '@mui/material'
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Stack,
+  Typography,
+  useMediaQuery
+} from '@mui/material'
 import { styled, useTheme } from '@mui/material/styles'
 import dayjs from 'dayjs'
-import { useUnsubscribeOrderMutation, useResubscribeOrderMutation } from 'graphql/mutations/order.generated'
+import {
+  useUnsubscribeOrderMutation,
+  useResubscribeOrderMutation
+} from 'graphql/mutations/order.generated'
 import { UserPricesQuery } from 'graphql/queries/user-prices.generated'
 import { OrderInterval } from 'graphql/types'
 import { useSnackbar } from 'notistack'
@@ -43,7 +53,8 @@ const defaultConfirmState: ConfirmState = {
 }
 
 const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
-  const [confirmState, setConfirmState] = useState<ConfirmState>(defaultConfirmState)
+  const [confirmState, setConfirmState] =
+    useState<ConfirmState>(defaultConfirmState)
   const [actionLoading, setActionLoading] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
   const daysFromNow = dayjs(order.end).diff(dayjs(), 'day')
@@ -138,7 +149,8 @@ const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
     setConfirmState(defaultConfirmState)
     setActionLoading(false)
   }
-  const recurring = order.plan_interval && order.plan_interval !== OrderInterval.Day
+  const recurring =
+    order.plan_interval && order.plan_interval !== OrderInterval.Day
 
   const renewMessage = useMemo(() => {
     if (!recurring) {
@@ -163,7 +175,12 @@ const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
             <Typography variant="body2" mt={1}>
               {renewMessage}
             </Typography>
-            {order?.discount && <DiscountInfo discount={order.discount} interval={order.plan_interval} />}
+            {order?.discount && (
+              <DiscountInfo
+                discount={order.discount}
+                interval={order.plan_interval}
+              />
+            )}
           </div>
         )}
       </Alert>
@@ -176,33 +193,33 @@ const ActiveOrder = ({ order, onUpdateSubscription }: Props) => {
         </Alert>
       )}
 
-      <Box py={2}>
-        {canceled ? (
-          <CustomButton
-            color="success"
-            variant="contained"
-            onClick={handleResubscribe}
-            loading={isInProgress}
-            fullWidth={!mdUp}
-            sx={{ fontSize: 16, px: 3, py: 1 }}
-          >
-            Resubscribe
-          </CustomButton>
-        ) : (
-          <CustomButton
-            color="error"
-            variant="outlined"
-            onClick={handleUnsubscribe}
-            loading={isInProgress}
-            sx={{ fontWeight: 700 }}
-          >
-            Cancel Subscription
-          </CustomButton>
-        )}
-      </Box>
+      {!isInProgress && (
+        <Box py={2}>
+          {canceled ? (
+            <CustomButton
+              color="success"
+              variant="contained"
+              onClick={handleResubscribe}
+              fullWidth={!mdUp}
+              sx={{ fontSize: 16, px: 3, py: 1 }}
+            >
+              Resubscribe
+            </CustomButton>
+          ) : (
+            <CustomButton
+              color="error"
+              variant="outlined"
+              onClick={handleUnsubscribe}
+              sx={{ fontWeight: 700 }}
+            >
+              Cancel Subscription
+            </CustomButton>
+          )}
+        </Box>
+      )}
 
       {isInProgress && (
-        <Alert color="info" severity="warning" icon={false}>
+        <Alert color="info" severity="warning" icon={false} sx={{ mt: 2 }}>
           <AlertTitle>{confirmState.message}</AlertTitle>
           <Stack direction={mdUp ? 'row' : 'column'} spacing={2} mt={2}>
             <CustomButton
