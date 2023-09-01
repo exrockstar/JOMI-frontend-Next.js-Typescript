@@ -89,7 +89,7 @@ export default function IndividualSubscription() {
       <SubscriptionHeaderText px={{ md: 1 }} pt={1}>
         Individual Subscription
       </SubscriptionHeaderText>
-      <PaymentStatus />
+      <PaymentStatus refetchPrices={refetch} />
       {order && (
         <div>
           {!isTrialOrder && (

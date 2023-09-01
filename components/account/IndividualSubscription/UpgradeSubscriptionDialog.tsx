@@ -24,6 +24,7 @@ import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { frontPageTheme } from 'components/theme'
 import { useSession } from 'next-auth/react'
+import CTAButton from 'components/common/CTAButton'
 type Props = {
   priceId: string
   priceNickname: string
@@ -32,6 +33,7 @@ const UpgradeSubscriptionDialog = (props: Props) => {
   const { priceId, priceNickname, ...otherProps } = props
   const { data: session } = useSession()
   const [promocode, setPromocode] = useState('')
+  const [promocodeApplied, setPromocodeApplied] = useState(false)
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()
   const {
@@ -58,16 +60,17 @@ const UpgradeSubscriptionDialog = (props: Props) => {
   const amount = `${(preview?.amount / 100).toFixed(2)} USD`
 
   const handleUpgrade = async () => {
-    const { data } = await upgradeSubscription({
+    await upgradeSubscription({
       variables: {
         price_id: priceId,
         promocode: promocode
+      },
+      onCompleted(result) {
+        if (result.upgradeSubscription) {
+          setTimeout(() => router.reload(), 1000)
+        }
       }
     })
-
-    if (data.upgradeSubscription) {
-      router.reload()
-    }
   }
 
   const isCard = !!preview?.cardLast4
@@ -114,7 +117,10 @@ const UpgradeSubscriptionDialog = (props: Props) => {
                 <TextField
                   color="secondary"
                   value={promocode}
-                  onChange={(e) => setPromocode(e.target.value)}
+                  onChange={(e) => {
+                    setPromocode(e.target.value)
+                    setPromocodeApplied(false)
+                  }}
                   size="small"
                   placeholder="e.g.: SUMMER2023"
                   fullWidth
@@ -129,12 +135,21 @@ const UpgradeSubscriptionDialog = (props: Props) => {
                     refetchPreview({
                       price_id: priceId,
                       promocode
+                    }).then(({ data }) => {
+                      const promocodeApplied =
+                        data?.upgradeSubscriptionPreview?.promocodeApplied
+                      setPromocodeApplied(promocodeApplied)
                     })
                   }}
                 >
-                  {preview?.promocodeApplied ? 'Applied' : 'Apply'}
+                  {promocodeApplied ? 'Applied' : 'Apply'}
                 </LoadingButton>
               </Stack>
+              {promocodeApplied && (
+                <Typography color="success.main" variant="caption">
+                  Promocode applied. please check the amount.
+                </Typography>
+              )}
             </Box>
           </Box>
         </DialogContent>
@@ -142,13 +157,12 @@ const UpgradeSubscriptionDialog = (props: Props) => {
         <Divider />
         <DialogActions sx={{ p: 3 }}>
           <Button
-            variant="outlined"
             color="error"
             onClick={(e) => otherProps.onClose(e, 'backdropClick')}
           >
             Cancel
           </Button>
-          <LoadingButton
+          <CTAButton
             type="submit"
             variant="contained"
             color="success"
@@ -157,7 +171,7 @@ const UpgradeSubscriptionDialog = (props: Props) => {
             disabled={loadingPreview}
           >
             Upgrade
-          </LoadingButton>
+          </CTAButton>
         </DialogActions>
       </Dialog>
     </ThemeProvider>

@@ -1,22 +1,41 @@
 import { Alert, CircularProgress } from '@mui/material'
-import { useGetPaymentStatusQuery } from 'graphql/queries/user-prices.generated'
-import { useRouter } from 'next/router'
+import { useGetPaymentStatusLazyQuery } from 'graphql/queries/user-prices.generated'
+
 import { useEffect } from 'react'
-import { useSessionStorage } from 'usehooks-ts'
+
+type Props = {
+  refetchPrices(): void
+}
 
 /**
  * Displays the user's payment status after checkout
  * @returns
  */
-const PaymentStatus = () => {
-  const { data } = useGetPaymentStatusQuery({
-    fetchPolicy: 'network-only'
+const PaymentStatus = ({ refetchPrices }: Props) => {
+  const [fetchData, { data }] = useGetPaymentStatusLazyQuery({
+    fetchPolicy: 'network-only',
+    onCompleted(result) {
+      const status = result.paymentStatus
+      console.log(status)
+      if (status === 'processing') {
+        setTimeout(() => fetchData(), 10000)
+      }
+      if (status === 'succeeded') {
+        refetchPrices()
+      }
+    }
   })
+
+  useEffect(() => {
+    fetchData()
+    //@ts-ignore
+  }, [])
+
   const paymentStatus = data?.paymentStatus
   const paymentStatusText = () => {
     switch (paymentStatus) {
       case 'processing':
-        return `Payment Status: We're still processing your payment. Try refreshing the page after a few minutes.`
+        return `Payment Status: We're still processing your payment...`
       default:
         return ''
     }
