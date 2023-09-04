@@ -147,7 +147,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                       >
                         {activity.institution ? (
                           <Link
-                            href={`/cms/institution-list/${activity.institution?._id}`}
+                            href={`/cms/institutions-list/${activity.institution?._id}`}
                           >
                             {activity.institution?.name}
                           </Link>

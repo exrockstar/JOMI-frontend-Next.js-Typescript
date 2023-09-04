@@ -254,7 +254,6 @@ export type ArticleInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
   authorId?: InputMaybe<Scalars['String']>;
   categoryId?: InputMaybe<Scalars['String']>;
-  categoryIds?: InputMaybe<Scalars['String']>;
   display?: InputMaybe<Scalars['String']>;
   page?: InputMaybe<Scalars['Int']>;
   perPage?: InputMaybe<Scalars['Int']>;
@@ -761,7 +760,6 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
-  howFound?: InputMaybe<Scalars['String']>;
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
   referredFrom?: InputMaybe<Scalars['String']>;
@@ -795,11 +793,13 @@ export type Feedback = {
 };
 
 export type FeedbackListInput = {
+  endDAte?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort_by?: InputMaybe<Scalars['String']>;
   sort_order?: InputMaybe<Scalars['Int']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type FeedbackListOutput = {
@@ -815,6 +815,7 @@ export type FeedbackQuestion = {
   choices?: Maybe<Array<Choice>>;
   createdAt: Scalars['DateTime'];
   createdBy: Scalars['String'];
+  disabled: Scalars['Boolean'];
   legends?: Maybe<Array<Scalars['String']>>;
   question: Scalars['String'];
   type: Scalars['String'];
@@ -2999,11 +3000,13 @@ export type TriageQueueEmailInput = {
 };
 
 export type TriageQueueInput = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   limit?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort_by?: InputMaybe<Scalars['String']>;
   sort_order?: InputMaybe<Scalars['Int']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type TriageQueueOutput = {
@@ -3038,7 +3041,7 @@ export type TriageRequestByUser = {
   loginCount?: Maybe<Scalars['Float']>;
   registered?: Maybe<Scalars['DateTime']>;
   requestCount: Scalars['Int'];
-  requests: Array<PartialRequest>;
+  requests?: Maybe<Array<PartialRequest>>;
   specialty: Scalars['String'];
   user_type: Scalars['String'];
 };
@@ -3047,7 +3050,7 @@ export type TriageRequestsByUserOutput = {
   __typename?: 'TriageRequestsByUserOutput';
   count: Scalars['Int'];
   totalRequestCount: Scalars['Int'];
-  triage_requests: Array<TriageRequestByUser>;
+  triage_requests?: Maybe<Array<TriageRequestByUser>>;
 };
 
 export type TrialSettings = {

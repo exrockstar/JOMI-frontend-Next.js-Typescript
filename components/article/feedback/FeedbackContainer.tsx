@@ -46,6 +46,11 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
     skip: isSessionLoading || isCMSOrAccess,
     variables: {
       anon_link_id
+    },
+    onCompleted(result) {
+      if (!result.question) {
+        setFeedbackButtonText('')
+      }
     }
   })
   const [trackFeedback] = useTrackFeedbackMutation()
