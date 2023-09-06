@@ -2,7 +2,7 @@ import {
   InstitutionsListQuery,
   useInstitutionsListQuery
 } from 'graphql/cms-queries/institutions-list.generated'
-import { InstitutionInput } from 'graphql/types'
+import { FeedbackListInput, InstitutionInput } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import {
   createContext,
@@ -31,23 +31,27 @@ const OrdersListContext = createContext<State | null>(null)
 export const InstFeedbackListProvider: React.FC<
   PropsWithChildren & { institution_id: string }
 > = ({ children, institution_id }) => {
+  const router = useRouter()
   const state = useListInput({
     page: 1,
     sort_by: 'createdAt',
     sort_order: -1,
     page_size: 10
   })
-  const { page, pageSize, sortBy, sortOrder, searchTerm, filters } = state
+  const start = router.query.start
+  const end = router.query.end
+  const { page, pageSize, sortBy, sortOrder, filters } = state
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
 
-  const input: InstitutionInput = {
+  const input: FeedbackListInput = {
     skip: (page - 1) * pageSize,
     limit: pageSize,
     sort_by: sortBy,
     sort_order: sortOrder,
     filters: filters,
-    search: searchTerm
+    startDate: start,
+    endDAte: end
   }
 
   const { data, loading, error, refetch } = useInstFeedbackListQuery({

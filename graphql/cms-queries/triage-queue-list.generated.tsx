@@ -17,7 +17,7 @@ export type RequestsByUserQueryVariables = Types.Exact<{
 }>;
 
 
-export type RequestsByUserQuery = { __typename?: 'Query', triageQueueRequestsByInstitution: { __typename?: 'TriageRequestsByUserOutput', count: number, totalRequestCount: number, triage_requests: Array<{ __typename?: 'TriageRequestByUser', _id: string, email: string, display_name: string, user_type: string, specialty: string, last_visited?: any | null | undefined, last_request_date?: any | null | undefined, registered?: any | null | undefined, loginCount?: number | null | undefined, articleCount?: number | null | undefined, requestCount: number, requests: Array<{ __typename?: 'PartialRequest', created?: any | null | undefined, message?: string | null | undefined }> }> } };
+export type RequestsByUserQuery = { __typename?: 'Query', triageQueueRequestsByInstitution: { __typename?: 'TriageRequestsByUserOutput', count: number, totalRequestCount: number, triage_requests?: Array<{ __typename?: 'TriageRequestByUser', _id: string, email: string, display_name: string, user_type: string, specialty: string, last_visited?: any | null | undefined, last_request_date?: any | null | undefined, registered?: any | null | undefined, loginCount?: number | null | undefined, articleCount?: number | null | undefined, requestCount: number, requests?: Array<{ __typename?: 'PartialRequest', created?: any | null | undefined, message?: string | null | undefined }> | null | undefined }> | null | undefined } };
 
 export type TriageQueueByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
