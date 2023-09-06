@@ -35,7 +35,9 @@ const FeedbackList = () => {
             <TableBody>
               {items?.map((item, index) => {
                 const isEven = index % 2 === 0
-                const maxRating = item.question?.choices?.at(-1)
+                const maxRating = Math.max(
+                  ...(item.question?.choices?.map((x) => x.value) ?? [])
+                )
                 const hasInst = item._institution
                 return (
                   <StyledTableRow key={item._id}>
@@ -107,7 +109,7 @@ const FeedbackList = () => {
                       {item.question?.question ?? NotApplicable}
                     </TableCell>
                     <TableCell title={item.value}>{item.value ?? ''}</TableCell>
-                    <TableCell>{maxRating?.value ?? ''}</TableCell>
+                    <TableCell>{maxRating ?? ''}</TableCell>
                     <TableCell
                       sx={{
                         whiteSpace: 'nowrap',

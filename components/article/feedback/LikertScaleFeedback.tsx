@@ -12,7 +12,7 @@ const LikertScaleFeedback: FeedbackComponent = (props) => {
   const handleSelect = (value: number) => {
     setFieldValue('value', value)
   }
-  const hasDescription = !!choices?.at(0)?.description
+  const hasDescription = choices ? !!choices[0].description : false
   return (
     <div>
       <Typography my={2}>{question.question}</Typography>
