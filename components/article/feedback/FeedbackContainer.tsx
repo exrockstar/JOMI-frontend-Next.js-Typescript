@@ -39,7 +39,8 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
     router.pathname.startsWith(path)
   )
   const isArticlePage = router.pathname.startsWith('/article')
-  const article_publication_id = isArticlePage ? router.query.slug?.at(0) : ''
+  const article_publication_id =
+    isArticlePage && router.query.slug ? router.query.slug[0] : ''
 
   const { anon_link_id } = useGoogleAnalyticsHelpers()
   const { data: feedbackQuestionData } = useGetFeedbackQuestionsQuery({
