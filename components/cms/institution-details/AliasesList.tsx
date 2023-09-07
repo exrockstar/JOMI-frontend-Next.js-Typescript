@@ -1,4 +1,4 @@
-import { Delete } from '@mui/icons-material'
+import { Add, Delete } from '@mui/icons-material'
 import { Stack, Box, Button, IconButton } from '@mui/material'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import { useField } from 'formik'
@@ -16,19 +16,9 @@ const AliasesList = () => {
 
   return (
     <Stack spacing={1}>
-      <Box my={2}>
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          onClick={() => addAlias()}
-        >
-          Add Alias
-        </Button>
-      </Box>
       {aliases.map((alias, index) => {
         return (
-          <Stack direction="row" key={index}>
+          <Stack direction="row" key={index} alignItems={'flex-start'}>
             <FormikTextField
               name={`aliases[${index}]`}
               size="small"
@@ -41,6 +31,17 @@ const AliasesList = () => {
           </Stack>
         )
       })}
+      <Box my={2}>
+        <Button
+          variant="contained"
+          size="small"
+          color="secondary"
+          onClick={() => addAlias()}
+          startIcon={<Add />}
+        >
+          Add Alias
+        </Button>
+      </Box>
     </Stack>
   )
 }

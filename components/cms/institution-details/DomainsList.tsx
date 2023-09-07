@@ -1,4 +1,4 @@
-import { Delete } from '@mui/icons-material'
+import { Add, Delete } from '@mui/icons-material'
 import { Stack, Box, Button, IconButton } from '@mui/material'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
 import { useField } from 'formik'
@@ -6,29 +6,19 @@ import React from 'react'
 
 const DomainsList = () => {
   const [field, meta, helpers] = useField('domains')
-  const aliases = field.value
-  const addAlias = () => helpers.setValue([...aliases, ''])
+  const domains = field.value
+  const addAlias = () => helpers.setValue([...domains, ''])
 
   const remove = (value: string) => {
-    const updated = field.value?.filter((alias) => alias !== value)
+    const updated = field.value?.filter((domain) => domain !== value)
     helpers.setValue(updated)
   }
 
   return (
     <Stack spacing={1}>
-      <Box my={2}>
-        <Button
-          variant="contained"
-          size="small"
-          color="secondary"
-          onClick={() => addAlias()}
-        >
-          Add Domains
-        </Button>
-      </Box>
-      {aliases.map((alias, index) => {
+      {domains.map((alias, index) => {
         return (
-          <Stack direction="row" key={index}>
+          <Stack direction="row" key={index} alignItems={'start'}>
             <FormikTextField
               name={`domains[${index}]`}
               size="small"
@@ -41,6 +31,17 @@ const DomainsList = () => {
           </Stack>
         )
       })}
+      <Box my={2}>
+        <Button
+          variant="contained"
+          size="small"
+          color="secondary"
+          onClick={() => addAlias()}
+          startIcon={<Add />}
+        >
+          Add Domains
+        </Button>
+      </Box>
     </Stack>
   )
 }
