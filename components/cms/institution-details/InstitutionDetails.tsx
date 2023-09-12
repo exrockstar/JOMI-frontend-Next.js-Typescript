@@ -43,8 +43,12 @@ type Media = Unpacked<MediaLibraryQuery['files']['files']>
 const schema = object({
   id: string().required(),
   name: string().required('Institution name is required'),
-  aliases: array().optional(),
-  domains: array().optional(),
+  aliases: array()
+    .of(string().required('Alias should not be empty'))
+    .optional(),
+  domains: array()
+    .of(string().required('Domain should not be empty'))
+    .optional(),
   urlLink: string().optional(),
   category: string().optional(),
   subscriber_display_name: string().optional(),
@@ -193,12 +197,14 @@ const InstitutionDetails = ({ institution }: Props) => {
                     fullWidth
                   />
                 </FormControl>
-                <FormControlLabel
-                  control={
-                    <FormikCheckbox name="enableMatchByName" size="small" />
-                  }
-                  label="Enable access by name and alias"
-                />
+                <Box>
+                  <FormControlLabel
+                    control={
+                      <FormikCheckbox name="enableMatchByName" size="small" />
+                    }
+                    label="Enable access by name and alias"
+                  />
+                </Box>
               </Stack>
 
               <Box my={2}>
