@@ -356,6 +356,18 @@ export type Chapter = {
   title: Scalars['String'];
 };
 
+export type ChartData = {
+  __typename?: 'ChartData';
+  datasets: Array<ChartDataset>;
+  labels: Array<Scalars['String']>;
+};
+
+export type ChartDataset = {
+  __typename?: 'ChartDataset';
+  data: Array<Scalars['Float']>;
+  label: Scalars['String'];
+};
+
 export type Choice = {
   __typename?: 'Choice';
   description: Scalars['String'];
@@ -934,7 +946,7 @@ export type Institution = {
   accessSettings: AccessSettings;
   aliases: Array<Scalars['String']>;
   aliases_str: Scalars['String'];
-  articleViewsOverTime: Array<InstitutionAccessTraffic>;
+  articleViewsOverTime: ChartData;
   article_count: Scalars['Int'];
   article_count_anon: Scalars['Int'];
   automated_status: Scalars['String'];
@@ -988,12 +1000,6 @@ export type InstitutionAccessStats = {
   totalArticleViews: Scalars['Float'];
   totalLogins: Scalars['Float'];
   users: Scalars['Float'];
-};
-
-export type InstitutionAccessTraffic = {
-  __typename?: 'InstitutionAccessTraffic';
-  _id: Scalars['String'];
-  count: Scalars['Int'];
 };
 
 export type InstitutionArticleStats = {
@@ -2256,7 +2262,7 @@ export type Query = {
   instArticleEventLogs: AccessEventsOutput;
   institutionAccessStats: InstitutionAccessStats;
   institutionById?: Maybe<Institution>;
-  institutionTrafficOverTime: Array<InstitutionAccessTraffic>;
+  institutionTrafficOverTime: ChartData;
   institutionUserTypesStats: Array<InstitutionUserTypeStat>;
   institution_subs: Array<Institution>;
   institutions: InstitutionOutput;
@@ -3032,25 +3038,25 @@ export type TriageRequestByUser = {
   __typename?: 'TriageRequestByUser';
   _id: Scalars['ID'];
   articleCount?: Maybe<Scalars['Float']>;
-  display_name: Scalars['String'];
+  display_name?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  inst_email: Scalars['String'];
-  institution: Scalars['String'];
+  inst_email?: Maybe<Scalars['String']>;
+  institution?: Maybe<Scalars['String']>;
   last_request_date?: Maybe<Scalars['DateTime']>;
   last_visited?: Maybe<Scalars['DateTime']>;
   loginCount?: Maybe<Scalars['Float']>;
   registered?: Maybe<Scalars['DateTime']>;
-  requestCount: Scalars['Int'];
-  requests?: Maybe<Array<PartialRequest>>;
-  specialty: Scalars['String'];
-  user_type: Scalars['String'];
+  requestCount?: Maybe<Scalars['Int']>;
+  requests: Array<PartialRequest>;
+  specialty?: Maybe<Scalars['String']>;
+  user_type?: Maybe<Scalars['String']>;
 };
 
 export type TriageRequestsByUserOutput = {
   __typename?: 'TriageRequestsByUserOutput';
   count: Scalars['Int'];
-  totalRequestCount: Scalars['Int'];
-  triage_requests?: Maybe<Array<TriageRequestByUser>>;
+  totalRequestCount?: Maybe<Scalars['Int']>;
+  triage_requests: Array<TriageRequestByUser>;
 };
 
 export type TrialSettings = {

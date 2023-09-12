@@ -52,10 +52,6 @@ const InstitutionAccessList = () => {
           <InstitutionTableHead />
           <TableBody>
             {institutions?.map((institution) => {
-              console.log(
-                institution._id,
-                institution.articleViewsOverTime.map((d) => d.count)
-              )
               return (
                 <StyledTableRow key={institution._id}>
                   <TableCell>
