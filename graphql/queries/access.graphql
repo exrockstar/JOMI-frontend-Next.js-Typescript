@@ -12,8 +12,11 @@ query InstitutionsAccessList($input: InstitutionInput!) {
         status
       }
       articleViewsOverTime{
-        _id
-        count
+        datasets {
+          data
+          label
+        }
+        labels
       }
     }
     count
@@ -69,8 +72,11 @@ query InstutionAccessOverview( $input:InstitutionAccessInput!) {
 
 query InstitutionTrafficOverTime($input: InstitutionAccessInput!, $groupBy: String!){
   institutionTrafficOverTime(input: $input, groupBy: $groupBy){
-    _id
-    count
+    datasets {
+      data
+      label
+    }
+    labels
   }
 }
 

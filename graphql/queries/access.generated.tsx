@@ -8,7 +8,7 @@ export type InstitutionsAccessListQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null | undefined, sent_requests: number, created?: any | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined }, articleViewsOverTime: Array<{ __typename?: 'InstitutionAccessTraffic', _id: string, count: number }> }> } };
+export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null | undefined, sent_requests: number, created?: any | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined }, articleViewsOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } }> } };
 
 export type AccessEventsQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.AccessFilterInput>;
@@ -30,7 +30,7 @@ export type InstitutionTrafficOverTimeQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: Array<{ __typename?: 'InstitutionAccessTraffic', _id: string, count: number }> };
+export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
 
 export type ArticleActivityStatsQueryVariables = Types.Exact<{
   input: Types.AccessFilterInput;
@@ -77,8 +77,11 @@ export const InstitutionsAccessListDocument = gql`
         status
       }
       articleViewsOverTime {
-        _id
-        count
+        datasets {
+          data
+          label
+        }
+        labels
       }
     }
     count
@@ -219,8 +222,11 @@ export type InstutionAccessOverviewQueryResult = Apollo.QueryResult<InstutionAcc
 export const InstitutionTrafficOverTimeDocument = gql`
     query InstitutionTrafficOverTime($input: InstitutionAccessInput!, $groupBy: String!) {
   institutionTrafficOverTime(input: $input, groupBy: $groupBy) {
-    _id
-    count
+    datasets {
+      data
+      label
+    }
+    labels
   }
 }
     `;
