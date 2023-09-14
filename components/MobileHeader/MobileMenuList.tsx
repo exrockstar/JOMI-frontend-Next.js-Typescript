@@ -34,7 +34,7 @@ const MobileMenuList = () => {
         open={!!openNav['account']}
       />
       {menuData?.map((item) => {
-        return (
+        return item.subItems?.length ? (
           <MobileMenuItem
             key={item.name}
             onToggle={handleClick}
@@ -99,6 +99,10 @@ const MobileMenuList = () => {
               </List>
             )}
           </MobileMenuItem>
+        ) : (
+          <ListItemButton component="a" LinkComponent={Link} href={item.href}>
+            {item.label}
+          </ListItemButton>
         )
       })}
     </MenuList>

@@ -774,8 +774,10 @@ export enum EmailPreference {
 
 export type ExtendedRegistrationInput = {
   anon_link_id?: InputMaybe<Scalars['String']>;
+  first_name: Scalars['String'];
   institution_name?: InputMaybe<Scalars['String']>;
   institutional_email?: InputMaybe<Scalars['String']>;
+  last_name: Scalars['String'];
   referredFrom?: InputMaybe<Scalars['String']>;
   referrerPath?: InputMaybe<Scalars['String']>;
   specialty: Scalars['ID'];
@@ -2248,6 +2250,7 @@ export type Query = {
   getFeedbacksByInstitutionId: FeedbackListOutput;
   getPaymentIntentStatus?: Maybe<Scalars['String']>;
   getPriceByProductId: StripePrice;
+  getPricingSectionData?: Maybe<Array<StripePrice>>;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
   getPurchasedArticlesByUserId: Array<Order>;
@@ -2705,6 +2708,7 @@ export type Social = {
   google?: Maybe<SocialAuthDetails>;
   linkedin?: Maybe<SocialAuthDetails>;
   saml?: Maybe<SocialAuthDetails>;
+  apple?: Maybe<SocialAuthDetails>;
 };
 
 export type SocialAuthDetails = {
@@ -2736,6 +2740,7 @@ export type SocialInput = {
   facebook?: InputMaybe<SocialAuthDetailsInput>;
   google?: InputMaybe<SocialAuthDetailsInput>;
   linkedin?: InputMaybe<SocialAuthDetailsInput>;
+  apple?: InputMaybe<SocialAuthDetailsInput>;
 };
 
 export type SocialName = {
@@ -2749,7 +2754,8 @@ export enum SocialProviderEnum {
   Facebook = 'Facebook',
   Google = 'Google',
   Linkedin = 'Linkedin',
-  Saml = 'Saml'
+  Saml = 'Saml',
+  Apple = 'Apple'
 }
 
 export type Specialty = {
@@ -2778,6 +2784,7 @@ export type StripePrice = {
   nickname: Scalars['String'];
   priceId: Scalars['ID'];
   product: Scalars['String'];
+  productName?: Maybe<Scalars['String']>;
   unit_amount: Scalars['Int'];
   unit_decimal?: Maybe<Scalars['String']>;
 };
@@ -3382,7 +3389,8 @@ export type UserStripeData = {
 
 export type UserType = {
   __typename?: 'UserType';
-  _id: Scalars['ID'];
+  _id: Scalars['ObjectId'];
+  pricingBracket: Scalars['String'];
   type: Scalars['String'];
 };
 

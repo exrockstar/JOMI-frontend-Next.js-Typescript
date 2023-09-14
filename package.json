@@ -33,6 +33,7 @@
     "cheerio": "^1.0.0-rc.10",
     "cookies": "^0.8.0",
     "dayjs": "^1.10.7",
+    "embla-carousel-react": "^8.0.0-rc12",
     "formidable": "^2.0.1",
     "formik": "^2.2.9",
     "formik-mui": "^4.0.0-alpha.3",

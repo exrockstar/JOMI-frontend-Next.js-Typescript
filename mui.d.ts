@@ -17,6 +17,7 @@ declare module '@mui/material/styles' {
     linkedin: Palette['primary']
     header: Palette['primary']
     linkblue: Pallet['primary']
+    apple: Palette['primary']
   }
   interface PaletteOptions {
     neutral?: PaletteOptions['primary'] | Palette['grey']
@@ -26,6 +27,7 @@ declare module '@mui/material/styles' {
     facebook?: PaletteOptions['primary']
     linkedin?: PaletteOptions['primary']
     linkblue?: PaletteOptions['primary']
+    apple?: PaletteOptions['primary']
   }
 }
 
@@ -37,6 +39,7 @@ declare module '@mui/material/Button' {
     facebook: true
     linkedin: true
     linkblue: true
+    apple: true
   }
 }
 

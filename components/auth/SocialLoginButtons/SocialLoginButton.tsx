@@ -2,7 +2,8 @@ import {
   Facebook,
   FacebookOutlined,
   Google,
-  LinkedIn
+  LinkedIn,
+  Apple
 } from '@mui/icons-material'
 import { Button, ButtonProps } from '@mui/material'
 import { analytics } from 'apis/analytics'
@@ -14,7 +15,7 @@ import React, { PropsWithChildren } from 'react'
 const MAIN_PAGE = BASE_URL
 
 type Provider = {
-  provider: 'google' | 'facebook' | 'linkedin'
+  provider: 'google' | 'facebook' | 'linkedin' | 'apple'
 }
 
 const SocialLoginButton: React.FC<ButtonProps & Provider> = ({
@@ -106,6 +107,22 @@ export const LinkedInAuthButton: React.FC<PropsWithChildren> = ({
       fullWidth
       provider="linkedin"
       data-event="Login Form - Login via Linkedin Button"
+    >
+      {children}
+    </SocialLoginButton>
+  )
+}
+
+export const AppleAuthButton: React.FC<PropsWithChildren> = ({
+  children
+}) => {
+  return (
+    <SocialLoginButton
+      startIcon={<Apple />}
+      color="apple"
+      fullWidth
+      provider="apple"
+      data-event="Login Form - Login via Apple Button"
     >
       {children}
     </SocialLoginButton>

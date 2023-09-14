@@ -38,6 +38,10 @@ const basePalette: PaletteOptions = {
     main: '#0077b5',
     contrastText: '#ffffff'
   },
+  apple: {
+    main: '#000000',
+    contrastText: '#ffffff'
+  },
   linkblue: {
     main: '#337ab7',
     dark: '#23527c'

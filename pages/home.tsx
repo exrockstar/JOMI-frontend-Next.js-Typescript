@@ -12,7 +12,11 @@ import RecentNewsSection from 'components/frontpage/recent-news/RecentNewsSectio
 import TestimonialSection from 'components/frontpage/testimonial/TestimonialSection'
 import Navbar from 'components/navbar/Navbar'
 import { frontPageTheme } from 'components/theme'
-import { FrontPageDocument, FrontPageQuery } from 'graphql/queries/frontpage.generated'
+import {
+  FrontPageDocument,
+  FrontPageQuery,
+  useFrontPageQuery
+} from 'graphql/queries/frontpage.generated'
 import { GetStaticProps, NextPage } from 'next'
 import Head from 'next/head'
 import { createRef } from 'react'
@@ -24,31 +28,47 @@ import {
 } from 'graphql/queries/announcement-for-user.generated'
 import { useAppState } from 'components/_appstate/useAppState'
 import UserAnnouncementModal from 'components/common/Announcement/AnnouncementForUserModal'
+import PricingSection from 'components/frontpage/pricing/PricingSection'
+import SubscribingInstitutionsSection from 'components/frontpage/subscribers/SubscribingInstitutionsSection'
 
 const Home: NextPage = (props) => {
   const ref = createRef<HTMLDivElement>()
   const {
     state: { announcementsShown }
   } = useAppState()
-
+  const { data } = useFrontPageQuery()
   return (
     <div>
       <Head>
         <link rel="canonical" href={BASE_URL + '/'} key="canonical" />
       </Head>
       <ThemeProvider theme={frontPageTheme}>
-        <Box minHeight="100vh" bgcolor="background.default" zIndex={1} position="relative">
+        <Box
+          minHeight="100vh"
+          bgcolor="background.default"
+          zIndex={1}
+          position="relative"
+        >
           <PageLoadingIndicator />
           <Navbar />
           <Box visibility={announcementsShown ? 'visible' : 'hidden'}>
             <AnnouncementContainer ref={ref} />
-            <Box width="100%" left={0} top={0} zIndex={-1} position="absolute" overflow="hidden">
+            <Box
+              width="100%"
+              left={0}
+              top={0}
+              zIndex={-1}
+              position="absolute"
+              overflow="hidden"
+            >
               <BackgroundVideo />
             </Box>
             <Box zIndex={1} position="relative" overflow="hidden">
-              <HeroSection />
-              <LatestArticlesSection />
+              <HeroSection totalArticleCount={data?.articles?.totalCount} />
+              <LatestArticlesSection latestArticles={data?.latestArticles} />
             </Box>
+            <SubscribingInstitutionsSection />
+            <PricingSection />
             <TestimonialSection />
             <RecentNewsSection />
             <Footer2 />

@@ -32,6 +32,7 @@ import { CookiesProvider } from 'react-cookie'
 import { NextPage } from 'next'
 import AmplitudeAnalytics from 'components/utils/AmplitudeAnalytics'
 import FeedbackContainer from 'components/article/feedback/FeedbackContainer'
+import PricingSignupDialog from 'components/common/PricingModal/PricingSignupDialog'
 
 // export function reportWebVitals(metric) {
 //   console.log(metric)
@@ -70,6 +71,7 @@ function MyApp({
                 <LinkedInInsightTag />
                 <HotJar />
                 <MoreInfoDialog />
+                <PricingSignupDialog />
                 <Component {...pageProps} />
                 <FeedbackContainer />
                 <noscript>

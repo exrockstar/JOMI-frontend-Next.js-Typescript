@@ -1,8 +1,18 @@
-import { AppBar, Badge, Box, Button, Container, IconButton, Menu, Toolbar, useMediaQuery } from '@mui/material'
+import {
+  AppBar,
+  Badge,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  Toolbar,
+  useMediaQuery
+} from '@mui/material'
 import { frontPageTheme } from 'components/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import LogoWhite from 'public/logo-white.svg'
-import NavMenu from './NavMenu'
+import NavMenu, { NavButton } from './NavMenu'
 import Link from 'next/link'
 import SearchBar from 'components/navbar/account/SearchBar'
 import CTAButton from 'components/common/CTAButton'
@@ -50,7 +60,9 @@ const Navbar = () => {
 
     return () => window.removeEventListener('scroll', handler)
   }, [scrollHeight])
-  const isSignUpPage = router.pathname.startsWith('/signup') || router.pathname.startsWith('/login')
+  const isSignUpPage =
+    router.pathname.startsWith('/signup') ||
+    router.pathname.startsWith('/login')
   const isTransparentBg = !hasScrolled && !isSignUpPage
   return (
     <ThemeProvider theme={frontPageTheme}>
@@ -148,7 +160,7 @@ const Navbar = () => {
                     }
                   ]}
                 />
-                <NavMenu
+                {/* <NavMenu
                   buttonText="Subscribe"
                   items={[
                     {
@@ -160,11 +172,23 @@ const Navbar = () => {
                       url: '/institutional-access'
                     }
                   ]}
-                />
+                /> */}
+                <NavButton
+                  id="nav-button"
+                  href="/#pricing"
+                  LinkComponent={Link}
+                >
+                  Pricing
+                </NavButton>
               </Box>
             </Box>
 
-            <Box display={{ xs: 'none', md: 'flex' }} alignItems="stretch" gap={2.5} height={44}>
+            <Box
+              display={{ xs: 'none', md: 'flex' }}
+              alignItems="stretch"
+              gap={2.5}
+              height={44}
+            >
               <SearchBar />
               {!session?.user ? (
                 <Box display={'flex'} gap={2.5}>
@@ -185,7 +209,10 @@ const Navbar = () => {
               ) : (
                 <Box display="flex">
                   {!!personalAnnouncements.count && (
-                    <Badge badgeContent={personalAnnouncements.count} color="error">
+                    <Badge
+                      badgeContent={personalAnnouncements.count}
+                      color="error"
+                    >
                       <Notifications
                         fontSize="large"
                         sx={{

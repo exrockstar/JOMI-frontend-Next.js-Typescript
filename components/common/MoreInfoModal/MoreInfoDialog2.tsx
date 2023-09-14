@@ -28,8 +28,11 @@ import FormikTextField from '../formik/FormikTextFIeld'
 import FormikSelect from '../formik/FormkSelect'
 import CTAButton from '../CTAButton'
 import { frontPageTheme } from 'components/theme'
+import { useAppState } from 'components/_appstate/useAppState'
 
 const schema = object({
+  first_name: string().required('Please enter your first name.'),
+  last_name: string().required('Please enter your last name.'),
   institution_name: string(),
   inst_email: string().email(),
   user_type: string().required('Please select your user type.'),
@@ -39,6 +42,8 @@ const schema = object({
 type FormValues = Asserts<typeof schema>
 
 const initialValues: FormValues = {
+  first_name: '',
+  last_name: '',
   inst_email: '',
   institution_name: '',
   specialty: '',
@@ -58,6 +63,7 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
   const userAccessType = user?.accessType
   const { enqueueSnackbar } = useSnackbar()
   const isSmallDevice = useMediaQuery(theme.breakpoints.down('md'))
+  const {setShowPricingDialog} = useAppState()
 
   const [updateProfile, { loading: updateLoading }] =
     useCompleteRegistrationMutation({
@@ -65,6 +71,7 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
         enqueueSnackbar('Thank you! your profile has been updated.', {
           variant: 'info'
         })
+        setShowPricingDialog(true)
         onClose({}, null)
       },
       refetchQueries: [UserPricesDocument, UserProfileDocument]
@@ -78,6 +85,8 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
     updateProfile({
       variables: {
         input: {
+          first_name: values.first_name,
+          last_name: values.last_name,
           institution_name: values.institution_name,
           institutional_email: values.inst_email,
           user_type: values.user_type,
@@ -117,6 +126,26 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
             <Divider />
 
             <DialogContent sx={{ minWidth: { lg: 480 } }}>
+              <Box mt={-1}>
+                <Typography fontWeight={700} variant="body2">
+                  Your First Name
+                </Typography>
+                <FormikTextField
+                  name="first_name"
+                  fullWidth
+                  size="small"
+                />
+              </Box>
+              <Box mt={2}>
+                <Typography fontWeight={700} variant="body2">
+                  Your Last Name
+                </Typography>
+                <FormikTextField
+                  name="last_name"
+                  fullWidth
+                  size="small"
+                />
+              </Box>
               {!user.institution ? (
                 <>
                   <Box my={1}>

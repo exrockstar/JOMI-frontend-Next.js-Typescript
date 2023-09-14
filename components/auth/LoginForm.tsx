@@ -4,7 +4,8 @@ import { Typography, Stack } from '@mui/material'
 import {
   FacebookAuthButton,
   GoogleAuthButton,
-  LinkedInAuthButton
+  LinkedInAuthButton,
+  AppleAuthButton
 } from './SocialLoginButtons/SocialLoginButton'
 import CredentialsForm from './CredentialsForm'
 import { SignupButton } from './SignupButton'
@@ -42,6 +43,7 @@ export function LoginForm(props: Props) {
         <GoogleAuthButton>Sign in with Google</GoogleAuthButton>
         <FacebookAuthButton>Sign in with Facebook</FacebookAuthButton>
         <LinkedInAuthButton>Sign in with LinkedIn</LinkedInAuthButton>
+        {/* <AppleAuthButton>Sign in with Apple</AppleAuthButton> */}
       </Stack>
 
       <FormDivider my={4} color="text.secondary" component="div">

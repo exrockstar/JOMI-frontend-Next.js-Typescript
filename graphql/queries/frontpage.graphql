@@ -1,4 +1,7 @@
 query FrontPage {
+  articles {
+    totalCount
+  }
   latestArticles {
     _id
     title
@@ -23,5 +26,22 @@ query FrontPage {
     hospital {
       name
     }
+  }
+}
+
+query GetPricingSectionData {
+   user {
+    _id
+   }
+  getPricingSectionData {
+    _id
+    enabled
+    nickname
+    priceId
+    product
+    interval
+    currency
+    unit_amount
+    productName
   }
 }

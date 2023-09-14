@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import { styled } from '@mui/material/styles'
 import SubmitButton from '../SubmitButton'
-import { Facebook, Google, LinkedIn } from '@mui/icons-material'
+import { Facebook, Google, LinkedIn, Apple } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import { User } from 'next-auth'
 import { useUpdatePasswordMutation } from 'graphql/mutations/update-password.generated'
@@ -30,7 +30,8 @@ export default function Page() {
   const isOAuthSignIn =
     signInType === 'google' ||
     signInType === 'facebook' ||
-    signInType === 'linkedin'
+    signInType === 'linkedin' ||
+    signInType === 'apple'
 
   const [updateProfile] = useUpdatePasswordMutation({
     onError: (error) => {
@@ -77,6 +78,8 @@ export default function Page() {
         return <LinkedIn />
       case 'facebook':
         return <Facebook />
+      case 'apple':
+        return <Apple />
       default:
         return null
     }

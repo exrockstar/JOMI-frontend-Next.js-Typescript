@@ -14,7 +14,7 @@ type SubMenuItem = {
   href?: string
   externalLink?: boolean
   noNextLink?: boolean
-  rel?: string;
+  rel?: string
 }
 export const menuData: MainMenuItem[] = [
   {
@@ -68,7 +68,7 @@ export const menuData: MainMenuItem[] = [
         label: 'News',
         href: 'http://blog.jomi.com/category/announcement/',
         externalLink: true,
-        rel: ""
+        rel: ''
       },
       {
         label: 'Careers',
@@ -95,18 +95,23 @@ export const menuData: MainMenuItem[] = [
       }
     ]
   },
+  // {
+  //   name: 'subscribe',
+  //   label: 'Subscribe',
+  //   subItems: [
+  //     {
+  //       label: 'Personal',
+  //       href: '/account/subscription'
+  //     },
+  //     {
+  //       label: 'Institutional',
+  //       href: '/institutional-access'
+  //     }
+  //   ]
+  // }
   {
-    name: 'subscribe',
-    label: 'Subscribe',
-    subItems: [
-      {
-        label: 'Personal',
-        href: '/account/subscription'
-      },
-      {
-        label: 'Institutional',
-        href: '/institutional-access'
-      }
-    ]
+    name: 'pricing',
+    label: 'Pricing',
+    href: '/#pricing'
   }
 ]

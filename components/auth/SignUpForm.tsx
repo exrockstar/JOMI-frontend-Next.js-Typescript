@@ -12,7 +12,8 @@ import { useRouter } from 'next/router'
 import {
   FacebookAuthButton,
   GoogleAuthButton,
-  LinkedInAuthButton
+  LinkedInAuthButton,
+  AppleAuthButton
 } from './SocialLoginButtons/SocialLoginButton'
 import { SignupButton } from './SignupButton'
 import FormDivider from 'components/common/FormDivider'
@@ -99,6 +100,7 @@ export function SignUpForm() {
         <GoogleAuthButton> with Google</GoogleAuthButton>
         <FacebookAuthButton>with Facebook</FacebookAuthButton>
         <LinkedInAuthButton>with LinkedIn</LinkedInAuthButton>
+        {/* <AppleAuthButton>with Apple</AppleAuthButton> */}
       </Stack>
 
       <FormDivider my={3} color="text.secondary" fontSize={14} component="div">
@@ -125,34 +127,12 @@ export function SignUpForm() {
           <Stack spacing={1}>
             <FormikTextField
               fullWidth
-              label="First Name"
-              variant="outlined"
-              size="small"
-              name="firstName"
-            />
-            <FormikTextField
-              fullWidth
-              label="Last Name"
-              variant="outlined"
-              size="small"
-              name="lastName"
-            />
-            <FormikTextField
-              fullWidth
               label="Email"
               type="email"
               variant="outlined"
               size="small"
               name="email"
               helperText="Please use your personal email"
-            />
-            <FormikTextField
-              fullWidth={true}
-              label="Phone Number"
-              variant="outlined"
-              size="small"
-              type="tel"
-              name="phoneNumber"
             />
             <FormikTextField
               fullWidth={true}

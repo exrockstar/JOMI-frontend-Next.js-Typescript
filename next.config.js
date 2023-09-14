@@ -28,6 +28,7 @@ const config = {
       'develop.jomi.com',
       'staging.jomi.com',
       'jomi.com',
+      'prep.jomi.com',
       //used for profile images of users.
       'lh2.googleusercontent.com',
       'lh3.googleusercontent.com',

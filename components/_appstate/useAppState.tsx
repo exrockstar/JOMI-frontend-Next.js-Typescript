@@ -42,6 +42,7 @@ const context = {
     count: 0,
     announcements: []
   },
+  showPricingDialog: false,
   setShowPersonalAnnouncements(val: boolean) {},
   setFeedbackButtonText(val: string) {},
   setShowFeedbackDialog(val: ShowFeedbackDialogMethod) {},
@@ -52,7 +53,8 @@ const context = {
   setVideosBlocked: (pub_id: String) => {},
   setAnnouncementsShown(value: boolean) {},
   closeAnnouncement(cache_id: string) {},
-  markNotificationAsRead(cache_id: string) {}
+  markNotificationAsRead(cache_id: string) {},
+  setShowPricingDialog(val: boolean) {},
 }
 
 const AppContext = createContext<typeof context>(context)
@@ -74,6 +76,8 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   )
   const [showPersonalAnnouncements, setShowPersonalAnnouncements] =
     useState(true)
+  const [showPricingDialog, setShowPricingDialog] =
+    useState(false)
 
   const { data: session } = useSession()
   const { data: personalAnnouncementsData, updateQuery } =
@@ -188,6 +192,7 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         showFeedbackDialog,
         feedbackButtonText,
         showFeedbackTime,
+        showPricingDialog,
         setShowFeedbackTime,
         setFeedbackButtonText,
         setShowFeedbackDialog,
@@ -198,7 +203,8 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         setVideosBlocked,
         setAnnouncementsShown,
         closeAnnouncement,
-        markNotificationAsRead: markAnnouncementAsRead
+        markNotificationAsRead: markAnnouncementAsRead,
+        setShowPricingDialog,
       }}
     >
       {children}

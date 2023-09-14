@@ -15,6 +15,7 @@ declare module 'next-auth' {
       | 'linkedin'
       | 'token'
       | 'tokenid'
+      | 'apple'
     isPasswordSet: boolean
     role: UserRoles
   }
@@ -35,6 +36,7 @@ declare module 'next-auth/jwt' {
       | 'linkedin'
       | 'token'
       | 'tokenid'
+      | 'apple'
     isPasswordSet: boolean
     role: UserRoles
     token?: string
