@@ -31,6 +31,7 @@ export type Access = {
   geolocation?: Maybe<GeoLocation>;
   institution?: Maybe<Institution>;
   ip_address_str?: Maybe<Scalars['String']>;
+  orderId?: Maybe<Scalars['String']>;
   order_amount?: Maybe<Scalars['Float']>;
   referredFrom?: Maybe<Scalars['String']>;
   referrerPath?: Maybe<Scalars['String']>;
@@ -72,6 +73,7 @@ export type AccessSettingsInput = {
 export type AccessType = {
   __typename?: 'AccessType';
   accessType?: Maybe<AccessTypeEnum>;
+  customInstitutionName?: Maybe<Scalars['String']>;
   expiry?: Maybe<Scalars['DateTime']>;
   institution_id?: Maybe<Scalars['String']>;
   institution_name?: Maybe<Scalars['String']>;
@@ -1812,6 +1814,7 @@ export type Order = {
   created: Scalars['DateTime'];
   createdBy?: Maybe<Scalars['String']>;
   currency?: Maybe<OrderCurrency>;
+  customInstitutionName?: Maybe<Scalars['String']>;
   db_user_id?: Maybe<Scalars['String']>;
   deleted?: Maybe<Scalars['Boolean']>;
   description?: Maybe<Scalars['String']>;
@@ -3122,6 +3125,7 @@ export type UpdateOrderInput = {
   amount?: InputMaybe<Scalars['Float']>;
   articleId?: InputMaybe<Scalars['String']>;
   currency?: InputMaybe<OrderCurrency>;
+  customInstitutionName?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   end?: InputMaybe<Scalars['DateTime']>;
   institution?: InputMaybe<Scalars['String']>;

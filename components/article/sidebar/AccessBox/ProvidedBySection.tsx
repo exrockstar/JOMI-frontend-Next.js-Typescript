@@ -11,6 +11,8 @@ const ProvidedBySection = ({ data }: Props) => {
   const expiry = access.subscriptionExpiresAt
     ? dayjs(access.subscriptionExpiresAt).format('MM/DD/YYYY')
     : ''
+  const institutionName =
+    access?.customInstitutionName ?? access?.institution_name
   return (
     <>
       <Stack
@@ -29,7 +31,7 @@ const ProvidedBySection = ({ data }: Props) => {
           color="grey.600"
           fontFamily="Manrope"
         >
-          {access.institution_name}
+          {institutionName}
         </Typography>
         {access.viaTemporaryIp && access.expiry && (
           <Typography variant="body2" color="textSecondary">

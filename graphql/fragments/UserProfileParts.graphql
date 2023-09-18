@@ -26,5 +26,6 @@ fragment UserProfileParts on User {
     subscriptionExpiresAt
     requireLogin
     institution_id
+    customInstitutionName
   }
 }

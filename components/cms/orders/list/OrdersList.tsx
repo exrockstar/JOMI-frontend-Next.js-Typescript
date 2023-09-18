@@ -107,7 +107,15 @@ const OrdersList = () => {
                       NotApplicable
                     )}
                   </TableCell>
-
+                  <TableCell
+                    sx={{
+                      whiteSpace: 'nowrap',
+                      minWidth: 200
+                    }}
+                    title={order.customInstitutionName}
+                  >
+                    {order.customInstitutionName}
+                  </TableCell>
                   <TableCell
                     sx={{
                       whiteSpace: 'nowrap',

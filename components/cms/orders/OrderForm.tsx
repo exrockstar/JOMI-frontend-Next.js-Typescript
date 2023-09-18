@@ -114,7 +114,8 @@ const OrderForm = ({ order }: Props) => {
     restricted_specialties: order.restricted_specialties,
     restricted_user_types: order.restricted_user_types,
     isCanceled: !!order.isCanceled,
-    notes: order.notes
+    notes: order.notes,
+    customInstitutionName: order.customInstitutionName
   }
   return (
     <Formik
@@ -384,6 +385,10 @@ const OrderForm = ({ order }: Props) => {
                         <MenuItem value={RequireLogin.True}>True</MenuItem>
                         <MenuItem value={RequireLogin.False}>False</MenuItem>
                       </FormikSelect>
+                      <FormikTextField
+                        label="Custom Institution Name"
+                        name="customInstitutionName"
+                      />
                       <UserTypeSelector />
                       <SpecialtySelector />
                     </>

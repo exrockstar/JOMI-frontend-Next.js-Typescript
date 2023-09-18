@@ -89,6 +89,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                   <TableCell>Type</TableCell>
                   <TableCell>AccessType</TableCell>
                   <TableCell>Institution</TableCell>
+                  <TableCell>Order ID</TableCell>
                   <TableCell>Article Title</TableCell>
                   <TableCell>IP Address</TableCell>
                   <TableCell>User Agent</TableCell>
@@ -153,6 +154,22 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                           </Link>
                         ) : (
                           'Unknown'
+                        )}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: 200,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {activity.orderId ? (
+                          <Link href={`/cms/orders/${activity.orderId}`}>
+                            {activity.orderId}
+                          </Link>
+                        ) : (
+                          'N/A'
                         )}
                       </TableCell>
                       <TableCell

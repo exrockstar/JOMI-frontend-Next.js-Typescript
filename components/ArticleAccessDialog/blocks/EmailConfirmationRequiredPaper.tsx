@@ -18,7 +18,8 @@ const EmailConfirmationRequiredPaper = ({ accessData, onClose }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
   const articleAccess = accessData?.article?.articleAccessType
   const email = articleAccess?.shouldRequestInstVerification
-  const institutionName = articleAccess?.institution_name
+  const institutionName =
+    articleAccess?.customInstitutionName ?? articleAccess?.institution_name
 
   const [sentDate, setSentDate] = useLocalStorage(
     'email-confirmation-sent-at',

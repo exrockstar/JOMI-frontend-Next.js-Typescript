@@ -7,10 +7,12 @@ type Props = {
 const AwaitingEmailConfirmationSection = ({ data }: Props) => {
   const { article } = data
   const access = article.articleAccessType
+  const institution_name =
+    access?.customInstitutionName ?? access?.institution_name
   return (
     <Box p={2}>
       <Typography variant="body2" mb={1} fontWeight={700} color="grey.900">
-        {`Your institution ${access?.institution_name} has an active subscription. `}
+        {`Your institution ${institution_name} has an active subscription. `}
       </Typography>
       <Typography
         variant="body2"

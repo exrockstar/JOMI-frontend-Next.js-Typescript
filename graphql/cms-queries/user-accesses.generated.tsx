@@ -8,7 +8,7 @@ export type AccessesByUserIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type AccessesByUserIdQuery = { __typename?: 'Query', accessesByUserId?: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', created: any, article_title?: string | null | undefined, activity: Types.ActivityType, ip_address_str?: string | null | undefined, time_watched?: number | null | undefined, user_agent?: string | null | undefined, block_type?: string | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } | null | undefined };
+export type AccessesByUserIdQuery = { __typename?: 'Query', accessesByUserId?: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', created: any, article_title?: string | null | undefined, activity: Types.ActivityType, ip_address_str?: string | null | undefined, time_watched?: number | null | undefined, user_agent?: string | null | undefined, block_type?: string | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, orderId?: string | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } | null | undefined };
 
 
 export const AccessesByUserIdDocument = gql`
@@ -27,6 +27,7 @@ export const AccessesByUserIdDocument = gql`
         _id
         name
       }
+      orderId
     }
     count
   }

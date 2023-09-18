@@ -10,6 +10,7 @@ query ArticleAccess($publication_id: String!) {
       subscriptionExpiresAt
       expiry
       requireLogin
+      customInstitutionName
     }
     _id
     title

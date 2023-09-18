@@ -57,6 +57,10 @@ const headCells: readonly HeadCell[] = [
     label: 'Institution'
   },
   {
+    id: 'customInstitutionName',
+    label: 'Custom Institution Name'
+  },
+  {
     id: 'user.email',
     label: 'User Email'
   },
