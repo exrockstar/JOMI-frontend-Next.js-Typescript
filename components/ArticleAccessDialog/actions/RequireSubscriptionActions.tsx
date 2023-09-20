@@ -33,8 +33,10 @@ const RequireSubscriptionActions = ({ accessData }: Props) => {
   const [purchasePrice, rentPrice] = prices
   const purchaseDescription = `${article.publication_id} - ${article.title}`
   const userId = session?.user?._id
-  const showRentArticleButton = article.showRentArticle
-  const showPurchaseArticleButton = article.showPurchaseArticle
+  const showRentArticleButton =
+    article.showRentArticle && article.status !== 'preprint'
+  const showPurchaseArticleButton =
+    article.showPurchaseArticle && article.status !== 'preprint'
   const showDivider = showRentArticleButton || showPurchaseArticleButton
   const rentDuration = article.rentDuration
   const rentDescription = `Purchase access to this article for ${rentDuration} days.`

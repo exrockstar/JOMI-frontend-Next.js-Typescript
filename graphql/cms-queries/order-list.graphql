@@ -77,6 +77,7 @@ query OrderList($input:OrderListInput!) {
       }
       type
       notes
+      customInstitutionName
     }
     count
     dbQueryString

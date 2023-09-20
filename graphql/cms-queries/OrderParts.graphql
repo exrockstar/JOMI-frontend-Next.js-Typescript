@@ -18,6 +18,7 @@ fragment OrderParts on Order {
   restricted_specialties
   deleted
   notes
+  customInstitutionName
 }
 
 fragment OrderByIdParts on Order {
@@ -55,4 +56,5 @@ fragment OrderByIdParts on Order {
     name
     _id
   }
+  customInstitutionName
 }

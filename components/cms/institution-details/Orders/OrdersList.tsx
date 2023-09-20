@@ -201,6 +201,7 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                 <TableCell>Created</TableCell>
                 <TableCell>Last updated</TableCell>
                 <TableCell>Internal Notes</TableCell>
+                <TableCell>Custom Institution Name</TableCell>
                 <TableCell>Restricted User Types</TableCell>
                 <TableCell>Restricted Specialties</TableCell>
                 <TableCell>Actions</TableCell>
@@ -256,6 +257,13 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                       <Tooltip title={order.notes}>
                         <Typography variant="body2" color="text.secondary">
                           {order.notes}
+                        </Typography>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell sx={{ width: 250 }}>
+                      <Tooltip title={order.customInstitutionName}>
+                        <Typography variant="body2" color="text.secondary">
+                          {order.customInstitutionName}
                         </Typography>
                       </Tooltip>
                     </TableCell>
