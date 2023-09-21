@@ -202,8 +202,8 @@ const OrdersList = ({ orders, locationId, institutionId }: Props) => {
                 <TableCell>Last updated</TableCell>
                 <TableCell>Internal Notes</TableCell>
                 <TableCell>Custom Institution Name</TableCell>
-                <TableCell>Restricted User Types</TableCell>
-                <TableCell>Restricted Specialties</TableCell>
+                <TableCell>Restricted To these User Types</TableCell>
+                <TableCell>Restricted To these Specialties</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
