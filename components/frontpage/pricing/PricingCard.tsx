@@ -41,6 +41,7 @@ const PricingCard = (props: PricingCardProps) => {
     }
   })
   const isTrial = props.unit_amount > 0
+  console.log(props.productName)
   return (
     <Stack
       p={4}
@@ -65,7 +66,8 @@ const PricingCard = (props: PricingCardProps) => {
       <Stack gap={3.25}>
         <Stack gap={2}>
           <Typography fontSize={'1.5rem'} fontWeight={600} lineHeight={1}>
-            {props.productName}
+            {props.productName === 'Trainee' ? 'Trainee / Other Medical Professional'
+              : props.productName}
           </Typography>
           <Typography fontSize={'3rem'} fontWeight={600} lineHeight={1}>
             ${amount}
