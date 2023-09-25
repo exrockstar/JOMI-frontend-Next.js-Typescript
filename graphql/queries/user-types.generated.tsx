@@ -6,7 +6,7 @@ const defaultOptions =  {}
 export type UserTypesAndSpecialtiesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserTypesAndSpecialtiesQuery = { __typename?: 'Query', userTypes?: Array<{ __typename?: 'UserType', type: string, _id: string }> | null | undefined, specialties?: Array<{ __typename?: 'Specialty', name: string, _id: string }> | null | undefined };
+export type UserTypesAndSpecialtiesQuery = { __typename?: 'Query', userTypes?: Array<{ __typename?: 'UserType', type: string, _id: any }> | null | undefined, specialties?: Array<{ __typename?: 'Specialty', name: string, _id: string }> | null | undefined };
 
 
 export const UserTypesAndSpecialtiesDocument = gql`

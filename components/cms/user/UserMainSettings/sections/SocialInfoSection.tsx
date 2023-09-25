@@ -1,4 +1,4 @@
-import { Delete, Facebook, Google, LinkedIn } from '@mui/icons-material'
+import { Delete, Facebook, Google, LinkedIn, Apple } from '@mui/icons-material'
 import {
   Button,
   Card,
@@ -19,7 +19,8 @@ const SocialInfoSection = () => {
   const social = {
     facebook: field.value?.facebook,
     linkedin: field.value?.linkedin,
-    google: field.value?.google
+    google: field.value?.google,
+    apple: field.value?.apple
   }
   type Provider = keyof typeof social
   const socialEntries = Object.entries(social)
@@ -31,6 +32,8 @@ const SocialInfoSection = () => {
         return <LinkedIn />
       case 'google':
         return <Google />
+      case 'apple':
+        return <Apple />
     }
   }
 

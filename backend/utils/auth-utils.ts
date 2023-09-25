@@ -13,6 +13,8 @@ export function getAuthInput(
       return getFacebookSocialInfo(profile)
     case 'linkedin':
       return getLinkedInSocialInfo(profile, user)
+    case 'apple': 
+    return getAppleSocialInfo(profile)
   }
 }
 
@@ -48,5 +50,17 @@ function getLinkedInSocialInfo(profile: Profile, user: User): SocialAuthInput {
     email: user.email,
     givenName: _profile.localizedFirstName as string,
     familyName: _profile.localizedLastName as string
+  }
+}
+
+function getAppleSocialInfo(profile: Profile): SocialAuthInput {
+  const _profile = profile as any
+  return {
+    id: profile.sub,
+    provider: SocialProviderEnum.Apple,
+    email: profile.email,
+    displayName: profile.name,
+    givenName: _profile.given_name as string,
+    familyName: _profile.family_name as string
   }
 }

@@ -5,17 +5,18 @@ import Link from 'next/link'
 import HeadingDivider from '../HeadingDivider'
 import { ArrowForward, NorthEast } from '@mui/icons-material'
 import CTAButton from '../../common/CTAButton'
-import HarvardLogo from 'public/img/harvard-logo.png'
-import JohnHopkinsLogo from 'public/img/john-hopkins-logo.png'
-import TheMethodistLogo from 'public/img/the-methodist-logo.png'
-import StanfordLogo from 'public/img/stanford-logo.png'
+
 import CTAButtonOutlined from '../CTAButtonOutlined'
 
 import { useSession } from 'next-auth/react'
-const partners = [HarvardLogo, JohnHopkinsLogo, TheMethodistLogo, StanfordLogo]
-const HeroSection = () => {
+
+type Props = {
+  totalArticleCount: number
+}
+const HeroSection = ({ totalArticleCount }: Props) => {
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
+
   return (
     <Box position="relative" bgcolor="transparent">
       <Container maxWidth="lg" sx={{ px: { sm: 2 } }} component="section">
@@ -29,14 +30,13 @@ const HeroSection = () => {
                 mb={2.5}
                 mt={{ xs: 4, md: 9.5 }}
               >
-                Surgical Video Articles for Attendings, Residents, and Medical
-                Students
+                Masterclass Surgical Education Videos
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                The Journal of Medical Insight publishes full-length,
-                incision-to-closure surgical videos with live narration from the
-                operating room. Articles are peer-reviewed and include a full
-                text component, animation, and more.
+                The Journal of Medical Insight (JOMI) publishes peer-reviewed
+                videos with incision to closure instruction, key animations, and
+                expert insight. Explore {totalArticleCount ?? 222} videos across
+                13+ specialities.
               </Typography>
               <Box
                 display="flex"
@@ -49,10 +49,10 @@ const HeroSection = () => {
                     variant="contained"
                     sx={{ flexGrow: { xs: 1, md: 0 } }}
                   >
-                    View Articles
+                    Get Started
                   </CTAButton>
                 </Link>
-                {!isLoggedIn && (
+                {/* {!isLoggedIn && (
                   <Link href="/signup" passHref legacyBehavior>
                     <CTAButtonOutlined
                       sx={{
@@ -62,7 +62,7 @@ const HeroSection = () => {
                       Get Started
                     </CTAButtonOutlined>
                   </Link>
-                )}
+                )} */}
               </Box>
               {/* <Box display={{ xs: 'none', md: 'flex' }} gap={2} mt={3.5}>
                 <Link href="/index#general-surgery" legacyBehavior passHref>
@@ -78,7 +78,7 @@ const HeroSection = () => {
                   <CategoryLink>Global Surgery</CategoryLink>
                 </Link>
               </Box> */}
-              <Box mt={5.25}>
+              {/* <Box mt={5.25}>
                 <Box
                   display={{ md: 'flex', xs: 'none' }}
                   gap={2}
@@ -143,7 +143,7 @@ const HeroSection = () => {
                     View all Subscribers
                   </CTAButtonOutlined>
                 </Link>
-              </Box>
+              </Box> */}
             </Box>
           </TwoColumnLayout>
         </Box>

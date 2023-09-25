@@ -44,6 +44,9 @@ fragment UserListParts on User {
     facebook {
       id
     }
+    apple {
+      id
+    }
   }
   referer
   referrerPath

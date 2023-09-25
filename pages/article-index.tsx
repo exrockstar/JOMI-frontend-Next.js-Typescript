@@ -7,7 +7,8 @@ import {
   Stack,
   FormControlLabel,
   Tooltip,
-  Checkbox
+  Checkbox,
+  Divider
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Layout from 'components/layout'
@@ -97,13 +98,17 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
         <Typography variant="h4" component="h1">
           Article Index
         </Typography>
-        <Box sx={{ a: { color: 'linkblue.main' } }}>
+
+        <Divider sx={{ backgroundColor: '#e45252', mb: 1 }} />
+        {/* Intro Paragraph */}
+        {/* <Box sx={{ a: { color: 'linkblue.main' } }}>
           <div dangerouslySetInnerHTML={{ __html: indexInfo }} />
-        </Box>
+        </Box> */}
 
         <Box>
-          <ExampleCases cases={exampleCases} />
           <TableOfContents sections={sections} />
+          <Divider sx={{ backgroundColor: '#e45252', mb: 1 }} />
+          <ExampleCases cases={exampleCases} />
           <Typography variant="body2">
             Total articles : {numArticles?.length}
           </Typography>
@@ -234,6 +239,9 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     content,
     articles.articleOutput?.articles
   )
+  sections.sort((a, b) => {
+    return ('' + a.categoryText).localeCompare(b.categoryText);
+  })
   await client.resetStore()
   await client.query<SiteWideAnnouncementsQuery>({
     query: SiteWideAnnouncementsDocument

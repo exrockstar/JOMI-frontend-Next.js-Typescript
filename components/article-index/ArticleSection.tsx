@@ -43,7 +43,13 @@ const ArticleSection = ({
 
   return (
     <Box key={categoryId}>
-      <Typography component="h3" fontFamily="Arial, sans-serif">
+      <Typography 
+        component="h3" 
+        fontFamily="Arial, sans-serif" 
+        textAlign={"center"}
+        fontWeight={"bold"}
+        fontSize={26}
+      >
         <Link href={'#toc'} passHref prefetch={false} legacyBehavior>
           <BlueLink fontSize={20} sx={{ mr: 1 }}>
             ↸
@@ -58,9 +64,10 @@ const ArticleSection = ({
               id={categoryId}
               style={{ position: 'absolute', top: '-80px' }}
             ></span>
-            {categoryText}
+            {/* {categoryText} */}
           </BlueLink>
         </Link>
+        {categoryText}
       </Typography>
 
       <Divider sx={{ backgroundColor: '#e45252', mb: 1 }} />

@@ -9,7 +9,8 @@ const CTAButtonOutlined = styled(LoadingButton)<LoadingButtonProps>(
     '&:hover': {
       backgroundColor: theme.palette.common.white,
       color: theme.palette.primary.main
-    }
+    },
+    borderRadius: 8
   })
 )
 

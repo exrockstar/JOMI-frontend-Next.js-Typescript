@@ -10,7 +10,8 @@ import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'
 import {
   FacebookAuthButton,
   GoogleAuthButton,
-  LinkedInAuthButton
+  LinkedInAuthButton,
+  AppleAuthButton
 } from './SocialLoginButton'
 import { sleep } from 'common/utils'
 import { signIn } from 'next-auth/react'
@@ -123,7 +124,14 @@ export function NewLoginForm({ onComplete }: Props) {
               <GoogleAuthButton />
               <FacebookAuthButton />
               <LinkedInAuthButton />
+              {/* <AppleAuthButton /> */}
             </Box>
+            {/* <Box mt={1} mb={2} display="flex" justifyContent={'space-around'}>
+              <GoogleAuthButton />
+              <FacebookAuthButton />
+              <LinkedInAuthButton />
+              <AppleAuthButton />
+            </Box> */}
             <FormDivider>{`Don't have an account?`}</FormDivider>
             <Link
               href={{ pathname: '/signup', query: { from: fromUrl } }}
