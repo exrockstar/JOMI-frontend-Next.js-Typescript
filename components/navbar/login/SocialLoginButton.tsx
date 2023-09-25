@@ -98,14 +98,14 @@ export const LinkedInAuthButton = () => {
   )
 }
 
-export const AppleAuthButton = () => {
-  return (
-    <SocialLoginButton
-      provider="apple"
-      data-event="Login Form - Login via Apple Button"
-      title="Log in via Apple"
-    >
-      <Apple />
-    </SocialLoginButton>
-  )
-}
+// export const AppleAuthButton = () => {
+//   return (
+//     <SocialLoginButton
+//       provider="apple"
+//       data-event="Login Form - Login via Apple Button"
+//       title="Log in via Apple"
+//     >
+//       <Apple />
+//     </SocialLoginButton>
+//   )
+// }

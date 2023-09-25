@@ -2,7 +2,7 @@ import NextAuth from 'next-auth'
 import FacebookProvider from 'next-auth/providers/facebook'
 import GoogleProvider from 'next-auth/providers/google'
 import LinkedInProvider from 'next-auth/providers/linkedin'
-import AppleProvider from 'next-auth/providers/apple'
+// import AppleProvider from 'next-auth/providers/apple'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { getAuthInput } from 'backend/utils/auth-utils'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -57,10 +57,10 @@ export default async function handler(
         clientId: process.env.LINKEDIN_CLIENT_ID,
         clientSecret: process.env.LINKEDIN_CLIENT_SECRET
       }),
-      AppleProvider({
-        clientId: process.env.APPLE_CLIENT_ID,
-        clientSecret: process.env.APPLE_CLIENT_SECRET
-      }),
+      // AppleProvider({
+      //   clientId: process.env.APPLE_CLIENT_ID,
+      //   clientSecret: process.env.APPLE_CLIENT_SECRET
+      // }),
       //TODO: Create signIn mutation
       CredentialsProvider({
         name: 'Credentials',

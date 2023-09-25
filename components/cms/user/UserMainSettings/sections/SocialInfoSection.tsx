@@ -20,7 +20,7 @@ const SocialInfoSection = () => {
     facebook: field.value?.facebook,
     linkedin: field.value?.linkedin,
     google: field.value?.google,
-    apple: field.value?.apple
+    // apple: field.value?.apple
   }
   type Provider = keyof typeof social
   const socialEntries = Object.entries(social)
@@ -32,8 +32,8 @@ const SocialInfoSection = () => {
         return <LinkedIn />
       case 'google':
         return <Google />
-      case 'apple':
-        return <Apple />
+      // case 'apple':
+      //   return <Apple />
     }
   }
 
