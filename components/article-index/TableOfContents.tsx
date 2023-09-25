@@ -1,6 +1,6 @@
-import { Box, Grid, List, ListItem, Stack, Typography } from '@mui/material'
+import { Box, Grid, List, ListItem, Stack, Typography, useMediaQuery } from '@mui/material'
 import React from 'react'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { BlueLink } from 'components/common/BlueLink'
 import { ArticleIndexSection } from './types'
 
@@ -8,6 +8,8 @@ type Props = {
   sections: ArticleIndexSection[]
 }
 const TableOfContents = ({ sections }: Props) => {
+  const theme = useTheme()
+  const isSmallDevice = useMediaQuery(theme.breakpoints.down('md'))
   return (
     <nav>
       <Typography
@@ -22,15 +24,17 @@ const TableOfContents = ({ sections }: Props) => {
           style={{ visibility: 'hidden', top: -100, position: 'absolute' }}
         ></span>
       </Typography>
-      <Grid container sx={{ my: 2 }}>
+      <Grid container sx={{ my: 2, maxHeight: isSmallDevice ? 1000 : 200 }} 
+        direction={'column'}
+      >
         {sections.map((section) => {
           return (
             <Grid
               item
               key={section.categoryId}
-              xs={6}
-              md={4}
-              lg={3}
+              // xs={6}
+              // md={4}
+              // lg={3}
               pr={2}
               pb={0.5}
             >
