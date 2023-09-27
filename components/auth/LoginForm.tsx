@@ -5,7 +5,7 @@ import {
   FacebookAuthButton,
   GoogleAuthButton,
   LinkedInAuthButton,
-  AppleAuthButton
+  // AppleAuthButton
 } from './SocialLoginButtons/SocialLoginButton'
 import CredentialsForm from './CredentialsForm'
 import { SignupButton } from './SignupButton'

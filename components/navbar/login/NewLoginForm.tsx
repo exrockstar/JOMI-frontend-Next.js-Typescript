@@ -11,7 +11,7 @@ import {
   FacebookAuthButton,
   GoogleAuthButton,
   LinkedInAuthButton,
-  AppleAuthButton
+  // AppleAuthButton
 } from './SocialLoginButton'
 import { sleep } from 'common/utils'
 import { signIn } from 'next-auth/react'

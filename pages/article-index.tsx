@@ -69,7 +69,6 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
   const [futureArticlesShown, setFutureArticlesShown] = useState(false)
   const [availableArticlesShown, setAvailableArticlesShown] = useState(true)
   const [scoreArticlesShown, setScoreArticlesShown] = useState(false)
-
   const totalArticles = sections.flatMap((section) =>
     section.articles.filter((article) => !article.soon)
   )

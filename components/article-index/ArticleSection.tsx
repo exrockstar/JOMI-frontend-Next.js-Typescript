@@ -62,7 +62,7 @@ const ArticleSection = ({
           >
             <span
               id={categoryId}
-              style={{ position: 'absolute', top: '-80px' }}
+              style={{ position: 'absolute', top: '-100px' }}
             ></span>
             {/* {categoryText} */}
           </BlueLink>
@@ -92,6 +92,11 @@ const ArticleSection = ({
             <Box key={i}>
               {hasSubheading && (
                 <Typography component="h4" my={1} sx={{ color: '#000' }}>
+                  <span
+                    id={subheading}
+                    style={{ position: 'relative', top: '-100px' }}
+                  ></span>
+                  
                   <MuiLink
                     fontSize={18}
                     underline="hover"

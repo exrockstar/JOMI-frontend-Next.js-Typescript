@@ -113,18 +113,18 @@ export const LinkedInAuthButton: React.FC<PropsWithChildren> = ({
   )
 }
 
-export const AppleAuthButton: React.FC<PropsWithChildren> = ({
-  children
-}) => {
-  return (
-    <SocialLoginButton
-      startIcon={<Apple />}
-      color="apple"
-      fullWidth
-      provider="apple"
-      data-event="Login Form - Login via Apple Button"
-    >
-      {children}
-    </SocialLoginButton>
-  )
-}
+// export const AppleAuthButton: React.FC<PropsWithChildren> = ({
+//   children
+// }) => {
+//   return (
+//     <SocialLoginButton
+//       startIcon={<Apple />}
+//       color="apple"
+//       fullWidth
+//       provider="apple"
+//       data-event="Login Form - Login via Apple Button"
+//     >
+//       {children}
+//     </SocialLoginButton>
+//   )
+// }

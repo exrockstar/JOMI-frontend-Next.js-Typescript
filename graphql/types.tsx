@@ -2230,6 +2230,7 @@ export type Query = {
   authorBySlug?: Maybe<Author>;
   authors: Array<Author>;
   categories?: Maybe<Array<Category>>;
+  confSampleCases: Array<Article>;
   deleteInstitution: DeleteInstitutionOutput;
   featured_institutions: Array<Institution>;
   fetchArticles: ArticleOutput;
@@ -2708,7 +2709,6 @@ export type Social = {
   google?: Maybe<SocialAuthDetails>;
   linkedin?: Maybe<SocialAuthDetails>;
   saml?: Maybe<SocialAuthDetails>;
-  apple?: Maybe<SocialAuthDetails>;
 };
 
 export type SocialAuthDetails = {
@@ -2740,7 +2740,6 @@ export type SocialInput = {
   facebook?: InputMaybe<SocialAuthDetailsInput>;
   google?: InputMaybe<SocialAuthDetailsInput>;
   linkedin?: InputMaybe<SocialAuthDetailsInput>;
-  apple?: InputMaybe<SocialAuthDetailsInput>;
 };
 
 export type SocialName = {
@@ -2754,8 +2753,7 @@ export enum SocialProviderEnum {
   Facebook = 'Facebook',
   Google = 'Google',
   Linkedin = 'Linkedin',
-  Saml = 'Saml',
-  Apple = 'Apple'
+  Saml = 'Saml'
 }
 
 export type Specialty = {

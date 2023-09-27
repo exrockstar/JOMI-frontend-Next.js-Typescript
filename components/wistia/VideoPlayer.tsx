@@ -219,11 +219,11 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
   //#endregion useEffects
   // console.log(video)
   return (
-    <VideoContainer>
+    <VideoContainer sx={{width: '95%', height:'95%', display:'block', margin:'auto', padding: 0}}>
       <Script src={`https://fast.wistia.com/embed/medias/${wistiaId}.jsonp`} />
       <Box
         className={`wistia_embed wistia_async_${wistiaId} videoFoam=true seo=true`}
-        sx={{ position: 'absolute', top: 0, left: 0, right: 0 }}
+        // sx={{ position: 'absolute', top: 0, left: 0, right: 0 }}
       ></Box>
       {!disableJKL && (
         <VideoOverlay

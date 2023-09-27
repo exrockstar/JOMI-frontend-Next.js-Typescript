@@ -30,8 +30,8 @@ export default function Page() {
   const isOAuthSignIn =
     signInType === 'google' ||
     signInType === 'facebook' ||
-    signInType === 'linkedin' ||
-    signInType === 'apple'
+    signInType === 'linkedin' 
+    // signInType === 'apple'
 
   const [updateProfile] = useUpdatePasswordMutation({
     onError: (error) => {
@@ -78,8 +78,8 @@ export default function Page() {
         return <LinkedIn />
       case 'facebook':
         return <Facebook />
-      case 'apple':
-        return <Apple />
+      // case 'apple':
+      //   return <Apple />
       default:
         return null
     }
