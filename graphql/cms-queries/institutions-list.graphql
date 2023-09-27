@@ -15,7 +15,10 @@ query InstitutionsList($input: InstitutionInput!) {
       pending_requests
       sent_requests
       total_requests
-
+      stats {
+        videoBlocks
+        uniqueVideoBlocks
+      }
     }
     dbQueryString
     count

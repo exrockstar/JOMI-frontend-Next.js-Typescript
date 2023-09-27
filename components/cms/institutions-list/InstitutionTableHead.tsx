@@ -3,12 +3,15 @@ import {
   TableRow,
   TableCell,
   TableSortLabel,
-  Box
+  Box,
+  Tooltip
 } from '@mui/material'
 import { Institution } from 'graphql/types'
 import React from 'react'
 import { useInstitutionList } from './useInstitutionList'
 import { visuallyHidden } from '@mui/utils'
+import { InfoOutlined } from '@mui/icons-material'
+import StickyTableHeadCell from 'components/common/TableHeader/StickyTableHeadCell'
 
 interface HeadCell {
   id:
@@ -16,12 +19,17 @@ interface HeadCell {
     | `subscription.${keyof Institution['subscription']}`
     | `stats.${keyof Institution['stats']}`
   label: string
+  title?: string // description,
+  sticky?: boolean
+  minWidth?: number
 }
 
 const headCells: readonly HeadCell[] = [
   {
     id: 'name',
-    label: 'Name'
+    label: 'Institution Name',
+    sticky: true,
+    minWidth: 200
   },
   {
     id: 'category',
@@ -29,7 +37,8 @@ const headCells: readonly HeadCell[] = [
   },
   {
     id: 'stats.userCount',
-    label: 'Users'
+    label: 'Users',
+    title: 'Number of registered users'
   },
   {
     id: 'stats.totalArticleCount',
@@ -46,6 +55,16 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'total_requests',
     label: 'Total Requesting Users'
+  },
+  {
+    id: 'stats.videoBlocks',
+    label: 'Video Blocks',
+    title: 'Total video block events for this institution'
+  },
+  {
+    id: 'stats.uniqueVideoBlocks',
+    label: 'Unique Video Blocks',
+    title: 'Number of users that experienced a video block at least once'
   },
   {
     id: 'created',
@@ -69,10 +88,26 @@ const InstitutionTableHead = () => {
       // setSortOrder(-sortOrder)
       setSort(property, -sortOrder)
     }
+
+  const stickyHeaders = headCells.filter((x) => !!x.sticky)
+  const nonStickyHeaders = headCells.filter((x) => !x.sticky)
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => {
+        {stickyHeaders.map(({ id, ...restProps }) => {
+          const _id = id as string
+          return (
+            <StickyTableHeadCell
+              {...restProps}
+              key={_id}
+              id={id}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onClick={createSortHandler(id)}
+            />
+          )
+        })}
+        {nonStickyHeaders.map((headCell) => {
           const order = sortOrder >= 1 ? 'asc' : 'desc'
           return (
             <TableCell
@@ -84,6 +119,11 @@ const InstitutionTableHead = () => {
                 direction={sortBy === headCell.id ? order : 'asc'}
                 onClick={createSortHandler(headCell.id)}
               >
+                {headCell.title && (
+                  <Tooltip title={headCell.title} sx={{ mr: 2 }}>
+                    <InfoOutlined color="info" />
+                  </Tooltip>
+                )}
                 {headCell.label}
                 {sortBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>

@@ -9,7 +9,7 @@ export type InstitutionsListQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionsListQuery = { __typename?: 'Query', institutions: { __typename?: 'InstitutionOutput', dbQueryString: string, count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, total_article_count: number, user_count: number, created?: any | null | undefined, expiry_date_cached?: any | null | undefined, pending_requests?: number | null | undefined, sent_requests: number, total_requests?: number | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined, expiredOrderStatus?: Types.OrderType | null | undefined } }> } };
+export type InstitutionsListQuery = { __typename?: 'Query', institutions: { __typename?: 'InstitutionOutput', dbQueryString: string, count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, total_article_count: number, user_count: number, created?: any | null | undefined, expiry_date_cached?: any | null | undefined, pending_requests?: number | null | undefined, sent_requests: number, total_requests?: number | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined, expiredOrderStatus?: Types.OrderType | null | undefined }, stats?: { __typename?: 'InstitutionStats', videoBlocks?: number | null | undefined, uniqueVideoBlocks?: number | null | undefined } | null | undefined }> } };
 
 export type InstitutionByIdQueryVariables = Types.Exact<{
   id: Types.Scalars['String'];
@@ -44,6 +44,10 @@ export const InstitutionsListDocument = gql`
       pending_requests
       sent_requests
       total_requests
+      stats {
+        videoBlocks
+        uniqueVideoBlocks
+      }
     }
     dbQueryString
     count

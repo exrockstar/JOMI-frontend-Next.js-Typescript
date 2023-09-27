@@ -31,6 +31,7 @@ import { ColumnFilter, QueryOperation, StatusType } from 'graphql/types'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useUpdateAllInstStatsMutation } from 'graphql/mutations/update-inst-stats.generated'
 import DbQueryDialog from 'components/common/DbQueryDialog'
+import RefreshInstStatsButton from 'components/institutions/RefreshInstStatsButton'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -55,6 +56,18 @@ const columnOptions: ColumnOption[] = [
     columnName: 'stats.totalArticleCount',
     type: 'number',
     label: 'Article count',
+    operations: NumericOperations
+  },
+  {
+    columnName: 'stats.videoBlocks',
+    type: 'number',
+    label: 'Video Blocks',
+    operations: NumericOperations
+  },
+  {
+    columnName: 'stats.uniqueVideoBlocks',
+    type: 'number',
+    label: 'Unique Video Blocks',
     operations: NumericOperations
   },
   {
@@ -165,15 +178,7 @@ const InstitutionsListPage = () => {
             Add Institution
           </LoadingButton>
           <Tooltip title="Runs a job to update all cached institutiton stats. userCount, and articleViews. Completes in about 5 minutes.">
-            <LoadingButton
-              startIcon={<Refresh />}
-              loading={updating}
-              onClick={() => {
-                updateInstStats()
-              }}
-            >
-              Refresh Inst Stats
-            </LoadingButton>
+            <RefreshInstStatsButton />
           </Tooltip>
           <Tooltip title="Display the MongoDB aggregate operation used to filter the data">
             <Button

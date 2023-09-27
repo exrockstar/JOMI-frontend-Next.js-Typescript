@@ -22,7 +22,7 @@ export type InstutionAccessOverviewQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstutionAccessOverviewQuery = { __typename?: 'Query', institutionAccessStats: { __typename?: 'InstitutionAccessStats', users: number, activeUsers: number, totalLogins: number, totalArticleViews: number, anonymousArticleViews: number, articleViewsByUser: number }, institutionUserTypesStats: Array<{ __typename?: 'InstitutionUserTypeStat', user_type: string, count: number }> };
+export type InstutionAccessOverviewQuery = { __typename?: 'Query', institutionAccessStats: { __typename?: 'InstitutionAccessStats', users: number, activeUsers: number, totalLogins: number, totalArticleViews: number, anonymousArticleViews: number, articleViewsByUser: number, videoBlocks: number, uniqueVideoBlocks: number }, institutionUserTypesStats: Array<{ __typename?: 'InstitutionUserTypeStat', user_type: string, count: number }> };
 
 export type InstitutionTrafficOverTimeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -184,6 +184,8 @@ export const InstutionAccessOverviewDocument = gql`
     totalArticleViews
     anonymousArticleViews
     articleViewsByUser
+    videoBlocks
+    uniqueVideoBlocks
   }
   institutionUserTypesStats(input: $input) {
     user_type

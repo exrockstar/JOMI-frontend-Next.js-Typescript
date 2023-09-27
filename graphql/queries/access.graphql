@@ -63,6 +63,8 @@ query InstutionAccessOverview( $input:InstitutionAccessInput!) {
     totalArticleViews
     anonymousArticleViews
     articleViewsByUser
+    videoBlocks
+    uniqueVideoBlocks
   }
   institutionUserTypesStats(input:$input){
     user_type
