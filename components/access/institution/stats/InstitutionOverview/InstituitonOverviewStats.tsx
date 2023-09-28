@@ -86,6 +86,15 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
             label="Anonymous Article Views"
             value={accessStats.anonymousArticleViews}
           />
+          <StatCard
+            label="Anonymous Article Views"
+            value={accessStats.anonymousArticleViews}
+          />
+          {/* <StatCard label="Video Blocks" value={accessStats.videoBlocks} />
+          <StatCard
+            label="Unique Video Blocks"
+            value={accessStats.uniqueVideoBlocks}
+          /> */}
         </Grid>
       )}
       {data && institution && (

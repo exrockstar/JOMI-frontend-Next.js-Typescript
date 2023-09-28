@@ -9,7 +9,10 @@ import {
   TableContainer,
   Chip,
   Typography,
-  Link as MuiLink
+  Link as MuiLink,
+  Stack,
+  Tooltip,
+  Box
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
@@ -20,6 +23,7 @@ import React from 'react'
 import InstitutionTableHead from './InstitutionTableHead'
 import { useInstitutionList } from './useInstitutionList'
 import Link from 'next/link'
+import { StickyTableCell } from 'components/common/StickyTableCell'
 
 type Props = {
   institutions: InstitutionsListQuery['institutions']['institutions']
@@ -71,10 +75,23 @@ const InstitutionsList: React.FC<Props> = ({ institutions, count }) => {
   return (
     <Card>
       <TableContainer sx={{ minWidth: 1050 }}>
+        <Box position="sticky" left={0}>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={count}
+            rowsPerPage={pageSize}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
         <Table>
           <InstitutionTableHead />
           <TableBody>
-            {institutions?.map((inst) => {
+            {institutions?.map((inst, i) => {
               const created = dayjs(inst.created).format('MM/DD/YYYY')
               const expiry = inst.expiry_date_cached
                 ? dayjs(inst.expiry_date_cached).format('MM/DD/YYYY')
@@ -82,25 +99,61 @@ const InstitutionsList: React.FC<Props> = ({ institutions, count }) => {
               const isExpired = dayjs(inst.expiry_date_cached).isBefore(
                 new Date()
               )
-
+              let stickyTableCellColor = i % 2 !== 0 ? 'white' : '#fafafa'
               return (
                 <StyledTableRow key={inst._id}>
-                  <TableCell sx={{ width: 400 }}>
-                    <Link
-                      href={`/cms/institutions-list/${inst._id}`}
-                      passHref
-                      legacyBehavior
+                  <StickyTableCell
+                    backgroundColor={stickyTableCellColor}
+                    sx={{ p: 0 }}
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems={'stretch'}
+                      px={2}
+                      py={3}
+                      sx={{
+                        borderRightColor: 'grey.100',
+                        borderRightWidth: 2,
+                        borderRightStyle: 'solid'
+                      }}
                     >
-                      <MuiLink underline="none">{inst.name}</MuiLink>
-                    </Link>
+                      <Tooltip
+                        sx={{
+                          maxWidth: 300,
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap'
+                        }}
+                        title={inst.name}
+                      >
+                        <MuiLink
+                          href={`/cms/institutions-list/${inst._id}`}
+                          underline="hover"
+                          component={Link}
+                        >
+                          {inst.name}
+                        </MuiLink>
+                      </Tooltip>
+                    </Stack>
+                  </StickyTableCell>
+                  <TableCell
+                    sx={{
+                      maxWidth: 150,
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {inst.category ?? 'N/A'}
                   </TableCell>
-                  <TableCell>{inst.category ?? 'N/A'}</TableCell>
                   <TableCell>{inst.user_count}</TableCell>
                   <TableCell>{inst.total_article_count}</TableCell>
                   <TableCell>{inst.pending_requests}</TableCell>
 
                   <TableCell>{inst.sent_requests}</TableCell>
                   <TableCell>{inst.total_requests}</TableCell>
+                  <TableCell>{inst.stats?.videoBlocks ?? 0}</TableCell>
+                  <TableCell>{inst.stats?.uniqueVideoBlocks ?? 0}</TableCell>
                   <TableCell>{created}</TableCell>
                   <TableCell>
                     <Chip
@@ -148,15 +201,19 @@ const InstitutionsList: React.FC<Props> = ({ institutions, count }) => {
             })}
           </TableBody>
         </Table>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={count}
-          rowsPerPage={pageSize}
-          page={page - 1}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Box position="sticky" left={0}>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={count}
+            rowsPerPage={pageSize}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
       </TableContainer>
     </Card>
   )

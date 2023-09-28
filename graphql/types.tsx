@@ -1003,7 +1003,9 @@ export type InstitutionAccessStats = {
   articleViewsByUser: Scalars['Float'];
   totalArticleViews: Scalars['Float'];
   totalLogins: Scalars['Float'];
+  uniqueVideoBlocks: Scalars['Float'];
   users: Scalars['Float'];
+  videoBlocks: Scalars['Float'];
 };
 
 export type InstitutionArticleStats = {
@@ -1051,7 +1053,9 @@ export type InstitutionStats = {
   loginCount?: Maybe<Scalars['Int']>;
   totalArticleCount?: Maybe<Scalars['Int']>;
   totalSearches?: Maybe<Scalars['Int']>;
+  uniqueVideoBlocks?: Maybe<Scalars['Int']>;
   userCount: Scalars['Int'];
+  videoBlocks?: Maybe<Scalars['Int']>;
 };
 
 export type InstitutionSubscription = {
