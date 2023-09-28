@@ -32,6 +32,7 @@ import UserStatsTableHead from './UsersStatsTableHead'
 import UserStatsHeader from './UserStatsHeader'
 import { useQueryFilters } from '../../../../hooks/useQueryFilters'
 import { StickyTableCell } from 'components/common/StickyTableCell'
+import { cleanObj } from 'common/utils'
 
 type Props = {
   institutionId: string
@@ -274,9 +275,11 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                         <Link
                           href={{
                             pathname: `/access/${institutionId}/users/${user._id}`,
-                            query: {
-                              ...router.query
-                            }
+                            query: cleanObj({
+                              ...router.query,
+                              filters: null,
+                              id: null
+                            })
                           }}
                           passHref
                           legacyBehavior

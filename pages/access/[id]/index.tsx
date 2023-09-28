@@ -1,5 +1,6 @@
 import { Box, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { IS_SERVER } from 'common/constants'
+import { cleanObj } from 'common/utils'
 import AccessLayout from 'components/access/AccessLayout'
 import Counter from 'components/access/institution/counter/Counter'
 import InstitutionFeedbackPanel from 'components/access/institution/feedback/InstitutionFeedbackPanel'
@@ -84,8 +85,7 @@ const InstitutionAccessPage = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
     const tab = tabs[newValue]
-    const q = { ...router.query }
-    delete q.id
+    const q = cleanObj({ ...router.query, id: null, filters: null })
 
     router.push({
       pathname: `/access/${id}/${tab}`,
