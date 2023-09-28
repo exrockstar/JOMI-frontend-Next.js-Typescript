@@ -43,6 +43,21 @@ const ArticleEffects = ({ article }: Props) => {
         publicationId: article.publication_id ?? article.production_id,
         userId: session && session.user ? session.user._id : 'anon',
       })
+
+      //track in Amplitude
+      amplitudeTrackArticleView({
+        categories: article.categories.map((c) => {
+          return c.displayName
+        }),
+        title: article.title,
+        authors: article.authors.map((a) => {
+          return a.display_name
+        }),
+        tags: article.tags,
+        publicationId: article.publication_id ?? article.production_id,
+        userId: session && session.user ? session.user._id : 'anon',
+        anon_link_id: anon_link_id ?? null,
+      })
       
       //track in DB
       if (state.articlesViewed.find((id) => id === article.publication_id)) {
