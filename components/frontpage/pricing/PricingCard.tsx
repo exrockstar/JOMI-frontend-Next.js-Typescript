@@ -66,8 +66,7 @@ const PricingCard = (props: PricingCardProps) => {
       <Stack gap={3.25}>
         <Stack gap={2}>
           <Typography fontSize={'1.5rem'} fontWeight={600} lineHeight={1}>
-            {props.productName === 'Trainee' ? 'Trainee / Other Medical Professional'
-              : props.productName}
+            {props.productName}
           </Typography>
           <Typography fontSize={'3rem'} fontWeight={600} lineHeight={1}>
             ${amount}
@@ -86,7 +85,33 @@ const PricingCard = (props: PricingCardProps) => {
           {props.nickname}
         </Typography>{' '}
       </Stack>
-      {!customerId ? (
+      {/* Modify link to go to /account/subscription page for subscriptions */}
+      {props.unit_amount > 0 ? (
+        <CTAButtonOutlined
+          LinkComponent={NextLink}
+          href="/account/subscription"
+          sx={{
+            backgroundColor: selected ? 'white' : 'unset',
+            color: selected ? 'primary.main' : 'white',
+            py: 1
+          }}
+        >
+          {props.ctaText}
+        </CTAButtonOutlined>
+      ) : (
+        <CTAButtonOutlined
+          onClick={() => addTrialOrder()}
+          loading={loading}
+          sx={{
+            backgroundColor: selected ? 'white' : 'unset',
+            color: selected ? 'primary.main' : 'white',
+            py: 1
+          }}
+        >
+          {props.ctaText}
+        </CTAButtonOutlined>
+      )}
+      {/* {!customerId ? (
         <CTAButtonOutlined
           LinkComponent={NextLink}
           href="/account/subscription"
@@ -134,7 +159,7 @@ const PricingCard = (props: PricingCardProps) => {
         >
           {props.ctaText}
         </CTAButtonOutlined>
-      )}
+      )} */}
     </Stack>
   )
 }
