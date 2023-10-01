@@ -45,6 +45,7 @@ const PricingCard = (props: PricingCardProps) => {
   return (
     <Stack
       p={4}
+      height="100%"
       sx={{
         borderColor: selected ? 'transparent' : 'grey.700',
         borderWidth: 1,
@@ -65,7 +66,12 @@ const PricingCard = (props: PricingCardProps) => {
       {selected ? <LogoRed /> : <Logo />}
       <Stack gap={3.25}>
         <Stack gap={2}>
-          <Typography fontSize={'1.5rem'} fontWeight={600} lineHeight={1}>
+          <Typography
+            fontSize={'1.5rem'}
+            fontWeight={600}
+            lineHeight={1}
+            minHeight={48}
+          >
             {props.productName}
           </Typography>
           <Typography fontSize={'3rem'} fontWeight={600} lineHeight={1}>
