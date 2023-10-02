@@ -1,8 +1,7 @@
 /**
- * This file is used for different conferences, feel free to update the file name for
- * whatever conference we are remaking the page for.
+ * Goto jomi.com/cms/page-list and search for 'ESBC' to see the html content.
  */
-import { Box, Container, Divider, Grid, Link as MuiLink, Typography, useMediaQuery } from "@mui/material"
+import { Box, Link as MuiLink, useMediaQuery } from "@mui/material"
 import { getApolloAdminClient } from "apis/apollo-admin-client"
 import { APOLLO_STATE_PROP_NAME } from "apis/apollo-client"
 import CTAButton from "components/common/CTAButton"
@@ -11,10 +10,8 @@ import Layout from 'components/layout'
 import useEmblaCarousel from "embla-carousel-react"
 import { ConferencePageDocument, ConferencePageQuery, useConferencePageQuery } from "graphql/queries/conference.generated"
 import { GetStaticProps, NextPage } from "next"
-import Link from "next/link"
 import { useRouter } from 'next/router'
 import { useTheme } from '@mui/material/styles'
-import { VideoPlayer } from "components/wistia"
 import HarvardLogo from 'public/img/subscribers/harvard-logo.png'
 import JohnHopkinsLogo from 'public/img/subscribers/john-hopkins-university.png'
 import TheMethodistLogo from 'public/img/subscribers/the-methodist.png'
@@ -28,8 +25,23 @@ import CornellUinveristy_Logo from 'public/img/subscribers/cornell-university.pn
 import { ArrowForward } from "@mui/icons-material"
 import NextLink from 'next/link'
 import Image from 'next/image'
+import { SiteWideAnnouncementsDocument, SiteWideAnnouncementsQuery } from "graphql/queries/announcement-for-user.generated"
+import cheerio from 'cheerio'
+import { buildGenericMetadata } from "backend/seo/buildGenericMetadata"
+import { PageBySlugDocument, PageBySlugQuery, PageBySlugQueryVariables } from "graphql/queries/page-by-slug.generated"
+import { DefaultPageProps } from "backend/seo/MetaData"
+import { transformContent } from "components/conference/transformContentConfPage"
+import Script from "next/script"
+import { logger } from "logger/logger"
 
-const ConferencePage: NextPage = (props) => {
+type Props = {
+  introductionSection: string
+  featuredCasesSection: string
+  videosSection: string
+  scripts: string[]
+} & DefaultPageProps
+
+const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, scripts }: Props) => {
   const router = useRouter()
   const { data, loading } = useConferencePageQuery()
   const [emblaRefInsts] = useEmblaCarousel({
@@ -52,93 +64,24 @@ const ConferencePage: NextPage = (props) => {
     WalterReedLogo,
     CornellUinveristy_Logo
   ]
-
-  if (!data || loading) return null
-
+  
   return(
     <Layout>
-      <Box bgcolor="white" px={2} py={4}>
-        {/* Conference Title */}
-        <Typography 
-          variant="h4" 
-          component="h1" 
-          fontWeight={"bold"}
-          textAlign={"center"}
-          mb={1}
-        >
-          European Society of Coloproctology Conference
-        </Typography>
-        <Divider sx={{ backgroundColor: '#e45252', mb: 2 }} />
-        {/* What is JOMI section */}
-        <Box>
-          <Typography
-            variant="h5"
-            component="h5"
-            fontWeight={700}
-            textAlign={"center"}
-          >
-            What is JOMI?
-          </Typography>
-          <Typography variant="body1" mt={2}>
-            The Journal of Medical Insight (JOMI) publishes peer-reviewed
-            videos with incision to closure instruction, key animations, and
-            expert insight. Explore 220+ videos across 13+ specialities. View our full index
-            <Link
-              href={'/index'}
-              passHref
-              prefetch={false}
-              legacyBehavior
-            >
-              <MuiLink
-                className="index-link"
-                title={`Article Index Page`}
-                color="linkblue.main"
-              >
-                {` here`}
-              </MuiLink>
-            </Link>
-            .
-          </Typography>
-          
-        </Box>
-        {/* Latest Publications */}
-        {/* <Typography
-          variant="h6"
-          component="h6"
-          mt={2}
-        >
-          Latest Publications:
-        </Typography>
-        <Container maxWidth="lg" sx={{ px: { sm: 2 } }} component="section">
-        <Box mt={1} overflow="hidden" ref={emblaRef}>
-          <Box display="flex" gap={2}>
-            {data?.latestArticles.map((article) => (
-              <Box
-                key={article._id}
-                flex={{ xs: '0 0 75%', sm: '0 0 25%' }}
-                minWidth={0}
-              >
-                <ConfArticleCard article={article} />
-              </Box>
-            ))}
-          </Box>
-        </Box>
-        </Container> */}
-        <Divider sx={{ backgroundColor: '#e45252', mb: 2, mt: 3 }} />
-        {/* Article Index Section */}
-        <Typography
-          variant="h5"
-          component="h5"
-          fontWeight={700}
-          textAlign={"center"}
-        >
-          Colorectal and Anorectal Cases
-        </Typography>
+      {scripts?.map((script, index) => (
+        <Script key={index} src={script} />
+      ))}
+      <Box sx={{ backgroundColor: 'white', wordBreak: 'break-word' }} p={2}>
+        {/* Conference Title to Conference Cases area */}
+        <div
+          dangerouslySetInnerHTML={{ __html: introductionSection }}
+          className="generated"
+        />
+        {/* Buttons that go to relevant articles in index page */}
         <Box 
           sx={{ 
             display: 'flex', 
-            justifyContent: 'center', 
-            mt: 2, 
+            justifyContent: 'left', 
+            my: 2, 
             flexDirection: isSmallDevice ? 'column' : 'row',
           }}
         >
@@ -161,13 +104,12 @@ const ConferencePage: NextPage = (props) => {
             All Anorectal Cases
           </CTAButton>
         </Box>
-        <Typography
-          variant="h6"
-          component="h6"
-          mt={2}
-        >
-          Featured Cases:
-        </Typography>
+        {/* Featured Cases text */}
+        <div
+          dangerouslySetInnerHTML={{ __html: featuredCasesSection }}
+          className="generated"
+        />
+        {/* Article Carousel */}
         {data?.confSampleCases && <Box mt={1} overflow="hidden" ref={emblaRefArticles}>
           <Box display="flex" gap={2}>
             {data?.confSampleCases.map((article) => (
@@ -181,43 +123,12 @@ const ConferencePage: NextPage = (props) => {
             ))}
           </Box>
         </Box>}
-        <Divider sx={{ backgroundColor: '#e45252', mb: 2, mt: 3 }} />
-        {/* How To Film Section */}
-        {/* <Typography
-          variant="h5"
-          component="h5"
-          fontWeight={700}
-          textAlign={"center"}
-          mb={2}
-        >
-          How to Film with Us
-        </Typography>
-        <VideoPlayer wistiaId={'s8tuh5o1e4'} videoLength={'30'}/>
-        <Divider sx={{ backgroundColor: '#e45252', mb: 2, mt: 3 }} /> */}
-        
-        {/* About JOMI Section */}
-        {/* <Typography
-          variant="h5"
-          component="h5"
-          fontWeight={700}
-          textAlign={"center"}
-          mb={2}
-        >
-          About JOMI
-        </Typography>
-        <VideoPlayer wistiaId={'s8tuh5o1e4'} videoLength={'30'}/>
-        <Divider sx={{ backgroundColor: '#e45252', mb: 2, mt: 3 }} /> */}
-        
-        {/* Subscribing Institutions Section */}
-        <Typography
-          variant="h5"
-          component="h5"
-          fontWeight={700}
-          textAlign={"center"}
-          mb={2}
-        >
-          Subscribing Institutions
-        </Typography>
+        {/* How to Film to Subscribing Institutions area */}
+        <div
+          dangerouslySetInnerHTML={{ __html: videosSection }}
+          className="generated"
+        />
+        {/* Institution carousel and Subscribing Institutions button */}
         <Box mt={2} overflow="hidden" ref={emblaRefInsts}>
           <Box display="flex" gap={{ xs: 4, md: 10 }}>
             {partners.map((school, i) => {
@@ -269,18 +180,78 @@ const ConferencePage: NextPage = (props) => {
   )
 }
 
-export default ConferencePage
+export default ESBCPage
 
-export const getStaticProps: GetStaticProps = async () => {
-  const client = getApolloAdminClient(true)
-  await client.query<ConferencePageQuery>({
-    query: ConferencePageDocument
-  })
-  return {
-    props: {
-      [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
-      // articles: data
-    },
-    revalidate: 3600 //refresh every hour.
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  logger.info("Regenerating esbc page")
+  try {
+    const client = getApolloAdminClient()
+
+    const { data } = await client.query<
+      PageBySlugQuery,
+      PageBySlugQueryVariables
+    >({
+      variables: { slug: 'esbc' },
+      query: PageBySlugDocument,
+      fetchPolicy: 'no-cache'
+    })
+
+    if (!data?.pageBySlug) {
+      throw new Error('Page not found')
+    }
+
+    await client.query<ConferencePageQuery>({
+      query: ConferencePageDocument
+    })
+
+    let scripts = []
+    data?.pageBySlug?.scripts?.map((script) => {
+      const src = getWordsBetween(script)
+      src?.map((script) => {
+        scripts.push(script)
+      })
+    })
+
+    const $ = cheerio.load(data?.pageBySlug.content)
+    $('a').each(function () {
+      var href = $(this).attr('href')
+      if (href?.startsWith('http')) {
+        $(this).attr('rel', 'nofollow')
+      }
+    })
+
+    const content = $('body').html()
+    const { introductionSection, featuredCasesSection, videosSection } = transformContent(content)
+
+    await client.resetStore()
+    await client.query<SiteWideAnnouncementsQuery>({
+      query: SiteWideAnnouncementsDocument
+    })
+
+    return {
+      props: {
+        _name: 'esbc',
+        introductionSection,
+        featuredCasesSection,
+        videosSection,
+        scripts,
+        [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
+        meta_data: buildGenericMetadata(data?.pageBySlug ?? { title: 'Error' })
+      },
+      revalidate: 3600,
+    }
+  } catch (e) {
+    console.log('error in esbc page getStaticProps: ', e.message)
   }
+}
+
+function getWordsBetween(str) {
+  let results = [],
+    re = /"([^"]+)"/g,
+    text
+
+  while ((text = re.exec(str))) {
+    results.push(text[1])
+  }
+  return results
 }
