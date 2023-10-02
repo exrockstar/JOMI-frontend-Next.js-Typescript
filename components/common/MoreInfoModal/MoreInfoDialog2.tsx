@@ -29,6 +29,7 @@ import FormikSelect from '../formik/FormkSelect'
 import CTAButton from '../CTAButton'
 import { frontPageTheme } from 'components/theme'
 import { useAppState } from 'components/_appstate/useAppState'
+import { GetPricingSectionDataDocument } from 'graphql/queries/frontpage.generated'
 
 const schema = object({
   first_name: string().required('Please enter your first name.'),
@@ -63,15 +64,19 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
   const userAccessType = user?.accessType
   const { enqueueSnackbar } = useSnackbar()
   const isSmallDevice = useMediaQuery(theme.breakpoints.down('md'))
-  const {setShowPricingDialog} = useAppState()
+  const { setShowPricingDialog } = useAppState()
 
-  const [updateProfile, { loading: updateLoading }] =
+  const [updateProfile, { loading: updateLoading, client }] =
     useCompleteRegistrationMutation({
       onCompleted() {
         enqueueSnackbar('Thank you! your profile has been updated.', {
           variant: 'info'
         })
         setShowPricingDialog(true)
+
+        client.refetchQueries({
+          include: [GetPricingSectionDataDocument]
+        })
         onClose({}, null)
       },
       refetchQueries: [UserPricesDocument, UserProfileDocument]
@@ -130,21 +135,13 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
                 <Typography fontWeight={700} variant="body2">
                   Your First Name
                 </Typography>
-                <FormikTextField
-                  name="first_name"
-                  fullWidth
-                  size="small"
-                />
+                <FormikTextField name="first_name" fullWidth size="small" />
               </Box>
               <Box mt={2}>
                 <Typography fontWeight={700} variant="body2">
                   Your Last Name
                 </Typography>
-                <FormikTextField
-                  name="last_name"
-                  fullWidth
-                  size="small"
-                />
+                <FormikTextField name="last_name" fullWidth size="small" />
               </Box>
               {!user.institution ? (
                 <>
