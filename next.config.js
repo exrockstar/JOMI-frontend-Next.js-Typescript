@@ -78,6 +78,10 @@ const config = {
         source: '/request-publication',
         destination: '/api/request-publication'
       },
+      {
+        source: '/esbc',
+        destination: '/conference'
+      },
     ]
   },
   pwa: {
