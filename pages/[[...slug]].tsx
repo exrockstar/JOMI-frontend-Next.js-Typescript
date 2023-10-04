@@ -28,7 +28,7 @@ import { useRouter } from 'next/router'
 import { ArticleIndexSection } from 'components/article-index/types'
 import ESBCPage, {
   getStaticProps as esbcGetStaticProps
-} from './esbc'
+} from './conference'
 import HomePage, { getStaticProps as homeGetStaticProps } from './home'
 
 type GenericPageProps = {
