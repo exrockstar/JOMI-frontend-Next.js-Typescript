@@ -26,12 +26,16 @@ import ArticleIndex, {
 } from './article-index'
 import { useRouter } from 'next/router'
 import { ArticleIndexSection } from 'components/article-index/types'
-
+import ESBCPage, {
+  getStaticProps as esbcGetStaticProps
+} from './esbc'
 import HomePage, { getStaticProps as homeGetStaticProps } from './home'
+
 type GenericPageProps = {
   page: PageBySlugQuery['pageBySlug']
   scripts: string[]
   _name: 'generic'
+  styles: string
 } & DefaultPageProps
 
 type ExampleCaseItem = {
@@ -49,8 +53,16 @@ type ArticleIndexProps = {
   _name: 'index'
 } & DefaultPageProps
 
+type ESBCPageProps = {
+  introductionSection: string
+  featuredCasesSection: string
+  videosSection: string
+  scripts: string[]
+  _name: 'esbc'
+} & DefaultPageProps
+
 export default function SinglePage(
-  props: GenericPageProps | ArticleIndexProps
+  props: GenericPageProps | ArticleIndexProps | ESBCPageProps
 ) {
   // when a proxy such as ezproxy is used, sometimmes nextjs matches /[[...slug ]] route instead of
   // /home route. Hence, we have thes condition below. Same with /article-index or /index.
@@ -62,6 +74,11 @@ export default function SinglePage(
   if (props._name === 'index') {
     let _props = props as ArticleIndexProps
     return <ArticleIndex {..._props} />
+  }
+
+  if (props._name === 'esbc') {
+    let _props = props as ESBCPageProps
+    return <ESBCPage {..._props} />
   }
 
   // render generic page
@@ -125,6 +142,10 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
     return await articleIndexGetStaticProps({ params })
   }
 
+  if (slug.startsWith('esbc')) {
+    return await esbcGetStaticProps({ params })
+  }
+
   try {
     const client = getApolloAdminClient()
     const { data } = await client.query<
@@ -135,7 +156,6 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
       query: PageBySlugDocument,
       fetchPolicy: 'no-cache'
     })
-
     let scripts = []
     data?.pageBySlug?.scripts?.map((script) => {
       const src = getWordsBetween(script)
@@ -165,7 +185,7 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
         _name: 'generic',
         page: {
           ...data?.pageBySlug,
-          content: content
+          content: content,
         },
         scripts,
         [APOLLO_STATE_PROP_NAME]: client.cache.extract(),

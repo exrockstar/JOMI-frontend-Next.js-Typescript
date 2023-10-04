@@ -77,7 +77,7 @@ const config = {
       {
         source: '/request-publication',
         destination: '/api/request-publication'
-      }
+      },
     ]
   },
   pwa: {
