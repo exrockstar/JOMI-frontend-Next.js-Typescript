@@ -54,7 +54,7 @@ const CredentialsForm: React.FC<{ onComplete?(): void }> = ({ onComplete }) => {
     if (router.pathname !== '/login') {
       return router.asPath
     }
-    const from = router.query?.from as string
+    const from = (router.query?.from as string) ?? '/'
     return from ? from : MAIN_PAGE
   }
 

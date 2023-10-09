@@ -69,7 +69,7 @@ export function SignUpForm() {
       },
       onCompleted: async (data) => {
         // const token = data.signUp
-        const from = router?.query?.from
+        const from = router?.query?.from ?? '/'
         const callbackUrl = Array.isArray(from) ? '/' : from
         const params = cleanObj({
           email: values.email,
