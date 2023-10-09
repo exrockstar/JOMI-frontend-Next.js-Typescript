@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { object, string, TypeOf } from 'yup'
 import NextLink from 'next/link'
-import { sleep } from 'common/utils'
+import { cleanObj, sleep } from 'common/utils'
 import { BlueLink } from 'components/common/BlueLink'
 import { useSnackbar } from 'notistack'
 import { analytics } from 'apis/analytics'
@@ -30,13 +30,13 @@ const CredentialsForm: React.FC<{ onComplete?(): void }> = ({ onComplete }) => {
   const handleSubmit = async (values: FormValues) => {
     setLoading(true)
     const callbackUrl = getCallbackUrl()
-    console.log('callbackUrl', callbackUrl)
-    const res = await signIn('credentials', {
+    const params = cleanObj({
       redirect: false,
       callbackUrl: callbackUrl,
       email: values.email.toLowerCase(),
       password: values.password
     })
+    const res = await signIn('credentials', params)
     if (!res.error) {
       enqueueSnackbar('You are now logged in.', { variant: 'success' })
       onComplete && onComplete()

@@ -12,12 +12,12 @@ import { useRouter } from 'next/router'
 import {
   FacebookAuthButton,
   GoogleAuthButton,
-  LinkedInAuthButton,
+  LinkedInAuthButton
   // AppleAuthButton
 } from './SocialLoginButtons/SocialLoginButton'
 import { SignupButton } from './SignupButton'
 import FormDivider from 'components/common/FormDivider'
-import { sleep } from 'common/utils'
+import { cleanObj, sleep } from 'common/utils'
 import { BlueLink } from 'components/common/BlueLink'
 import { useSignUpMutation } from 'graphql/mutations/signup.generated'
 import { signIn } from 'next-auth/react'
@@ -71,11 +71,12 @@ export function SignUpForm() {
         // const token = data.signUp
         const from = router?.query?.from
         const callbackUrl = Array.isArray(from) ? '/' : from
-        await signIn('credentials', {
+        const params = cleanObj({
           email: values.email,
           password: values.password,
           callbackUrl: decodeURIComponent(callbackUrl)
         })
+        await signIn('credentials', params)
         await sleep(600)
         const message = `Account Created. We sent you an email at ${values.email}`
         enqueueSnackbar(message, { variant: 'success' })
