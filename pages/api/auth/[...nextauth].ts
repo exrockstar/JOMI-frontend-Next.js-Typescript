@@ -93,12 +93,17 @@ export default async function handler(
               name: displayAuthenticatedUser(user as User)
             } as any
           } catch (e) {
-            logger.info(`[NextAuth] Credentials SignIn Failed`)
+            logger.error(`[NextAuth] Credentials SignIn Failed`, {
+              error_message: e.message
+            })
             if (e instanceof ApolloError) {
               if (e.networkError) {
-                console.log(e.message)
                 throw new Error('Network error')
               }
+              logger.error(
+                `[NextAuth] Credentials SignIn Failed - ApolloError`,
+                e
+              )
               throw new Error(e.message)
             }
 
@@ -163,7 +168,7 @@ export default async function handler(
               name: displayAuthenticatedUser(user as User)
             } as any
           } catch (e) {
-            logger.error(`[NextAuth] TokenID SignIn Failed. ${e.message}`)
+            logger.error(`[NextAuth] TokenID SignIn Failed.`)
             throw new Error(e.message)
           }
         }
