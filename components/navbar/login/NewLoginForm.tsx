@@ -10,10 +10,10 @@ import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'
 import {
   FacebookAuthButton,
   GoogleAuthButton,
-  LinkedInAuthButton,
+  LinkedInAuthButton
   // AppleAuthButton
 } from './SocialLoginButton'
-import { sleep } from 'common/utils'
+import { cleanObj, sleep } from 'common/utils'
 import { signIn } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -45,12 +45,15 @@ export function NewLoginForm({ onComplete }: Props) {
   const handleSubmit = async (values: FormikValues) => {
     setLoading(true)
     const callbackUrl = getCallbackUrl()
-    const res = await signIn('credentials', {
-      redirect: false,
-      callbackUrl: callbackUrl,
-      email: values.email.toLowerCase(),
-      password: values.password
-    })
+    const res = await signIn(
+      'credentials',
+      cleanObj({
+        redirect: false,
+        callbackUrl: callbackUrl,
+        email: values.email.toLowerCase(),
+        password: values.password
+      })
+    )
     if (!res.error) {
       enqueueSnackbar('You are now logged in.', { variant: 'success' })
       onComplete && onComplete()
