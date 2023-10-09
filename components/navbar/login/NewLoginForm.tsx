@@ -29,7 +29,7 @@ type Props = {
 export function NewLoginForm({ onComplete }: Props) {
   const router = useRouter()
 
-  const fromUrl = encodeURIComponent(router?.asPath)
+  const fromUrl = router?.asPath
   const [loading, setLoading] = useState(false)
   const [errorText, setErrorText] = useState('')
   const { enqueueSnackbar } = useSnackbar()
@@ -38,7 +38,7 @@ export function NewLoginForm({ onComplete }: Props) {
     if (router.pathname !== '/login') {
       return router.asPath
     }
-    const from = router.query?.from as string
+    const from = (router.query?.from as string) ?? '/'
     return from ? from : MAIN_PAGE
   }
 
