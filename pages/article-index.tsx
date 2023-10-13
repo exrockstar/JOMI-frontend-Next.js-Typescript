@@ -75,9 +75,10 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
   const numArticles = uniq(totalArticles.map((a) => a.publication_id))
   useEffect(() => {
     if (router.isReady) {
-      if (router.query.soon) {
-        setFutureArticlesShown(true)
-      }
+      //disabling this until FutureArticle component is fixed
+      // if (router.query.soon) { 
+      //   setFutureArticlesShown(true)
+      // }
       if (router.query.score) {
         setScoreArticlesShown(true)
         setAvailableArticlesShown(false)
@@ -146,9 +147,10 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
                       checked && setScoreArticlesShown(!checked)
                       if (checked) {
                         const query: ArticleIndexQuery = {}
-                        if (futureArticlesShown) {
-                          query.soon = true
-                        }
+                        //disabling this until FutureArticle component is fixed
+                        // if (futureArticlesShown) {
+                        //   query.soon = true
+                        // }
                         router.push({ query }, null, { shallow: true })
                       }
                     }}
@@ -165,7 +167,8 @@ const ArticleIndexPage = ({ sections, indexInfo, exampleCases }: Props) => {
                     checked={scoreArticlesShown}
                     onChange={(e, checked) => {
                       setScoreArticlesShown(checked)
-                      setFutureArticlesShown(!checked)
+                      //disabling this until FutureArticle component is fixed
+                      // setFutureArticlesShown(!checked)
                       setAvailableArticlesShown(!checked)
                       if (checked) {
                         router.push({ query: { score: true } }, null, {

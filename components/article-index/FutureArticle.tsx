@@ -18,6 +18,9 @@ type Props = {
   article: Article
 }
 
+/**
+ * Component needs to be updated, vote article buttons break styling on index page.
+ */
 const FutureArticle = ({ article }: Props) => {
   const { data, updateQuery, loading: loadingVotes } = useAllArticleVotesQuery()
 
