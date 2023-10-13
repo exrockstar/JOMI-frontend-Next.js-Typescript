@@ -33,6 +33,7 @@ export type Access = {
   ip_address_str?: Maybe<Scalars['String']>;
   orderId?: Maybe<Scalars['String']>;
   order_amount?: Maybe<Scalars['Float']>;
+  promoCode?: Maybe<Scalars['String']>;
   referredFrom?: Maybe<Scalars['String']>;
   referrerPath?: Maybe<Scalars['String']>;
   searchTerm?: Maybe<Scalars['String']>;
@@ -118,6 +119,7 @@ export type AccessesByUserIdInput = {
 export enum ActivityType {
   Article = 'Article',
   CreateAccount = 'CreateAccount',
+  EnterPromoCode = 'EnterPromoCode',
   InitiateCheckout = 'InitiateCheckout',
   LeaveFeedback = 'LeaveFeedback',
   Login = 'Login',
@@ -1183,6 +1185,7 @@ export type Mutation = {
   addTrialOrderForUser: Scalars['Boolean'];
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
+  cancelJob: Scalars['String'];
   cancelOrder: Scalars['Boolean'];
   checkOutdatedTranslations: Scalars['Boolean'];
   completeUserRegistration: ExtendedRegistrationOutput;
@@ -1252,7 +1255,6 @@ export type Mutation = {
   translateArticles: Array<TranslationResult>;
   triggerUpdateUserSubscription: Scalars['String'];
   unsubscribeOrder?: Maybe<Order>;
-  updateAllInstStats: Scalars['String'];
   updateAnnouncement: Announcement;
   updateArticle?: Maybe<Article>;
   updateContentLength: Scalars['String'];
@@ -1310,6 +1312,11 @@ export type MutationAddVoteArgs = {
 export type MutationApplyInstitutionToTriageArgs = {
   id: Scalars['String'];
   institution_id: Scalars['String'];
+};
+
+
+export type MutationCancelJobArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -2038,6 +2045,7 @@ export type OrderInputForLocation = {
   end: Scalars['DateTime'];
   institution: Scalars['String'];
   location: Scalars['String'];
+  notes?: InputMaybe<Scalars['String']>;
   require_login: RequireLogin;
   restricted_specialties?: InputMaybe<Array<Scalars['String']>>;
   restricted_user_types?: InputMaybe<Array<Scalars['String']>>;

@@ -56,7 +56,8 @@ const defaultValue: OrderInputForLocation = {
   require_login: RequireLogin.True,
   description: '',
   restricted_user_types: [],
-  restricted_specialties: []
+  restricted_specialties: [],
+  notes: ''
 }
 
 const schema = object({
@@ -91,7 +92,8 @@ const OrderDialog = ({
     restricted_user_types:
       order?.restricted_user_types ?? defaultValue.restricted_user_types,
     restricted_specialties:
-      order?.restricted_specialties ?? defaultValue.restricted_specialties
+      order?.restricted_specialties ?? defaultValue.restricted_specialties,
+    notes: order?.notes ?? defaultValue.notes
   }
 
   const { enqueueSnackbar } = useSnackbar()
@@ -223,7 +225,7 @@ const OrderDialog = ({
                     <MenuItem value={RequireLogin.False}>False</MenuItem>
                   </FormikSelect>
                   <FormikTextField
-                    name="description"
+                    name="notes"
                     label="Notes"
                     helperText="Interal notes for order"
                     multiline
