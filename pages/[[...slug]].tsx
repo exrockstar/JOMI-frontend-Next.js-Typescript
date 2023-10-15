@@ -35,7 +35,6 @@ type GenericPageProps = {
   page: PageBySlugQuery['pageBySlug']
   scripts: string[]
   _name: 'generic'
-  styles: string
 } & DefaultPageProps
 
 type ExampleCaseItem = {
@@ -177,6 +176,8 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
     })
 
     const content = $('body').html()
+    const styles = `<style>${$('style').html()}</style>\n`
+    const stylesAndContent = styles.concat(content)
     await client.query<SiteWideAnnouncementsQuery>({
       query: SiteWideAnnouncementsDocument
     })
@@ -185,7 +186,7 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
         _name: 'generic',
         page: {
           ...data?.pageBySlug,
-          content: content,
+          content: stylesAndContent,
         },
         scripts,
         [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
