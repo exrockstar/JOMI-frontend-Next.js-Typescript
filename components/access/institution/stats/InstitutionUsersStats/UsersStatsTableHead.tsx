@@ -20,30 +20,9 @@ interface HeadCell {
 const headCells: readonly HeadCell[] = [
   {
     id: 'email',
-    label: 'Email & Name',
+    label: 'Name\n & Email(s)',
     sticky: true
   },
-  {
-    id: 'institution_name',
-    label: 'Stated Institution'
-  },
-  {
-    id: 'matched_institution_name',
-    label: 'Matched Institution'
-  },
-  {
-    id: 'inst_email',
-    label: 'Institutional Email'
-  },
-  {
-    id: 'matchedBy',
-    label: 'Matched By'
-  },
-  {
-    id: 'subscription.lastSubType',
-    label: 'Access'
-  },
-
   {
     id: 'user_type',
     label: 'User Type'
@@ -51,6 +30,14 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'specialty',
     label: 'Specialty'
+  },
+  {
+    id: 'articleCount',
+    label: 'Uses'
+  },
+  {
+    id: 'loginCount',
+    label: 'Logins'
   },
   {
     id: 'last_visited',
@@ -61,13 +48,21 @@ const headCells: readonly HeadCell[] = [
     label: 'Registered'
   },
   {
-    id: 'loginCount',
-    label: 'Logins'
+    id: 'institution_name',
+    label: 'Stated Institution'
   },
   {
-    id: 'articleCount',
-    label: 'Uses'
-  }
+    id: 'matched_institution_name',
+    label: 'Matched Institution'
+  },
+  {
+    id: 'matchedBy',
+    label: 'Matched By'
+  },
+  {
+    id: 'subscription.lastSubType',
+    label: 'Access'
+  },
 ]
 
 const UserStatsTableHead = () => {
