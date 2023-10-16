@@ -1,4 +1,4 @@
-import { Edit, Delete, SaveAs, Close } from '@mui/icons-material'
+import { Edit, Delete, SaveAs, Close, OpenInNew } from '@mui/icons-material'
 import {
   Box,
   Card,
@@ -8,9 +8,9 @@ import {
   TablePagination,
   TableContainer,
   Button,
-  Input
+  Input,
+  Link
 } from '@mui/material'
-import Image from 'next/legacy/image'
 import { LoadingButton } from '@mui/lab'
 import { BASE_URL } from 'common/constants'
 import { StyledTableRow } from 'components/common/StyledTableRow'
@@ -24,15 +24,21 @@ import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import MediaLibraryTableHead from './MediaLibraryTableHead'
 import { useMediaLibraryList } from './useMediaLibraryList'
-
+import MediaLibraryImage from './MediaLibraryImage'
+import NextLink from 'next/link'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 type Props = {
   medias: MediaLibraryQuery['files']['files']
   count: number
 }
 
+type Media = Unpacked<MediaLibraryQuery['files']['files']>
+
 const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
   const { page, setPage, pageSize, setPageSize, refetch } =
     useMediaLibraryList()
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
+  const [selected, setSelected] = useState<Media | null>(null)
   const { enqueueSnackbar } = useSnackbar()
   const [editRowId, setEditRowId] = useState('')
   const [editData, setEditData] = useState({
@@ -106,15 +112,20 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
                         height: 100
                       }}
                     >
-                      <Image
-                        src={url}
-                        alt={media.filename}
-                        layout="fill"
-                        objectFit="contain"
-                      />
+                      <MediaLibraryImage src={url} alt={media.filename} />
                     </Box>
                   </TableCell>
-                  <TableCell>{media.filename ?? 'N/A'}</TableCell>
+                  <TableCell>
+                    <Link
+                      href={`/api/files/${media.filename}`}
+                      target="_blank"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                      underline="hover"
+                    >
+                      {media.filename}
+                      <OpenInNew fontSize={'inherit'} />
+                    </Link>
+                  </TableCell>
                   <TableCell>
                     {editRowId !== media._id ? (
                       media.metadata?.title ?? 'N/A'
@@ -199,11 +210,7 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
                       color="error"
                       startIcon={<Delete />}
                       onClick={() => {
-                        deleteMedia({
-                          variables: {
-                            _id: media._id
-                          }
-                        })
+                        setSelected(media)
                       }}
                       loading={deleteLoading}
                     >
@@ -225,6 +232,28 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
+      <ConfirmationDialog
+        key={'confirm-delete-range' + selected}
+        open={!!selected}
+        dialogTitle={'Delete File'}
+        onClose={() => {
+          setSelected(null)
+        }}
+        onComplete={() => {
+          deleteMedia({
+            variables: {
+              _id: selected._id
+            }
+          })
+          setSelected(null)
+        }}
+        onCancel={() => {
+          setSelected(null)
+        }}
+        loading={deleteLoading}
+      >
+        Are you sure to delete the file <b>{selected?.filename}</b>?
+      </ConfirmationDialog>
     </Card>
   )
 }

@@ -107,7 +107,7 @@ const MediaLibaryListPage = () => {
             color="primary"
             onClick={() => setAddDialogOpen(true)}
           >
-            Add Image
+            Upload File
           </LoadingButton>
           <Typography>
             <Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>
