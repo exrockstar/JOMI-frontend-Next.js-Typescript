@@ -21,6 +21,7 @@ import { Form, Formik } from 'formik'
 import axios, { AxiosError } from 'axios'
 import { LoadingButton } from '@mui/lab'
 import { useSnackbar } from 'notistack'
+import MediaLibraryImage from '../media-library/MediaLibraryImage'
 
 type Props = {
   onCompleted(uploaded: { name: string; size: number }): void
@@ -93,7 +94,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
     >
       <Dialog {...props}>
         <Form>
-          <DialogTitle>Upload Image</DialogTitle>
+          <DialogTitle>Upload File</DialogTitle>
           <Divider />
           <DialogContent sx={{ width: { sm: '100%', md: 600 } }}>
             {image && localImageSrc && (
@@ -102,12 +103,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
                   <Grid item xs={12} md={6}>
                     <Paper elevation={4}>
                       <Box position="relative" paddingTop={'100%'}>
-                        <Image
-                          src={localImageSrc}
-                          alt={filename}
-                          layout="fill"
-                          objectFit="contain"
-                        />
+                        <MediaLibraryImage src={localImageSrc} alt={filename} />
                       </Box>
                     </Paper>
                   </Grid>
@@ -150,7 +146,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
                   style={{ display: 'none' }}
                   type="file"
                   id="file-input-hidden"
-                  accept="image/*"
+                  accept="image/*|.pdf|.doc|.docx"
                   ref={ref}
                   onChange={handleFilePick}
                 />
@@ -158,7 +154,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
                   Choose file to upload
                 </Button>
                 <Typography variant="subtitle2" color="text.secondary">
-                  Currently only images of formats jpg, bmp, gif, and png are
+                  Currently only jpg, bmp, gif,png, doc, docx, and pdf are
                   supported. Animated gifs will upload normally, but will behave
                   abnormally when scaled for UI purposes.
                 </Typography>
@@ -179,7 +175,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
               color="error"
               onClick={() => setImage(null)}
             >
-              Clear Image
+              Clear File
             </Button>
             <LoadingButton
               variant="contained"
@@ -189,7 +185,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
               type="submit"
               disabled={!image}
             >
-              Upload Image
+              Upload File
             </LoadingButton>
           </DialogActions>
         </Form>

@@ -24,6 +24,7 @@ import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import MediaLibraryTableHead from './MediaLibraryTableHead'
 import { useMediaLibraryList } from './useMediaLibraryList'
+import MediaLibraryImage from './MediaLibraryImage'
 
 type Props = {
   medias: MediaLibraryQuery['files']['files']
@@ -106,12 +107,7 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
                         height: 100
                       }}
                     >
-                      <Image
-                        src={url}
-                        alt={media.filename}
-                        layout="fill"
-                        objectFit="contain"
-                      />
+                      <MediaLibraryImage src={url} alt={media.filename} />
                     </Box>
                   </TableCell>
                   <TableCell>{media.filename ?? 'N/A'}</TableCell>
