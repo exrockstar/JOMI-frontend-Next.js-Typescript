@@ -1,6 +1,4 @@
 import { FilterList } from '@mui/icons-material'
-import { LocalizationProvider } from '@mui/lab'
-import AdapterDayjs from '@mui/lab/AdapterDayjs'
 import {
   Alert,
   Badge,
@@ -12,7 +10,6 @@ import {
   Typography
 } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
-import { columnOptions } from 'components/cms/announcements/AnnouncementScoping/columns'
 import OrdersList from 'components/cms/orders/list/OrdersList'
 import { orderListColumnFilterOptions } from 'components/cms/orders/list/orderListColumnFilterOptions'
 import {
@@ -35,61 +32,59 @@ const OrdersListPage = () => {
   }
   return (
     <CmsLayout>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Drawer
-          anchor={'right'}
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <FilterDrawer
-            onSubmit={onSubmitFilter}
-            columnOptions={orderListColumnFilterOptions}
-            filters={filters}
-          />
-        </Drawer>
-        <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
-          <Typography variant="h4">Orders</Typography>
-          <Tooltip title="Filter list">
-            <Badge
-              badgeContent={filters?.length}
-              color="secondary"
-              invisible={!filters?.length}
-              sx={{
-                '& .MuiBadge-badge': {
-                  right: 8,
-                  top: 12
-                }
+      <Drawer
+        anchor={'right'}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <FilterDrawer
+          onSubmit={onSubmitFilter}
+          columnOptions={orderListColumnFilterOptions}
+          filters={filters}
+        />
+      </Drawer>
+      <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
+        <Typography variant="h4">Orders</Typography>
+        <Tooltip title="Filter list">
+          <Badge
+            badgeContent={filters?.length}
+            color="secondary"
+            invisible={!filters?.length}
+            sx={{
+              '& .MuiBadge-badge': {
+                right: 8,
+                top: 12
+              }
+            }}
+          >
+            <IconButton
+              onClick={() => {
+                setDrawerOpen(!drawerOpen)
               }}
             >
-              <IconButton
-                onClick={() => {
-                  setDrawerOpen(!drawerOpen)
-                }}
-              >
-                <FilterList />
-              </IconButton>
-            </Badge>
-          </Tooltip>
+              <FilterList />
+            </IconButton>
+          </Badge>
+        </Tooltip>
+      </Stack>
+      <Stack px={2}>
+        <TableFilters filters={filters} />
+      </Stack>
+      {loading ? (
+        <Stack alignItems="center" justifyContent="center" height="80vh">
+          <CircularProgress />
         </Stack>
-        <Stack px={2}>
-          <TableFilters filters={filters} />
+      ) : error ? (
+        <Stack p={2}>
+          <Alert variant="filled" severity="error">
+            {error}
+          </Alert>
         </Stack>
-        {loading ? (
-          <Stack alignItems="center" justifyContent="center" height="80vh">
-            <CircularProgress />
-          </Stack>
-        ) : error ? (
-          <Stack p={2}>
-            <Alert variant="filled" severity="error">
-              {error}
-            </Alert>
-          </Stack>
-        ) : (
-          <Stack p={2}>
-            <OrdersList />
-          </Stack>
-        )}
-      </LocalizationProvider>
+      ) : (
+        <Stack p={2}>
+          <OrdersList />
+        </Stack>
+      )}
     </CmsLayout>
   )
 }

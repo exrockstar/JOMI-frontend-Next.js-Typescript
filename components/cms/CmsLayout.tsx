@@ -29,7 +29,12 @@ const CmsLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <ThemeProvider theme={cmsTheme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        dateFormats={{
+          keyboardDate: 'M/D/YYYY'
+        }}
+      >
         <DashboardLayoutRoot
           sx={{ paddingLeft: { lg: isSidebarOpen ? '280px' : 0 } }}
         >

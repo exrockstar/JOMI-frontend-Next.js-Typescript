@@ -1,6 +1,4 @@
 import { FilterList, Settings } from '@mui/icons-material'
-import { LocalizationProvider } from '@mui/lab'
-import AdapterDayjs from '@mui/lab/AdapterDayjs'
 import {
   Alert,
   Badge,
@@ -55,79 +53,77 @@ const FeedbackListPage = () => {
   }
   return (
     <CmsLayout>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Drawer
-          anchor={'right'}
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <FilterDrawer
-            onSubmit={onSubmitFilter}
-            columnOptions={columnFilterOptions}
-            filters={filters}
-          />
-        </Drawer>
-        <FeedbackSettingsModal
-          open={showSettings}
-          onClose={() => {
-            setShowSettings(false)
-          }}
+      <Drawer
+        anchor={'right'}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <FilterDrawer
+          onSubmit={onSubmitFilter}
+          columnOptions={columnFilterOptions}
+          filters={filters}
         />
-        <Stack direction={'row'} justifyContent="space-between" px={2} pt={5}>
-          <Typography variant="h4">User Feedback</Typography>
-          <Tooltip title="Filter list">
-            <Badge
-              badgeContent={filters?.length}
-              color="secondary"
-              invisible={!filters?.length}
-              sx={{
-                '& .MuiBadge-badge': {
-                  right: 8,
-                  top: 12
-                }
-              }}
-            >
-              <IconButton
-                onClick={() => {
-                  setDrawerOpen(!drawerOpen)
-                }}
-              >
-                <FilterList />
-              </IconButton>
-            </Badge>
-          </Tooltip>
-        </Stack>
-        <Box px={2}>
-          <Button
-            startIcon={<Settings />}
-            size="small"
-            variant="outlined"
-            onClick={() => {
-              setShowSettings(true)
+      </Drawer>
+      <FeedbackSettingsModal
+        open={showSettings}
+        onClose={() => {
+          setShowSettings(false)
+        }}
+      />
+      <Stack direction={'row'} justifyContent="space-between" px={2} pt={5}>
+        <Typography variant="h4">User Feedback</Typography>
+        <Tooltip title="Filter list">
+          <Badge
+            badgeContent={filters?.length}
+            color="secondary"
+            invisible={!filters?.length}
+            sx={{
+              '& .MuiBadge-badge': {
+                right: 8,
+                top: 12
+              }
             }}
           >
-            Settings{' '}
-          </Button>
-        </Box>
-        <Stack px={2} mt={2}>
-          <TableFilters filters={filters} />
+            <IconButton
+              onClick={() => {
+                setDrawerOpen(!drawerOpen)
+              }}
+            >
+              <FilterList />
+            </IconButton>
+          </Badge>
+        </Tooltip>
+      </Stack>
+      <Box px={2}>
+        <Button
+          startIcon={<Settings />}
+          size="small"
+          variant="outlined"
+          onClick={() => {
+            setShowSettings(true)
+          }}
+        >
+          Settings{' '}
+        </Button>
+      </Box>
+      <Stack px={2} mt={2}>
+        <TableFilters filters={filters} />
+      </Stack>
+      {loading ? (
+        <Stack alignItems="center" justifyContent="center" height="80vh">
+          <CircularProgress />
         </Stack>
-        {loading ? (
-          <Stack alignItems="center" justifyContent="center" height="80vh">
-            <CircularProgress />
-          </Stack>
-        ) : error ? (
-          <Stack p={2}>
-            <Alert variant="filled" severity="error">
-              {error}
-            </Alert>
-          </Stack>
-        ) : (
-          <Stack p={2}>
-            <FeedbackList />
-          </Stack>
-        )}
-      </LocalizationProvider>
+      ) : error ? (
+        <Stack p={2}>
+          <Alert variant="filled" severity="error">
+            {error}
+          </Alert>
+        </Stack>
+      ) : (
+        <Stack p={2}>
+          <FeedbackList />
+        </Stack>
+      )}
     </CmsLayout>
   )
 }
