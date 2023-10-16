@@ -61,19 +61,23 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
             href="/cms"
           >
             CMS
-          </Button>,
-          <Button
-            key="access"
-            component={MuiLink}
-            endIcon={<OpenInNew />}
-            sx={{ color: '#FFF' }}
-            target="_blank"
-            href={`/cms/institutions-list/${router.query.id}`}
-          >
-            Back to Institution
           </Button>
         ]
       : []
+  if (router.query.id) {
+    buttons.push(
+      <Button
+        key="access"
+        component={MuiLink}
+        endIcon={<OpenInNew />}
+        sx={{ color: '#FFF' }}
+        target="_blank"
+        href={`/cms/institutions-list/${router.query.id}`}
+      >
+        Back to Institution
+      </Button>
+    )
+  }
   return (
     <ThemeProvider theme={cmsTheme}>
       <LocalizationProvider
