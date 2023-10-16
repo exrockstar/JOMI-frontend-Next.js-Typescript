@@ -1,6 +1,5 @@
 import { Add, Download, FilterList, Visibility } from '@mui/icons-material'
-import { LoadingButton, LocalizationProvider } from '@mui/lab'
-import AdapterDayjs from '@mui/lab/AdapterDayjs'
+import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Badge,
@@ -33,13 +32,12 @@ import {
   UserRoles,
   QueryOperation,
   MatchStatus,
-  MatchedBy,
   ColumnFilter,
   SubType
 } from 'graphql/types'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import TagUsersToCRM from 'components/cms/user-list/TagUsersToCRM'
 import DbQueryDialog from 'components/common/DbQueryDialog'
 
@@ -268,171 +266,166 @@ const UserManagementListPage = () => {
         onClose={() => setShowQuery(false)}
         queryStr={dbQueryString}
       />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Drawer
-          anchor={'right'}
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-        >
-          <FilterDrawer
-            onSubmit={onSubmitFilter}
-            columnOptions={columnOptions}
-            filters={filters}
-          />
-        </Drawer>
-        {addDialoglOpen && (
-          <AddUserDialog
-            open={addDialoglOpen}
-            addLibrarian={addLibrarian}
-            onClose={() => {
-              setAddDialogOpen(false)
-              setAddLibrarian(false)
-            }}
-          />
-        )}
+      <Drawer
+        anchor={'right'}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <FilterDrawer
+          onSubmit={onSubmitFilter}
+          columnOptions={columnOptions}
+          filters={filters}
+        />
+      </Drawer>
+      {addDialoglOpen && (
+        <AddUserDialog
+          open={addDialoglOpen}
+          addLibrarian={addLibrarian}
+          onClose={() => {
+            setAddDialogOpen(false)
+            setAddLibrarian(false)
+          }}
+        />
+      )}
 
-        <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
-          <Stack
-            direction={{ xs: 'column', md: 'row' }}
-            alignItems={{ xs: 'flex-start', md: 'center' }}
-            spacing={2}
+      <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+          spacing={2}
+        >
+          <Typography variant="h4">User Management</Typography>
+          <LoadingButton
+            startIcon={<Add />}
+            variant="contained"
+            color="primary"
+            onClick={() => setAddDialogOpen(true)}
           >
-            <Typography variant="h4">User Management</Typography>
+            Add User
+          </LoadingButton>
+          <LoadingButton
+            startIcon={<Add />}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setAddDialogOpen(true)
+              setAddLibrarian(true)
+            }}
+          >
+            Add Librarian
+          </LoadingButton>
+          <Tooltip title="Download results as JSON file. 1000 user limit" arrow>
             <LoadingButton
-              startIcon={<Add />}
-              variant="contained"
-              color="primary"
-              onClick={() => setAddDialogOpen(true)}
-            >
-              Add User
-            </LoadingButton>
-            <LoadingButton
-              startIcon={<Add />}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setAddDialogOpen(true)
-                setAddLibrarian(true)
-              }}
-            >
-              Add Librarian
-            </LoadingButton>
-            <Tooltip
-              title="Download results as JSON file. 1000 user limit"
-              arrow
-            >
-              <LoadingButton
-                startIcon={<Download />}
-                variant="outlined"
-                loading={downloading}
-                onClick={async () => {
-                  setDownloading(true)
-                  const { data } = await download({
-                    variables: {
-                      input: {
-                        sort_by: sortBy,
-                        sort_order: sortOrder,
-                        filters,
-                        skip: 0,
-                        limit: 1000
-                      }
+              startIcon={<Download />}
+              variant="outlined"
+              loading={downloading}
+              onClick={async () => {
+                setDownloading(true)
+                const { data } = await download({
+                  variables: {
+                    input: {
+                      sort_by: sortBy,
+                      sort_order: sortOrder,
+                      filters,
+                      skip: 0,
+                      limit: 1000
                     }
-                  })
-                  saveJsonToFile('users.json', data?.users?.users)
-                  setDownloading(false)
-                }}
-              >
-                Download
-              </LoadingButton>
-            </Tooltip>
-            <Tooltip title="Display the MongoDB aggregate operation used to filter the data">
-              <Button
-                color="primary"
-                onClick={() => setShowQuery(true)}
-                startIcon={<Visibility />}
-              >
-                Show DB Query Parameters
-              </Button>
-            </Tooltip>
-            <Typography>
-              <Typography fontWeight={'bold'} component="span">
-                Table Filters&nbsp;
-              </Typography>
-              {filters.length == 0
-                ? 'None'
-                : `${filters.length} total:` +
-                  filters.map(
-                    (filter, i) =>
-                      ` ${filter.columnName} ${filter.operation} ${filter.value}`
-                  )}
-            </Typography>
-          </Stack>
-          <Tooltip title="Filter list">
-            <Badge
-              badgeContent={filters?.length}
-              color="secondary"
-              invisible={!filters?.length}
-              sx={{
-                '& .MuiBadge-badge': {
-                  right: 8,
-                  top: 12
-                }
+                  }
+                })
+                saveJsonToFile('users.json', data?.users?.users)
+                setDownloading(false)
               }}
             >
-              <IconButton
-                onClick={() => {
-                  setDrawerOpen(!drawerOpen)
-                }}
-              >
-                <FilterList />
-              </IconButton>
-            </Badge>
+              Download
+            </LoadingButton>
           </Tooltip>
+          <Tooltip title="Display the MongoDB aggregate operation used to filter the data">
+            <Button
+              color="primary"
+              onClick={() => setShowQuery(true)}
+              startIcon={<Visibility />}
+            >
+              Show DB Query Parameters
+            </Button>
+          </Tooltip>
+          <Typography>
+            <Typography fontWeight={'bold'} component="span">
+              Table Filters&nbsp;
+            </Typography>
+            {filters.length == 0
+              ? 'None'
+              : `${filters.length} total:` +
+                filters.map(
+                  (filter, i) =>
+                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
+                )}
+          </Typography>
         </Stack>
-        <Stack px={2} display="flex" gap={2} direction="row">
-          <SearchInput
-            onSubmit={(search) => {
-              if (!!search) {
-                router.push({
-                  query: {
-                    ...router.query,
-                    search,
-                    page: 1
-                  }
-                })
-              } else {
-                const query = router.query
-                delete query.search
-                router.push({
-                  query: {
-                    ...query,
-                    page: 1
-                  }
-                })
+        <Tooltip title="Filter list">
+          <Badge
+            badgeContent={filters?.length}
+            color="secondary"
+            invisible={!filters?.length}
+            sx={{
+              '& .MuiBadge-badge': {
+                right: 8,
+                top: 12
               }
             }}
-            value={router.query.search as string}
-            placeholder="Search user name, email, id..."
-          />
+          >
+            <IconButton
+              onClick={() => {
+                setDrawerOpen(!drawerOpen)
+              }}
+            >
+              <FilterList />
+            </IconButton>
+          </Badge>
+        </Tooltip>
+      </Stack>
+      <Stack px={2} display="flex" gap={2} direction="row">
+        <SearchInput
+          onSubmit={(search) => {
+            if (!!search) {
+              router.push({
+                query: {
+                  ...router.query,
+                  search,
+                  page: 1
+                }
+              })
+            } else {
+              const query = router.query
+              delete query.search
+              router.push({
+                query: {
+                  ...query,
+                  page: 1
+                }
+              })
+            }
+          }}
+          value={router.query.search as string}
+          placeholder="Search user name, email, id..."
+        />
 
-          <TagUsersToCRM />
+        <TagUsersToCRM />
+      </Stack>
+      {loading ? (
+        <Stack alignItems="center" justifyContent="center" height="90vh">
+          <CircularProgress />
         </Stack>
-        {loading ? (
-          <Stack alignItems="center" justifyContent="center" height="90vh">
-            <CircularProgress />
-          </Stack>
-        ) : error ? (
-          <Stack p={2}>
-            <Alert variant="filled" severity="error">
-              {error}
-            </Alert>
-          </Stack>
-        ) : (
-          <Stack p={2}>
-            <UserManagementList users={users} />
-          </Stack>
-        )}
-      </LocalizationProvider>
+      ) : error ? (
+        <Stack p={2}>
+          <Alert variant="filled" severity="error">
+            {error}
+          </Alert>
+        </Stack>
+      ) : (
+        <Stack p={2}>
+          <UserManagementList users={users} />
+        </Stack>
+      )}
     </CmsLayout>
   )
 }

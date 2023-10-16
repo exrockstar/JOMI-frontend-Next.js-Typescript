@@ -11,6 +11,7 @@ import { SidenavItem } from 'components/common/Sidenav/SideNavItem'
 import { Domain, Event, OpenInNew } from '@mui/icons-material'
 import Error403 from 'components/error-pages/Error403'
 import { LocalizationProvider } from '@mui/lab'
+import { useRouter } from 'next/router'
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -31,6 +32,7 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
   // if (status !== 'loading' && !isAuthorized) {
   //   return <Error403 />
   // }
+  const router = useRouter()
 
   const items: SidenavItem[] = [
     {
@@ -59,12 +61,27 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
             href="/cms"
           >
             CMS
+          </Button>,
+          <Button
+            key="access"
+            component={MuiLink}
+            endIcon={<OpenInNew />}
+            sx={{ color: '#FFF' }}
+            target="_blank"
+            href={`/cms/institutions-list/${router.query.id}`}
+          >
+            Back to Institution
           </Button>
         ]
       : []
   return (
     <ThemeProvider theme={cmsTheme}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        dateFormats={{
+          keyboardDate: 'M/D/YYYY'
+        }}
+      >
         <DashboardLayoutRoot>
           <PageLoadingIndicator />
           <Box
