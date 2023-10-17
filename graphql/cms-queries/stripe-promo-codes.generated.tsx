@@ -30,7 +30,7 @@ export type PromoCodeRedeemListQueryVariables = Types.Exact<{
 }>;
 
 
-export type PromoCodeRedeemListQuery = { __typename?: 'Query', orders: { __typename?: 'RedeemListOutput', totalCount: number, items: Array<{ __typename?: 'Order', _id: string, user_id?: string | null | undefined, created: any, amount?: number | null | undefined, description?: string | null | undefined, user?: { __typename?: 'User', email: string } | null | undefined }> } };
+export type PromoCodeRedeemListQuery = { __typename?: 'Query', orders: { __typename?: 'RedeemListOutput', totalCount: number, items: Array<{ __typename?: 'Payment', _id: string, userId: string, created: any, amount: number, invoiceId: string, user?: { __typename?: 'User', email: string } | null | undefined, order?: { __typename?: 'Order', _id: string, description?: string | null | undefined } | null | undefined }> } };
 
 export type CreateStripeCodeMutationVariables = Types.Exact<{
   input: Types.CreatePromoCodeInput;
@@ -217,13 +217,17 @@ export const PromoCodeRedeemListDocument = gql`
   orders: getStripePromocodeRedeems(id: $id, input: $input) {
     items {
       _id
-      user_id
+      userId
       user {
         email
       }
       created
       amount
-      description
+      order {
+        _id
+        description
+      }
+      invoiceId
     }
     totalCount
   }

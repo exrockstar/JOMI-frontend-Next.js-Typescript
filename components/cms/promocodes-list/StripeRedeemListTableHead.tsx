@@ -6,24 +6,24 @@ import {
   TableSortLabel
 } from '@mui/material'
 import { StickyTableCell } from 'components/common/StickyTableCell'
-import { Order } from 'graphql/types'
+import { Payment } from 'graphql/types'
 
 import { visuallyHidden } from '@mui/utils'
 import { useCodeRedeemList } from './useCodeRedeemList'
 interface HeadCell {
-  id: keyof Order
+  id: keyof Payment
   label: string
   sticky?: boolean
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'user_id',
+    id: 'userId',
     label: 'User Email',
     sticky: true
   },
   {
-    id: 'description',
+    id: '_id',
     label: 'Description'
   },
   {
@@ -31,8 +31,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Amount'
   },
   {
-    id: '_id',
+    id: 'orderId',
     label: 'Order ID'
+  },
+  {
+    id: 'invoiceId',
+    label: 'Invoice ID'
   },
   {
     id: 'created',

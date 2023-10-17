@@ -75,13 +75,17 @@ query PromoCodeRedeemList($id:String!, $input: RedeemListInput!){
   orders:getStripePromocodeRedeems(id: $id, input: $input){
     items {
       _id,
-      user_id
+      userId
       user {
         email
       }
       created
       amount
-      description
+      order {
+        _id
+        description
+      }
+      invoiceId
     }
     totalCount
   }
