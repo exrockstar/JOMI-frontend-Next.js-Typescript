@@ -47,6 +47,7 @@ const errorLink = onError(({ graphQLErrors, operation }) => {
   const href = !IS_SERVER ? window.location.href : ''
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message }) => {
+      if (message === 'RateLimitError') return
       const _message = `[GraphQL error][${operation.operationName}]: ${message}`
       logtail.error(_message, {
         href: href,

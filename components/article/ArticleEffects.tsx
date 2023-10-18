@@ -11,7 +11,7 @@ type Props = {
   article: ArticlesBySlugQuery['articleBySlug']
 }
 const ArticleEffects = ({ article }: Props) => {
-  const { data: session, status } = useSession()
+  // const { data: session, status } = useSession()
   const { state, setArticlesViewed } = useAppState()
   const router = useRouter()
   const [trackArticle, { data }] = useTrackArticleMutation({})
@@ -28,8 +28,7 @@ const ArticleEffects = ({ article }: Props) => {
 
   useEffect(() => {
     const handler = () => {
-      if(status === "loading") return;
-
+      console.log("TRACKING ARTICLE VIEW")
       //track in GA4
       analytics.trackArticleView({
         categories: article.categories.map((c) => {
@@ -41,7 +40,7 @@ const ArticleEffects = ({ article }: Props) => {
         }),
         tags: article.tags,
         publicationId: article.publication_id ?? article.production_id,
-        userId: session && session.user ? session.user._id : 'anon',
+        // userId: session && session.user ? session.user._id : 'anon',
       })
 
       //track in Amplitude
@@ -55,7 +54,7 @@ const ArticleEffects = ({ article }: Props) => {
         }),
         tags: article.tags,
         publicationId: article.publication_id ?? article.production_id,
-        userId: session && session.user ? session.user._id : 'anon',
+        // userId: session && session.user ? session.user._id : 'anon',
         anon_link_id: anon_link_id ?? null,
       })
       
@@ -87,7 +86,7 @@ const ArticleEffects = ({ article }: Props) => {
       }
     }
     handler()
-  }, [status, session])
+  }, [])
   return null
 }
 
