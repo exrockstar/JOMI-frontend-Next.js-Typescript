@@ -20,10 +20,17 @@ import StripePromoCodeListTableHeader from './StripePromoCodeListTableHead'
 import NextLink from 'next/link'
 import { useCodeRedeemList } from './useCodeRedeemList'
 import StripeRedeemListTableHead from './StripeRedeemListTableHead'
+import { STRIPE_BASE_URL } from 'common/constants'
 
 const StripeRedeemList: React.FC<{}> = () => {
-  const { page, setPage, pageSize, setPageSize, totalCount, orders } =
-    useCodeRedeemList()
+  const {
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    totalCount,
+    orders: payments
+  } = useCodeRedeemList()
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage + 1)
   }
@@ -57,11 +64,11 @@ const StripeRedeemList: React.FC<{}> = () => {
         <Table size="small">
           <StripeRedeemListTableHead />
           <TableBody>
-            {orders?.map((order, i) => {
+            {payments?.map((payment, i) => {
               const stickyTableCellColor = i % 2 !== 0 ? 'white' : '#fafafa'
 
               return (
-                <StyledTableRow key={order._id}>
+                <StyledTableRow key={payment._id}>
                   <StickyTableCell
                     sx={{
                       whiteSpace: 'nowrap',
@@ -69,29 +76,39 @@ const StripeRedeemList: React.FC<{}> = () => {
                     }}
                   >
                     <Box bgcolor={stickyTableCellColor}>
-                      <Link href={`/cms/user/${order.user_id}`}>
-                        {order.user?.email}
+                      <Link href={`/cms/user/${payment.userId}`}>
+                        {payment.user?.email}
                       </Link>
                     </Box>
                   </StickyTableCell>
 
-                  <TableCell>{order.description ?? 'No description'}</TableCell>
-                  <TableCell>${order.amount.toFixed(2)}</TableCell>
+                  <TableCell>
+                    {payment.order?.description ?? 'No description'}
+                  </TableCell>
+                  <TableCell>${(payment.amount / 100).toFixed(2)}</TableCell>
                   <TableCell>
                     <Link
-                      href={`/cms/orders/${order._id}`}
+                      href={`/cms/orders/${payment.order._id}`}
                       component={NextLink}
                     >
-                      {order._id}
+                      {payment.order._id}
                     </Link>
                   </TableCell>
                   <TableCell>
-                    {dayjs(order.created).format('MM/DD/YYYY HH:mm:ss A')}
+                    <Link
+                      href={`${STRIPE_BASE_URL}/invoices/${payment.invoiceId}`}
+                      component={NextLink}
+                    >
+                      {payment.invoiceId}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(payment.created).format('MM/DD/YYYY HH:mm:ss A')}
                   </TableCell>
                 </StyledTableRow>
               )
             })}
-            {!orders?.length && (
+            {!payments?.length && (
               <StyledTableRow>
                 <TableCell colSpan={5}>
                   No Redemptions for this promo code

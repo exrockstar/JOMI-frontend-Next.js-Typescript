@@ -71,27 +71,31 @@ export const INTEREST_CATEGORIES: InterestCategory[] = [
 ]
 
 /*
-* Array of all categories in our DB
-* Used right now for filtering articles in article management CMS
-*/
+ * Array of all categories in our DB
+ * Used right now for filtering articles in article management CMS
+ */
 export const ARTICLE_CATEGORIES = [
   'Interventional Radiology',
-  "Obstetrics & Gynecology",
+  'Obstetrics & Gynecology',
   'Fundamentals',
-  "Hand Surgery",
-  "Vascular Surgery",
-  "Pediatric Surgery",
-  "Trauma and Acute Care",
-  "Otolaryngology",
-  "Urology",
-  "Orthopaedics",
-  "Neurosurgery",
-  "Basic Skills for the OR",
-  "Plastic Surgery",
-  "Global Surgery",
-  "Orthopaedic Trauma",
-  "General Surgery",
-  "Cardiac Surgery",
-  "(OMFS)",
-  "Ophthalmology",
+  'Hand Surgery',
+  'Vascular Surgery',
+  'Pediatric Surgery',
+  'Trauma and Acute Care',
+  'Otolaryngology',
+  'Urology',
+  'Orthopaedics',
+  'Neurosurgery',
+  'Basic Skills for the OR',
+  'Plastic Surgery',
+  'Global Surgery',
+  'Orthopaedic Trauma',
+  'General Surgery',
+  'Cardiac Surgery',
+  '(OMFS)',
+  'Ophthalmology'
 ]
+
+export const STRIPE_BASE_URL = isProduction
+  ? `https://dashboard.stripe.com`
+  : `https://dashboard.stripe.com/test`

@@ -2157,6 +2157,19 @@ export type PartialRequest = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type Payment = {
+  __typename?: 'Payment';
+  _id: Scalars['ID'];
+  amount: Scalars['Float'];
+  coupon?: Maybe<Scalars['String']>;
+  created: Scalars['DateTime'];
+  invoiceId: Scalars['String'];
+  order?: Maybe<Order>;
+  orderId: Scalars['String'];
+  user?: Maybe<User>;
+  userId: Scalars['String'];
+};
+
 export type PreviouslyStatedInst = {
   __typename?: 'PreviouslyStatedInst';
   date: Scalars['DateTime'];
@@ -2616,7 +2629,7 @@ export type RedeemListInput = {
 
 export type RedeemListOutput = {
   __typename?: 'RedeemListOutput';
-  items: Array<Order>;
+  items: Array<Payment>;
   totalCount: Scalars['Int'];
 };
 
