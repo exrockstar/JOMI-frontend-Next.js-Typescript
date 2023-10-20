@@ -19,6 +19,8 @@ import Link from 'next/link'
 import { Delete, Edit } from '@mui/icons-material'
 import router from 'next/router'
 import { useSnackbar } from 'notistack'
+import DeleteDialog from 'components/common/cms/DeleteDialog'
+import { useState } from 'react'
 
 type Props = {
   pages: PagesListQuery['fetchPages']['pages']
@@ -28,6 +30,8 @@ type Props = {
 const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   //page var is used for pagination
   const { page, setPage, pageSize, setPageSize } = usePagesList()
+  const [deleteID, setDeleteID] = useState(null)
+  const [showDialog, setShowDialog] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -53,6 +57,12 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   })
   return (
     <>
+      <DeleteDialog 
+        deleteMutation={deletePage} 
+        _id={deleteID} 
+        open={showDialog}
+        onClose={() => setShowDialog(false)}
+      />
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
           <Table>
@@ -102,11 +112,15 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
                         size="small"
                         variant="contained"
                         onClick={() => {
-                          deletePage({
-                            variables: {
-                              id: page._id
-                            }
-                          })
+                          //set page ID to delete
+                          setDeleteID(page._id)
+                          //open dialog window
+                          setShowDialog(true)
+                          // deletePage({
+                          //   variables: {
+                          //     id: page._id
+                          //   }
+                          // })
                         }}
                       >
                         Delete
