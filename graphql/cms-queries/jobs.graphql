@@ -7,3 +7,7 @@ mutation RunJobManually($name: String!){
     isJobRunning(name: $name)
     jobProgress(name: $name)
   }
+
+mutation CancelJob($name: String!){
+  cancelJob(name: $name)
+}

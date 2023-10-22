@@ -17,6 +17,13 @@ export type IsJobRunningQueryVariables = Types.Exact<{
 
 export type IsJobRunningQuery = { __typename?: 'Query', isJobRunning: boolean, jobProgress: number };
 
+export type CancelJobMutationVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+
+export type CancelJobMutation = { __typename?: 'Mutation', cancelJob: string };
+
 
 export const RunJobManuallyDocument = gql`
     mutation RunJobManually($name: String!) {
@@ -83,3 +90,34 @@ export function useIsJobRunningLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type IsJobRunningQueryHookResult = ReturnType<typeof useIsJobRunningQuery>;
 export type IsJobRunningLazyQueryHookResult = ReturnType<typeof useIsJobRunningLazyQuery>;
 export type IsJobRunningQueryResult = Apollo.QueryResult<IsJobRunningQuery, IsJobRunningQueryVariables>;
+export const CancelJobDocument = gql`
+    mutation CancelJob($name: String!) {
+  cancelJob(name: $name)
+}
+    `;
+export type CancelJobMutationFn = Apollo.MutationFunction<CancelJobMutation, CancelJobMutationVariables>;
+
+/**
+ * __useCancelJobMutation__
+ *
+ * To run a mutation, you first call `useCancelJobMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelJobMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelJobMutation, { data, loading, error }] = useCancelJobMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCancelJobMutation(baseOptions?: Apollo.MutationHookOptions<CancelJobMutation, CancelJobMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelJobMutation, CancelJobMutationVariables>(CancelJobDocument, options);
+      }
+export type CancelJobMutationHookResult = ReturnType<typeof useCancelJobMutation>;
+export type CancelJobMutationResult = Apollo.MutationResult<CancelJobMutation>;
+export type CancelJobMutationOptions = Apollo.BaseMutationOptions<CancelJobMutation, CancelJobMutationVariables>;

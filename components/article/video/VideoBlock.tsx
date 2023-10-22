@@ -51,6 +51,8 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const rateLimit = 2000 //in ms
 
   const [trackVideoPlay] = useTrackVideoPlayMutation()
   const [trackVideoTime] = useTrackVideoTimeMutation()
@@ -101,6 +103,26 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     ...trackBlockInput,
     uniqueView: !isPreviouslyViewed
   }
+
+  const trackVideoBlockWithRateLimiter = (accessType: string) => {
+    if (!isRateLimited) {
+      console.log("TRACKING VIDEO BLOCK")
+      trackVideoBlock({
+        variables: {
+          input: {
+            ...trackBlockInput,
+            block_type: accessType === 'evaluation-block' ? 
+              accessType : kebabCase(accessType)
+          }
+        }
+      })
+      // Apply rate limiting: Block further tracking for 1 second
+      setIsRateLimited(true);
+      setTimeout(() => {
+        setIsRateLimited(false);
+      }, rateLimit); // 1 second
+    }
+  };
 
   useEffect(() => {
     refetch()
@@ -173,14 +195,15 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     video.cancelFullscreen()
     setShowDialog(true)
     if (trackBlock) {
-      trackVideoBlock({
-        variables: {
-          input: {
-            ...trackBlockInput,
-            block_type: kebabCase(accessType)
-          }
-        }
-      })
+      trackVideoBlockWithRateLimiter(accessType)
+      // trackVideoBlock({
+      //   variables: {
+      //     input: {
+      //       ...trackBlockInput,
+      //       block_type: kebabCase(accessType)
+      //     }
+      //   }
+      // })
     }
     setVideosBlocked(pubId)
   }
@@ -205,14 +228,15 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     setShowDialog(true)
 
     if (trackBlock) {
-      trackVideoBlock({
-        variables: {
-          input: {
-            ...trackBlockInput,
-            block_type: 'evaluation-block'
-          }
-        }
-      })
+      trackVideoBlockWithRateLimiter('evaluation-block')
+      // trackVideoBlock({
+      //   variables: {
+      //     input: {
+      //       ...trackBlockInput,
+      //       block_type: 'evaluation-block'
+      //     }
+      //   }
+      // })
     }
 
     setVideosBlocked(pubId)
