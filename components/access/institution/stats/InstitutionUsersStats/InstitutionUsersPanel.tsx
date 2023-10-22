@@ -206,16 +206,27 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                               target="_blank"
                               passHref
                             >
-                              <Typography>{user.email}</Typography>
+                              <Typography variant="body1" color="text.secondary">
+                                {user.display_name}
+                              </Typography>
                             </Link>
                           ) : (
-                            <Typography>{user.email}</Typography>
+                            <Typography>{user.display_name}</Typography>
                           )}
-                          <Typography variant="body2" color="text.secondary">
-                            {user.display_name}
-                          </Typography>
+                          <Typography>{user.email}</Typography>  
+                          <Typography>{user.institutionalEmail}</Typography>
                         </TableCell>
                       </StickyTableCell>
+                      <TableCell>{user.user_type}</TableCell>
+                      <TableCell>{user.specialty ?? 'Not specified'}</TableCell>
+                      <TableCell>{user.articleCount}</TableCell>
+                      <TableCell>{user.loginCount}</TableCell>
+                      <TableCell>
+                        {dayjs(user.last_visited).format('MM/DD/YYYY hh:mm A')}
+                      </TableCell>
+                      <TableCell>
+                        {dayjs(user.created).format('MM/DD/YYYY')}
+                      </TableCell>
                       <TableCell
                         sx={{
                           maxWidth: 200,
@@ -235,11 +246,6 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                         title={user.accessType.institution_name}
                       >
                         {user.accessType.institution_name}
-                      </TableCell>
-                      <TableCell>
-                        <Box display="flex" alignItems="center" gap={1}>
-                          {user.institutionalEmail}
-                        </Box>
                       </TableCell>
                       <TableCell>{user.accessType.matchedBy}</TableCell>
                       <TableCell sx={{ minWidth: 200 }}>
@@ -261,16 +267,6 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                           </Box>
                         )}
                       </TableCell>
-                      <TableCell>{user.user_type}</TableCell>
-                      <TableCell>{user.specialty ?? 'Not specified'}</TableCell>
-                      <TableCell>
-                        {dayjs(user.last_visited).format('MM/DD/YYYY hh:mm A')}
-                      </TableCell>
-                      <TableCell>
-                        {dayjs(user.created).format('MM/DD/YYYY')}
-                      </TableCell>
-                      <TableCell>{user.loginCount}</TableCell>
-                      <TableCell>{user.articleCount}</TableCell>
                       <TableCell>
                         <Link
                           href={{
