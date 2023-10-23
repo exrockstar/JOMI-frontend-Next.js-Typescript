@@ -27,10 +27,12 @@ type Props = {
   totalCount: number
 }
 
+type Page = Unpacked<PagesListQuery['fetchPages']['pages']>
+
 const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   //page var is used for pagination
   const { page, setPage, pageSize, setPageSize } = usePagesList()
-  const [deleteID, setDeleteID] = useState(null)
+  const [selectedPage, setSelectedPage] = useState<Page | null>(null)
   const [showDialog, setShowDialog] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -59,9 +61,16 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
     <>
       <DeleteDialog 
         deleteMutation={deletePage} 
-        _id={deleteID} 
+        deleteOpts={{
+          variables: {
+            id: selectedPage._id
+          }
+        }}
         open={showDialog}
-        onClose={() => setShowDialog(false)}
+        onClose={() => { 
+          setShowDialog(false)
+          setSelectedPage(null)
+        }}
       />
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
@@ -112,15 +121,8 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
                         size="small"
                         variant="contained"
                         onClick={() => {
-                          //set page ID to delete
-                          setDeleteID(page._id)
-                          //open dialog window
+                          setSelectedPage(page)
                           setShowDialog(true)
-                          // deletePage({
-                          //   variables: {
-                          //     id: page._id
-                          //   }
-                          // })
                         }}
                       >
                         Delete

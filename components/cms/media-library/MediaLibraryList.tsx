@@ -252,7 +252,7 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
         }}
         loading={deleteLoading}
       >
-        Are you sure to delete the file <b>{selected?.filename}</b>?
+        Are you sure you want to delete <b>{selected?.filename}</b>?
       </ConfirmationDialog>
     </Card>
   )

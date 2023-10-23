@@ -18,6 +18,7 @@ import { useRedirectsList } from './useRedirectsList'
 import RedirectsUpdateModal from './RedirectsUpdateModal'
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
+import DeleteDialog from 'components/common/cms/DeleteDialog'
 
 type Props = {
   redirects: RedirectsListQuery['fetchRedirects']['redirects']
@@ -26,7 +27,9 @@ type Props = {
 
 const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [selectedRedirect, setSelectedRedirect] = useState(null)
+  const [deleteID, setDeleteID] = useState(null)
   const { page, setPage, pageSize, setPageSize } = useRedirectsList()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -59,6 +62,16 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
         onCompleted={() => setUpdateModalOpen(false)}
         redirect={selectedRedirect}
         key={new Date().getTime()}
+      />
+      <DeleteDialog 
+        deleteMutation={deleteRedirect} 
+        deleteOpts={{
+          variables: {
+            input: { _id: deleteID }
+          }
+        }} 
+        open={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
       />
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
@@ -107,11 +120,13 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
                         startIcon={<Delete />}
                         variant="outlined"
                         onClick={() => {
-                          deleteRedirect({
-                            variables: {
-                              input: { _id: redir._id }
-                            }
-                          })
+                          setDeleteID(redir._id)
+                          setShowDeleteDialog(true)
+                          // deleteRedirect({
+                          //   variables: {
+                          //     input: { _id: redir._id }
+                          //   }
+                          // })
                         }}
                       >
                         Delete
