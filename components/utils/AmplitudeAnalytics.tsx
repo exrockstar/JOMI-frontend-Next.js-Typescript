@@ -22,6 +22,8 @@ function AmplitudeAnalytics() {
   const user_role = user?.role || 'N/A'
   const institution_name = access?.institution_name || 'N/A'
   const sub_type = user?.subscription?.subType || 'anon'
+  const user_email = data?.user?.email || 'N/A'
+  const user_name = data?.user?.display_name || 'anon'
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
 
@@ -52,7 +54,9 @@ function AmplitudeAnalytics() {
       specialty: specialty,
       userRole: user_role,
       institution: institution_name,
-      subType: sub_type
+      subType: sub_type,
+      email: user_email,
+      name: user_name
     })
   }, [session, status, loading, cmsOrAccess])
 
