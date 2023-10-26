@@ -153,7 +153,7 @@ export const amplitudeTrackFeedback = (params: Object) => {
 }
 
 /**
- * Purpose: Track when a user submits feedback
+ * Purpose: Track when a user requests an institutional subscription
  * @param params: An Object whose properties we use to add to the tracked event.
  */
 export const amplitudeTrackRequestSubscription = (params: Object) => {
@@ -162,4 +162,15 @@ export const amplitudeTrackRequestSubscription = (params: Object) => {
     anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   })
   amplitudeAddToUserProps({ requestInstSubCount: 1 })
+}
+
+/**
+ * Purpose: Track when a user creates an account
+ * @param params: An Object whose properties we use to add to the tracked event.
+ */
+export const amplitudeTrackCreateAccount = (params: Object) => {
+  amplitude.track('Create Account', {
+    ...params,
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
 }
