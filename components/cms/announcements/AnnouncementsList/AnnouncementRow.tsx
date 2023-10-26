@@ -13,9 +13,10 @@ import {
   Button,
   TableRow,
   Collapse,
-  Stack
+  Stack,
+  Typography
 } from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import {
@@ -24,22 +25,28 @@ import {
   useDeleteAnnouncementMutation
 } from 'graphql/queries/announcements.generated'
 import { AnnouncementType } from 'graphql/types'
-
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import AnnouncementToggle from './AnnouncementToggle'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 
 type Props = {
   announcement: Unpacked<AnnouncementsQuery['announcements']>
 }
+
+type Announcement = Unpacked<AnnouncementsQuery['announcements']>
+
 const AnnouncementRow = ({ announcement }: Props) => {
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
+  const [selected, setSelected] = useState<Announcement | null>(null)
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()
   const client = useApolloClient()
   const theme = useTheme()
+
   const [deleteAnnouncement, { loading: deleteLoading }] =
     useDeleteAnnouncementMutation({
       onCompleted: ({ result: deletedId }) => {
@@ -88,8 +95,42 @@ const AnnouncementRow = ({ announcement }: Props) => {
     theme.palette.warning.main
   ])
 
+  const startDelete = (announcement: Announcement) => {
+    setSelected(announcement)
+    setConfirmDialogOpen(true)
+  }
+
+  const cancelDelete = () => {
+    setConfirmDialogOpen(false)
+    setSelected(null)
+  }
+  const handleDelete = () => {
+    if (!selected) return
+    deleteAnnouncement({
+      variables: { _id: selected._id }
+    })
+    setConfirmDialogOpen(false)
+    setSelected(null)
+  }
+
   return (
     <>
+      <ConfirmationDialog
+        key={'confirm-delete-announcement' + selected?._id}
+        open={confirmDialogOpen}
+        dialogTitle={'Please confirm this deletion'}
+        onClose={() => cancelDelete()}
+        onComplete={handleDelete}
+        onCancel={cancelDelete}
+        loading={deleteLoading}
+      >
+        <Typography mb={2}>
+          Are you sure you want to delete this announcement?
+        </Typography>
+        <Typography>
+          <strong> {selected?.title} </strong>
+        </Typography>
+      </ConfirmationDialog>
       <StyledTableRow hover key={announcement._id}>
         <TableCell sx={{ maxWidth: 600 }}>
           <IconButton
@@ -136,11 +177,7 @@ const AnnouncementRow = ({ announcement }: Props) => {
             color="error"
             startIcon={<Delete />}
             onClick={() => {
-              deleteAnnouncement({
-                variables: {
-                  _id: announcement._id
-                }
-              })
+              startDelete(announcement)
             }}
             loading={deleteLoading}
           >

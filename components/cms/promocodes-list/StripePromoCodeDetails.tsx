@@ -366,7 +366,7 @@ const StripePromoCodeDetails = ({ promocode }: Props) => {
                 color="error"
                 onClick={() => {
                   const result = confirm(
-                    'Are you sure to delete this promocode?'
+                    'Are you sure you want to delete this promocode?'
                   )
                   if (result) {
                     deletePromocode({

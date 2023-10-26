@@ -6,7 +6,8 @@ import {
   TablePagination,
   Table,
   Link as MuiLink,
-  Button
+  Button,
+  Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import {
@@ -15,19 +16,24 @@ import {
 } from 'graphql/cms-queries/pages-list.generated'
 import { usePagesList } from './usePagesList'
 import PagesTableHead from './PagesTableHead'
-import Link from 'next/link'
 import { Delete, Edit } from '@mui/icons-material'
 import router from 'next/router'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 
 type Props = {
   pages: PagesListQuery['fetchPages']['pages']
   totalCount: number
 }
 
+type Page = Unpacked<PagesListQuery['fetchPages']['pages']>
+
 const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   //page var is used for pagination
   const { page, setPage, pageSize, setPageSize } = usePagesList()
+  const [selectedPage, setSelectedPage] = useState<Page | null>(null)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -38,7 +44,7 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   ) => {
     setPageSize(+event.target.value)
   }
-  const [deletePage] = useDeletePageMutation({
+  const [deletePage, { loading: deleteLoading }] = useDeletePageMutation({
     refetchQueries: ['PagesList'],
     onCompleted() {
       enqueueSnackbar(`Page Deleted!`, {
@@ -51,8 +57,44 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
       })
     }
   })
+
+  const startDelete = (page: Page) => {
+    setSelectedPage(page)
+    setShowDeleteDialog(true)
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteDialog(false)
+    setSelectedPage(null)
+  }
+
+  const handleDelete = () => {
+    if (!selectedPage) return
+    deletePage({
+      variables: { id: selectedPage._id }
+    })
+    setShowDeleteDialog(false)
+    setSelectedPage(null)
+  }
+
   return (
     <>
+      <ConfirmationDialog
+        key={'confirm-delete-page' + selectedPage?._id}
+        open={showDeleteDialog}
+        dialogTitle={'Please confirm this deletion'}
+        onClose={() => cancelDelete()}
+        onComplete={handleDelete}
+        onCancel={cancelDelete}
+        loading={deleteLoading}
+      >
+        <Typography mb={2}>
+          Are you sure you want to delete this page?
+        </Typography>
+        <Typography>
+          <strong> {selectedPage?.title} </strong>
+        </Typography>
+      </ConfirmationDialog>
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
           <Table>
@@ -102,11 +144,7 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
                         size="small"
                         variant="contained"
                         onClick={() => {
-                          deletePage({
-                            variables: {
-                              id: page._id
-                            }
-                          })
+                          startDelete(page)
                         }}
                       >
                         Delete
