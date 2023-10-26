@@ -6,7 +6,8 @@ import {
   TableCell,
   TablePagination,
   Table,
-  Button
+  Button,
+  Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import {
@@ -18,7 +19,7 @@ import { useRedirectsList } from './useRedirectsList'
 import RedirectsUpdateModal from './RedirectsUpdateModal'
 import { useState } from 'react'
 import { useSnackbar } from 'notistack'
-import DeleteDialog from 'components/common/cms/DeleteDialog'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 
 type Props = {
   redirects: RedirectsListQuery['fetchRedirects']['redirects']
@@ -43,7 +44,7 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
   ) => {
     setPageSize(+event.target.value)
   }
-  const [deleteRedirect] = useDeleteRedirectMutation({
+  const [deleteRedirect, { loading: deleteLoading}] = useDeleteRedirectMutation({
     refetchQueries: ['RedirectsList'],
     onCompleted() {
       enqueueSnackbar(`Redirect Deleted!`, {
@@ -56,6 +57,26 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
       })
     }
   })
+
+  const startDelete = (redirect: Redirect) => {
+    setSelectedDeleteRedirect(redirect)
+    setShowDeleteDialog(true)
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteDialog(false)
+    setSelectedDeleteRedirect(null)
+  }
+
+  const handleDelete = () => {
+    if (!selectedDeleteRedirect) return
+    deleteRedirect({
+      variables: { input: { _id: selectedDeleteRedirect._id } }
+    })
+    setShowDeleteDialog(false)
+    setSelectedDeleteRedirect(null)
+  }
+
   return (
     <>
       <RedirectsUpdateModal
@@ -65,20 +86,22 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
         redirect={selectedUpdateRedirect}
         key={new Date().getTime()}
       />
-      <DeleteDialog 
-        deleteMutation={deleteRedirect} 
-        deleteMutationOpts={{
-          variables: {
-            input: { _id: selectedDeleteRedirect?._id}
-          }
-        }} 
-        header={`Are you sure you want to delete '${selectedDeleteRedirect?.name}'`}
+      <ConfirmationDialog
+        key={'confirm-delete-redirect' + selectedDeleteRedirect?._id}
         open={showDeleteDialog}
-        onClose={() => {
-          setShowDeleteDialog(false)
-          setSelectedDeleteRedirect(null)
-        }}
-      />
+        dialogTitle={'Please confirm this deletion'}
+        onClose={() => cancelDelete()}
+        onComplete={handleDelete}
+        onCancel={cancelDelete}
+        loading={deleteLoading}
+      >
+        <Typography mb={2}>
+          Are you sure you want to delete this redirect?
+        </Typography>
+        <Typography>
+          <strong> {selectedDeleteRedirect?.name} </strong>
+        </Typography>
+      </ConfirmationDialog>
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
           <Table>
@@ -126,8 +149,7 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
                         startIcon={<Delete />}
                         variant="outlined"
                         onClick={() => {
-                          setSelectedDeleteRedirect(redir)
-                          setShowDeleteDialog(true)
+                          startDelete(redir)
                         }}
                       >
                         Delete

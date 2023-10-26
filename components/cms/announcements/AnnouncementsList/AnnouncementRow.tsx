@@ -13,9 +13,10 @@ import {
   Button,
   TableRow,
   Collapse,
-  Stack
+  Stack,
+  Typography
 } from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import {
@@ -29,7 +30,7 @@ import { useSnackbar } from 'notistack'
 import React, { useMemo, useState } from 'react'
 
 import AnnouncementToggle from './AnnouncementToggle'
-import DeleteDialog from 'components/common/cms/DeleteDialog'
+import ConfirmationDialog from 'components/common/ConfirmationDialog'
 
 type Props = {
   announcement: Unpacked<AnnouncementsQuery['announcements']>
@@ -39,12 +40,13 @@ type Announcement = Unpacked<AnnouncementsQuery['announcements']>
 
 const AnnouncementRow = ({ announcement }: Props) => {
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [selectedDeleteAnnouncement, setSelectedDeleteAnnouncement] = useState<Announcement | null>(null)
+  const [selected, setSelected] = useState<Announcement | null>(null)
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()
   const client = useApolloClient()
   const theme = useTheme()
+
   const [deleteAnnouncement, { loading: deleteLoading }] =
     useDeleteAnnouncementMutation({
       onCompleted: ({ result: deletedId }) => {
@@ -93,22 +95,42 @@ const AnnouncementRow = ({ announcement }: Props) => {
     theme.palette.warning.main
   ])
 
+  const startDelete = (announcement: Announcement) => {
+    setSelected(announcement)
+    setConfirmDialogOpen(true)
+  }
+
+  const cancelDelete = () => {
+    setConfirmDialogOpen(false)
+    setSelected(null)
+  }
+  const handleDelete = () => {
+    if (!selected) return
+    deleteAnnouncement({
+      variables: { _id: selected._id }
+    })
+    setConfirmDialogOpen(false)
+    setSelected(null)
+  }
+
   return (
     <>
-      <DeleteDialog 
-        deleteMutation={deleteAnnouncement} 
-        deleteMutationOpts={{
-          variables: {
-            _id: selectedDeleteAnnouncement?._id
-          }
-        }} 
-        header={`Are you sure you want to delete '${selectedDeleteAnnouncement?.title}'`}
-        open={showDeleteDialog}
-        onClose={() => {
-          setShowDeleteDialog(false)
-          setSelectedDeleteAnnouncement(null)
-        }}
-      />
+      <ConfirmationDialog
+        key={'confirm-delete-announcement' + selected?._id}
+        open={confirmDialogOpen}
+        dialogTitle={'Please confirm this deletion'}
+        onClose={() => cancelDelete()}
+        onComplete={handleDelete}
+        onCancel={cancelDelete}
+        loading={deleteLoading}
+      >
+        <Typography mb={2}>
+          Are you sure you want to delete this announcement?
+        </Typography>
+        <Typography>
+          <strong> {selected?.title} </strong>
+        </Typography>
+      </ConfirmationDialog>
       <StyledTableRow hover key={announcement._id}>
         <TableCell sx={{ maxWidth: 600 }}>
           <IconButton
@@ -155,8 +177,7 @@ const AnnouncementRow = ({ announcement }: Props) => {
             color="error"
             startIcon={<Delete />}
             onClick={() => {
-              setSelectedDeleteAnnouncement(announcement)
-              setShowDeleteDialog(true)
+              startDelete(announcement)
             }}
             loading={deleteLoading}
           >
