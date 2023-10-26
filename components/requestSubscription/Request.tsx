@@ -31,6 +31,7 @@ type SchemaInput = TypeOf<typeof schema>
 export default function Request() {
   const isClient = typeof window !== 'undefined'
   const { data: session, status } = useSession()
+  const [requestInst, setRequestInst] = useState<string>("not set")
   const { state } = useAppState()
   const { enqueueSnackbar } = useSnackbar()
   const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -53,12 +54,14 @@ export default function Request() {
           anon_link_id
         })
         amplitudeTrackRequestSubscription({
-          institution: data?.user?.institution_name ? data.user.institution_name : 'none',
+          userInstitution: data?.user?.institution_name ? data.user.institution_name : 'none',
           userId: session && session.user ? session.user._id : 'anon',
+          requestInstitution: requestInst
         })
         fbPixelTrackCustom('Requests', {
           institution: `${data?.user?.institution_name}`
         })
+        setRequestInst('not set')
       }
     })
 
@@ -69,6 +72,7 @@ export default function Request() {
     )
   }, [])
   function handleSubmit(input: SchemaInput) {
+    setRequestInst(input.institution_name)
     requestSubscriptionMutation({
       variables: {
         input: {
