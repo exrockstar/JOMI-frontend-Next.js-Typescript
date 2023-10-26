@@ -33,7 +33,7 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
   //page var is used for pagination
   const { page, setPage, pageSize, setPageSize } = usePagesList()
   const [selectedPage, setSelectedPage] = useState<Page | null>(null)
-  const [showDialog, setShowDialog] = useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -61,14 +61,15 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
     <>
       <DeleteDialog 
         deleteMutation={deletePage} 
-        deleteOpts={{
+        deleteMutationOpts={{
           variables: {
-            id: selectedPage._id
+            id: selectedPage?._id
           }
         }}
-        open={showDialog}
+        header={`Are you sure you want to delete '${selectedPage?.title}?'`}
+        open={showDeleteDialog}
         onClose={() => { 
-          setShowDialog(false)
+          setShowDeleteDialog(false)
           setSelectedPage(null)
         }}
       />
@@ -122,7 +123,7 @@ const PagesList: React.FC<Props> = ({ pages, totalCount }) => {
                         variant="contained"
                         onClick={() => {
                           setSelectedPage(page)
-                          setShowDialog(true)
+                          setShowDeleteDialog(true)
                         }}
                       >
                         Delete

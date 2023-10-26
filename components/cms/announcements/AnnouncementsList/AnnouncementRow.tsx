@@ -24,18 +24,23 @@ import {
   useDeleteAnnouncementMutation
 } from 'graphql/queries/announcements.generated'
 import { AnnouncementType } from 'graphql/types'
-
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import AnnouncementToggle from './AnnouncementToggle'
+import DeleteDialog from 'components/common/cms/DeleteDialog'
 
 type Props = {
   announcement: Unpacked<AnnouncementsQuery['announcements']>
 }
+
+type Announcement = Unpacked<AnnouncementsQuery['announcements']>
+
 const AnnouncementRow = ({ announcement }: Props) => {
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [selectedDeleteAnnouncement, setSelectedDeleteAnnouncement] = useState<Announcement | null>(null)
   const router = useRouter()
   const { enqueueSnackbar } = useSnackbar()
   const client = useApolloClient()
@@ -90,6 +95,20 @@ const AnnouncementRow = ({ announcement }: Props) => {
 
   return (
     <>
+      <DeleteDialog 
+        deleteMutation={deleteAnnouncement} 
+        deleteMutationOpts={{
+          variables: {
+            _id: selectedDeleteAnnouncement?._id
+          }
+        }} 
+        header={`Are you sure you want to delete '${selectedDeleteAnnouncement?.title}'`}
+        open={showDeleteDialog}
+        onClose={() => {
+          setShowDeleteDialog(false)
+          setSelectedDeleteAnnouncement(null)
+        }}
+      />
       <StyledTableRow hover key={announcement._id}>
         <TableCell sx={{ maxWidth: 600 }}>
           <IconButton
@@ -136,11 +155,8 @@ const AnnouncementRow = ({ announcement }: Props) => {
             color="error"
             startIcon={<Delete />}
             onClick={() => {
-              deleteAnnouncement({
-                variables: {
-                  _id: announcement._id
-                }
-              })
+              setSelectedDeleteAnnouncement(announcement)
+              setShowDeleteDialog(true)
             }}
             loading={deleteLoading}
           >

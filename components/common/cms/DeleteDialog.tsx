@@ -9,51 +9,26 @@ import {
   useMediaQuery,
   DialogProps
 } from '@mui/material'
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { ThemeProvider, styled, useTheme } from '@mui/material/styles'
-import { Form, Formik } from 'formik'
-import { signOut } from 'next-auth/react'
-import { useSnackbar } from 'notistack'
+import { ThemeProvider, useTheme } from '@mui/material/styles'
 import React from 'react'
-import { object, string, Asserts } from 'yup'
-import CTAButton from '../CTAButton'
 import { frontPageTheme } from 'components/theme'
 
-// const schema = object({
-//   first_name: string().required('Please enter your first name.'),
-//   last_name: string().required('Please enter your last name.'),
-//   institution_name: string(),
-//   inst_email: string().email(),
-//   user_type: string().required('Please select your user type.'),
-//   specialty: string().required('Please select your specialty.')
-// })
-
-// type FormValues = Asserts<typeof schema>
-
-// const initialValues: FormValues = {
-//   first_name: '',
-//   last_name: '',
-//   inst_email: '',
-//   institution_name: '',
-//   specialty: '',
-//   user_type: ''
-// }
 
 type Props = {
   deleteMutation: any,
-  deleteOpts: {}
+  deleteMutationOpts: {},
+  header: string,
 } & DialogProps
 /**
  * Dialog pop up to confirm if a user wants to delete.
  * @returns
  */
-const DeleteDialog: React.FC<Props> = ({ deleteMutation, deleteOpts, open, onClose }: Props) => {
+const DeleteDialog: React.FC<Props> = ({ header, deleteMutation, deleteMutationOpts, open, onClose }: Props) => {
   const theme = useTheme()
   const isSmallDevice = useMediaQuery(theme.breakpoints.down('md'))
   if (!open) return null
   return (
-    <ThemeProvider theme={frontPageTheme}>
+    <>
       <Dialog
         open={open}
         maxWidth="sm"
@@ -61,7 +36,10 @@ const DeleteDialog: React.FC<Props> = ({ deleteMutation, deleteOpts, open, onClo
       >
         <DialogTitle>
           <Typography variant="h5" textAlign={'center'}>
-            Are you sure you want to delete this?
+            {header}
+          </Typography>
+          <Typography textAlign={'center'}>
+            This is irreversible!
           </Typography>
         </DialogTitle>
         <Divider />
@@ -78,7 +56,7 @@ const DeleteDialog: React.FC<Props> = ({ deleteMutation, deleteOpts, open, onClo
             <Button
               color="error"
               onClick={(e) => {
-                deleteMutation(deleteOpts)
+                deleteMutation(deleteMutationOpts)
                 onClose(e, 'backdropClick')
               }}
               variant="contained"
@@ -95,7 +73,7 @@ const DeleteDialog: React.FC<Props> = ({ deleteMutation, deleteOpts, open, onClo
           </Box>
         </DialogContent>
       </Dialog>
-    </ThemeProvider>
+    </>
   )
 }
 

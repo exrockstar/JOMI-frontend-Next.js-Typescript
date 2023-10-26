@@ -25,11 +25,13 @@ type Props = {
   count: number
 }
 
+type Redirect = Unpacked<RedirectsListQuery['fetchRedirects']['redirects']>
+
 const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
   const [updateModalOpen, setUpdateModalOpen] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-  const [selectedRedirect, setSelectedRedirect] = useState(null)
-  const [deleteID, setDeleteID] = useState(null)
+  const [selectedUpdateRedirect, setSelectedUpdateRedirect] = useState(null)
+  const [selectedDeleteRedirect, setSelectedDeleteRedirect] = useState<Redirect | null>(null)
   const { page, setPage, pageSize, setPageSize } = useRedirectsList()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -60,18 +62,22 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
         open={updateModalOpen}
         onClose={() => setUpdateModalOpen(false)}
         onCompleted={() => setUpdateModalOpen(false)}
-        redirect={selectedRedirect}
+        redirect={selectedUpdateRedirect}
         key={new Date().getTime()}
       />
       <DeleteDialog 
         deleteMutation={deleteRedirect} 
-        deleteOpts={{
+        deleteMutationOpts={{
           variables: {
-            input: { _id: deleteID }
+            input: { _id: selectedDeleteRedirect?._id}
           }
         }} 
+        header={`Are you sure you want to delete '${selectedDeleteRedirect?.name}'`}
         open={showDeleteDialog}
-        onClose={() => setShowDeleteDialog(false)}
+        onClose={() => {
+          setShowDeleteDialog(false)
+          setSelectedDeleteRedirect(null)
+        }}
       />
       <Card>
         <TableContainer sx={{ minWidth: 1050 }}>
@@ -108,7 +114,7 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
                         sx={{ mr: 2 }}
                         variant="outlined"
                         onClick={() => {
-                          setSelectedRedirect(redir)
+                          setSelectedUpdateRedirect(redir)
                           setUpdateModalOpen(true)
                         }}
                         size="small"
@@ -120,13 +126,8 @@ const RedirectsList: React.FC<Props> = ({ redirects, count }) => {
                         startIcon={<Delete />}
                         variant="outlined"
                         onClick={() => {
-                          setDeleteID(redir._id)
+                          setSelectedDeleteRedirect(redir)
                           setShowDeleteDialog(true)
-                          // deleteRedirect({
-                          //   variables: {
-                          //     input: { _id: redir._id }
-                          //   }
-                          // })
                         }}
                       >
                         Delete
