@@ -32,6 +32,7 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useUpdateAllInstStatsMutation } from 'graphql/mutations/update-inst-stats.generated'
 import DbQueryDialog from 'components/common/DbQueryDialog'
 import RefreshInstStatsButton from 'components/institutions/RefreshInstStatsButton'
+import TransferInstitutionDataDialog from 'components/cms/institutions-list/TransferInstitutionDataDialog'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -130,6 +131,7 @@ const columnOptions: ColumnOption[] = [
 const InstitutionsListPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [addDialoglOpen, setAddDialogOpen] = useState(false)
+  const [transferDialogOpen, setTransferDialogOpen] = useState(false)
   const [showQuery, setShowQuery] = useState(false)
   const {
     institutions,
@@ -165,6 +167,10 @@ const InstitutionsListPage = () => {
         open={addDialoglOpen}
         onClose={() => setAddDialogOpen(false)}
       />
+      <TransferInstitutionDataDialog
+        open={transferDialogOpen}
+        onClose={() => setTransferDialogOpen(false)}
+      />
       <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
         <Stack direction="row" alignItems="center" spacing={2}>
           <Typography variant="h4">Institution List</Typography>
@@ -176,6 +182,13 @@ const InstitutionsListPage = () => {
             onClick={() => setAddDialogOpen(true)}
           >
             Add Institution
+          </LoadingButton>
+          <LoadingButton
+            variant="outlined"
+            color="primary"
+            onClick={() => setTransferDialogOpen(true)}
+          >
+            Transfer Institution Data
           </LoadingButton>
           <Tooltip title="Runs a job to update all cached institutiton stats. userCount, and articleViews. Completes in about 5 minutes.">
             <RefreshInstStatsButton />
