@@ -1,15 +1,19 @@
 /**
  * Goto jomi.com/cms/page-list and search for 'ESBC' to see the html content.
  */
-import { Box, Link as MuiLink, useMediaQuery } from "@mui/material"
-import { getApolloAdminClient } from "apis/apollo-admin-client"
-import { APOLLO_STATE_PROP_NAME } from "apis/apollo-client"
-import CTAButton from "components/common/CTAButton"
-import ConfArticleCard from "components/conference/ConfArticleCard"
+import { Box, Link as MuiLink, useMediaQuery } from '@mui/material'
+import { getApolloAdminClient } from 'apis/apollo-admin-client'
+import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
+import CTAButton from 'components/common/CTAButton'
+import ConfArticleCard from 'components/conference/ConfArticleCard'
 import Layout from 'components/layout'
-import useEmblaCarousel from "embla-carousel-react"
-import { ConferencePageDocument, ConferencePageQuery, useConferencePageQuery } from "graphql/queries/conference.generated"
-import { GetStaticProps, NextPage } from "next"
+import useEmblaCarousel from 'embla-carousel-react'
+import {
+  ConferencePageDocument,
+  ConferencePageQuery,
+  useConferencePageQuery
+} from 'graphql/queries/conference.generated'
+import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useTheme } from '@mui/material/styles'
 import HarvardLogo from 'public/img/subscribers/harvard-logo.png'
@@ -22,17 +26,24 @@ import UMASS_Logo from 'public/img/subscribers/umass-medical-school.png'
 import MGH_Logo from 'public/img/subscribers/mgh.png'
 import WalterReedLogo from 'public/img/subscribers/walter-reed.png'
 import CornellUinveristy_Logo from 'public/img/subscribers/cornell-university.png'
-import { ArrowForward } from "@mui/icons-material"
+import { ArrowForward } from '@mui/icons-material'
 import NextLink from 'next/link'
 import Image from 'next/image'
-import { SiteWideAnnouncementsDocument, SiteWideAnnouncementsQuery } from "graphql/queries/announcement-for-user.generated"
+import {
+  SiteWideAnnouncementsDocument,
+  SiteWideAnnouncementsQuery
+} from 'graphql/queries/announcement-for-user.generated'
 import cheerio from 'cheerio'
-import { buildGenericMetadata } from "backend/seo/buildGenericMetadata"
-import { PageBySlugDocument, PageBySlugQuery, PageBySlugQueryVariables } from "graphql/queries/page-by-slug.generated"
-import { DefaultPageProps } from "backend/seo/MetaData"
-import { transformContent } from "components/conference/transformContentConfPage"
-import Script from "next/script"
-import { logger } from "logger/logger"
+import { buildGenericMetadata } from 'backend/seo/buildGenericMetadata'
+import {
+  PageBySlugDocument,
+  PageBySlugQuery,
+  PageBySlugQueryVariables
+} from 'graphql/queries/page-by-slug.generated'
+import { DefaultPageProps } from 'backend/seo/MetaData'
+import { transformContent } from 'components/conference/transformContentConfPage'
+import Script from 'next/script'
+import { logger } from 'logger/logger'
 
 type Props = {
   introductionSection: string
@@ -41,7 +52,12 @@ type Props = {
   scripts: string[]
 } & DefaultPageProps
 
-const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, scripts }: Props) => {
+const ESBCPage = ({
+  videosSection,
+  introductionSection,
+  featuredCasesSection,
+  scripts
+}: Props) => {
   const router = useRouter()
   const { data, loading } = useConferencePageQuery()
   const [emblaRefInsts] = useEmblaCarousel({
@@ -64,8 +80,8 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
     WalterReedLogo,
     CornellUinveristy_Logo
   ]
-  
-  return(
+
+  return (
     <Layout>
       {scripts?.map((script, index) => (
         <Script key={index} src={script} />
@@ -77,12 +93,12 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
           className="generated"
         />
         {/* Buttons that go to relevant articles in index page */}
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'left', 
-            my: 2, 
-            flexDirection: isSmallDevice ? 'column' : 'row',
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'left',
+            my: 2,
+            flexDirection: isSmallDevice ? 'column' : 'row'
           }}
         >
           <CTAButton
@@ -110,19 +126,21 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
           className="generated"
         />
         {/* Article Carousel */}
-        {data?.confSampleCases && <Box mt={1} overflow="hidden" ref={emblaRefArticles}>
-          <Box display="flex" gap={2}>
-            {data?.confSampleCases.map((article) => (
-              <Box
-                key={article._id}
-                flex={{ xs: '0 0 75%', sm: '0 0 25%' }}
-                minWidth={0}
-              >
-                <ConfArticleCard article={article} />
-              </Box>
-            ))}
+        {data?.confSampleCases && (
+          <Box mt={1} overflow="hidden" ref={emblaRefArticles}>
+            <Box display="flex" gap={2}>
+              {data?.confSampleCases.map((article) => (
+                <Box
+                  key={article._id}
+                  flex={{ xs: '0 0 75%', sm: '0 0 25%' }}
+                  minWidth={0}
+                >
+                  <ConfArticleCard article={article} />
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>}
+        )}
         {/* How to Film to Subscribing Institutions area */}
         <div
           dangerouslySetInnerHTML={{ __html: videosSection }}
@@ -133,7 +151,11 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
           <Box display="flex" gap={{ xs: 4, md: 10 }}>
             {partners.map((school, i) => {
               return (
-                <Box key={i} flex={{ xs: '0 0 40%', md: '0 0 15%' }} minWidth={0}>
+                <Box
+                  key={i}
+                  flex={{ xs: '0 0 40%', md: '0 0 15%' }}
+                  minWidth={0}
+                >
                   <Box position="relative" paddingTop={{ xs: 4, sm: 10 }}>
                     <Image
                       src={school.src}
@@ -142,9 +164,11 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
                       fill
                       style={{
                         objectFit: 'contain',
-                        filter: school.src === '/_next/static/media/cornell-university.bbe53418.png' ? 
-                          'grayscale(1)' : 
-                          'invert(100%) grayscale(1)'
+                        filter:
+                          school.src ===
+                          '/_next/static/media/cornell-university.bbe53418.png'
+                            ? 'grayscale(1)'
+                            : 'invert(100%) grayscale(1)'
                       }}
                       priority
                     />
@@ -154,18 +178,18 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
             })}
           </Box>
         </Box>
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            mt: 2, 
-            flexDirection: isSmallDevice ? 'column' : 'row',
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 2,
+            flexDirection: isSmallDevice ? 'column' : 'row'
           }}
         >
           <CTAButton
             sx={{
               mt: 6,
-              width: { xs: '100%', md: 'unset' },
+              width: { xs: '100%', md: 'unset' }
             }}
             endIcon={<ArrowForward />}
             size="large"
@@ -183,7 +207,7 @@ const ESBCPage = ({ videosSection, introductionSection, featuredCasesSection, sc
 export default ESBCPage
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  logger.info("Regenerating esbc page")
+  logger.info('Regenerating esbc page')
   try {
     const client = getApolloAdminClient()
 
@@ -221,7 +245,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     })
 
     const content = $('body').html()
-    const { introductionSection, featuredCasesSection, videosSection } = transformContent(content)
+    const { introductionSection, featuredCasesSection, videosSection } =
+      transformContent(content)
 
     await client.resetStore()
     await client.query<SiteWideAnnouncementsQuery>({
@@ -238,10 +263,20 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
         [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
         meta_data: buildGenericMetadata(data?.pageBySlug ?? { title: 'Error' })
       },
-      revalidate: 3600,
+      revalidate: 3600
     }
   } catch (e) {
     console.log('error in esbc page getStaticProps: ', e.message)
+    return {
+      props: {
+        _name: 'esbc',
+        introductionSection: '',
+        featuredCasesSection: '',
+        videosSection: '',
+        scripts: [],
+        meta_data: {}
+      }
+    }
   }
 }
 

@@ -13,7 +13,8 @@ import {
   Pagination,
   TableFooter,
   Button,
-  Chip
+  Chip,
+  TablePagination
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import { InstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.generated'
@@ -24,11 +25,11 @@ import React from 'react'
 import ArticleActivityTableHead from './ArticleActivityTableHead'
 import Link from 'next/link'
 import ArticleActivityHeader from './ArticleActivityHeader'
-import { useLocalStorage, useReadLocalStorage } from 'usehooks-ts'
-import ArticleActivityFilter from './ArticleActivityFilter'
+
 import { Info, Visibility } from '@mui/icons-material'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
 import { cleanObj } from 'common/utils'
+import { useListInput } from 'components/hooks/useListInput'
 
 type Props = {
   institution: InstitutionByIdQuery['institution']
@@ -36,26 +37,38 @@ type Props = {
 
 const ArticleActivityPanel = ({ institution }: Props) => {
   const router = useRouter()
-  const { filters } = useQueryFilters()
-  const sort_by = (router.query.sort_by as string) ?? 'articleViews'
-  const sort_order_str = (router.query.sort_order as string) ?? 'desc'
-  const search = router.query.search as string
-  const page = parseInt((router.query.page as string) ?? '1')
-  const perPage = 20
-  const skip = (page - 1) * perPage
-  const sort_order = sort_order_str === 'desc' ? -1 : 1
+  const { filters: global } = useQueryFilters('global')
   const start = router.query.start as string | null
   const end = router.query.end as string | null
+  const state = useListInput({
+    page: 1,
+    sort_order: -1,
+    page_size: 10,
+    sort_by: 'articleViews'
+  })
+  const {
+    page,
+    sortOrder,
+    sortBy,
+    pageSize,
+    filters,
+    searchTerm,
+    setPage,
+    setPageSize
+  } = state
+
   const input: AccessFilterInput = {
-    sort_by,
-    sort_order,
-    limit: perPage,
-    skip,
+    sort_by: sortBy,
+    sort_order: sortOrder,
+    limit: pageSize,
+    skip: (page - 1) * pageSize,
     filters: filters,
+    globalFilters: global,
     institution_id: institution._id
   }
-  if (search) {
-    input.search = search
+
+  if (searchTerm) {
+    input.search = searchTerm
   }
   if (start) {
     input.startDate = start
@@ -65,40 +78,47 @@ const ArticleActivityPanel = ({ institution }: Props) => {
   }
 
   const { data, loading, error } = useArticleActivityStatsQuery({
-    variables: { input }
+    variables: { input },
+    fetchPolicy: 'network-only'
   })
 
   const articles = data?.articleAccessStats?.items || []
   const count = data?.articleAccessStats?.totalCount || 0
   const hasFilters = input.filters?.length > 0
-  const pageCount = Math.ceil(count / perPage)
-  const handlePageChange = (page: number) => {
-    router.push({
-      query: {
-        ...router.query,
-        page: page
-      }
-    })
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage + 1)
   }
-  const TablePagination = (
-    <TableFooter>
-      <Box p={1} display="flex" alignItems="center" gap={2}>
-        <Pagination
-          count={pageCount}
-          shape="rounded"
-          page={page}
-          onChange={(event, newPage) => handlePageChange(newPage)}
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPageSize(+event.target.value)
+  }
+
+  const Pagination = (
+    <>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent={'flex-end'}
+        gap={2}
+      >
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50]}
+          component="div"
+          count={count}
+          rowsPerPage={pageSize}
+          page={page - 1}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          showFirstButton
+          showLastButton
         />
-        {!!count && (
-          <Typography color="text.secondary">
-            {skip} to {Math.min(skip + perPage, count)} of {count} articles
-          </Typography>
-        )}
         {hasFilters && (
           <Chip color="info" label="Filter Applied" icon={<Info />}></Chip>
         )}
       </Box>
-    </TableFooter>
+    </>
   )
 
   return (
@@ -106,7 +126,7 @@ const ArticleActivityPanel = ({ institution }: Props) => {
       <ArticleActivityHeader />
       <Card>
         <TableContainer>
-          {TablePagination}
+          {Pagination}
           <Table sx={{ minWidth: 1050 }}>
             <ArticleActivityTableHead />
             <TableBody>
@@ -147,7 +167,8 @@ const ArticleActivityPanel = ({ institution }: Props) => {
                             pathname: `/access/${institution._id}/articles/${item._id}`,
                             query: cleanObj({
                               start: router.query.start,
-                              end: router.query.end
+                              end: router.query.end,
+                              global: router.query.global
                             })
                           }}
                           passHref

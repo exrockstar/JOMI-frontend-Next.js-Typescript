@@ -42,6 +42,7 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const router = useRouter()
   const { data: session } = useSession()
   const { filters } = useQueryFilters()
+  const { filters: global } = useQueryFilters('global')
   const sort_by = (router.query.sort_by as string) ?? 'created'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const search = router.query.search as string
@@ -57,7 +58,8 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
     sort_order: sort_order,
     limit: perPage,
     skip: skip,
-    filters: filters || []
+    filters: filters || [],
+    globalFilters: global
   }
 
   if (search) {
@@ -77,7 +79,8 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
       instId: institutionId,
       input: input
     },
-    skip: !router.isReady
+    skip: !router.isReady,
+    fetchPolicy: 'network-only'
   })
   const output = data?.usersByInstitution
   const users = output?.users
@@ -168,13 +171,6 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
               {!!users?.length &&
                 users?.map((user, i) => {
                   const access = user?.accessType?.accessType
-                  const lastAccess = user?.subscription?.lastSubType
-                  const accessExpiry = user?.subscription?.lastSubTypeExpiry
-
-                  const needsConfirmation = [
-                    AccessTypeEnum.AwaitingEmailConfirmation,
-                    AccessTypeEnum.EmailConfirmationExpired
-                  ].includes(access)
 
                   let stickyTableCellColor = i % 2 !== 0 ? 'white' : '#fafafa'
                   const isNoLongerMatched =
@@ -250,22 +246,8 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                       <TableCell>{user.accessType.matchedBy}</TableCell>
                       <TableCell sx={{ minWidth: 200 }}>
                         <Typography sx={{ textTransform: 'capitalize' }}>
-                          {lastAccess}
+                          {access}
                         </Typography>
-                        {needsConfirmation && (
-                          <Box width={'100%'}>
-                            <Typography variant="caption" color="error.main">
-                              Needs email confirmation
-                            </Typography>
-                          </Box>
-                        )}
-                        {!!accessExpiry && dayjs().isAfter(accessExpiry) && (
-                          <Box width={'100%'}>
-                            <Typography variant="caption" color="error.main">
-                              Expired: {dayjs(accessExpiry).format('L LT')}
-                            </Typography>
-                          </Box>
-                        )}
                       </TableCell>
                       <TableCell>
                         <Link

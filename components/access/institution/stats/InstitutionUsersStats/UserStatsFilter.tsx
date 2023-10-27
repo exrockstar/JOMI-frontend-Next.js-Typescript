@@ -44,7 +44,12 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       type: 'text',
       operations: StringOperations
     },
-
+    {
+      columnName: 'institution',
+      label: 'Institution ID',
+      type: 'text',
+      operations: StringOperations
+    },
     {
       columnName: 'specialty',
       label: 'Specialty',
@@ -74,13 +79,6 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       values: data?.specialties.map((i) => i.name)
     },
     {
-      columnName: 'user_type',
-      label: 'User Type',
-      type: 'select',
-      operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-      values: data?.userTypes.map((i) => i.type)
-    },
-    {
       columnName: 'created',
       label: 'Registered',
       type: 'date',
@@ -91,13 +89,6 @@ const UserStatsFilter = ({ open, setOpen }: Props) => {
       label: 'Last Visited',
       type: 'date',
       operations: [QueryOperation.Before, QueryOperation.After]
-    },
-    {
-      columnName: 'subscription.lastSubType',
-      label: 'Access',
-      type: 'select',
-      operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-      values: Object.values(SubType)
     }
   ]
   return (

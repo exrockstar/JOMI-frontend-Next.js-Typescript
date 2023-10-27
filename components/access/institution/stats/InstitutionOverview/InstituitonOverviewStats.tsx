@@ -1,44 +1,41 @@
-import { DatePicker } from '@mui/lab'
 import {
   Alert,
   Box,
   CircularProgress,
   Grid,
   Stack,
-  TextField,
-  TextFieldProps,
   Tooltip,
   Typography
 } from '@mui/material'
-import dayjs, { Dayjs } from 'dayjs'
 import { InstitutionPartsFragment } from 'graphql/cms-queries/InstitutionParts.generated'
 import { useInstutionAccessOverviewQuery } from 'graphql/queries/access.generated'
-
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
 import AliasesCard from './AliasesCard'
 import DomainsCard from './DomainsCard'
 import StatCard from './StatCard'
 import UserTypesCard from './UserTypesCard'
 import { InfoOutlined } from '@mui/icons-material'
 import TrafficOverTimeCard from './TrafficOverTimeCard'
-import CustomDatePicker from '../../../../common/CustomDatePicker'
+import TrafficOverTimeByUserType from './TrafficOverTimeByUserType'
+import ActivityBreakdownCard from './ActivityBreakdownCard'
+import useInstitutionAccessInput from './useInstitutionAccessInput'
 
 type Props = {
   institutionId: string
   institution: InstitutionPartsFragment
 }
+
 const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
-  const router = useRouter()
-  const start = router.query.start as string | null
-  const end = router.query.end as string | null
+  const { endDate, startDate, filters, setFilters, globalFilters } =
+    useInstitutionAccessInput()
 
   const { data, loading, error } = useInstutionAccessOverviewQuery({
     variables: {
       input: {
         institutionId,
-        startDate: start,
-        endDate: end
+        endDate,
+        startDate,
+        filters,
+        globalFilters
       }
     },
     skip: !institutionId
@@ -73,6 +70,10 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
         <Grid container gap={2}>
           <StatCard label="Newly Registered Users" value={accessStats.users} />
           <StatCard label="Active Users" value={accessStats.activeUsers} />
+          <StatCard
+            label="Anonymous Active Users"
+            value={accessStats.anonUserCount}
+          />
           <StatCard label="Total Logins" value={accessStats.totalLogins} />
           <StatCard
             label="Total Article Views"
@@ -86,12 +87,6 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
             label="Anonymous Article Views"
             value={accessStats.anonymousArticleViews}
           />
-
-          {/* <StatCard label="Video Blocks" value={accessStats.videoBlocks} />
-          <StatCard
-            label="Unique Video Blocks"
-            value={accessStats.uniqueVideoBlocks}
-          /> */}
         </Grid>
       )}
       {data && institution && (
@@ -111,9 +106,26 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
         </Grid>
       )}
       {data && !!institution?.accessSettings?.displayTrafficGraph && (
-        <Grid>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <TrafficOverTimeCard />
+          </Grid>
+          <Grid item xs={12}>
+            <TrafficOverTimeByUserType />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ActivityBreakdownCard
+              by="userType"
+              title="Activity Breakdown By User Type"
+              description="Shows activity breakdown by user type over the past period"
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ActivityBreakdownCard
+              by="contentType"
+              title="Activity Breakdown By Content Type"
+              description="Shows activity breakdown by content type over the past period"
+            />
           </Grid>
         </Grid>
       )}

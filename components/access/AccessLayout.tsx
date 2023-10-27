@@ -83,7 +83,8 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
         dateFormats={{
-          keyboardDate: 'M/D/YYYY'
+          keyboardDate: 'M/D/YYYY',
+          keyboardDateTime12h: 'M/D/YYY hh:mm A'
         }}
       >
         <DashboardLayoutRoot>

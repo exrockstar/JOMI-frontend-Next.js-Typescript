@@ -1,11 +1,13 @@
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, FilterList } from '@mui/icons-material'
 import {
+  Badge,
   Box,
   Button,
   Card,
   CardContent,
   Divider,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Pagination,
@@ -18,6 +20,7 @@ import {
   TableContainer,
   TableFooter,
   TablePagination,
+  Tooltip,
   Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
@@ -25,13 +28,18 @@ import dayjs, { Dayjs } from 'dayjs'
 import { useAccessEventsQuery } from 'graphql/queries/access.generated'
 import { AccessFilterInput, ActivityType, QueryOperation } from 'graphql/types'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import UserActivityTableHead from './UserActivityTableHead'
 import Link from 'next/link'
 import CustomDatePicker from 'components/common/CustomDatePicker'
+import { useQueryFilters } from 'components/hooks/useQueryFilters'
+import GlobalFilterDrawer from '../institution/GlobalFilterDrawer'
+import FilterButton from 'components/common/FilterButton'
 
 const UserActivityTable = () => {
   const router = useRouter()
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const { filters: globalFilters } = useQueryFilters('global')
   const userId = router.query.userId as string
   const sort_by = (router.query.sort_by as string) ?? 'created'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
@@ -42,7 +50,6 @@ const UserActivityTable = () => {
   const skip = (page - 1) * perPage
   const start = router.query.start as string | null
   const end = router.query.end as string | null
-
   const input: AccessFilterInput = {
     sort_by,
     sort_order,
@@ -54,7 +61,8 @@ const UserActivityTable = () => {
         value: userId,
         operation: QueryOperation.Equal
       }
-    ]
+    ],
+    globalFilters: globalFilters
   }
 
   if (start) {
@@ -158,7 +166,7 @@ const UserActivityTable = () => {
           showLastButton={true}
         />
       </Box>
-      <FormControl sx={{ width: 140 }}>
+      {/* <FormControl sx={{ width: 140 }}>
         <InputLabel id="select-label">Filter by Activity</InputLabel>
         <Select
           value={activity}
@@ -173,7 +181,7 @@ const UserActivityTable = () => {
           <MenuItem value={'article'}>Article View</MenuItem>
           <MenuItem value={'video-play'}>Video Play</MenuItem>
         </Select>
-      </FormControl>
+      </FormControl> */}
     </Box>
   )
   const text = (activity: ActivityType) => {
@@ -185,86 +193,95 @@ const UserActivityTable = () => {
     }
   }
   return (
-    <Card>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        pr={1}
-      >
-        <Typography variant="h4" p={2}>
-          Activity{' '}
-        </Typography>
-        <Stack direction="row" gap={2} alignItems="center" mb={2}>
-          <Typography fontWeight={600}>Period</Typography>
-          <CustomDatePicker
-            defaultLabel="Start date"
-            value={start}
-            onChange={(val?: Dayjs) => {
-              handleDateChange(val, 'start')
-            }}
-          />
-          <CustomDatePicker
-            defaultLabel="End date"
-            value={end}
-            onChange={(val?: Dayjs) => {
-              handleDateChange(val, 'end')
-            }}
-          />
-        </Stack>
-      </Stack>
-      <Divider />
-      <Card>
-        <TableContainer>
-          {TableFoot}
-          <Table>
-            <UserActivityTableHead />
-            <TableBody sx={{ borderRadius: 2 }}>
-              {events?.map((activity, index) => {
-                const activityText = text(activity.activity)
-                return (
-                  <StyledTableRow key={index}>
-                    <TableCell>
-                      {dayjs(activity.created).format(
-                        'MM/DD/YYYY - HH:mm:ss A'
-                      )}
-                    </TableCell>
-                    <TableCell sx={{ display: 'flex' }}>
-                      {activityText}
-                      {activity.activity === ActivityType.VideoPlay && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          ml={0.5}
-                        >
-                          {activity.time_watched > 0
-                            ? `(${activity.time_watched}s)`
-                            : ''}
-                        </Typography>
-                      )}
-                    </TableCell>
-                    <TableCell sx={{ maxWidth: 480, whiteSpace: 'pre-wrap' }}>
-                      {(activity.activity !== ActivityType.Login && (
-                        <Link
-                          href={`/article/${activity.article_publication_id}`}
-                          target={'_blank'}
-                        >
-                          {activity.article_title}
-                        </Link>
-                      )) ??
-                        'N/A'}
+    <>
+      <GlobalFilterDrawer />
 
-                      {activity.activity === ActivityType.Login &&
-                        activity.ip_address_str}
-                    </TableCell>
-                  </StyledTableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Card>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          pr={1}
+        >
+          <Typography variant="h4" p={2}>
+            Activity{' '}
+          </Typography>
+          <Stack direction="row" gap={2} alignItems="center" mb={2}>
+            <Typography fontWeight={600}>Period</Typography>
+            <CustomDatePicker
+              defaultLabel="Start date"
+              value={start}
+              onChange={(val?: Dayjs) => {
+                handleDateChange(val, 'start')
+              }}
+            />
+            <CustomDatePicker
+              defaultLabel="End date"
+              value={end}
+              onChange={(val?: Dayjs) => {
+                handleDateChange(val, 'end')
+              }}
+            />
+            <FilterButton
+              description="Global Filter - across access pages"
+              filterOpenKey="gf_open"
+              filterKey="global"
+            />
+          </Stack>
+        </Stack>
+        <Divider />
+        <Card>
+          <TableContainer>
+            {TableFoot}
+            <Table>
+              <UserActivityTableHead />
+              <TableBody sx={{ borderRadius: 2 }}>
+                {events?.map((activity, index) => {
+                  const activityText = text(activity.activity)
+                  return (
+                    <StyledTableRow key={index}>
+                      <TableCell>
+                        {dayjs(activity.created).format(
+                          'MM/DD/YYYY - HH:mm:ss A'
+                        )}
+                      </TableCell>
+                      <TableCell sx={{ display: 'flex' }}>
+                        {activityText}
+                        {activity.activity === ActivityType.VideoPlay && (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            ml={0.5}
+                          >
+                            {activity.time_watched > 0
+                              ? `(${activity.time_watched}s)`
+                              : ''}
+                          </Typography>
+                        )}
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 480, whiteSpace: 'pre-wrap' }}>
+                        {(activity.activity !== ActivityType.Login && (
+                          <Link
+                            href={`/article/${activity.article_publication_id}`}
+                            target={'_blank'}
+                          >
+                            {activity.article_title}
+                          </Link>
+                        )) ??
+                          'N/A'}
+
+                        {activity.activity === ActivityType.Login &&
+                          activity.ip_address_str}
+                      </TableCell>
+                    </StyledTableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
       </Card>
-    </Card>
+    </>
   )
 }
 

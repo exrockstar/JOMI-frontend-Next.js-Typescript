@@ -12,5 +12,6 @@ export type ColumnOption = {
     | 'divider'
   label: string
   operations: QueryOperation[]
-  values?: string[]
+  values?: string[] | number[]
+  labels?: string[]
 }
