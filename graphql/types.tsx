@@ -31,6 +31,7 @@ export type Access = {
   geolocation?: Maybe<GeoLocation>;
   institution?: Maybe<Institution>;
   ip_address_str?: Maybe<Scalars['String']>;
+  locationId?: Maybe<Scalars['String']>;
   orderId?: Maybe<Scalars['String']>;
   order_amount?: Maybe<Scalars['Float']>;
   promoCode?: Maybe<Scalars['String']>;
@@ -53,6 +54,7 @@ export type AccessEventsOutput = {
 export type AccessFilterInput = {
   endDate?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
+  globalFilters?: InputMaybe<Array<ColumnFilter>>;
   institution_id?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
@@ -79,6 +81,7 @@ export type AccessType = {
   institution_id?: Maybe<Scalars['String']>;
   institution_name?: Maybe<Scalars['String']>;
   isTrial?: Maybe<Scalars['Boolean']>;
+  locationId?: Maybe<Scalars['String']>;
   matchStatus?: Maybe<MatchStatus>;
   matchedBy?: Maybe<MatchedBy>;
   orderId?: Maybe<Scalars['String']>;
@@ -988,6 +991,8 @@ export type Institution = {
 
 export type InstitutionAccessInput = {
   endDate?: InputMaybe<Scalars['DateTime']>;
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  globalFilters?: InputMaybe<Array<ColumnFilter>>;
   institutionId: Scalars['String'];
   startDate?: InputMaybe<Scalars['DateTime']>;
 };
@@ -1001,6 +1006,7 @@ export enum InstitutionAccessState {
 export type InstitutionAccessStats = {
   __typename?: 'InstitutionAccessStats';
   activeUsers: Scalars['Float'];
+  anonUserCount: Scalars['Float'];
   anonymousArticleViews: Scalars['Float'];
   articleViewsByUser: Scalars['Float'];
   totalArticleViews: Scalars['Float'];
@@ -2294,7 +2300,10 @@ export type Query = {
   instArticleEventLogs: AccessEventsOutput;
   institutionAccessStats: InstitutionAccessStats;
   institutionById?: Maybe<Institution>;
+  institutionTrafficBreakdownByContentType: ChartData;
+  institutionTrafficBreakdownByUserType: ChartData;
   institutionTrafficOverTime: ChartData;
+  institutionTrafficOverTimeByUserType: ChartData;
   institutionUserTypesStats: Array<InstitutionUserTypeStat>;
   institution_subs: Array<Institution>;
   institutions: InstitutionOutput;
@@ -2493,7 +2502,23 @@ export type QueryInstitutionByIdArgs = {
 };
 
 
+export type QueryInstitutionTrafficBreakdownByContentTypeArgs = {
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionTrafficBreakdownByUserTypeArgs = {
+  input: InstitutionAccessInput;
+};
+
+
 export type QueryInstitutionTrafficOverTimeArgs = {
+  groupBy: Scalars['String'];
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionTrafficOverTimeByUserTypeArgs = {
   groupBy: Scalars['String'];
   input: InstitutionAccessInput;
 };
@@ -3378,6 +3403,7 @@ export type User = {
 export type UserInput = {
   endDate?: InputMaybe<Scalars['DateTime']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
+  globalFilters?: InputMaybe<Array<ColumnFilter>>;
   limit?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;

@@ -10,6 +10,7 @@ import {
 } from 'chart.js'
 import React, { useMemo } from 'react'
 import { InstitutionUserTypeStat } from 'graphql/types'
+import { graphColors } from './getColors'
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip)
 
@@ -24,18 +25,12 @@ type Props = {
 }
 
 const UserTypesCard = ({ user_types, title }: Props) => {
-  const colors = useMemo(() => {
-    return user_types
-      .map((v) => `hsla(${~~(360 * Math.random())},80%,60%,0.7)`)
-      .slice(0, 10)
-  }, [])
-
   const data = {
     labels: user_types.map((v) => v.user_type),
     datasets: [
       {
-        data: user_types.map((v) => v.count),
-        backgroundColor: colors,
+        data: user_types.map((v, i) => v.count),
+        backgroundColor: user_types.map((u, i) => graphColors[i]),
         barPercentage: 5,
         barThickness: 50,
         maxBarThickness: 25,

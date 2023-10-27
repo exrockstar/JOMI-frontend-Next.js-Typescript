@@ -17,29 +17,30 @@ import { CategoryScale, Tooltip, LinearScale, LineElement } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { useRouter } from 'next/router'
 import { useInstitutionTrafficOverTimeQuery } from 'graphql/queries/access.generated'
-import { indigo, green, rose } from 'tailwindcss/colors'
+import { indigo, green, rose, zinc } from 'tailwindcss/colors'
+import { graphColors } from './getColors'
+import useInstitutionAccessInput from './useInstitutionAccessInput'
 
 Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
 
 const TrafficOverTimeCard = () => {
-  const router = useRouter()
-  const start = router.query.start as string | null
-  const end = router.query.end as string | null
-  const instId = router.query.id as string | null
+  const { endDate, startDate, filters, institutionId, globalFilters } =
+    useInstitutionAccessInput()
   const [groupBy, setGroupBy] = useState('month') //day ,month, year
   const { data, loading, error } = useInstitutionTrafficOverTimeQuery({
     variables: {
       input: {
-        startDate: start,
-        endDate: end,
-        institutionId: instId
+        endDate,
+        startDate,
+        filters,
+        globalFilters,
+        institutionId
       },
       groupBy: groupBy
     }
   })
   const chartData = data?.institutionTrafficOverTime
 
-  const _colors = [indigo[400], green[400], rose[400]]
   return (
     <Card>
       <Box p={2}>
@@ -89,7 +90,7 @@ const TrafficOverTimeCard = () => {
                 data={{
                   labels: chartData.labels,
                   datasets: chartData.datasets.map((x, i) => {
-                    const color = _colors[i]
+                    const color = graphColors[i]
                     return {
                       data: x.data,
                       label: x.label,

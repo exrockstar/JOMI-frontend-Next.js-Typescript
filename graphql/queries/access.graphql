@@ -65,6 +65,7 @@ query InstutionAccessOverview( $input:InstitutionAccessInput!) {
     articleViewsByUser
     videoBlocks
     uniqueVideoBlocks
+    anonUserCount
   }
   institutionUserTypesStats(input:$input){
     user_type
@@ -82,6 +83,32 @@ query InstitutionTrafficOverTime($input: InstitutionAccessInput!, $groupBy: Stri
   }
 }
 
+query InstitutionTrafficOverTimeByUserType($input: InstitutionAccessInput!, $groupBy: String!){
+  output:institutionTrafficOverTimeByUserType(input: $input, groupBy: $groupBy){
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+}
+
+query InstitutionTrafficBreakdown($input: InstitutionAccessInput!){
+  byUserType:institutionTrafficBreakdownByUserType(input: $input){
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+  byContentType:institutionTrafficBreakdownByContentType(input: $input){
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+}
 query ArticleActivityStats($input: AccessFilterInput!){
   articleAccessStats(input: $input){
     items {

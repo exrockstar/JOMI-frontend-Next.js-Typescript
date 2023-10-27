@@ -36,7 +36,8 @@ const UserActivityPanel = ({ userId, instId }: Props) => {
             pathname: `/access/${instId}/users`,
             query: cleanObj({
               start: router.query.start,
-              end: router.query.end
+              end: router.query.end,
+              global: router.query.global
             })
           }}
           passHref

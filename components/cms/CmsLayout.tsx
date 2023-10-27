@@ -32,7 +32,8 @@ const CmsLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <LocalizationProvider
         dateAdapter={AdapterDayjs}
         dateFormats={{
-          keyboardDate: 'M/D/YYYY'
+          keyboardDate: 'M/D/YYYY',
+          keyboardDateTime12h: 'M/D/YYYY hh:mm A'
         }}
       >
         <DashboardLayoutRoot

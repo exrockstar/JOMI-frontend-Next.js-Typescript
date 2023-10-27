@@ -9,6 +9,7 @@ import { Article, InstitutionArticleStats } from 'graphql/types'
 import { visuallyHidden } from '@mui/utils'
 import React from 'react'
 import { useRouter } from 'next/router'
+import { useListInput } from 'components/hooks/useListInput'
 
 interface HeadCell {
   id: keyof InstitutionArticleStats | `article.${keyof Article}`
@@ -40,20 +41,12 @@ const headCells: readonly HeadCell[] = [
 ]
 
 const ArticleActivityTableHead = () => {
-  const router = useRouter()
-  const sort_by = (router.query.sort_by as string) ?? 'created'
-  const sort_order_str = (router.query.sort_order as string) ?? 'desc'
-  const sort_order = sort_order_str === 'desc' ? -1 : 1
+  const { sortBy, sortOrder, setSort } = useListInput({})
+
   const createSortHandler =
     (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      const order = sort_order >= 1 ? 'desc' : 'asc'
-      router.push({
-        query: {
-          ...router.query,
-          sort_by: property,
-          sort_order: order
-        }
-      })
+      const _sortOrder = property === sortBy ? -sortOrder : -1
+      setSort(property, _sortOrder)
     }
   return (
     <>
@@ -67,19 +60,19 @@ const ArticleActivityTableHead = () => {
       <TableHead>
         <TableRow>
           {headCells.map((headCell) => {
-            const order = sort_order >= 1 ? 'asc' : 'desc'
+            const order = sortOrder >= 1 ? 'asc' : 'desc'
             return (
               <TableCell
                 key={headCell.id}
-                sortDirection={sort_by === headCell.id ? order : false}
+                sortDirection={sortBy === headCell.id ? order : false}
               >
                 <TableSortLabel
-                  active={sort_by === headCell.id}
-                  direction={sort_by === headCell.id ? order : 'asc'}
+                  active={sortBy === headCell.id}
+                  direction={sortBy === headCell.id ? order : 'asc'}
                   onClick={createSortHandler(headCell.id)}
                 >
                   {headCell.label}
-                  {sort_by === headCell.id ? (
+                  {sortBy === headCell.id ? (
                     <Box component="span" sx={visuallyHidden}>
                       {order === 'desc'
                         ? 'sorted descending'

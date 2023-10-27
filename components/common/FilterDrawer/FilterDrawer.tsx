@@ -195,9 +195,9 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                     value={filter.value}
                     onChange={(e) => handleValueChange(index, e.target.value)}
                   >
-                    {columnOption.values?.map((value) => (
+                    {columnOption.values?.map((value, i) => (
                       <MenuItem key={value} value={value}>
-                        {value}
+                        {columnOption.labels?.at(i) ?? value}
                       </MenuItem>
                     ))}
                   </Select>

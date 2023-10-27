@@ -1,5 +1,13 @@
 import { Add, Delete, Edit } from '@mui/icons-material'
-import { Button, Tabs, Tab, useMediaQuery, Stack, Alert } from '@mui/material'
+import {
+  Button,
+  Tabs,
+  Tab,
+  useMediaQuery,
+  Stack,
+  Alert,
+  Typography
+} from '@mui/material'
 import { Location } from 'graphql/types'
 import TabPanel, { a11yProps } from 'components/common/TabPanel'
 import { useState } from 'react'
@@ -202,23 +210,28 @@ const LocationList = ({ locations }: Props) => {
       </Tabs>
       {locations.map((location) => {
         return (
-          <TabPanel
-            key={location._id}
-            id={`location-tab-panel`}
-            value={value}
-            index={location._id}
-          >
-            <OrdersList
-              orders={location.orders}
-              locationId={location._id}
-              institutionId={institutionId}
-            />
-            <IpRangesList
-              ip_ranges={location.ip_ranges}
-              locationId={location._id}
-              institutionId={institutionId}
-            />
-          </TabPanel>
+          <>
+            <TabPanel
+              key={location._id}
+              id={`location-tab-panel`}
+              value={value}
+              index={location._id}
+            >
+              <Typography variant="caption">
+                Location Database ID: <b>{location._id}</b>
+              </Typography>
+              <OrdersList
+                orders={location.orders}
+                locationId={location._id}
+                institutionId={institutionId}
+              />
+              <IpRangesList
+                ip_ranges={location.ip_ranges}
+                locationId={location._id}
+                institutionId={institutionId}
+              />
+            </TabPanel>
+          </>
         )
       })}
     </>

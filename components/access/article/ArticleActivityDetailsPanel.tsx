@@ -1,5 +1,6 @@
 import {
   Alert,
+  Badge,
   Box,
   Card,
   CircularProgress,
@@ -17,6 +18,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Tooltip,
   Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
@@ -27,15 +29,21 @@ import dayjs, { Dayjs } from 'dayjs'
 import ArticleActivityTableHead from './ArticleActivityTableHead'
 import { useInstitutionByIdQuery } from 'graphql/cms-queries/institutions-list.generated'
 import SearchInput from '../SearchInput'
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, FilterList } from '@mui/icons-material'
 import Link from 'next/link'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
 import { end } from 'cheerio/lib/api/traversing'
 import CustomDatePicker from 'components/common/CustomDatePicker'
 import { cleanObj } from 'common/utils'
+import { useState } from 'react'
+import GlobalFilterDrawer from '../institution/GlobalFilterDrawer'
+import FilterButton from 'components/common/FilterButton'
 
 const ArticleActivityDetailsPanel = () => {
   const router = useRouter()
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const { filters: globalFilters } = useQueryFilters('global')
+
   const sort_by = (router.query.sort_by as string) ?? 'created'
   const sort_order_str = (router.query.sort_order as string) ?? 'desc'
   const search = router.query.search as string
@@ -70,7 +78,8 @@ const ArticleActivityDetailsPanel = () => {
         value: articleId
       },
       ...filters
-    ]
+    ],
+    globalFilters
   }
 
   if (activity !== 'All') {
@@ -175,97 +184,94 @@ const ArticleActivityDetailsPanel = () => {
           />
         </Stack>
 
-        <FormControl sx={{ width: 140 }}>
-          <InputLabel id="select-label">Filter by Activity</InputLabel>
-          <Select
-            value={activity}
-            label="Filter by Activity"
-            labelId="select-label"
-            id="simple-select"
-            size="small"
-            onChange={handleActivityChange}
-          >
-            <MenuItem value={'All'}>All</MenuItem>
-            <MenuItem value={'article'}>Article View</MenuItem>
-            <MenuItem value={'video-play'}>Video Play</MenuItem>
-          </Select>
-        </FormControl>
+        <FilterButton
+          description="Global Filter - across access pages"
+          filterOpenKey="gf_open"
+          filterKey="global"
+        />
       </Box>
     </Box>
   )
 
   const articleTitle = events && events[0]?.article_title
   return (
-    <Box p={2} minHeight="100vh">
-      <Box py={2}>
-        <Typography variant="h3" component="h1">
-          <Link
-            href={{
-              pathname: `/access/${institution}/articles`,
-              query: cleanObj({
-                start,
-                end
-              })
-            }}
-            passHref
-            legacyBehavior
-          >
-            <IconButton color="primary">
-              <ArrowBack />
-            </IconButton>
-          </Link>
-          {institutionData?.institution?.name}
-        </Typography>
-        <Typography variant="h5">Access logs for {articleTitle}</Typography>
+    <>
+      <GlobalFilterDrawer />
+
+      <Box p={2} minHeight="100vh">
+        <Box py={2}>
+          <Typography variant="h3" component="h1">
+            <Link
+              href={{
+                pathname: `/access/${institution}/articles`,
+                query: cleanObj({
+                  start,
+                  end,
+                  global: router.query.global
+                })
+              }}
+              passHref
+              legacyBehavior
+            >
+              <IconButton color="primary">
+                <ArrowBack />
+              </IconButton>
+            </Link>
+            {institutionData?.institution?.name}
+          </Typography>
+          <Typography variant="h5">Access logs for {articleTitle}</Typography>
+        </Box>
+        <Box>
+          <SearchInput
+            onSubmit={handleSearch}
+            placeholder="Filter by user "
+            value={search}
+          />
+        </Box>
+        <Card>
+          <TableContainer>
+            {TablePagination}
+            <Table sx={{ minWidth: 1050 }}>
+              <ArticleActivityTableHead />
+              <TableBody>
+                {loading && (
+                  <TableRow>
+                    <TableCell colSpan={9}>
+                      <Stack py={10} alignItems="center">
+                        <CircularProgress />
+                        <Typography>Loading</Typography>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
+                )}
+                {error && (
+                  <Stack py={10} alignItems="center" spacing={1}>
+                    <Alert severity="error">{error.message}</Alert>
+                  </Stack>
+                )}
+                {!!events?.length &&
+                  events?.map((item, index) => {
+                    const user = item.user
+                    return (
+                      <StyledTableRow key={index}>
+                        <TableCell>
+                          {dayjs(item.created).format('MM/DD/YYYY hh:mm A')}
+                        </TableCell>
+                        <TableCell>{item.activity}</TableCell>
+                        <TableCell>{user?.email ?? 'anonymous'}</TableCell>
+                        <TableCell>
+                          {user?.display_name ?? 'anonymous'}
+                        </TableCell>
+                        <TableCell>{item.ip_address_str}</TableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Card>
       </Box>
-      <Box>
-        <SearchInput
-          onSubmit={handleSearch}
-          placeholder="Filter by user "
-          value={search}
-        />
-      </Box>
-      <Card>
-        <TableContainer>
-          {TablePagination}
-          <Table sx={{ minWidth: 1050 }}>
-            <ArticleActivityTableHead />
-            <TableBody>
-              {loading && (
-                <TableRow>
-                  <TableCell colSpan={9}>
-                    <Stack py={10} alignItems="center">
-                      <CircularProgress />
-                      <Typography>Loading</Typography>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              )}
-              {error && (
-                <Stack py={10} alignItems="center" spacing={1}>
-                  <Alert severity="error">{error.message}</Alert>
-                </Stack>
-              )}
-              {!!events?.length &&
-                events?.map((item, index) => {
-                  const user = item.user
-                  return (
-                    <StyledTableRow key={index}>
-                      <TableCell>
-                        {dayjs(item.created).format('MM/DD/YYYY hh:mm A')}
-                      </TableCell>
-                      <TableCell>{item.activity}</TableCell>
-                      <TableCell>{user?.email ?? 'anonymous'}</TableCell>
-                      <TableCell>{user?.display_name ?? 'anonymous'}</TableCell>
-                      <TableCell>{item.ip_address_str}</TableCell>
-                    </StyledTableRow>
-                  )
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Card>
-    </Box>
+    </>
   )
 }
 
