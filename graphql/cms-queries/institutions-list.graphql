@@ -40,3 +40,7 @@ query InstitutionSearch($input: InstitutionInput!) {
     count
   }
 }
+
+mutation TransferInstitutionData($input: TransferInstDataInput!) {
+  transferInstitutionData(input: $input)
+}

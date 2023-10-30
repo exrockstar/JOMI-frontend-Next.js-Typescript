@@ -25,6 +25,13 @@ export type InstitutionSearchQueryVariables = Types.Exact<{
 
 export type InstitutionSearchQuery = { __typename?: 'Query', institutions: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', value: string, label: string }> } };
 
+export type TransferInstitutionDataMutationVariables = Types.Exact<{
+  input: Types.TransferInstDataInput;
+}>;
+
+
+export type TransferInstitutionDataMutation = { __typename?: 'Mutation', transferInstitutionData: string };
+
 
 export const InstitutionsListDocument = gql`
     query InstitutionsList($input: InstitutionInput!) {
@@ -156,3 +163,34 @@ export function useInstitutionSearchLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type InstitutionSearchQueryHookResult = ReturnType<typeof useInstitutionSearchQuery>;
 export type InstitutionSearchLazyQueryHookResult = ReturnType<typeof useInstitutionSearchLazyQuery>;
 export type InstitutionSearchQueryResult = Apollo.QueryResult<InstitutionSearchQuery, InstitutionSearchQueryVariables>;
+export const TransferInstitutionDataDocument = gql`
+    mutation TransferInstitutionData($input: TransferInstDataInput!) {
+  transferInstitutionData(input: $input)
+}
+    `;
+export type TransferInstitutionDataMutationFn = Apollo.MutationFunction<TransferInstitutionDataMutation, TransferInstitutionDataMutationVariables>;
+
+/**
+ * __useTransferInstitutionDataMutation__
+ *
+ * To run a mutation, you first call `useTransferInstitutionDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTransferInstitutionDataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [transferInstitutionDataMutation, { data, loading, error }] = useTransferInstitutionDataMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTransferInstitutionDataMutation(baseOptions?: Apollo.MutationHookOptions<TransferInstitutionDataMutation, TransferInstitutionDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TransferInstitutionDataMutation, TransferInstitutionDataMutationVariables>(TransferInstitutionDataDocument, options);
+      }
+export type TransferInstitutionDataMutationHookResult = ReturnType<typeof useTransferInstitutionDataMutation>;
+export type TransferInstitutionDataMutationResult = Apollo.MutationResult<TransferInstitutionDataMutation>;
+export type TransferInstitutionDataMutationOptions = Apollo.BaseMutationOptions<TransferInstitutionDataMutation, TransferInstitutionDataMutationVariables>;
