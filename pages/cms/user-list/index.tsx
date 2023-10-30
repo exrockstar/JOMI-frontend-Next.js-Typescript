@@ -3,6 +3,7 @@ import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Badge,
+  Box,
   Button,
   CircularProgress,
   Drawer,
@@ -40,202 +41,16 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useRouter } from 'next/router'
 import TagUsersToCRM from 'components/cms/user-list/TagUsersToCRM'
 import DbQueryDialog from 'components/common/DbQueryDialog'
+import useUserListColumnOptions from 'components/cms/user-list/useUserListColumnOptions'
+import FilterButton from 'components/common/FilterButton'
+import TableFilters from 'components/common/TableFilters'
 
-const columnOptions: ColumnOption[] = [
-  {
-    label: 'Name',
-    columnName: 'name',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Email',
-    columnName: 'email',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Institutional Email',
-    columnName: 'inst_email',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Role',
-    columnName: 'role',
-    type: 'select',
-    operations: StringOperations,
-    values: Object.values(UserRoles)
-  },
-
-  {
-    label: 'User Type',
-    columnName: 'user_type',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Specialty',
-    columnName: 'specialty',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Institution (Stated)',
-    columnName: 'institution_name',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Institution (Matched)',
-    columnName: 'matched_institution_name',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Registration date',
-    columnName: 'created',
-    type: 'date',
-    operations: DateOperations
-  },
-  {
-    label: 'Promo code',
-    columnName: 'promo_code',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Referrer',
-    columnName: 'referer',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Interest',
-    columnName: 'interests',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Subscription Type',
-    columnName: 'subscription.subType',
-    type: 'select',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-    values: Object.values(SubType)
-  },
-  {
-    label: 'Created Trial Access At',
-    columnName: 'trialAccessAt',
-    type: 'date',
-    operations: DateOperations
-  },
-  {
-    label: 'Trials Allowed',
-    columnName: 'trialsAllowed',
-    type: 'boolean',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
-  },
-  {
-    label: 'Is User Blocked',
-    columnName: 'hasManualBlock',
-    type: 'boolean',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
-  },
-
-  {
-    label: 'Match Status',
-    columnName: 'matchStatus',
-    type: 'select',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-    values: Object.values(MatchStatus).map((val) =>
-      val
-        .split(/(?=[A-Z])/)
-        .join('_')
-        .toLowerCase()
-    )
-  },
-  {
-    label: 'Matched By',
-    columnName: 'matchedBy',
-    type: 'select',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual],
-    values: [
-      'admin',
-      'email',
-      'ip',
-      'institution_name',
-      'institutional_email',
-      'not_matched'
-    ]
-  },
-  {
-    label: 'Country Code',
-    columnName: 'countryCode',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Region Name',
-    columnName: 'regionName',
-    type: 'text',
-    operations: StringOperations
-  },
-
-  {
-    label: 'Login Count',
-    columnName: 'loginCount',
-    type: 'text',
-    operations: NumericOperations
-  },
-  {
-    label: 'View Count',
-    columnName: 'articleCount',
-    type: 'text',
-    operations: NumericOperations
-  },
-  {
-    label: 'Last Visited',
-    columnName: 'last_visited',
-    type: 'date',
-    operations: DateOperations
-  },
-  {
-    label: 'Referrer Path',
-    columnName: 'referrerPath',
-    type: 'text',
-    operations: StringOperations
-  },
-  {
-    label: 'Has Requested Subscription',
-    columnName: 'hasRequestedSubscription',
-    type: 'boolean',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
-  },
-  {
-    label: 'Request Count',
-    columnName: 'requestSubscriptionCount',
-    type: 'number',
-    operations: NumericOperations
-  },
-  {
-    label: 'Email Verify Date',
-    columnName: 'emailVerifiedAt',
-    type: 'date',
-    operations: DateOperations
-  },
-  {
-    label: 'Institution Email Verified At',
-    columnName: 'instEmailVerifiedAt',
-    type: 'date',
-    operations: DateOperations
-  }
-]
 const UserManagementListPage = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false)
   const [addDialoglOpen, setAddDialogOpen] = useState(false)
   const [addLibrarian, setAddLibrarian] = useState(false)
   const [downloading, setDownloading] = useState(false)
   const [showQuery, setShowQuery] = useState(false)
+  const columnOptions = useUserListColumnOptions()
   const router = useRouter()
   const {
     users,
@@ -245,14 +60,17 @@ const UserManagementListPage = () => {
     sortOrder,
     filters,
     setFilters,
-    dbQueryString
+    dbQueryString,
+    filterOpen,
+    setFilterOpen
   } = useUserManagementList()
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
-    if (!filters) return
-
-    setFilters(filters)
-    setDrawerOpen(!drawerOpen)
+    if (!filters?.length) {
+      setFilters([])
+    } else {
+      setFilters(filters)
+    }
   }
 
   const [download] = useDownloadUserListLazyQuery({
@@ -268,8 +86,8 @@ const UserManagementListPage = () => {
       />
       <Drawer
         anchor={'right'}
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
       >
         <FilterDrawer
           onSubmit={onSubmitFilter}
@@ -339,49 +157,10 @@ const UserManagementListPage = () => {
               Download
             </LoadingButton>
           </Tooltip>
-          <Tooltip title="Display the MongoDB aggregate operation used to filter the data">
-            <Button
-              color="primary"
-              onClick={() => setShowQuery(true)}
-              startIcon={<Visibility />}
-            >
-              Show DB Query Parameters
-            </Button>
-          </Tooltip>
-          <Typography>
-            <Typography fontWeight={'bold'} component="span">
-              Table Filters&nbsp;
-            </Typography>
-            {filters.length == 0
-              ? 'None'
-              : `${filters.length} total:` +
-                filters.map(
-                  (filter, i) =>
-                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
-                )}
-          </Typography>
         </Stack>
-        <Tooltip title="Filter list">
-          <Badge
-            badgeContent={filters?.length}
-            color="secondary"
-            invisible={!filters?.length}
-            sx={{
-              '& .MuiBadge-badge': {
-                right: 8,
-                top: 12
-              }
-            }}
-          >
-            <IconButton
-              onClick={() => {
-                setDrawerOpen(!drawerOpen)
-              }}
-            >
-              <FilterList />
-            </IconButton>
-          </Badge>
-        </Tooltip>
+        <Box>
+          <FilterButton />
+        </Box>
       </Stack>
       <Stack px={2} display="flex" gap={2} direction="row">
         <SearchInput
@@ -410,6 +189,9 @@ const UserManagementListPage = () => {
         />
 
         <TagUsersToCRM />
+      </Stack>
+      <Stack px={2}>
+        <TableFilters filters={filters} />
       </Stack>
       {loading ? (
         <Stack alignItems="center" justifyContent="center" height="90vh">

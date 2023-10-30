@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
 import OrdersList from 'components/cms/orders/list/OrdersList'
-import { orderListColumnFilterOptions } from 'components/cms/orders/list/orderListColumnFilterOptions'
+import { useOrdersListColumnOptions } from 'components/cms/orders/list/orderListColumnFilterOptions'
 import {
   OrdersListProvider,
   useOrdersList
@@ -24,6 +24,7 @@ import { useState } from 'react'
 const OrdersListPage = () => {
   const { loading, error, filters, setFilters } = useOrdersList()
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const colummnOptions = useOrdersListColumnOptions()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
 
@@ -39,7 +40,7 @@ const OrdersListPage = () => {
       >
         <FilterDrawer
           onSubmit={onSubmitFilter}
-          columnOptions={orderListColumnFilterOptions}
+          columnOptions={colummnOptions}
           filters={filters}
         />
       </Drawer>

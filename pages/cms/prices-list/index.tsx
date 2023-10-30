@@ -5,6 +5,7 @@ import { Badge, Drawer, IconButton, Stack, Typography } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
 import AddPriceDialog from 'components/cms/prices-list/AddPriceDialog'
 import PricesList from 'components/cms/prices-list/PricesList'
+import { countries } from 'components/cms/prices-list/countryList'
 import {
   PricesListProvider,
   usePricesListControls
@@ -40,9 +41,11 @@ const columnOptions: ColumnOption[] = [
   },
   {
     columnName: 'countryCodes',
-    label: 'Country Code',
-    type: 'text',
-    operations: StringOperations
+    label: 'Country ',
+    type: 'select',
+    values: [...countries.map((c) => c.code)],
+    labels: [...countries.map((c) => c.label)],
+    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
   },
   {
     columnName: 'unit_amount',

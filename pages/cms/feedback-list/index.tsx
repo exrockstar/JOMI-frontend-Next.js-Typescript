@@ -11,7 +11,7 @@ import {
   Button,
   Box
 } from '@mui/material'
-import { feedbackListColumnFilterOptions } from 'components/access/institution/feedback/feedbacklistColumnFilterOptions'
+import { useFeedbackListColumnOptions } from 'components/access/institution/feedback/feedbacklistColumnFilterOptions'
 import CmsLayout from 'components/cms/CmsLayout'
 import {
   FeedbackListProvider,
@@ -26,25 +26,11 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { StringOperations } from 'components/common/FilterDrawer/operations'
 import FeedbackSettingsModal from 'components/cms/feedback-list/FeedbackSettingsModal'
 
-const columnFilterOptions: ColumnOption[] = [
-  ...feedbackListColumnFilterOptions,
-  {
-    columnName: '_institution._id',
-    label: 'Institution ID',
-    operations: StringOperations,
-    type: 'text'
-  },
-  {
-    columnName: '_institution.name',
-    label: 'Institution Name',
-    operations: StringOperations,
-    type: 'text'
-  }
-]
 const FeedbackListPage = () => {
   const { loading, error, filters, setFilters } = useFeedbackList()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  const columnOptions = useFeedbackListColumnOptions()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
 
@@ -60,7 +46,7 @@ const FeedbackListPage = () => {
       >
         <FilterDrawer
           onSubmit={onSubmitFilter}
-          columnOptions={columnFilterOptions}
+          columnOptions={columnOptions}
           filters={filters}
         />
       </Drawer>
