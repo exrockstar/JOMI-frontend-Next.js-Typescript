@@ -44,6 +44,7 @@ import dayjs from 'dayjs'
 import ArticleTranslationsDialog from 'components/cms/articles-list/ArticleTranslationsDialog'
 import PurchaseSettingDialog from 'components/cms/articles-list/PurchaseSettingDialog'
 import { ARTICLE_CATEGORIES } from 'common/constants'
+import { countries } from 'components/cms/prices-list/countryList'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -131,9 +132,15 @@ const columnOptions: ColumnOption[] = [
   },
   {
     columnName: 'purchaseAllowedCountries',
-    type: 'text',
+    type: 'select',
     label: 'PPA Scope',
-    operations: StringOperations
+    operations: [
+      QueryOperation.Equal,
+      QueryOperation.Contains,
+      QueryOperation.NotContains
+    ],
+    values: ['[]', ...countries.map((c) => c.code)],
+    labels: ['All Countries', ...countries.map((c) => c.label)]
   },
   {
     columnName: 'categories',
