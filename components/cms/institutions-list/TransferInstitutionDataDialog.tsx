@@ -82,8 +82,17 @@ const TransferInstitutionDataDialog: React.FC<DialogProps> = ({
       }}
       initialValues={{ from: [''], to: '' }}
       validationSchema={schema}
+      validateOnBlur={true}
     >
-      {({ setFieldValue, values, isValid, submitForm, errors }) => {
+      {({
+        setFieldValue,
+        values,
+        isValid,
+        submitForm,
+        errors,
+        resetForm,
+        isInitialValid
+      }) => {
         return (
           <>
             <ConfirmationDialog
@@ -93,17 +102,21 @@ const TransferInstitutionDataDialog: React.FC<DialogProps> = ({
                 transferInstitutionData({
                   variables: {
                     input: values
+                  },
+                  onCompleted() {
+                    resetForm()
                   }
                 })
               }}
               onCancel={() => {
                 setOpenConfirm(false)
+                resetForm()
               }}
               dialogTitle={'Confirm Transfer'}
               open={openConfirm}
             >
               <Typography color="error" fontWeight={700} my={2}>
-                This is action irreversible. Click {'Yes'} to continue.
+                This action is irreversible. Click {'Yes'} to continue.
               </Typography>
               <Typography color="text.secondary" variant="body2">
                 {' '}
