@@ -148,6 +148,18 @@ const trackTrial = (
   })
 }
 
+const trackCreateAccount = (
+  eventParams: Gtag.CustomParams | Gtag.ControlParams | Gtag.EventParams = {}
+) => {
+  const isClient = typeof window !== 'undefined'
+  gtag('event', 'create_account', {
+    ...eventParams,
+    referredFrom: isClient ? localStorage.getItem('referrer') ?? '' : '',
+    referrerPath: isClient ? localStorage.getItem('referrerPath') ?? '' : '',
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+}
+
 export const analytics = {
   init,
   set,
@@ -162,5 +174,6 @@ export const analytics = {
   event,
   trackPurchase,
   trackArticleView,
-  trackTrial
+  trackTrial,
+  trackCreateAccount
 }
