@@ -31,6 +31,7 @@ import { frontPageTheme } from 'components/theme'
 import { useAppState } from 'components/_appstate/useAppState'
 import { GetPricingSectionDataDocument } from 'graphql/queries/frontpage.generated'
 import { amplitudeTrackCreateAccount } from 'apis/amplitude'
+import { analytics } from 'apis/analytics'
 
 const schema = object({
   first_name: string().required('Please enter your first name.'),
@@ -101,6 +102,16 @@ const MoreInfoDialog2: React.FC<Props> = ({ data, open, onClose }: Props) => {
       }
     })
     amplitudeTrackCreateAccount({
+      firstName: values.first_name,
+      lastName: values.last_name,
+      institutionName: values.institution_name,
+      institutionalEmail: values.inst_email,
+      userType: values.user_type,
+      specialty: values.specialty,
+      userEmail: user.email
+    })
+    //ga4 tracking
+    analytics.trackCreateAccount({
       firstName: values.first_name,
       lastName: values.last_name,
       institutionName: values.institution_name,
