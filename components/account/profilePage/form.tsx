@@ -104,7 +104,7 @@ function ProfileForm({ loading }: Props) {
         </Box>
 
         <Box m={1} flex={1}>
-          <InputLabel>Institution Email</InputLabel>
+          <InputLabel>Institutional Email</InputLabel>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
             alignItems={{ xs: 'stretch', md: 'flex-end' }}
@@ -115,7 +115,7 @@ function ProfileForm({ loading }: Props) {
               variant="standard"
               id="institutional_email"
               name="institutional_email"
-              placeholder="Institutional Email"
+              placeholder="example@test.edu"
               fullWidth
               sx={{ flex: 2 }}
             />
