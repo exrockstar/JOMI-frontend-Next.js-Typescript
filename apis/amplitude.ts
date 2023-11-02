@@ -174,3 +174,14 @@ export const amplitudeTrackCreateAccount = (params: Object) => {
     anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   })
 }
+
+/**
+ * Purpose: Track when a user renews their subscription
+ * @param params: An Object whose properties we use to add to the tracked event.
+ */
+export const amplitudeTrackRenewal = (params: Object) => {
+  amplitude.track('Renewal', {
+    ...params,
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+}

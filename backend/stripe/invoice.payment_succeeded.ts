@@ -16,6 +16,8 @@ import { logger } from 'logger/logger'
 
 import Stripe from 'stripe'
 import { PriceMetadata } from './common/PriceMetadata'
+import { amplitudeTrackRenewal } from 'apis/amplitude'
+import { analytics } from 'apis/analytics'
 
 const API_KEY = process.env.STRIPE_SECRET_KEY
 
@@ -97,6 +99,37 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
         input: order
       },
       mutation: AddOrUpdateOrderDocument
+    })
+
+    amplitudeTrackRenewal({
+      transaction_id: order.plan_id,
+      value: order.amount,
+      promoCode: order.promoCode,
+      type: order.type,
+      userId: order.user_id,
+      items: [
+        {
+          item_id: order.plan_id,
+          item_name: order.description,
+          price: order.amount,
+          quantity: 1
+        }
+      ]
+    })
+
+    analytics.trackRenewal({
+      transaction_id: order.plan_id,
+      value: order.amount,
+      promoCode: order.promoCode,
+      event_label: order.type,
+      items: [
+        {
+          item_id: order.plan_id,
+          item_name: order.description,
+          price: order.amount,
+          quantity: 1
+        }
+      ]
     })
 
     if (discount.coupon) {
