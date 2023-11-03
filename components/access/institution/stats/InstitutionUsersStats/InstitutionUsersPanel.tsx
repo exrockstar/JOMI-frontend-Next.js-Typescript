@@ -1,4 +1,4 @@
-import { Info, InfoOutlined, Visibility } from '@mui/icons-material'
+import { Info, Visibility } from '@mui/icons-material'
 import {
   Stack,
   CircularProgress,
@@ -11,20 +11,15 @@ import {
   TableCell,
   TableRow,
   TableContainer,
-  TableFooter,
   Button,
   Chip,
-  TablePagination
+  TablePagination,
+  Link as MuiLink
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
 import { useUseUserByInstitutionListQuery } from 'graphql/cms-queries/user-list.generated'
-import {
-  AccessTypeEnum,
-  QueryOperation,
-  UserInput,
-  UserRoles
-} from 'graphql/types'
+import { UserInput, UserRoles } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -197,20 +192,31 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                           sx={{ borderBottom: 'none' }}
                         >
                           {isAdmin ? (
-                            <Link
+                            <MuiLink
+                              variant="body1"
                               href={`/cms/user/${user._id}`}
+                              component={Link}
                               target="_blank"
-                              passHref
                             >
-                              <Typography variant="body1" color="text.secondary">
-                                {user.display_name}
-                              </Typography>
-                            </Link>
+                              {user.display_name}
+                            </MuiLink>
                           ) : (
                             <Typography>{user.display_name}</Typography>
                           )}
-                          <Typography>{user.email}</Typography>  
-                          <Typography>{user.institutionalEmail}</Typography>
+                          <Typography
+                            variant="caption"
+                            display={'block'}
+                            color="text.secondary"
+                          >
+                            {user.email}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            display={'block'}
+                            color="text.secondary"
+                          >
+                            {user.institutionalEmail}
+                          </Typography>
                         </TableCell>
                       </StickyTableCell>
                       <TableCell>{user.user_type}</TableCell>
