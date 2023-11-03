@@ -1,7 +1,9 @@
 import {
   Alert,
   Box,
+  Card,
   CircularProgress,
+  Divider,
   Grid,
   Stack,
   Tooltip,
@@ -67,27 +69,59 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
         </Alert>
       )}
       {data && (
-        <Grid container gap={2}>
-          <StatCard label="Newly Registered Users" value={accessStats.users} />
-          <StatCard label="Active Users" value={accessStats.activeUsers} />
-          <StatCard
-            label="Anonymous Active Users"
-            value={accessStats.anonUserCount}
-          />
-          <StatCard label="Total Logins" value={accessStats.totalLogins} />
-          <StatCard
-            label="Total Article Views"
-            value={accessStats.totalArticleViews}
-          />
-          <StatCard
-            label="Article Views by User"
-            value={accessStats.articleViewsByUser}
-          />
-          <StatCard
-            label="Anonymous Article Views"
-            value={accessStats.anonymousArticleViews}
-          />
-        </Grid>
+        <>
+          <Grid container gap={2}>
+            <StatCard
+              label="Newly Registered Users"
+              value={accessStats.users}
+            />
+            <StatCard label="Active Users" value={accessStats.activeUsers} />
+
+            <StatCard
+              label="Article Views by User"
+              value={accessStats.articleViewsByUser}
+            />
+            <StatCard label="Total Logins" value={accessStats.totalLogins} />
+          </Grid>
+          <Divider sx={{ my: 2 }} />
+          <Grid container gap={2}>
+            <StatCard
+              label="Anonymous Users"
+              value={accessStats.anonUserCount}
+            />
+            <StatCard
+              label="Anonymous Article Views"
+              value={accessStats.anonymousArticleViews}
+            />
+          </Grid>
+          <Divider sx={{ my: 2 }} />
+          <Grid container gap={2}>
+            <StatCard
+              label="Total Article Views"
+              value={accessStats.totalArticleViews}
+            />
+          </Grid>
+
+          <Card sx={{ my: 2, p: 2 }}>
+            <Typography
+              color="text.secondary"
+              gutterBottom
+              variant="overline"
+              alignItems={'center'}
+              display="flex"
+              gap={1}
+            >
+              <InfoOutlined color="info" />
+              Guide
+            </Typography>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                <b>Anon</b> - traffic that is identified via IP addresses,
+                however, the users did not log in.
+              </Typography>
+            </Box>
+          </Card>
+        </>
       )}
       {data && institution && (
         <Grid container my={4}>
@@ -118,6 +152,7 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
               by="userType"
               title="Activity Breakdown By User Type"
               description="Shows activity breakdown by user type over the past period"
+              showHideAllButtons
             />
           </Grid>
           <Grid item xs={12} md={6}>

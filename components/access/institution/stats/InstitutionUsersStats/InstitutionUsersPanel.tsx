@@ -167,9 +167,14 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                 users?.map((user, i) => {
                   const access = user?.accessType?.accessType
 
-                  let stickyTableCellColor = i % 2 !== 0 ? 'white' : '#fafafa'
                   const isNoLongerMatched =
                     user.accessType.institution_id !== institutionId
+                  const isEven = i % 2 !== 0
+                  let stickyTableCellColor = isNoLongerMatched
+                    ? 'warning.light'
+                    : isEven
+                    ? 'white'
+                    : '#fafafa'
 
                   return (
                     <StyledTableRow

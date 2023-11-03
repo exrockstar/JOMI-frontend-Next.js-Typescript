@@ -26,7 +26,9 @@ type Props = {
 
 const UserTypesCard = ({ user_types, title }: Props) => {
   const data = {
-    labels: user_types.map((v) => v.user_type),
+    labels: user_types.map((v) =>
+      v.user_type === 'anon' ? 'Anon' : v.user_type
+    ),
     datasets: [
       {
         data: user_types.map((v, i) => v.count),
