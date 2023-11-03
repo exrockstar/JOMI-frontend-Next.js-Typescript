@@ -12,8 +12,8 @@ export const useQueryFilters = (
 
   const getFilters = (): ColumnFilter[] => {
     const queryFilters = router.query[filterKey] as string
-    const input = queryFilters?.split(',') ?? []
-
+    const input = queryFilters?.split('|') ?? []
+    console.log(input)
     if (!input) return []
     return input.map((filter) => {
       // template "{columnName}-{operation}-{value}"
@@ -21,7 +21,7 @@ export const useQueryFilters = (
       return {
         columnName,
         operation,
-        value
+        value: JSON.parse(value)
       } as ColumnFilter
     })
   }
@@ -32,10 +32,12 @@ export const useQueryFilters = (
         .map((filter) => {
           const { columnName, operation, value } = filter
 
-          const encoded = `${columnName}--${operation}--${value}`
+          const encoded = `${columnName}--${operation}--${JSON.stringify(
+            value
+          )}`
           return encoded
         })
-        .join(',')
+        .join('|')
 
       router.push(
         {

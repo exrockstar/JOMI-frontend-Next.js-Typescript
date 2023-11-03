@@ -33,7 +33,7 @@ export const useListInput = (initial: InitialInputState) => {
   const pageSize = query.page_size
     ? parseInt(query.page_size)
     : initial.page_size
-  const { filters, setFilters } = useQueryFilters()
+  const { filters, setFilters, filterOpen, setFilterOpen } = useQueryFilters()
   const searchTerm = query.search as string
 
   const setPage = (page: number) => {
@@ -109,7 +109,9 @@ export const useListInput = (initial: InitialInputState) => {
     searchTerm: searchTerm,
     setSearchTerm,
     filters,
-    setFilters
+    setFilters,
+    filterOpen,
+    setFilterOpen
   }
 }
 

@@ -27,7 +27,7 @@ import { ColumnFilter } from 'graphql/types'
 import { FilterList, Settings } from '@mui/icons-material'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import TableFilters from 'components/common/TableFilters'
-import { feedbackListColumnFilterOptions } from './feedbacklistColumnFilterOptions'
+import { useFeedbackListColumnOptions } from './feedbacklistColumnFilterOptions'
 import { useGetFeedbackSettingsQuery } from 'graphql/cms-queries/feedback-list.generated'
 import CircularLoader from 'components/common/CircularLoader'
 const InstitutionFeedbackList = () => {
@@ -35,6 +35,7 @@ const InstitutionFeedbackList = () => {
     useInstitutionFeedbackList()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { data: settingsData } = useGetFeedbackSettingsQuery()
+  const columnOptions = useFeedbackListColumnOptions()
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     if (!filters) return
 
@@ -56,7 +57,7 @@ const InstitutionFeedbackList = () => {
       >
         <FilterDrawer
           onSubmit={onSubmitFilter}
-          columnOptions={feedbackListColumnFilterOptions}
+          columnOptions={columnOptions}
           filters={filters}
         />
       </Drawer>
