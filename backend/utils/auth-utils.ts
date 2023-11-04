@@ -13,7 +13,7 @@ export function getAuthInput(
       return getFacebookSocialInfo(profile)
     case 'linkedin':
       return getLinkedInSocialInfo(profile, user)
-    // case 'apple': 
+    // case 'apple':
     //   return getAppleSocialInfo(profile)
   }
 }
