@@ -123,12 +123,12 @@ const TrafficOverTimeByUserType = () => {
               <Line
                 id="traffic-over-time"
                 data={{
-                  labels: output.labels,
+                  labels: output.labels.map((l) => (l === 'anon' ? 'Anon' : l)),
                   datasets: output.datasets.map((x, i) => {
                     const color = graphColors[i]
                     return {
                       data: x.data,
-                      label: x.label,
+                      label: x.label === 'anon' ? 'Anon' : x.label,
                       backgroundColor: color,
                       borderColor: color,
                       tension: 0.4

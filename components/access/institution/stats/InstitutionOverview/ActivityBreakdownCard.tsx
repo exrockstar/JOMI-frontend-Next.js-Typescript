@@ -15,13 +15,20 @@ import { Bar, Doughnut } from 'react-chartjs-2'
 import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
 import { Chart } from 'chart.js'
+import { capitalize } from 'lodash'
 
 type Props = {
   by: 'userType' | 'contentType'
   title: string
   description: string
+  showHideAllButtons?: boolean
 }
-const ActivityBreakdownCard = ({ by, title, description }: Props) => {
+const ActivityBreakdownCard = ({
+  by,
+  title,
+  description,
+  showHideAllButtons
+}: Props) => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
     useInstitutionAccessInput()
   const { data, loading, error } = useInstitutionTrafficBreakdownQuery({
@@ -61,44 +68,48 @@ const ActivityBreakdownCard = ({ by, title, description }: Props) => {
           {error && <Alert severity="error">{error.message}</Alert>}
           {chartData && (
             <>
-              <Box
-                display="flex"
-                gap={2}
-                alignItems="center"
-                justifyContent={'center'}
-              >
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    const chart_ref = ref.current as Chart
-                    chartData.labels.map((item, i) => {
-                      if (chart_ref?.getDataVisibility(i)) {
-                        chart_ref?.toggleDataVisibility(i)
-                      }
-                    })
-                    chart_ref?.update()
-                  }}
+              {showHideAllButtons && (
+                <Box
+                  display="flex"
+                  gap={2}
+                  alignItems="center"
+                  justifyContent={'center'}
                 >
-                  Hide All
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    const chart_ref = ref.current as Chart
-                    chartData.labels.map((item, i) => {
-                      if (!chart_ref?.getDataVisibility(i)) {
-                        chart_ref?.toggleDataVisibility(i)
-                      }
-                    })
-                    chart_ref?.update()
-                  }}
-                >
-                  Show All
-                </Button>
-              </Box>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      const chart_ref = ref.current as Chart
+                      chartData.labels.map((item, i) => {
+                        if (chart_ref?.getDataVisibility(i)) {
+                          chart_ref?.toggleDataVisibility(i)
+                        }
+                      })
+                      chart_ref?.update()
+                    }}
+                  >
+                    Hide All
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      const chart_ref = ref.current as Chart
+                      chartData.labels.map((item, i) => {
+                        if (!chart_ref?.getDataVisibility(i)) {
+                          chart_ref?.toggleDataVisibility(i)
+                        }
+                      })
+                      chart_ref?.update()
+                    }}
+                  >
+                    Show All
+                  </Button>
+                </Box>
+              )}
               <Component
                 data={{
-                  labels: chartData.labels,
+                  labels: chartData.labels.map((l) =>
+                    l === 'anon' ? 'Anon' : l
+                  ),
                   datasets: chartData.datasets.map((x, i) => {
                     const colors = graphColors.slice(0, chartData.labels.length)
                     return {
