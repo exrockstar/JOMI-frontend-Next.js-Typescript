@@ -30,7 +30,7 @@ import {
   UpsertSocialUserMutationVariables,
   UpsertSocialUserDocument
 } from 'graphql/mutations/upsert-social-user.generated'
-import { User } from 'graphql/types'
+import { User, UserRoles } from 'graphql/types'
 import { ClientInfo } from 'middleware/types'
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -47,7 +47,31 @@ export default async function handler(
     providers: [
       FacebookProvider({
         clientId: process.env.FACEBOOK_CLIENT_ID,
-        clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+        clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        userinfo: {
+          url: 'https://graph.facebook.com/me',
+          // https://developers.facebook.com/docs/graph-api/reference/user/#fields
+          params: { fields: 'id,name,email,picture,first_name,last_name' },
+          async request({ tokens, client, provider }) {
+            return await client.userinfo(tokens.access_token!, {
+              // @ts-expect-error
+              params: provider.userinfo?.params
+            })
+          }
+        },
+        profile: (_profile, tokens) => {
+          return {
+            _id: _profile.id,
+            id: _profile.id,
+            firstName: _profile.first_name,
+            lastName: _profile.last_name,
+            email: _profile.email,
+            fullName: _profile.name,
+            isPasswordSet: false,
+            role: UserRoles.User,
+            token: tokens.access_token
+          }
+        }
       }),
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID,
