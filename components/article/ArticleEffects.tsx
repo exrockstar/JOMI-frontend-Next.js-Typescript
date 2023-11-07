@@ -28,7 +28,6 @@ const ArticleEffects = ({ article }: Props) => {
 
   useEffect(() => {
     const handler = () => {
-      console.log("TRACKING ARTICLE VIEW")
       //track in GA4
       analytics.trackArticleView({
         categories: article.categories.map((c) => {

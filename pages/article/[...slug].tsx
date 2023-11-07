@@ -1,6 +1,6 @@
-import { memo, useState, useMemo } from 'react'
+import { memo, useState, useMemo, useEffect } from 'react'
 import { ParsedUrlQuery } from 'querystring'
-import { Box, Grid, Hidden } from '@mui/material'
+import { Box, Grid, Hidden, Typography } from '@mui/material'
 import Layout from 'components/layout'
 import ArticleTabs from 'components/article/ArticleTabs'
 import ArticleSideBar from 'components/article/sidebar/ArticleSideBar'
@@ -45,6 +45,8 @@ import { APOLLO_STATE_PROP_NAME } from 'apis/apollo-client'
 import Error404 from 'components/error-pages/Error404'
 import { useAppState } from 'components/_appstate/useAppState'
 import CTAButton from 'components/common/CTAButton'
+import { useSearchParams } from 'next/navigation'
+
 const ArticlePassword = dynamic(
   () => import('components/article/ArticlePassword')
 )
@@ -62,9 +64,20 @@ const isProduction = process.env.APP_ENV === 'production'
 function SingleArticle({ article }: SingleArticleProps) {
   const [showArticle, setShowArticle] = useState(!article?.isPasswordProtected)
   const { feedbackButtonText, setShowFeedbackDialog } = useAppState()
+  const [peerReview, setPeerReview] = useState(false)
+  const searchParams = useSearchParams()
   const onComplete = () => {
     setShowArticle(true)
   }
+
+  //Used to show the View Peer Review Form button
+  useEffect(() => {
+    if(searchParams.get('pr') === 'true') {
+      setPeerReview(true)
+    } else {
+      setPeerReview(false)
+    }
+  }, [searchParams])
 
   const ArticleContent = useMemo(() => {
     if (!article) return <Error404 />
@@ -76,7 +89,6 @@ function SingleArticle({ article }: SingleArticleProps) {
         <ChapterProvider chapters={article?.chapters}>
           <ArticleVideo article={article} />
         </ChapterProvider>
-
         <Box display={{ xs: 'block', md: 'none' }}>
           <LanguageSwitcher enabledLanguages={article.enabled_languages} />
         </Box>
@@ -99,7 +111,6 @@ function SingleArticle({ article }: SingleArticleProps) {
                 <AuthorsSection article={article} />
               </header>
               <CategoryBadges article={article} />
-
               <ArticleTabs article={article} />
             </article>
           </Grid>
@@ -126,9 +137,18 @@ function SingleArticle({ article }: SingleArticleProps) {
             </CTAButton>
           </Box>
         )}
+        {peerReview && 
+          <Box position="fixed" right={170} bottom={16} sx={{ zIndex: 500 }}>
+            <CTAButton
+              href='https://docs.google.com/forms/d/e/1FAIpQLSeqB_XMf-QXaldTLpG5bZ9bSYGjup6hWM4pLD-yI0mJ9rdxZg/viewform?urp=gmail_link'
+            >
+              View Peer Review Form
+            </CTAButton>
+          </Box>
+        }
       </div>
     )
-  }, [article, feedbackButtonText, setShowFeedbackDialog])
+  }, [article, feedbackButtonText, setShowFeedbackDialog, peerReview])
 
   if (article?.isPasswordProtected && !showArticle) {
     return (

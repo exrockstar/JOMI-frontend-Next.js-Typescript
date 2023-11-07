@@ -106,7 +106,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
 
   const trackVideoBlockWithRateLimiter = (accessType: string) => {
     if (!isRateLimited) {
-      console.log("TRACKING VIDEO BLOCK")
       trackVideoBlock({
         variables: {
           input: {
