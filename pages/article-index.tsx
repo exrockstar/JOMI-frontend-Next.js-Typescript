@@ -216,7 +216,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     query: PageBySlugDocument,
     fetchPolicy: 'no-cache'
   })
-  const examplecasesId = ['251', '315', '273', '301']
+  const examplecasesId = ['336', '315', '273', '301']
   const authorIndex = [0, 2, 0, 1]
   const { data: articles } = await client.query<
     ArticlesQuery,
