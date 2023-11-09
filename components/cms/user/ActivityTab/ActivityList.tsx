@@ -90,7 +90,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                   <TableCell>Created</TableCell>
                   <TableCell>Type</TableCell>
                   <TableCell>Access Type</TableCell>
-                  <TableCell>Mattched by</TableCell>
+                  <TableCell>Matched by</TableCell>
                   <TableCell>Institution</TableCell>
                   <TableCell>Order ID</TableCell>
                   <TableCell>Article Title</TableCell>
