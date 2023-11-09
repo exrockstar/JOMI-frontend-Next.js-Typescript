@@ -20,6 +20,8 @@ import dayjs from 'dayjs'
 import { useAccessesByUserIdQuery } from 'graphql/cms-queries/user-accesses.generated'
 import { ActivityType } from 'graphql/types'
 import React from 'react'
+import TimeWatched from './TimeWatched'
+import _ from 'lodash'
 
 type Props = {
   userId: string
@@ -87,7 +89,8 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                 <TableRow>
                   <TableCell>Created</TableCell>
                   <TableCell>Type</TableCell>
-                  <TableCell>AccessType</TableCell>
+                  <TableCell>Access Type</TableCell>
+                  <TableCell>Mattched by</TableCell>
                   <TableCell>Institution</TableCell>
                   <TableCell>Order ID</TableCell>
                   <TableCell>Article Title</TableCell>
@@ -101,7 +104,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                     <StyledTableRow key={index}>
                       <TableCell sx={{ maxWidth: 150 }}>
                         {dayjs(activity.created).format(
-                          'MM/DD/YYYY - HH:mm:ss A'
+                          'MM/DD/YYYY - HH:mm:ss'
                         )}
                       </TableCell>
                       <TableCell sx={{ maxWidth: 150 }}>
@@ -117,15 +120,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                           </Typography>
                         )}
                         {activity.activity === ActivityType.VideoPlay && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            ml={0.5}
-                          >
-                            {activity.time_watched > 0
-                              ? `(${activity.time_watched}s)`
-                              : ''}
-                          </Typography>
+                          <TimeWatched time_watched={activity.time_watched} />
                         )}
                       </TableCell>
                       <TableCell
@@ -136,7 +131,17 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                           whiteSpace: 'nowrap'
                         }}
                       >
-                        {activity.accessType ?? 'Unknown'}
+                        {_.startCase(activity.accessType ?? 'Unknown')}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: 200,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {_.startCase(activity.matchedBy ?? 'Unknown')}
                       </TableCell>
                       <TableCell
                         sx={{

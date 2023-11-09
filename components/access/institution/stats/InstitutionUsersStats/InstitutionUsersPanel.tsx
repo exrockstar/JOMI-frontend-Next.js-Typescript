@@ -14,7 +14,8 @@ import {
   Button,
   Chip,
   TablePagination,
-  Link as MuiLink
+  Link as MuiLink,
+  IconButton
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
@@ -224,6 +225,24 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                           </Typography>
                         </TableCell>
                       </StickyTableCell>
+                      <TableCell title={'See user details and activity logs'}>
+                        <Link
+                          href={{
+                            pathname: `/access/${institutionId}/users/${user._id}`,
+                            query: cleanObj({
+                              ...router.query,
+                              filters: null,
+                              id: null
+                            })
+                          }}
+                          passHref
+                          legacyBehavior
+                        >
+                          <IconButton color="primary">
+                            <Visibility />
+                          </IconButton>
+                        </Link>
+                      </TableCell>
                       <TableCell>{user.user_type}</TableCell>
                       <TableCell>{user.specialty ?? 'Not specified'}</TableCell>
                       <TableCell>{user.articleCount}</TableCell>
@@ -259,22 +278,6 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
                         <Typography sx={{ textTransform: 'capitalize' }}>
                           {access}
                         </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Link
-                          href={{
-                            pathname: `/access/${institutionId}/users/${user._id}`,
-                            query: cleanObj({
-                              ...router.query,
-                              filters: null,
-                              id: null
-                            })
-                          }}
-                          passHref
-                          legacyBehavior
-                        >
-                          <Button startIcon={<Visibility />}>Details</Button>
-                        </Link>
                       </TableCell>
                     </StyledTableRow>
                   )

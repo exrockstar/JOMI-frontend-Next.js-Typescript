@@ -35,6 +35,8 @@ import CustomDatePicker from 'components/common/CustomDatePicker'
 import { useQueryFilters } from 'components/hooks/useQueryFilters'
 import GlobalFilterDrawer from '../institution/GlobalFilterDrawer'
 import FilterButton from 'components/common/FilterButton'
+import TimeWatched from 'components/cms/user/ActivityTab/TimeWatched'
+import _ from 'lodash'
 
 const UserActivityTable = () => {
   const router = useRouter()
@@ -46,7 +48,7 @@ const UserActivityTable = () => {
   const sort_order = sort_order_str === 'desc' ? -1 : 1
   const page = parseInt((router.query.page as string) ?? '1')
   const activity = (router.query.activity as string) ?? 'All'
-  const perPage = parseInt((router.query.page_size as string) ?? '10')
+  const perPage = parseInt((router.query.page_size as string) ?? '25')
   const skip = (page - 1) * perPage
   const start = router.query.start as string | null
   const end = router.query.end as string | null
@@ -248,16 +250,14 @@ const UserActivityTable = () => {
                       <TableCell sx={{ display: 'flex' }}>
                         {activityText}
                         {activity.activity === ActivityType.VideoPlay && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            ml={0.5}
-                          >
-                            {activity.time_watched > 0
-                              ? `(${activity.time_watched}s)`
-                              : ''}
-                          </Typography>
+                          <TimeWatched time_watched={activity.time_watched} />
                         )}
+                      </TableCell>
+                      <TableCell>
+                        {_.startCase(activity.matchedBy ?? 'Unknown')}
+                      </TableCell>
+                      <TableCell>
+                        {_.startCase(activity.accessType ?? 'Unknown')}
                       </TableCell>
                       <TableCell sx={{ maxWidth: 480, whiteSpace: 'pre-wrap' }}>
                         {(activity.activity !== ActivityType.Login && (

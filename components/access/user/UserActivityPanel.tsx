@@ -47,13 +47,15 @@ const UserActivityPanel = ({ userId, instId }: Props) => {
         </Link>
       </Box>
       <Grid container>
-        <Grid item xs={12} lg={3}>
-          <UserDetailsCard userId={userId} />
-          <Box my={2}>
-            <UserSubscriptionCard userId={userId} />
-          </Box>
-        </Grid>
         <Grid item xs={12} lg={9}>
+          <UserDetailsCard userId={userId} />
+        </Grid>
+        <Grid item xs={12} lg={3}>
+          <UserSubscriptionCard userId={userId} />
+        </Grid>
+      </Grid>
+      <Grid container sx={{ my: 2 }}>
+        <Grid item xs={12}>
           {!hidden ? (
             <UserActivityTable />
           ) : (

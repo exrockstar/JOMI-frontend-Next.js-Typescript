@@ -15,7 +15,7 @@ export type AccessEventsQueryVariables = Types.Exact<{
 }>;
 
 
-export type AccessEventsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null | undefined, article_title?: string | null | undefined, article_publication_id?: string | null | undefined, created: any, ip_address_str?: string | null | undefined, time_watched?: number | null | undefined, referredFrom?: string | null | undefined, referrerPath?: string | null | undefined, user?: { __typename?: 'User', display_name?: string | null | undefined, email: string, referer?: string | null | undefined, referrerPath?: string | null | undefined } | null | undefined, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null | undefined, regionName?: string | null | undefined } | null | undefined, institution?: { __typename?: 'Institution', name: string } | null | undefined }> } };
+export type AccessEventsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null | undefined, article_title?: string | null | undefined, article_publication_id?: string | null | undefined, created: any, ip_address_str?: string | null | undefined, matchedBy?: Types.MatchedBy | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, time_watched?: number | null | undefined, referredFrom?: string | null | undefined, referrerPath?: string | null | undefined, user?: { __typename?: 'User', display_name?: string | null | undefined, email: string, referer?: string | null | undefined, referrerPath?: string | null | undefined } | null | undefined, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null | undefined, regionName?: string | null | undefined } | null | undefined, institution?: { __typename?: 'Institution', name: string } | null | undefined }> } };
 
 export type InstutionAccessOverviewQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -154,6 +154,8 @@ export const AccessEventsDocument = gql`
       institution {
         name
       }
+      matchedBy
+      accessType
       time_watched
       referredFrom
       referrerPath

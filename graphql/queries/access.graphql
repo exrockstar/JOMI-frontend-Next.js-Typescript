@@ -45,6 +45,8 @@ query AccessEvents($input: AccessFilterInput) {
       institution {
         name
       }
+      matchedBy
+      accessType
       time_watched
       referredFrom
       referrerPath
