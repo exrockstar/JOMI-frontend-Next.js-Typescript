@@ -22,6 +22,14 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'activity',
     label: 'Activity Type'
+  },
+  {
+    id: 'matchedBy',
+    label: 'Matched By'
+  },
+  {
+    id: 'accessType',
+    label: 'Access Type'
   }
 ]
 

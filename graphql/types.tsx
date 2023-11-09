@@ -32,6 +32,7 @@ export type Access = {
   institution?: Maybe<Institution>;
   ip_address_str?: Maybe<Scalars['String']>;
   locationId?: Maybe<Scalars['String']>;
+  matchedBy?: Maybe<MatchedBy>;
   orderId?: Maybe<Scalars['String']>;
   order_amount?: Maybe<Scalars['Float']>;
   promoCode?: Maybe<Scalars['String']>;
@@ -103,6 +104,7 @@ export enum AccessTypeEnum {
   IndividualSubscription = 'IndividualSubscription',
   IndividualTrial = 'IndividualTrial',
   InstitutionLoginRequired = 'InstitutionLoginRequired',
+  InstitutionNameOrAliasRestricted = 'InstitutionNameOrAliasRestricted',
   InstitutionSubscriptionExpired = 'InstitutionSubscriptionExpired',
   InstitutionalSubscription = 'InstitutionalSubscription',
   InstitutionalTrial = 'InstitutionalTrial',

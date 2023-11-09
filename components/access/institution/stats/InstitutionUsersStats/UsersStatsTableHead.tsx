@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { StickyTableCell } from 'components/common/StickyTableCell'
 
 interface HeadCell {
-  id: keyof User | `subscription.${keyof User['subscription']}`
+  id: keyof User | `subscription.${keyof User['subscription']}` | 'details'
   label: string
   sticky?: boolean
 }
@@ -22,6 +22,10 @@ const headCells: readonly HeadCell[] = [
     id: 'email',
     label: 'Name\n & Email(s)',
     sticky: true
+  },
+  {
+    id: 'details',
+    label: 'Details'
   },
   {
     id: 'user_type',
@@ -62,7 +66,7 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'subscription.lastSubType',
     label: 'Access'
-  },
+  }
 ]
 
 const UserStatsTableHead = () => {
@@ -123,7 +127,6 @@ const UserStatsTableHead = () => {
             content
           )
         })}
-        <TableCell key={'details'}>Details</TableCell>
       </TableRow>
     </TableHead>
   )

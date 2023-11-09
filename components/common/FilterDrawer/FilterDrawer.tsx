@@ -179,11 +179,7 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                       value={filter.value}
                       type={columnOption.type}
                       onChange={(e) => {
-                        const val =
-                          columnOption.type === 'number'
-                            ? parseFloat(e.target.value)
-                            : e.target.value
-                        handleValueChange(index, val)
+                        handleValueChange(index, e.target.value)
                       }}
                     />
                   )}
@@ -229,9 +225,7 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                       placeholder="Value"
                       size="small"
                       value={filter.value}
-                      onChange={(e) =>
-                        handleValueChange(index, e.target.value === 'true')
-                      }
+                      onChange={(e) => handleValueChange(index, e.target.value)}
                     >
                       <MenuItem value={'true'}>True</MenuItem>
                       <MenuItem value={'false'}>False</MenuItem>
