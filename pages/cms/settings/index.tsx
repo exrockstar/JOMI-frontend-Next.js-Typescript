@@ -40,6 +40,7 @@ import {
   useRunJobManuallyMutation
 } from 'graphql/cms-queries/jobs.generated'
 import PayPerArticleSettings from 'components/settings/PayPerArticleSettings'
+import RequestInstSubSettings from 'components/settings/RequestInstSubSettings'
 
 const Settings = () => {
   const [generatingSitemap, setGeneratingSitemap] = useState(false)
@@ -165,7 +166,8 @@ const Settings = () => {
           isRentArticleFeatureOn: settings.isRentArticleFeatureOn,
           rentDuration: settings.rentDuration,
           displayPurchaseAndRentToAdminOnly:
-            settings.displayPurchaseAndRentToAdminOnly
+            settings.displayPurchaseAndRentToAdminOnly,
+          isRequestInstSubButtonPaperOn: settings.isRequestInstSubButtonPaperOn
         }}
       >
         <Form>
@@ -197,7 +199,11 @@ const Settings = () => {
             <Grid item lg={4}>
               <PayPerArticleSettings />
             </Grid>
+            <Grid item lg={4}>
+              <RequestInstSubSettings />
+            </Grid>
           </Grid>
+          
           <SaveButton />
         </Form>
       </Formik>

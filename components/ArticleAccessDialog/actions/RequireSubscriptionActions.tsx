@@ -1,4 +1,4 @@
-import { Divider, Stack } from '@mui/material'
+import { Divider, Stack, Typography } from '@mui/material'
 import { analytics } from 'apis/analytics'
 import CTAButton from 'components/common/CTAButton'
 import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'

@@ -7,6 +7,7 @@ type Props = {
   data: ArticleAccessQuery
 }
 const EvaluationSection = ({ data }: Props) => {
+  data.getIsRequestInstSubButtonPaperOn
   return (
     <>
       <Box p={2}>
@@ -17,7 +18,10 @@ const EvaluationSection = ({ data }: Props) => {
         </Typography>
         <Stack gap={2} mt={2}>
           <PurchaseSubscriptionCard data={data} />
-          <RequestSubscriptionCard />
+          { 
+            data.getIsRequestInstSubButtonPaperOn && 
+              <RequestSubscriptionCard />
+          }
         </Stack>
       </Box>
     </>

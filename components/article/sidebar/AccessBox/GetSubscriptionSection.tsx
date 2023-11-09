@@ -9,7 +9,10 @@ const GetSubscriptionSection = ({ data }: Props) => {
   return (
     <Stack gap={2} p={2}>
       <PurchaseSubscriptionCard data={data} />
-      <RequestSubscriptionCard />
+      {
+        data.getIsRequestInstSubButtonPaperOn && 
+          <RequestSubscriptionCard />
+      }
     </Stack>
   )
 }

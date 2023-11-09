@@ -33,6 +33,7 @@ query ArticleAccess($publication_id: String!) {
     trialDuration
     trialsAllowed
   }
+  getIsRequestInstSubButtonPaperOn
 }
 
 query ShowFeedbackModal($anon_link_id: String!){
