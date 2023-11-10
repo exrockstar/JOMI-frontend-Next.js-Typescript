@@ -30,6 +30,10 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'accessType',
     label: 'Access Type'
+  },
+  {
+    id: 'institution',
+    label: 'Institution Name'
   }
 ]
 
@@ -40,12 +44,11 @@ const UserActivityTableHead = () => {
   const sort_order = sort_order_str === 'desc' ? -1 : 1
   const createSortHandler =
     (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
-      const order = sort_order >= 1 ? 'desc' : 'asc'
       router.push({
         query: {
           ...router.query,
           sort_by: property,
-          sort_order: order
+          sort_order: -sort_order
         }
       })
     }

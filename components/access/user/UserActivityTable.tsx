@@ -1,26 +1,14 @@
-import { ArrowBack, FilterList } from '@mui/icons-material'
 import {
-  Badge,
   Box,
-  Button,
   Card,
-  CardContent,
   Divider,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Pagination,
-  Select,
   SelectChangeEvent,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableFooter,
   TablePagination,
-  Tooltip,
   Typography
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
@@ -43,9 +31,10 @@ const UserActivityTable = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { filters: globalFilters } = useQueryFilters('global')
   const userId = router.query.userId as string
+  const institution_id = router.query.id as string
   const sort_by = (router.query.sort_by as string) ?? 'created'
-  const sort_order_str = (router.query.sort_order as string) ?? 'desc'
-  const sort_order = sort_order_str === 'desc' ? -1 : 1
+  const sort_order_str = (router.query.sort_order as string) ?? '-1'
+  const sort_order = parseInt(sort_order_str)
   const page = parseInt((router.query.page as string) ?? '1')
   const activity = (router.query.activity as string) ?? 'All'
   const perPage = parseInt((router.query.page_size as string) ?? '25')
@@ -61,6 +50,11 @@ const UserActivityTable = () => {
       {
         columnName: 'user_id',
         value: userId,
+        operation: QueryOperation.Equal
+      },
+      {
+        columnName: 'institution',
+        value: institution_id,
         operation: QueryOperation.Equal
       }
     ],
@@ -258,6 +252,15 @@ const UserActivityTable = () => {
                       </TableCell>
                       <TableCell>
                         {_.startCase(activity.accessType ?? 'Unknown')}
+                      </TableCell>
+                      <TableCell>
+                        {activity.institution ? (
+                          <Link href={`/access/${activity.institution._id}`}>
+                            {activity.institution.name}
+                          </Link>
+                        ) : (
+                          'Unknown'
+                        )}
                       </TableCell>
                       <TableCell sx={{ maxWidth: 480, whiteSpace: 'pre-wrap' }}>
                         {(activity.activity !== ActivityType.Login && (
