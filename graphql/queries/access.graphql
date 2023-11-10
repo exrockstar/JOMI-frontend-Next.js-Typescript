@@ -43,6 +43,7 @@ query AccessEvents($input: AccessFilterInput) {
         regionName
       }
       institution {
+        _id
         name
       }
       matchedBy

@@ -104,7 +104,6 @@ export enum AccessTypeEnum {
   IndividualSubscription = 'IndividualSubscription',
   IndividualTrial = 'IndividualTrial',
   InstitutionLoginRequired = 'InstitutionLoginRequired',
-  InstitutionNameOrAliasRestricted = 'InstitutionNameOrAliasRestricted',
   InstitutionSubscriptionExpired = 'InstitutionSubscriptionExpired',
   InstitutionalSubscription = 'InstitutionalSubscription',
   InstitutionalTrial = 'InstitutionalTrial',
