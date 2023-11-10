@@ -1,7 +1,6 @@
 import {
   Alert,
   Box,
-  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -10,53 +9,65 @@ import {
   Stack,
   Typography
 } from '@mui/material'
-import { useRef, useState } from 'react'
-import {
-  CategoryScale,
-  Tooltip,
-  LinearScale,
-  LineElement,
-  Chart
-} from 'chart.js'
+import React, { useRef, useState } from 'react'
+import Chart from 'chart.js/auto'
+import { CategoryScale, Tooltip, LinearScale, LineElement } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { useInstitutionTrafficOverTimeByUserTypeQuery } from 'graphql/queries/access.generated'
 import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
+import { useInstitutionTrafficOverTimeQuery } from 'graphql/queries/access.generated'
+
 Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
 
-const TrafficOverTimeByUserType = () => {
+const BlocksOverTimeCard = () => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
     useInstitutionAccessInput()
   const [groupBy, setGroupBy] = useState('month') //day ,month, year
-  const ref = useRef<any>(null)
-  const { data, loading, error } = useInstitutionTrafficOverTimeByUserTypeQuery(
-    {
-      variables: {
-        input: {
-          startDate,
-          endDate,
-          institutionId,
-          filters,
-          globalFilters
-        },
-        groupBy: groupBy
-      }
+  const { data, loading, error } = useInstitutionTrafficOverTimeQuery({
+    variables: {
+      input: {
+        endDate,
+        startDate,
+        filters,
+        globalFilters,
+        institutionId
+      },
+      groupBy: groupBy
     }
-  )
-  const output = data?.traffic
-
+  })
+  const chartData = data?.institutionBlocksOverTime
   return (
     <Card>
       <Box p={2}>
-        <Typography variant="overline">Activity By User Type</Typography>
-        <Typography
-          color="text.secondary"
-          gutterBottom
-          variant="caption"
-          display="block"
-        >
-          Shows activity by user type over the past period
-        </Typography>
+        <Typography variant="overline">Users Blocked Over Time</Typography>
+
+        <Box>
+          <Typography variant="caption" color="text.secondary">
+            <b>Not Subscribed</b> - Users who were logged in, had restricted
+            access because they were not subscribed. Please note that data prior
+            to 8/14/2023 is not available.
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{ display: 'block' }}
+            color="text.secondary"
+          >
+            <b>Logged-In But Blocked Users</b> - Users who were logged in, had
+            restricted access because their email was not verified.Please note
+            that data prior to 8/14/2023 did not include the reason who why
+            access was denied.
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{ display: 'block' }}
+            color="text.secondary"
+          >
+            <b>Login Required</b> - Users who were not logged in, had restricted
+            access because their institution requires them to be logged into an
+            account. Please note that data prior to 8/14/2023 is not available.
+          </Typography>
+          <Typography></Typography>
+        </Box>
         <CardContent sx={{ height: 300, width: '100%' }}>
           {loading && (
             <Stack alignItems="center">
@@ -65,7 +76,7 @@ const TrafficOverTimeByUserType = () => {
             </Stack>
           )}
           {error && <Alert severity="error">{error.message}</Alert>}
-          {output && (
+          {chartData && (
             <>
               <Box
                 display="flex"
@@ -73,38 +84,6 @@ const TrafficOverTimeByUserType = () => {
                 alignItems="center"
                 justifyContent={'flex-end'}
               >
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    const chart_ref = ref.current as Chart
-                    if (chart_ref) {
-                      output.datasets.map((item, i) => {
-                        chart_ref.getDatasetMeta(i).hidden = true
-                      })
-                      chart_ref?.update()
-                    } else {
-                      console.log(chart_ref)
-                    }
-                  }}
-                >
-                  Hide All
-                </Button>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    const chart_ref = ref.current as Chart
-                    if (chart_ref) {
-                      output.datasets.map((item, i) => {
-                        chart_ref.getDatasetMeta(i).hidden = false
-                      })
-                      chart_ref?.update()
-                    } else {
-                      console.log(chart_ref)
-                    }
-                  }}
-                >
-                  Show All
-                </Button>
                 <Typography variant="body2" fontWeight="bold">
                   Group By
                 </Typography>
@@ -121,30 +100,37 @@ const TrafficOverTimeByUserType = () => {
               </Box>
 
               <Line
-                id="traffic-over-time"
+                id="blocks-over-time"
+                key={new Date().getTime()}
                 data={{
-                  labels: output.labels.map((l) => (l === 'anon' ? 'Anon' : l)),
-                  datasets: output.datasets.map((x, i) => {
+                  labels: chartData.labels,
+                  datasets: chartData.datasets.map((x, i) => {
                     const color = graphColors[i]
                     return {
                       data: x.data,
-                      label: x.label === 'anon' ? 'Anon' : x.label,
+                      label: x.label,
                       backgroundColor: color,
                       borderColor: color,
                       tension: 0.4
                     }
                   })
                 }}
-                ref={ref}
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  },
                   plugins: {
                     tooltip: {
                       mode: 'x'
                     },
                     legend: {
-                      onClick(e, legendItem) {
+                      display: true,
+                      onClick(e, legendItem, legend) {
+                        console.log(legendItem)
                         const allVisible = this.legendItems.every(
                           (i) => !i.hidden
                         )
@@ -166,17 +152,12 @@ const TrafficOverTimeByUserType = () => {
                         this.chart.update()
                       }
                     }
-                  },
-                  scales: {
-                    y: {
-                      beginAtZero: true
-                    }
                   }
                 }}
               ></Line>
             </>
           )}
-          {!loading && !error && !output && (
+          {!loading && !error && !chartData && (
             <Alert severity="info">No Data</Alert>
           )}
         </CardContent>
@@ -185,4 +166,4 @@ const TrafficOverTimeByUserType = () => {
   )
 }
 
-export default TrafficOverTimeByUserType
+export default BlocksOverTimeCard

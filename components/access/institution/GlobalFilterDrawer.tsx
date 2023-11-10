@@ -74,6 +74,18 @@ const GlobalFilterDrawer = () => {
       operations: [QueryOperation.Equal, QueryOperation.NotEqual],
       values: ['article', 'video-play', 'video-block'],
       labels: ['Article View', 'Video Play', 'Video Block']
+    },
+    {
+      label: 'User ID',
+      columnName: 'user_id',
+      type: 'text',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+    },
+    {
+      label: 'Anon Link ID',
+      columnName: 'anon_link_id',
+      type: 'text',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual]
     }
   ]
 

@@ -20,6 +20,9 @@ import TrafficOverTimeCard from './TrafficOverTimeCard'
 import TrafficOverTimeByUserType from './TrafficOverTimeByUserType'
 import ActivityBreakdownCard from './ActivityBreakdownCard'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
+import BlocksOverTimeCard from './BlocksOverTimeCard'
+import UsersOverTimeCard from './UsersOverTImeCard'
+import UsersOverTimeByUserType from './UsersOverTimeByUserType'
 
 type Props = {
   institutionId: string
@@ -145,7 +148,16 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
             <TrafficOverTimeCard />
           </Grid>
           <Grid item xs={12}>
+            <UsersOverTimeCard />
+          </Grid>
+          <Grid item xs={12}>
+            <BlocksOverTimeCard />
+          </Grid>
+          <Grid item xs={12}>
             <TrafficOverTimeByUserType />
+          </Grid>
+          <Grid item xs={12}>
+            <UsersOverTimeByUserType />
           </Grid>
           <Grid item xs={12} md={6}>
             <ActivityBreakdownCard

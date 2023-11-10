@@ -30,7 +30,7 @@ export type InstitutionTrafficOverTimeQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
+export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, institutionUsersOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, institutionBlocksOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
 
 export type InstitutionTrafficOverTimeByUserTypeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -38,7 +38,7 @@ export type InstitutionTrafficOverTimeByUserTypeQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionTrafficOverTimeByUserTypeQuery = { __typename?: 'Query', output: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
+export type InstitutionTrafficOverTimeByUserTypeQuery = { __typename?: 'Query', traffic: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, users: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
 
 export type InstitutionTrafficBreakdownQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -249,6 +249,20 @@ export const InstitutionTrafficOverTimeDocument = gql`
     }
     labels
   }
+  institutionUsersOverTime(input: $input, groupBy: $groupBy) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+  institutionBlocksOverTime(input: $input, groupBy: $groupBy) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
 }
     `;
 
@@ -282,7 +296,14 @@ export type InstitutionTrafficOverTimeLazyQueryHookResult = ReturnType<typeof us
 export type InstitutionTrafficOverTimeQueryResult = Apollo.QueryResult<InstitutionTrafficOverTimeQuery, InstitutionTrafficOverTimeQueryVariables>;
 export const InstitutionTrafficOverTimeByUserTypeDocument = gql`
     query InstitutionTrafficOverTimeByUserType($input: InstitutionAccessInput!, $groupBy: String!) {
-  output: institutionTrafficOverTimeByUserType(input: $input, groupBy: $groupBy) {
+  traffic: institutionTrafficOverTimeByUserType(input: $input, groupBy: $groupBy) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+  users: institutionUsersOverTimeByUserType(input: $input, groupBy: $groupBy) {
     datasets {
       data
       label

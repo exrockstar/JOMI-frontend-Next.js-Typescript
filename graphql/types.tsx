@@ -2307,12 +2307,15 @@ export type Query = {
   hasServiceInCountry: Scalars['Boolean'];
   instArticleEventLogs: AccessEventsOutput;
   institutionAccessStats: InstitutionAccessStats;
+  institutionBlocksOverTime: ChartData;
   institutionById?: Maybe<Institution>;
   institutionTrafficBreakdownByContentType: ChartData;
   institutionTrafficBreakdownByUserType: ChartData;
   institutionTrafficOverTime: ChartData;
   institutionTrafficOverTimeByUserType: ChartData;
   institutionUserTypesStats: Array<InstitutionUserTypeStat>;
+  institutionUsersOverTime: ChartData;
+  institutionUsersOverTimeByUserType: ChartData;
   institution_subs: Array<Institution>;
   institutions: InstitutionOutput;
   isJobRunning: Scalars['Boolean'];
@@ -2505,6 +2508,12 @@ export type QueryInstitutionAccessStatsArgs = {
 };
 
 
+export type QueryInstitutionBlocksOverTimeArgs = {
+  groupBy: Scalars['String'];
+  input: InstitutionAccessInput;
+};
+
+
 export type QueryInstitutionByIdArgs = {
   id: Scalars['String'];
 };
@@ -2533,6 +2542,18 @@ export type QueryInstitutionTrafficOverTimeByUserTypeArgs = {
 
 
 export type QueryInstitutionUserTypesStatsArgs = {
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionUsersOverTimeArgs = {
+  groupBy: Scalars['String'];
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionUsersOverTimeByUserTypeArgs = {
+  groupBy: Scalars['String'];
   input: InstitutionAccessInput;
 };
 
