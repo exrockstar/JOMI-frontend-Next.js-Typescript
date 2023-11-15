@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const EditorContainer = styled.div<{ toolbarLocation: string }>`
   border: 1px solid #ccc;
@@ -7,14 +7,24 @@ export const EditorContainer = styled.div<{ toolbarLocation: string }>`
   box-shadow: 0 3px 0px -1px rgba(0, 0, 0, 0.05);
 
   .tox.tox-tinymce {
+    overflow: unset;
     border: none;
-
+    .tox-toolbar {
+    }
     .tox-toolbar:first-child {
       border-top: none;
     }
-
+    .tox-editor-container {
+      position: relative;
+      overflow: unset;
+    }
     .tox-editor-header {
-      margin-bottom: ${({ toolbarLocation }) => (toolbarLocation === 'top' ? '-7px' : '-1px')};
+      position: sticky;
+      top: 64px;
+      z-index: 1000;
+
+      margin-bottom: ${({ toolbarLocation }) =>
+        toolbarLocation === 'top' ? '-7px' : '-1px'};
 
       .tox-toolbar__primary {
         border-top: none !important;
@@ -77,7 +87,7 @@ export const EditorContainer = styled.div<{ toolbarLocation: string }>`
       }
     }
   }
-`;
+`
 
 /**
  * NOTE: THIS ISN'T A STYLED COMPONENT!!!!!
@@ -118,4 +128,5 @@ export const EditorStyles = `
   ::-webkit-scrollbar-corner {
     background: transparent;
   }
-`;
+  
+`

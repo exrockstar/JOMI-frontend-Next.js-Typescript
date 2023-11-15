@@ -1,38 +1,38 @@
-import * as React from 'react';
-import { default as Editor } from './RichTextEditor';
-import loadImages from './utils/loadImages';
-import uploadImage from './utils/uploadImage';
-import { CustomStyles } from '../styles/CustomStyles';
+import * as React from 'react'
+import { default as Editor } from './RichTextEditor'
+import loadImages from './utils/loadImages'
+import uploadImage from './utils/uploadImage'
+import { CustomStyles } from '../styles/CustomStyles'
 
-const apiurl = process.env.API_URL;
+const apiurl = process.env.API_URL
 
 type TextEditorProps = {
-  value: string;
-  setField: (value: string) => void;
-};
+  value: string
+  setField: (value: string) => void
+}
 
 export type Image = {
   metadata: {
-    title: string;
-    filesize: string;
-    extension: string;
+    title: string
+    filesize: string
+    extension: string
     geomotry?: {
-      width?: number;
-      height?: number;
-    };
-  };
-  filename: string;
-};
+      width?: number
+      height?: number
+    }
+  }
+  filename: string
+}
 
 export type BlobInfo = {
-  id: () => string;
-  name: () => string;
-  filename: () => string;
-  blob: () => Blob;
-  base64: () => string;
-  blobUri: () => string;
-  uri: () => string;
-};
+  id: () => string
+  name: () => string
+  filename: () => string
+  blob: () => Blob
+  base64: () => string
+  blobUri: () => string
+  uri: () => string
+}
 
 export const StylingOverride = `
   html {
@@ -68,31 +68,34 @@ export const StylingOverride = `
       width: 750px;
     }
   }
-`;
+`
 
-const TextEditor: React.FC<TextEditorProps> = ({ value, setField }): JSX.Element => (
+const TextEditor: React.FC<TextEditorProps> = ({
+  value,
+  setField
+}): JSX.Element => (
   <>
-    <label htmlFor='content-input' id="content">Content Editor</label>
+    {/* <label htmlFor="content-input" id="content">
+      Content Editor
+    </label> */}
     <Editor
-      toolbarLocation='top'
+      toolbarLocation="top"
       value={value}
       onChange={setField}
       resize
       menubar
-      placeholder=''
+      placeholder=""
       statusBar
-      height={500}
-      maxHeight={1000}
+      maxHeight={null}
       contentStyle={`${StylingOverride} ${CustomStyles}`}
       plugins={[
         'lists charmap paste autolink autoresize advlist autosave code emoticons fullscreen hr image imagetools insertdatetime link save searchreplace table wordcount anchor nonbreaking visualblocks'
       ]}
-      invalidElements=' '
-      validElements='*[*]'
+      invalidElements=" "
+      validElements="*[*]"
       contextMenuItems={false}
-      toolbarItems='image charmap nonbreaking | bold italic | outdent indent | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | link hr | forecolor backcolor | anchor code superscript | visualblocks fullpage'
+      toolbarItems="image charmap nonbreaking | bold italic | outdent indent | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | link hr | forecolor backcolor | anchor code superscript | visualblocks fullpage"
       init={{
-        content_css: '/dist/bootstrap3.3.7.css',
         browser_spellcheck: true,
         paste_data_images: false,
         link_default_protocol: 'https',
@@ -104,7 +107,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, setField }): JSX.Element
         file_picker_types: 'image',
         a11y_advanced_options: true,
         image_caption: true,
-        image_prepend_url: `${apiurl}/files/`,
+        image_prepend_url: `${process.env.NEXT_PUBLIC_URL}/api/files/`,
         image_title: true,
         image_advtab: true,
         image_uploadtab: true,
@@ -115,16 +118,19 @@ const TextEditor: React.FC<TextEditorProps> = ({ value, setField }): JSX.Element
         forced_root_block: 'p',
         remove_trailing_brs: false,
         image_list: async (complete: Function) => await loadImages(complete),
-        images_upload_handler: async (blobInfo: BlobInfo, success: Function, failure: Function) =>
-          await uploadImage(blobInfo, success, failure),
+        images_upload_handler: async (
+          blobInfo: BlobInfo,
+          success: Function,
+          failure: Function
+        ) => await uploadImage(blobInfo, success, failure),
         protect: [/<a.*.aria-hidden=('|")true('|").*.<\/a>/gim],
 
         extended_valid_elements: '-strong,+body[style],style',
         convert_newlines_to_brs: true,
-        custom_elements:"style"
+        custom_elements: 'style'
       }}
     />
   </>
-);
+)
 
-export default React.memo(TextEditor);
+export default React.memo(TextEditor)
