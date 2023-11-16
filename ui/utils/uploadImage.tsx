@@ -2,8 +2,6 @@
 import Axios from 'axios'
 import { BlobInfo } from '../TextEditor'
 
-const apiurl = process.env.API_URL
-
 export default async (
   blobInfo: BlobInfo,
   success: Function,
@@ -17,9 +15,15 @@ export default async (
     data.append('image', blobInfo.blob())
     data.append('title', blobInfo.filename())
 
-    await Axios.post(`/api/upload`, data, { withCredentials: true })
+    const response = await Axios.post<{ filename: string }>(
+      `/api/upload`,
+      data,
+      {
+        withCredentials: true
+      }
+    )
     console.log('Image was uploaded successfully!')
-    success(blobInfo.filename())
+    success(`${process.env.NEXTAUTH_URL}/api/files/${response.data.filename}`)
   } catch (e) {
     failure('An unknown error occured.')
     console.error(e)

@@ -97,9 +97,8 @@ const TextEditor: React.FC<TextEditorProps> = ({
       toolbarItems="image charmap nonbreaking | bold italic | outdent indent | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | numlist bullist | link hr | forecolor backcolor | anchor code superscript | visualblocks fullpage"
       init={{
         browser_spellcheck: true,
-        paste_data_images: false,
+        paste_data_images: true,
         link_default_protocol: 'https',
-        paste_as_text: true,
         autoresize_bottom_margin: 5,
         autoresize_overflow_padding: 50,
         min_height: 300,
@@ -107,7 +106,6 @@ const TextEditor: React.FC<TextEditorProps> = ({
         file_picker_types: 'image',
         a11y_advanced_options: true,
         image_caption: true,
-        image_prepend_url: `${process.env.NEXT_PUBLIC_URL}/api/files/`,
         image_title: true,
         image_advtab: true,
         image_uploadtab: true,
