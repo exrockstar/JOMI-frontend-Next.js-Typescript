@@ -14,21 +14,27 @@ import { UserPricesDocument } from 'graphql/queries/user-prices.generated'
 import { UserProfilePageDocument } from 'graphql/queries/user-profile-page.generated'
 import { UserProfileDocument } from 'graphql/queries/user-profile.generated'
 import { useSnackbar } from 'notistack'
-import React from 'react'
 import { TypeOf, object, string } from 'yup'
 import NextLink from 'next/link'
 import { analytics } from 'apis/analytics'
 import { useRouter } from 'next/router'
-import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'
-import { ArticleAccessDocument } from 'graphql/queries/article-access.generated'
+import {
+  ArticleAccessDocument,
+  ArticleAccessQuery
+} from 'graphql/queries/article-access.generated'
 const schema = object({
   inst_email: string().email('Please enter a valid email')
 })
 
-const InstitutionalAccessPaper = () => {
+type Props = {
+  accessData: ArticleAccessQuery
+}
+
+const InstitutionalAccessPaper = (props: Props) => {
   const { enqueueSnackbar } = useSnackbar()
   const router = useRouter()
   const fromUrl = encodeURIComponent(router?.asPath)
+
   const [updateInstEmail, { loading: updatingProfile }] =
     useUpdateInstEmailMutation({
       refetchQueries: [
@@ -70,7 +76,8 @@ const InstitutionalAccessPaper = () => {
             <DialogContent>
               <Typography mb={2} variant="body2">
                 If you are at an institution that has an institutional
-                subscription, please add a valid institutional email:
+                subscription, please add a valid institutional email to your
+                profile:
               </Typography>
               <FormikTextField
                 name="inst_email"
@@ -89,19 +96,23 @@ const InstitutionalAccessPaper = () => {
               >
                 Submit
               </CTAButton>
-              <Divider>or</Divider>
-              <CTAButton
-                LinkComponent={NextLink}
-                data-event={
-                  'ArticleAccessDialog - Request Institutional Subscription'
-                }
-                sx={{ mt: 2 }}
-                onClick={analytics.trackClick}
-                fullWidth
-                href={`/account/request-subscription?from=${fromUrl}`}
-              >
-                Request Institutional Subscription
-              </CTAButton>
+              {props.accessData?.getIsRequestInstSubButtonPaperOn && (
+                <>
+                  <Divider>or</Divider>
+                  <CTAButton
+                    LinkComponent={NextLink}
+                    data-event={
+                      'ArticleAccessDialog - Request Institutional Subscription'
+                    }
+                    sx={{ mt: 2 }}
+                    onClick={analytics.trackClick}
+                    fullWidth
+                    href={`/account/request-subscription?from=${fromUrl}`}
+                  >
+                    Request Institutional Subscription
+                  </CTAButton>
+                </>
+              )}
             </DialogContent>
           </Stack>
         </Form>

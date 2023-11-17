@@ -6,14 +6,14 @@ const defaultOptions =  {}
 export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, isRequestInstSubButtonPaperOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type UpdateSiteSettingsMutationVariables = Types.Exact<{
   input: Types.UpdateSiteSettingInput;
 }>;
 
 
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, isRequestInstSubButtonPaperOn: boolean, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
 
 export type AddHashToTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -26,6 +26,7 @@ export const SiteSettingsDocument = gql`
   getSiteSettings {
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
+    isRequestInstSubButtonPaperOn
     displayPurchaseAndRentToAdminOnly
     rentDuration
     updated
@@ -70,6 +71,7 @@ export const UpdateSiteSettingsDocument = gql`
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly
     rentDuration
+    isRequestInstSubButtonPaperOn
     updated
     updatedBy {
       display_name

@@ -2287,6 +2287,7 @@ export type Query = {
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getFeedbackSettings: FeedbackSettings;
   getFeedbacksByInstitutionId: FeedbackListOutput;
+  getIsRequestInstSubButtonPaperOn: Scalars['Boolean'];
   getPaymentIntentStatus?: Maybe<Scalars['String']>;
   getPriceByProductId: StripePrice;
   getPricingSectionData?: Maybe<Array<StripePrice>>;
@@ -2752,6 +2753,7 @@ export type SiteSetting = {
   displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
   isPurchaseArticleFeatureOn: Scalars['Boolean'];
   isRentArticleFeatureOn: Scalars['Boolean'];
+  isRequestInstSubButtonPaperOn: Scalars['Boolean'];
   isTrialFeatureOn?: Maybe<Scalars['Boolean']>;
   rentDuration: Scalars['Float'];
   scienceOpenXmlGeneratedAt: Scalars['DateTime'];
@@ -3266,6 +3268,7 @@ export type UpdateSiteSettingInput = {
   displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
   isPurchaseArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
   isRentArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
+  isRequestInstSubButtonPaperOn?: InputMaybe<Scalars['Boolean']>;
   isTrialFeatureOn?: InputMaybe<Scalars['Boolean']>;
   rentDuration?: InputMaybe<Scalars['Float']>;
   trialDuration?: InputMaybe<Scalars['Float']>;

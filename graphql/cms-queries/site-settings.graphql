@@ -3,6 +3,7 @@ query SiteSettings {
   getSiteSettings {
     isRentArticleFeatureOn
     isPurchaseArticleFeatureOn
+    isRequestInstSubButtonPaperOn
     displayPurchaseAndRentToAdminOnly
     rentDuration
     updated
@@ -10,9 +11,9 @@ query SiteSettings {
       display_name
       _id
     }
-
 	}
 }
+
 
 mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
   updateSiteSettings(input: $input){
@@ -20,6 +21,7 @@ mutation UpdateSiteSettings($input: UpdateSiteSettingInput!) {
     isPurchaseArticleFeatureOn
     displayPurchaseAndRentToAdminOnly
     rentDuration
+    isRequestInstSubButtonPaperOn
     updated
     updatedBy {
       display_name

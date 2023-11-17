@@ -19,6 +19,7 @@ import SubscriptionExpiredPaper from './blocks/SubscriptionExpiredPaper'
 import RequireLoginPaper from './blocks/RequireLoginPaper'
 import EvaluationPaper from './blocks/EvaluationPaper'
 import EmergencyAccessPaper from './common/EmergencyAccessPaper'
+import InstitutionalAccessAnonPaper from './common/InstitutionalAccessAnonPaper'
 
 type ArticleAccessDialogProps = {
   open: boolean
@@ -75,24 +76,25 @@ function ArticleAccessDialog({
   const addditional_blocks = useMemo(() => {
     const additional = []
     switch (accessType) {
+      // no additional blocks for these accessTypes
       case AccessTypeEnum.EmailConfirmationExpired:
       case AccessTypeEnum.AwaitingEmailConfirmation:
       case AccessTypeEnum.InstitutionLoginRequired:
-      case AccessTypeEnum.InstitutionSubscriptionExpired:
         break
+
+      // have additional blocks for these access types:
+      case AccessTypeEnum.InstitutionSubscriptionExpired:
       case AccessTypeEnum.RequireSubscription:
       case AccessTypeEnum.Evaluation:
+      case AccessTypeEnum.LimitedAccess:
         if (isLoggedIn) {
           additional.push(InstitutionalAccessPaper)
         } else {
-          additional.push(AlreadySubscribedPaper)
+          additional.push(InstitutionalAccessAnonPaper)
         }
-        additional.push(EmergencyAccessPaper)
-        break
-
-      case AccessTypeEnum.LimitedAccess:
         additional.push(AlreadySubscribedPaper)
         additional.push(EmergencyAccessPaper)
+        break
       default:
         break
     }
@@ -124,7 +126,7 @@ function ArticleAccessDialog({
             onClose={(e) => handleClose(e, null)}
           />
           {addditional_blocks?.map((Block, i) => (
-            <Block key={i} />
+            <Block key={i} accessData={accessData} />
           ))}
         </Stack>
       </Modal>
