@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
 import { useArticles } from 'components/articles/useArticles'
@@ -24,32 +24,36 @@ const TinyArticleItem = (
         </BlackLink>
       </Link>
       {showAuthors && (
-        <Stack direction="row" flexWrap="wrap" spacing={1} mt={0.75}>
+        <Box mt={0.75}>
           {props.authors?.map((author) => {
             const name = `${author.display_name}`
             const authorUrl = `/author/${
               author.slug ?? slugify(author.display_name)
             }`
             return (
-              <Link
-                key={author._id}
-                href={authorUrl}
-                passHref
-                prefetch={false}
-                legacyBehavior
-              >
-                <BlackLink
-                  variant="caption"
-                  fontSize={10}
-                  onClick={analytics.trackClick}
-                  data-event="Tiny Articles - Author Link"
+              <>
+                <Link
+                  key={author._id}
+                  href={authorUrl}
+                  passHref
+                  prefetch={false}
+                  legacyBehavior
                 >
-                  {name}
-                </BlackLink>
-              </Link>
+                  <BlackLink
+                    variant="caption"
+                    fontSize={10}
+                    onClick={analytics.trackClick}
+                    data-event="Tiny Articles - Author Link"
+                    display={'inline-block'}
+                  >
+                    {name}
+                  </BlackLink>
+                </Link>
+                &nbsp;
+              </>
             )
           })}
-        </Stack>
+        </Box>
       )}
       {showAuthors && (
         <Typography color="#000" variant="caption" fontSize={11}>
@@ -66,7 +70,7 @@ const Wrapper = styled(Stack)({
   color: 'black',
   cursor: 'pointer',
   backgroundColor: '#f5f5f5',
-  padding: '4px 8px',
+  padding: '12px 8px',
   ':hover': {
     backgroundColor: 'grey.A200'
   }
