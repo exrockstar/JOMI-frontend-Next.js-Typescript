@@ -24,7 +24,7 @@ import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
 Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
 
-const TrafficOverTimeByUserType = () => {
+const UsersOverTimeByUserType = () => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
     useInstitutionAccessInput()
   const [groupBy, setGroupBy] = useState('month') //day ,month, year
@@ -43,19 +43,19 @@ const TrafficOverTimeByUserType = () => {
       }
     }
   )
-  const output = data?.traffic
+  const output = data?.users
 
   return (
     <Card>
       <Box p={2}>
-        <Typography variant="overline">Activity By User Type</Typography>
+        <Typography variant="overline">Users Over Time By User Type</Typography>
         <Typography
           color="text.secondary"
           gutterBottom
           variant="caption"
           display="block"
         >
-          Shows activity by user type over the past period
+          Shows number of users per {groupBy} over the past period by user type.
         </Typography>
         <CardContent sx={{ height: 300, width: '100%' }}>
           {loading && (
@@ -121,7 +121,8 @@ const TrafficOverTimeByUserType = () => {
               </Box>
 
               <Line
-                id="traffic-over-time"
+                id={'UsersOverTimeByUserTypeGraph' + groupBy}
+                key={groupBy}
                 data={{
                   labels: output.labels.map((l) => (l === 'anon' ? 'Anon' : l)),
                   datasets: output.datasets.map((x, i) => {
@@ -185,4 +186,4 @@ const TrafficOverTimeByUserType = () => {
   )
 }
 
-export default TrafficOverTimeByUserType
+export default UsersOverTimeByUserType

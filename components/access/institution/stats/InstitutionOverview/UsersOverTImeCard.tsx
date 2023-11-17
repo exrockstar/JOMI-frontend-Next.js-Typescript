@@ -23,7 +23,7 @@ import useInstitutionAccessInput from './useInstitutionAccessInput'
 
 Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
 
-const TrafficOverTimeCard = () => {
+const UsersOverTimeCard = () => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
     useInstitutionAccessInput()
   const [groupBy, setGroupBy] = useState('month') //day ,month, year
@@ -39,19 +39,19 @@ const TrafficOverTimeCard = () => {
       groupBy: groupBy
     }
   })
-  const chartData = data?.institutionTrafficOverTime
+  const chartData = data?.institutionUsersOverTime
 
   return (
     <Card>
       <Box p={2}>
-        <Typography variant="overline">Article Views Over Time</Typography>
+        <Typography variant="overline">Users Over Time</Typography>
         <Typography
           color="text.secondary"
           gutterBottom
           variant="caption"
           display="block"
         >
-          Shows article views over the past period
+          Shows the number of users per {groupBy} including anonymous users.
         </Typography>
         <CardContent sx={{ height: 300, width: '100%' }}>
           {loading && (
@@ -85,7 +85,7 @@ const TrafficOverTimeCard = () => {
               </Box>
 
               <Line
-                id="traffic-over-time"
+                id="UsersOverTimeCard"
                 key={new Date().getTime()}
                 data={{
                   labels: chartData.labels,
@@ -107,6 +107,11 @@ const TrafficOverTimeCard = () => {
                     y: {
                       beginAtZero: true
                     }
+                  },
+                  plugins: {
+                    tooltip: {
+                      mode: 'x'
+                    }
                   }
                 }}
               ></Line>
@@ -121,4 +126,4 @@ const TrafficOverTimeCard = () => {
   )
 }
 
-export default TrafficOverTimeCard
+export default UsersOverTimeCard

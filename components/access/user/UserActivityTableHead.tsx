@@ -40,8 +40,8 @@ const headCells: readonly HeadCell[] = [
 const UserActivityTableHead = () => {
   const router = useRouter()
   const sort_by = (router.query.sort_by as string) ?? 'created'
-  const sort_order_str = (router.query.sort_order as string) ?? 'desc'
-  const sort_order = sort_order_str === 'desc' ? -1 : 1
+  const sort_order_str = (router.query.sort_order as string) ?? '-1'
+  const sort_order = parseInt(sort_order_str)
   const createSortHandler =
     (property: HeadCell['id']) => (event: React.MouseEvent<unknown>) => {
       router.push({

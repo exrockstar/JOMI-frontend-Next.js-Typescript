@@ -40,12 +40,12 @@ const IntitutionUsersPanel = ({ institutionId }: Props) => {
   const { filters } = useQueryFilters()
   const { filters: global } = useQueryFilters('global')
   const sort_by = (router.query.sort_by as string) ?? 'created'
-  const sort_order_str = (router.query.sort_order as string) ?? 'desc'
+  const sort_order_str = (router.query.sort_order as string) ?? '-1'
   const search = router.query.search as string
   const page = parseInt((router.query.page as string) ?? '1')
   const perPage = parseInt((router.query.page_size as string) ?? '10')
   const skip = (page - 1) * perPage
-  const sort_order = sort_order_str === 'desc' ? -1 : 1
+  const sort_order = parseInt(sort_order_str)
 
   const start = router.query.start as string | null
   const end = router.query.end as string | null

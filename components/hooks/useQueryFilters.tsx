@@ -6,14 +6,12 @@ export const useQueryFilters = (
   filterKey: string = 'filters',
   filterOpenKey: string = 'filterOpen'
 ) => {
-  console.log(filterKey, filterOpenKey)
   const router = useRouter()
   const filterOpen = router.query[filterOpenKey] === '1'
 
   const getFilters = (): ColumnFilter[] => {
     const queryFilters = router.query[filterKey] as string
     const input = queryFilters?.split('|') ?? []
-    console.log(input)
     if (!input) return []
     return input.map((filter) => {
       // template "{columnName}-{operation}-{value}"
