@@ -14,7 +14,6 @@ import GetSubscriptionSection from './GetSubscriptionSection'
 import CreateAccountOrLoginSection from './CreateAccountOrLoginSection'
 import LimitedAccessSection from './LimitedAccessSection'
 import EvaluationSection from './EvaluationSection'
-import dayjs from 'dayjs'
 import SubscriptionExpiredSection from './SubscriptionExpiredSection'
 import AwaitingEmailConfirmationSection from './AwaitingEmailConfirmationSection'
 import RentAccessSection from './RentAccessSection'
@@ -63,6 +62,7 @@ const AccessBox = ({ article }: AccessBoxProps) => {
     const purchaseSections = showPayPerArticle
       ? [DividerWithPadding, PurchaseArticleSection]
       : []
+    console.log(access.accessType)
     switch (access.accessType) {
       case AccessTypeEnum.LimitedAccess:
         return [
@@ -95,6 +95,7 @@ const AccessBox = ({ article }: AccessBoxProps) => {
         return [AccessBoxHeading, ProvidedBySection]
       case AccessTypeEnum.Evaluation:
         return [AccessBoxHeading, EvaluationSection, ...purchaseSections]
+      case AccessTypeEnum.InstitutionNameOrAliasRestricted:
       case AccessTypeEnum.RequireSubscription:
         return [AccessBoxHeading, GetSubscriptionSection, ...purchaseSections]
       case AccessTypeEnum.AwaitingEmailConfirmation:

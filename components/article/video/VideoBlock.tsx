@@ -51,7 +51,7 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   const { data: session, status } = useSession()
   const { anon_link_id, referredFrom, referrerPath } =
     useGoogleAnalyticsHelpers()
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState(false)
   const rateLimit = 2000 //in ms
 
   const [trackVideoPlay] = useTrackVideoPlayMutation()
@@ -110,18 +110,17 @@ export default function VideoBlock({ article }: VideoBlockProps) {
         variables: {
           input: {
             ...trackBlockInput,
-            block_type: accessType === 'evaluation-block' ? 
-              accessType : kebabCase(accessType)
+            block_type: kebabCase(accessType)
           }
         }
       })
       // Apply rate limiting: Block further tracking for 1 second
-      setIsRateLimited(true);
+      setIsRateLimited(true)
       setTimeout(() => {
-        setIsRateLimited(false);
-      }, rateLimit); // 1 second
+        setIsRateLimited(false)
+      }, rateLimit) // 1 second
     }
-  };
+  }
 
   useEffect(() => {
     refetch()
@@ -178,66 +177,20 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     if (!articleAccess) return
     const threeMinutes = 60 * 3
 
-    const hasNoAccess = [
-      AccessTypeEnum.LimitedAccess,
-      AccessTypeEnum.RequireSubscription,
-      AccessTypeEnum.AwaitingEmailConfirmation,
-      AccessTypeEnum.EmailConfirmationExpired,
-      AccessTypeEnum.InstitutionLoginRequired,
-      AccessTypeEnum.InstitutionSubscriptionExpired
-    ].includes(accessType)
-
-    const isTimeLimitReached = seconds >= threeMinutes
+    const hasNoAccess = !data?.getTypesWithAccess?.includes(accessType)
+    const isEvaluationAccess = accessType === AccessTypeEnum.Evaluation
+    const isTimeLimitReached = !isEvaluationAccess
+      ? seconds >= threeMinutes
+      : seconds > threeMinutes && seconds >= nextBlockTime
     const showBlock = isTimeLimitReached && hasNoAccess
     if (!showBlock) return
     video.pause()
     video.cancelFullscreen()
+    setVideoTime(seconds)
     setShowDialog(true)
     if (trackBlock) {
       trackVideoBlockWithRateLimiter(accessType)
-      // trackVideoBlock({
-      //   variables: {
-      //     input: {
-      //       ...trackBlockInput,
-      //       block_type: kebabCase(accessType)
-      //     }
-      //   }
-      // })
     }
-    setVideosBlocked(pubId)
-  }
-
-  // check block for evaluation access
-  const checkEvaluationBlock = (
-    seconds: number,
-    video: WistiaVideo,
-    trackBlock?: boolean
-  ) => {
-    if (!articleAccess) return
-    const threeMinutes = 60 * 3
-    const hasReachedTimeLimit =
-      seconds > threeMinutes && seconds >= nextBlockTime
-    const isEvaluationAccess = accessType === AccessTypeEnum.Evaluation
-    const shouldShowBlock = hasReachedTimeLimit && isEvaluationAccess
-    if (!shouldShowBlock) return
-
-    video.pause()
-    video.cancelFullscreen()
-    setVideoTime(seconds)
-    setShowDialog(true)
-
-    if (trackBlock) {
-      trackVideoBlockWithRateLimiter('evaluation-block')
-      // trackVideoBlock({
-      //   variables: {
-      //     input: {
-      //       ...trackBlockInput,
-      //       block_type: 'evaluation-block'
-      //     }
-      //   }
-      // })
-    }
-
     setVideosBlocked(pubId)
   }
 
@@ -310,7 +263,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
   ) => {
     handleChapterChange(seconds)
     checkSubscriptionBlock(seconds, video, true)
-    checkEvaluationBlock(seconds, video, true)
     checkFeedbackBlock(seconds, video) // disabling the feedback modal popping up in the video until the team comes to an agreement on how it should function.
     trackPlayTime(seconds, secondsWatched)
   }
@@ -320,7 +272,6 @@ export default function VideoBlock({ article }: VideoBlockProps) {
     video: WistiaVideo
   ) => {
     checkSubscriptionBlock(seconds, video)
-    checkEvaluationBlock(seconds, video)
     //do not add tracking id if there's already one
     if (vidWatchId) return
 

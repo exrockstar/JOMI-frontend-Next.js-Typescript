@@ -104,6 +104,7 @@ export enum AccessTypeEnum {
   IndividualSubscription = 'IndividualSubscription',
   IndividualTrial = 'IndividualTrial',
   InstitutionLoginRequired = 'InstitutionLoginRequired',
+  InstitutionNameOrAliasRestricted = 'InstitutionNameOrAliasRestricted',
   InstitutionSubscriptionExpired = 'InstitutionSubscriptionExpired',
   InstitutionalSubscription = 'InstitutionalSubscription',
   InstitutionalTrial = 'InstitutionalTrial',
@@ -2294,6 +2295,7 @@ export type Query = {
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
   getPurchasedArticlesByUserId: Array<Order>;
+  getRestrictedAccessTypes: Array<AccessTypeEnum>;
   getScienceOpenArticleByPubId?: Maybe<ScienceOpenXml>;
   getScienceOpenArticlesXml: Array<ScienceOpenXml>;
   getSiteSettings: SiteSetting;
@@ -2303,6 +2305,7 @@ export type Query = {
   getStripePromoCodes: StripePromoCodeListOutput;
   getStripePromocodeRedeems: RedeemListOutput;
   getTrialSettings: TrialSettings;
+  getTypesWithAccess: Array<AccessTypeEnum>;
   hasArticleRestriction: Scalars['Boolean'];
   hasServiceInCountry: Scalars['Boolean'];
   instArticleEventLogs: AccessEventsOutput;
