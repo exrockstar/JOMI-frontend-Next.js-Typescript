@@ -42,15 +42,7 @@ function ArticleAccessDialog({
   const isLoggedIn = accessData?.user
   const articleAccess = accessData?.article?.articleAccessType
   const accessType = articleAccess?.accessType
-  const hasNoAccess = [
-    AccessTypeEnum.LimitedAccess,
-    AccessTypeEnum.RequireSubscription,
-    AccessTypeEnum.AwaitingEmailConfirmation,
-    AccessTypeEnum.EmailConfirmationExpired,
-    AccessTypeEnum.InstitutionLoginRequired,
-    AccessTypeEnum.InstitutionSubscriptionExpired,
-    AccessTypeEnum.Evaluation
-  ].includes(accessType)
+  const hasAccess = accessData?.getTypesWithAccess?.includes(accessType)
 
   const MainBlock = useMemo(() => {
     switch (accessType) {
@@ -59,6 +51,7 @@ function ArticleAccessDialog({
       case AccessTypeEnum.EmailConfirmationExpired:
         return EmailExpiryNotice
       case AccessTypeEnum.RequireSubscription:
+      case AccessTypeEnum.InstitutionNameOrAliasRestricted:
         return RequireSubscriptionPaper
       case AccessTypeEnum.Evaluation:
         return EvaluationPaper
@@ -85,6 +78,7 @@ function ArticleAccessDialog({
       // have additional blocks for these access types:
       case AccessTypeEnum.InstitutionSubscriptionExpired:
       case AccessTypeEnum.RequireSubscription:
+      case AccessTypeEnum.InstitutionNameOrAliasRestricted:
       case AccessTypeEnum.Evaluation:
       case AccessTypeEnum.LimitedAccess:
         if (isLoggedIn) {
@@ -102,7 +96,7 @@ function ArticleAccessDialog({
     return additional
   }, [accessType, isLoggedIn])
   const hasAdditionalBlocks = addditional_blocks.length > 0
-  if (!hasNoAccess) return null
+  if (hasAccess) return null
   return (
     <ThemeProvider theme={frontPageTheme}>
       <Modal

@@ -143,6 +143,7 @@ const ActivityList = ({ userId, userAnonID }: Props) => {
                       >
                         {_.startCase(activity.matchedBy ?? 'Unknown')}
                       </TableCell>
+
                       <TableCell
                         sx={{
                           maxWidth: 200,
