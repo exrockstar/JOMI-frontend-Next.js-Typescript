@@ -24,7 +24,7 @@ const TinyArticleItem = (
         </BlackLink>
       </Link>
       {showAuthors && (
-        <Box mt={0.75}>
+        <Box lineHeight={'unset'}>
           {props.authors?.map((author) => {
             const name = `${author.display_name}`
             const authorUrl = `/author/${
@@ -70,12 +70,13 @@ const Wrapper = styled(Stack)({
   color: 'black',
   cursor: 'pointer',
   backgroundColor: '#f5f5f5',
-  padding: '12px 8px',
+  padding: '8px',
   ':hover': {
     backgroundColor: 'grey.A200'
   }
 })
 
 const BlackLink = styled(BlueLink)({
-  color: '#000'
+  color: '#000',
+  lineHeight: 1
 })
