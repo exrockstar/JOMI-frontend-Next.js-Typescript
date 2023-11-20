@@ -42,7 +42,9 @@ const PurchaseSuccessPage = () => {
         (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime()
       )
       const order = sortedOrders[0]
-      console.log('order', order)
+      const interval = order.description.includes('month') ? 'Monthly' :
+        order.description.includes('year') ? 'Yearly' :
+        'N/A'
       gtag('event', 'purchase', {
         transaction_id: order._id,
         value: order.amount,
@@ -73,7 +75,8 @@ const PurchaseSuccessPage = () => {
             price: order.amount,
             quantity: 1
           }
-        ]
+        ],
+        interval: interval,
       })
       setTimeout(() => {
         router.replace(redirectUrl)
