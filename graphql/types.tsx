@@ -3445,6 +3445,7 @@ export type UserInput = {
   globalFilters?: InputMaybe<Array<ColumnFilter>>;
   limit?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
+  showAuthorsOnly?: InputMaybe<Scalars['Boolean']>;
   skip?: InputMaybe<Scalars['Int']>;
   sort_by?: InputMaybe<Scalars['String']>;
   sort_order?: InputMaybe<Scalars['Int']>;
