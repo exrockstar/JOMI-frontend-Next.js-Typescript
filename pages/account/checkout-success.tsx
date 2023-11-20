@@ -40,14 +40,16 @@ const CheckoutSuccessPage = () => {
     if (!order?._id) return
     if (logged) return
     if (typeof gtag === 'undefined') return
-    console.log('logging purchase')
     trackSubscribeMutation({
       variables: {
         input: {
           orderAmount: order.amount
         }
       }
-    }) //track in our BE
+    })
+    const interval = order.description.includes('month') ? 'Monthly' :
+        order.description.includes('year') ? 'Yearly' :
+        'N/A'
     gtag('event', 'purchase', {
       transaction_id: order._id,
       value: order.amount,
@@ -63,7 +65,8 @@ const CheckoutSuccessPage = () => {
           price: order.amount,
           quantity: 1
         }
-      ]
+      ],
+      interval: interval,
     })
     amplitudeTrackPurchase({
       transaction_id: order._id,
@@ -77,7 +80,8 @@ const CheckoutSuccessPage = () => {
           price: order.amount,
           quantity: 1
         }
-      ]
+      ],
+      interval: interval,
     })
     //Track FB Pixel Subscribe event
     fbPixelTrackSubscribe(order.currency, order.amount, session.user.id)
