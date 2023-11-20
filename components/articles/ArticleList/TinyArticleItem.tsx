@@ -24,7 +24,7 @@ const TinyArticleItem = (
         </BlackLink>
       </Link>
       {showAuthors && (
-        <Box lineHeight={'unset'}>
+        <Box lineHeight={'1.2'}>
           {props.authors?.map((author) => {
             const name = `${author.display_name}`
             const authorUrl = `/author/${
@@ -41,7 +41,7 @@ const TinyArticleItem = (
                 >
                   <BlackLink
                     variant="caption"
-                    fontSize={10}
+                    fontSize={11}
                     onClick={analytics.trackClick}
                     data-event="Tiny Articles - Author Link"
                     display={'inline-block'}
@@ -56,7 +56,13 @@ const TinyArticleItem = (
         </Box>
       )}
       {showAuthors && (
-        <Typography color="#000" variant="caption" fontSize={11}>
+        <Typography
+          color="#000"
+          variant="caption"
+          fontSize={11}
+          fontStyle={'italic'}
+          lineHeight={'1.2'}
+        >
           {props.hospital.name}
         </Typography>
       )}
