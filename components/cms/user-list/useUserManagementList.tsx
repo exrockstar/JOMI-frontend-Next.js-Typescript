@@ -12,6 +12,7 @@ import {
   useState
 } from 'react'
 import { UseListInputState, useListInput } from 'components/hooks/useListInput'
+import { useRouter } from 'next/router'
 
 type State = {
   users: UserManagementListQuery['users']['users']
@@ -21,6 +22,8 @@ type State = {
   refetch(): void
   input?: UserInput
   dbQueryString: string
+  showAuthorsOnly: boolean
+  setShowAuthorsOnly(val: 1 | 0): void
 } & UseListInputState
 
 const UserManagementListContext = createContext<State | null>(null)
@@ -30,7 +33,9 @@ export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
 }) => {
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
-
+  const router = useRouter()
+  const query = router.query
+  const showAuthorsOnly = parseInt(query.showAuthorsOnly as string) === 1
   const state = useListInput({
     page: 1,
     sort_by: 'created',
@@ -43,7 +48,8 @@ export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
     limit: state.pageSize,
     sort_by: state.sortBy,
     sort_order: state.sortOrder,
-    filters: state.filters
+    filters: state.filters,
+    showAuthorsOnly: showAuthorsOnly
   }
 
   if (state.searchTerm) {
@@ -57,6 +63,15 @@ export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
     }
   })
 
+  function setShowAuthorsOnly(val: 1 | 0) {
+    router.push({
+      query: {
+        ...query,
+        showAuthorsOnly: val,
+        page: 1
+      }
+    })
+  }
   //perserve previous count
   useEffect(() => {
     if (!loading && !error) {
@@ -74,7 +89,9 @@ export const UserManagementListProvider: React.FC<PropsWithChildren> = ({
         input,
         loading,
         refetch,
-        users: data?.users.users
+        users: data?.users.users,
+        showAuthorsOnly,
+        setShowAuthorsOnly
       }}
     >
       {children}

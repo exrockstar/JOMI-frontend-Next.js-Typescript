@@ -1,4 +1,4 @@
-import { Edit } from '@mui/icons-material'
+import { Edit, InfoOutlined } from '@mui/icons-material'
 import {
   Card,
   Table,
@@ -11,7 +11,10 @@ import {
   Typography,
   Chip,
   Box,
-  Stack
+  Stack,
+  Checkbox,
+  FormControlLabel,
+  Tooltip
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import { StickyTableCell } from 'components/common/StickyTableCell'
@@ -33,8 +36,15 @@ type Props = {
 
 const UserManagementList: React.FC<Props> = ({ users }) => {
   const [selected, setSelected] = React.useState<string>()
-  const { page, setPage, pageSize, setPageSize, count } =
-    useUserManagementList()
+  const {
+    page,
+    setPage,
+    pageSize,
+    setPageSize,
+    count,
+    showAuthorsOnly,
+    setShowAuthorsOnly
+  } = useUserManagementList()
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage + 1)
@@ -63,7 +73,31 @@ const UserManagementList: React.FC<Props> = ({ users }) => {
   return (
     <Card>
       <TableContainer sx={{ minWidth: 1050 }}>
-        <Box position="sticky" left={0}>
+        <Box
+          position="sticky"
+          left={0}
+          display="flex"
+          justifyContent={'space-between'}
+          px={2}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={showAuthorsOnly}
+                onClick={(e) => {
+                  setShowAuthorsOnly((e.target as any).checked ? 1 : 0)
+                }}
+              />
+            }
+            label={
+              <Typography display="flex">
+                Show authors only{' '}
+                <Tooltip title="This includes authors from non-published articles">
+                  <InfoOutlined color="info" />
+                </Tooltip>
+              </Typography>
+            }
+          ></FormControlLabel>
           <TablePagination
             rowsPerPageOptions={[10, 25, 50]}
             component="div"
