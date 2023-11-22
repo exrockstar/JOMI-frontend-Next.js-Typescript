@@ -17,7 +17,7 @@ export const config = {
 const pipeline = promisify(pipelineSync)
 const IMAGE_EXTS = ['.jpg', '.jpeg', '.gif', '.png', '.jpe', 'bmp', '.webp']
 
-const DOCUMENT_EXTS = ['.pdf', '.doc', '.docx']
+const DOCUMENT_EXTS = ['.pdf', '.doc', '.docx', '.csv']
 
 async function saveFile(
   file: formidable.File,

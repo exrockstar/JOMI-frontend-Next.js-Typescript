@@ -146,7 +146,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
                   style={{ display: 'none' }}
                   type="file"
                   id="file-input-hidden"
-                  accept="image/*|.pdf|.doc|.docx"
+                  accept="image/*|.pdf|.doc|.docx|.csv"
                   ref={ref}
                   onChange={handleFilePick}
                 />
@@ -154,7 +154,7 @@ const UploadImageDialog = ({ onCompleted, ...props }: Props) => {
                   Choose file to upload
                 </Button>
                 <Typography variant="subtitle2" color="text.secondary">
-                  Currently only jpg, bmp, gif,png, doc, docx, and pdf are
+                  Currently only jpg, bmp, gif,png, doc, docx, csv, and pdf are
                   supported. Animated gifs will upload normally, but will behave
                   abnormally when scaled for UI purposes.
                 </Typography>
