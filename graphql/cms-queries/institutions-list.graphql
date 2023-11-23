@@ -44,3 +44,6 @@ query InstitutionSearch($input: InstitutionInput!) {
 mutation TransferInstitutionData($input: TransferInstDataInput!) {
   transferInstitutionData(input: $input)
 }
+mutation TransferDuplicateDomains($input: TransferDomainsInput!) {
+  transferDuplicateDomains(input: $input)
+}

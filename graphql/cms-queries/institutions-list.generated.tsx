@@ -32,6 +32,13 @@ export type TransferInstitutionDataMutationVariables = Types.Exact<{
 
 export type TransferInstitutionDataMutation = { __typename?: 'Mutation', transferInstitutionData: string };
 
+export type TransferDuplicateDomainsMutationVariables = Types.Exact<{
+  input: Types.TransferDomainsInput;
+}>;
+
+
+export type TransferDuplicateDomainsMutation = { __typename?: 'Mutation', transferDuplicateDomains: string };
+
 
 export const InstitutionsListDocument = gql`
     query InstitutionsList($input: InstitutionInput!) {
@@ -194,3 +201,34 @@ export function useTransferInstitutionDataMutation(baseOptions?: Apollo.Mutation
 export type TransferInstitutionDataMutationHookResult = ReturnType<typeof useTransferInstitutionDataMutation>;
 export type TransferInstitutionDataMutationResult = Apollo.MutationResult<TransferInstitutionDataMutation>;
 export type TransferInstitutionDataMutationOptions = Apollo.BaseMutationOptions<TransferInstitutionDataMutation, TransferInstitutionDataMutationVariables>;
+export const TransferDuplicateDomainsDocument = gql`
+    mutation TransferDuplicateDomains($input: TransferDomainsInput!) {
+  transferDuplicateDomains(input: $input)
+}
+    `;
+export type TransferDuplicateDomainsMutationFn = Apollo.MutationFunction<TransferDuplicateDomainsMutation, TransferDuplicateDomainsMutationVariables>;
+
+/**
+ * __useTransferDuplicateDomainsMutation__
+ *
+ * To run a mutation, you first call `useTransferDuplicateDomainsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTransferDuplicateDomainsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [transferDuplicateDomainsMutation, { data, loading, error }] = useTransferDuplicateDomainsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useTransferDuplicateDomainsMutation(baseOptions?: Apollo.MutationHookOptions<TransferDuplicateDomainsMutation, TransferDuplicateDomainsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TransferDuplicateDomainsMutation, TransferDuplicateDomainsMutationVariables>(TransferDuplicateDomainsDocument, options);
+      }
+export type TransferDuplicateDomainsMutationHookResult = ReturnType<typeof useTransferDuplicateDomainsMutation>;
+export type TransferDuplicateDomainsMutationResult = Apollo.MutationResult<TransferDuplicateDomainsMutation>;
+export type TransferDuplicateDomainsMutationOptions = Apollo.BaseMutationOptions<TransferDuplicateDomainsMutation, TransferDuplicateDomainsMutationVariables>;

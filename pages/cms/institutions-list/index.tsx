@@ -33,6 +33,7 @@ import { useUpdateAllInstStatsMutation } from 'graphql/mutations/update-inst-sta
 import DbQueryDialog from 'components/common/DbQueryDialog'
 import RefreshInstStatsButton from 'components/institutions/RefreshInstStatsButton'
 import TransferInstitutionDataDialog from 'components/cms/institutions-list/TransferInstitutionDataDialog'
+import TransferDuplicateDomainDialog from 'components/cms/institutions-list/TransferDuplicateDomainsDialog'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -167,7 +168,7 @@ const InstitutionsListPage = () => {
         open={addDialoglOpen}
         onClose={() => setAddDialogOpen(false)}
       />
-      <TransferInstitutionDataDialog
+      <TransferDuplicateDomainDialog
         open={transferDialogOpen}
         onClose={() => setTransferDialogOpen(false)}
       />
@@ -187,8 +188,9 @@ const InstitutionsListPage = () => {
             variant="outlined"
             color="primary"
             onClick={() => setTransferDialogOpen(true)}
+            title="Allows admins to transfer domain data such as access logs and users to a target institution."
           >
-            Transfer Institution Data
+            Transfer Domain Data
           </LoadingButton>
           <Tooltip title="Runs a job to update all cached institutiton stats. userCount, and articleViews. Completes in about 5 minutes.">
             <RefreshInstStatsButton />

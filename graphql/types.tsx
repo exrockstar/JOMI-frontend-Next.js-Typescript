@@ -1260,6 +1260,7 @@ export type Mutation = {
   trackVideoBlock?: Maybe<Scalars['String']>;
   trackVideoPlay?: Maybe<Scalars['String']>;
   trackVideoTime: Scalars['Boolean'];
+  transferDuplicateDomains: Scalars['String'];
   transferInstitutionData: Scalars['String'];
   translateArticles: Array<TranslationResult>;
   triggerUpdateUserSubscription: Scalars['String'];
@@ -1636,6 +1637,11 @@ export type MutationTrackVideoPlayArgs = {
 
 export type MutationTrackVideoTimeArgs = {
   input: TrackVideoTimeInput;
+};
+
+
+export type MutationTransferDuplicateDomainsArgs = {
+  input: TransferDomainsInput;
 };
 
 
@@ -3029,6 +3035,11 @@ export type TrackVideoTimeInput = {
   increment: Scalars['Int'];
   time_watched: Scalars['Float'];
   vidWatchId: Scalars['String'];
+};
+
+export type TransferDomainsInput = {
+  domain: Scalars['String'];
+  to: Scalars['String'];
 };
 
 export type TransferInstDataInput = {
