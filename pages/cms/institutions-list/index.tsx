@@ -188,8 +188,9 @@ const InstitutionsListPage = () => {
             variant="outlined"
             color="primary"
             onClick={() => setTransferDialogOpen(true)}
+            title="Allows admins to transfer domain data such as access logs and users to a target institution."
           >
-            Transfer Institution Data
+            Transfer Domain Data
           </LoadingButton>
           <Tooltip title="Runs a job to update all cached institutiton stats. userCount, and articleViews. Completes in about 5 minutes.">
             <RefreshInstStatsButton />
