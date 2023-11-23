@@ -33,6 +33,7 @@ import { useUpdateAllInstStatsMutation } from 'graphql/mutations/update-inst-sta
 import DbQueryDialog from 'components/common/DbQueryDialog'
 import RefreshInstStatsButton from 'components/institutions/RefreshInstStatsButton'
 import TransferInstitutionDataDialog from 'components/cms/institutions-list/TransferInstitutionDataDialog'
+import TransferDuplicateDomainDialog from 'components/cms/institutions-list/TransferDuplicateDomainsDialog'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -167,7 +168,7 @@ const InstitutionsListPage = () => {
         open={addDialoglOpen}
         onClose={() => setAddDialogOpen(false)}
       />
-      <TransferInstitutionDataDialog
+      <TransferDuplicateDomainDialog
         open={transferDialogOpen}
         onClose={() => setTransferDialogOpen(false)}
       />
