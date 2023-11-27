@@ -67,16 +67,9 @@ const PurchaseSuccessPage = () => {
         value: order.amount,
         currency: order.currency,
         type: order.type,
-        userId: session && session.user ? session.user._id : 'anon',
-        items: [
-          {
-            item_id: order._id,
-            item_name: order.description,
-            price: order.amount,
-            quantity: 1
-          }
-        ],
-        interval: interval,
+        description: order.description,
+        promoCode: "N/A",
+        interval: "month"
       })
       setTimeout(() => {
         router.replace(redirectUrl)
