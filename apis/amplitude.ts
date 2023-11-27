@@ -1,6 +1,17 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import { EnrichmentPlugin } from '@amplitude/analytics-types';
+import { OrderType } from 'graphql/types';
 import { logger } from 'logger/logger';
+
+type PurchaseParams = {
+  transaction_id: string,
+  value: number,
+  currency: string,
+  type: OrderType,
+  description: string,
+  promoCode: string,
+  interval: string,
+}
 
 const isClient = typeof window !== 'undefined'
 /**
@@ -110,12 +121,12 @@ export const amplitudeTrackInitiateCheckout = (params: Object) => {
  * (PPA, Subscription)
  * @param params: An Object whose properties we use to add to the tracked event.
  */
-export const amplitudeTrackPurchase = (params: Object) => {
+export const amplitudeTrackPurchase = (params: PurchaseParams) => {
   amplitude.track('Purchase', {
     ...params,
     anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   })
-  amplitudeAddToUserProps({ purchaseCount: 1})
+  amplitudeAddToUserProps({ purchaseCount: 1, revenueFromUser: params.value})
 }
 
 /**

@@ -50,6 +50,8 @@ const CheckoutSuccessPage = () => {
     const interval = order.description.includes('month') ? 'Monthly' :
         order.description.includes('year') ? 'Yearly' :
         'N/A'
+
+    const promoCode = order.promoCode || "None"
     gtag('event', 'purchase', {
       transaction_id: order._id,
       value: order.amount,
@@ -73,14 +75,8 @@ const CheckoutSuccessPage = () => {
       value: order.amount,
       currency: order.currency,
       type: OrderType.Individual,
-      items: [
-        {
-          item_id: order._id,
-          item_name: order.description,
-          price: order.amount,
-          quantity: 1
-        }
-      ],
+      description: order.description,
+      promoCode: promoCode,
       interval: interval,
     })
     //Track FB Pixel Subscribe event
