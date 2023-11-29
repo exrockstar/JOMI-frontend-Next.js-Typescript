@@ -17,6 +17,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CTAButton from 'components/common/CTAButton'
 import { TrackFeedbackInput } from 'graphql/types'
 import { Formik } from 'formik'
+import { analytics } from 'apis/analytics'
 type FeedbackContainerProps = {
   hideSkipButton?: boolean
 }
@@ -76,7 +77,7 @@ const FeedbackContainer = ({ hideSkipButton }: FeedbackContainerProps) => {
           user: user?._id
         }}
         onSubmit={async (values, helpers) => {
-          gtag('event', 'track_feedback', {
+          analytics.trackFeedback({
             question_id: question._id,
             question: question.question,
             value: values.value,

@@ -24,7 +24,7 @@ const RequireSubscriptionActions = ({ accessData }: Props) => {
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
       router.reload()
-      analytics.trackTrial({})
+      analytics.trackTrial()
     }
   })
 

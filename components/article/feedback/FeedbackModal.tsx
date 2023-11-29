@@ -18,6 +18,7 @@ import LikertScaleFeedback from './LikertScaleFeedback'
 import { useEffect, useState } from 'react'
 import { GetFeedbackQuestionsQuery } from 'graphql/mutations/collect-feedback.generated'
 import { useField, useFormikContext } from 'formik'
+import { analytics } from 'apis/analytics'
 type Question = GetFeedbackQuestionsQuery['question']
 type Props = DialogProps & {
   question?: Question
@@ -42,7 +43,7 @@ const FeedbackModal = (props: Props) => {
 
   useEffect(() => {
     if (props.open) {
-      gtag('event', 'show_feeback_block', {
+      analytics.trackShowFeedback({
         question_id: question?._id
       })
     }

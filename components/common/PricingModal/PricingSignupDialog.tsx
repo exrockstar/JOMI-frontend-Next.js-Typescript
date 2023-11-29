@@ -42,7 +42,7 @@ const PricingSignupDialog: React.FC = () => {
 
   const [addTrialOrder, { loading: trialLoading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
-      analytics.trackTrial({})
+      analytics.trackTrial()
       amplitudeTrackTrial({
         userId: session && session.user ? session.user._id : 'anon',
         duration: trialDuration

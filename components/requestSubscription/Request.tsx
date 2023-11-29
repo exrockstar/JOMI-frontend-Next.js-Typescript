@@ -47,11 +47,8 @@ export default function Request() {
       },
       onCompleted: () => {
         setShowSuccessMessage(true)
-        gtag('event', 'request_subscription', {
-          event_label: data?.user?.institution_name,
-          referredFrom,
-          referrerPath,
-          anon_link_id
+        analytics.trackRequestSubscription({
+          institution_name: data?.user?.institution_name
         })
         amplitudeTrackRequestSubscription({
           userInstitution: data?.user?.institution_name ? data.user.institution_name : 'none',

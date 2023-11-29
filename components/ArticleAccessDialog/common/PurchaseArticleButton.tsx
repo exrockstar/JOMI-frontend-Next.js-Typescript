@@ -6,6 +6,7 @@ import { OrderType } from 'graphql/types'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import CTAButtonOutlined from 'components/frontpage/CTAButtonOutlined'
 import PromocodeModal from 'components/article/sidebar/AccessBox/common/PromocodeModal'
+import { analytics } from 'apis/analytics'
 
 type Props = {
   userId: string
@@ -82,13 +83,7 @@ const PurchaseArticleButton = (props: Props) => {
           fullWidth
           onClick={(e) => {
             setOpen(true)
-            gtag('event', event, {
-              referredFrom,
-              referrerPath,
-              anon_link_id,
-              userId,
-              value: price
-            })
+            analytics.trackClick(e)
           }}
           type="button"
         >
