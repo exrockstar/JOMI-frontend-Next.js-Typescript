@@ -39,7 +39,7 @@ const PUBLIC_FILE = /\.(.*)$/
 export const withRedirect: MiddlewareFactory = (next: NextMiddleware) => {
   return async function (req: NextRequest, _next: NextFetchEvent) {
     try {
-      const { pathname, origin } = req.nextUrl
+      const { pathname, origin, searchParams } = req.nextUrl
 
       if (pathname === '/account') {
         const url = new URL('/account/profile', origin)
@@ -62,6 +62,10 @@ export const withRedirect: MiddlewareFactory = (next: NextMiddleware) => {
       if (data?.redirectFor) {
         const redirect = data.redirectFor
         const url = new URL(redirect.to, origin)
+        for (const [key, value] of searchParams.entries()) {
+          url.searchParams.append(key, value)
+        }
+
         return NextResponse.redirect(url, +redirect.type)
       }
 
