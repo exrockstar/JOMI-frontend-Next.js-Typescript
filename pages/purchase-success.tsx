@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import dayjs from 'dayjs'
 import { amplitudeTrackPurchase } from 'apis/amplitude'
+import { analytics } from 'apis/analytics'
 
 /**
  * Page to track article purchase and rent events
@@ -45,14 +46,15 @@ const PurchaseSuccessPage = () => {
       const interval = order.description.includes('month') ? 'Monthly' :
         order.description.includes('year') ? 'Yearly' :
         'N/A'
-      gtag('event', 'purchase', {
+        
+      analytics.trackPurchase({
         transaction_id: order._id,
         value: order.amount,
         currency: order.currency,
-        referredFrom,
-        referrerPath,
-        anon_link_id,
-        event_label: order.type,
+        type: order.type,
+        description: order.description,
+        promoCode: "N/A",
+        interval: "ppa",
         items: [
           {
             item_id: order._id,
@@ -69,7 +71,7 @@ const PurchaseSuccessPage = () => {
         type: order.type,
         description: order.description,
         promoCode: "N/A",
-        interval: "month"
+        interval: "ppa"
       })
       setTimeout(() => {
         router.replace(redirectUrl)

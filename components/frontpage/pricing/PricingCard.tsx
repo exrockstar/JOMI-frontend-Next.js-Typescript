@@ -33,7 +33,7 @@ const PricingCard = (props: PricingCardProps) => {
   const { enqueueSnackbar } = useSnackbar()
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
-      analytics.trackTrial({})
+      analytics.trackTrial()
       router.reload()
       enqueueSnackbar('Successfully Subscribed to Trial.', {
         variant: 'success'

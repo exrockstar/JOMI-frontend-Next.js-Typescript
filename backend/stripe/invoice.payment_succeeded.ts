@@ -121,7 +121,8 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
       transaction_id: order.plan_id,
       value: order.amount,
       promoCode: order.promoCode,
-      event_label: order.type,
+      type: order.type,
+      description: order.description,
       items: [
         {
           item_id: order.plan_id,

@@ -7,8 +7,6 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
 
-const GOOGLE_GTAG = process.env.GOOGLE_GTAG
-
 type Props = {
   metadata: MetaData
 }
@@ -36,7 +34,6 @@ const GoogleGtag = ({ metadata }: Props) => {
   useEffect(() => {
     if (cmsOrAccess) return
     if (status === 'loading' || loading) return
-    if (typeof gtag === 'undefined') return
     if (initialized) return
     type Config = Gtag.ConfigParams | Gtag.CustomParams
 
@@ -58,8 +55,18 @@ const GoogleGtag = ({ metadata }: Props) => {
     if (process.env.NODE_ENV === 'development') {
       config.debug_mode = true
     }
-    gtag('config', GOOGLE_GTAG, config)
-
+    window.dataLayer.push({
+      'event': 'config',
+      'send_page_view': false,
+      'userId': `${user?._id || 'N/A'}`,
+      'user_type': user_type,
+      'specialty': specialty,
+      'user_role': user_role,
+      'institution_id': institution_id,
+      'institution_name': institution_name,
+      'sub_type': sub_type,
+      'title': metadata.title
+    })
     setInitialized(true)
   }, [
     cmsOrAccess,
@@ -81,28 +88,19 @@ const GoogleGtag = ({ metadata }: Props) => {
     if (!initialized) {
       return
     }
-    console.log('logging page view')
-    gtag('event', 'page_view', {
-      page_path: location.pathname + location.search + location.hash,
-      referredFrom,
-      referrerPath,
-      anon_link_id
+    
+    window.dataLayer.push({
+      'event': 'page_view',
+      'page_path': location.pathname + location.search + location.hash,
+      'referredFrom': referredFrom,
+      'referrerPath': referrerPath,
+      'anon_link_id': anon_link_id
     })
   }, [router.asPath, initialized, referredFrom, referrerPath, anon_link_id])
   return (
     !cmsOrAccess && (
       <div>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_GTAG}`}
-        />
         {/* START Initialize GTAG */}
-        <Script id="gtag-initialization">
-          {`window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GOOGLE_GTAG}', { send_page_view: false });
-          `}
-        </Script>
         <Script async strategy="beforeInteractive" id="google-gtm">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

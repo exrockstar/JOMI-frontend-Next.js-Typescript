@@ -39,7 +39,6 @@ const CheckoutSuccessPage = () => {
     const isClient = typeof window !== 'undefined'
     if (!order?._id) return
     if (logged) return
-    if (typeof gtag === 'undefined') return
     trackSubscribeMutation({
       variables: {
         input: {
@@ -52,14 +51,14 @@ const CheckoutSuccessPage = () => {
         'N/A'
 
     const promoCode = order.promoCode || "None"
-    gtag('event', 'purchase', {
+    analytics.trackPurchase({
       transaction_id: order._id,
       value: order.amount,
       currency: order.currency,
-      referredFrom,
-      referrerPath,
-      anon_link_id,
-      event_label: OrderType.Individual,
+      type: order.type,
+      description: order.description,
+      promoCode: promoCode,
+      interval: interval,
       items: [
         {
           item_id: order._id,
@@ -67,8 +66,7 @@ const CheckoutSuccessPage = () => {
           price: order.amount,
           quantity: 1
         }
-      ],
-      interval: interval,
+      ]
     })
     amplitudeTrackPurchase({
       transaction_id: order._id,

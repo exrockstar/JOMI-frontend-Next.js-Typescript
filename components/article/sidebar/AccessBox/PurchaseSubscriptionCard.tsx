@@ -21,7 +21,7 @@ const PurchaseSubscriptionCard = ({ data }: Props) => {
 
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
-      analytics.trackTrial({})
+      analytics.trackTrial()
       amplitudeTrackTrial({
         userId: session && session.user ? session.user._id : 'anon',
         duration: trialDuration
