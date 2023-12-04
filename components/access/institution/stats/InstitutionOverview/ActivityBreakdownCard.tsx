@@ -18,7 +18,11 @@ import { Chart } from 'chart.js'
 import { capitalize } from 'lodash'
 
 type Props = {
-  by: 'userType' | 'contentType'
+  by:
+    | 'byUserType'
+    | 'userCountByUserType'
+    | 'byContentType'
+    | 'userCountByContentType'
   title: string
   description: string
   showHideAllButtons?: boolean
@@ -43,9 +47,14 @@ const ActivityBreakdownCard = ({
     }
   })
   const ref = useRef<any>(null)
-  const isByContentType = by === 'contentType'
-  const chartData = isByContentType ? data?.byContentType : data?.byUserType
+
+  if (!data) return null
+
+  const isByContentType = by.includes('ContentType')
+  const chartData = data[by]
   const Component = isByContentType ? Bar : Doughnut
+
+  console.log(by, chartData)
   return (
     <Card>
       <Box p={2}>
