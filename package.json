@@ -65,6 +65,7 @@
     "react-in-viewport": "^1.0.0-alpha.28",
     "react-share": "^4.4.0",
     "reflect-metadata": "^0.1.13",
+    "sass": "^1.69.5",
     "sharp": "^0.29.2",
     "slug": "^5.1.0",
     "stripe": "^8.190.0",

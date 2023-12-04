@@ -26,10 +26,9 @@ import ArticleIndex, {
 } from './article-index'
 import { useRouter } from 'next/router'
 import { ArticleIndexSection } from 'components/article-index/types'
-import ESBCPage, {
-  getStaticProps as esbcGetStaticProps
-} from './conference'
+import ESBCPage, { getStaticProps as esbcGetStaticProps } from './conference'
 import HomePage, { getStaticProps as homeGetStaticProps } from './home'
+import Head from 'next/head'
 
 type GenericPageProps = {
   page: PageBySlugQuery['pageBySlug']
@@ -176,7 +175,14 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
     })
 
     const content = $('body').html()
-    const styles = `<style>${$('style').html()}</style>\n`
+    const _stlyes = $('style')
+      .map(function () {
+        return $(this).html()
+      })
+      .toArray()
+      .join('\n')
+    const styles = `<style>${_stlyes}</style>\n`
+
     const stylesAndContent = styles.concat(content)
     await client.query<SiteWideAnnouncementsQuery>({
       query: SiteWideAnnouncementsDocument
@@ -186,7 +192,7 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
         _name: 'generic',
         page: {
           ...data?.pageBySlug,
-          content: stylesAndContent,
+          content: stylesAndContent
         },
         scripts,
         [APOLLO_STATE_PROP_NAME]: client.cache.extract(),
