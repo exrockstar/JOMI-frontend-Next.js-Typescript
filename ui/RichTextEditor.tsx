@@ -85,7 +85,7 @@ const RichTextEditor: React.FC<RTEProps> = ({
         valid_elements: validElements,
         auto_focus: autoFocus as true,
         content_style: `
-        @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+        @import url('/dist/bootstrap.css');
         ${EditorStyles}${contentStyle}`,
         toolbar_location: toolbarLocation,
         setup: (editor: any) => {
