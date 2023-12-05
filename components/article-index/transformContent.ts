@@ -10,6 +10,7 @@ const mapArticle = (
   articlesData: ArticlesData,
   subheading: string = '',
   heading: string = '',
+  subheadingSection: string = '',
 ): Article => {
   let level = 0 //level of the element in the content
   if($(elem).parent().parent().is('li')){
@@ -43,7 +44,8 @@ const mapArticle = (
     subheading,
     publication_id,
     categoryText: heading,
-    level
+    level,
+    subheadingSection
   }
 }
 
@@ -59,7 +61,7 @@ export const transformContent = (
   const sections = $('.section')
     .map((_, elem) => {
       const heading = $(elem).find('.section_heading')
-
+      
       const articles = $(elem)
         .find('.subsections')
         .map((_, elem) => {
@@ -68,21 +70,51 @@ export const transformContent = (
             .find('h4.subsection_heading')
             .map((_, elem) => {
               const subheading = $(elem).text()
-              const articles = $(elem)
-                .next('ul')
-                .find('li')
-                .toArray() 
-                .flatMap((elem, i) => { 
-                  return mapArticle(
-                    $,
-                    elem,
-                    articlesData,
-                    subheading,
-                    $(heading).text(),
-                  )
-                })
+
+              //check if there are subheading sections
+              let subheadingSections = $(elem).nextUntil('h4', 'h5')
+              if(subheadingSections.length > 0){
+                let arr = $(elem)
+                  .nextUntil('h4', 'h5')
+                  .map((_, elem) => {
+                    const subheading_sectionText = $(elem).text()
+                    
+                    const articles = $(elem)
+                      .next('ul')
+                      .find('li')
+                      .toArray() 
+                      .flatMap((elem, i) => { 
+                        return mapArticle(
+                          $,
+                          elem,
+                          articlesData,
+                          subheading,
+                          $(heading).text(),
+                          subheading_sectionText
+                        )
+                      })
+                    return articles
+                  })
+                  .get()
+
+                  return arr
+              } else {
+                const articles = $(elem)
+                  .next('ul')
+                  .find('li')
+                  .toArray() 
+                  .flatMap((elem, i) => { 
+                    return mapArticle(
+                      $,
+                      elem,
+                      articlesData,
+                      subheading,
+                      $(heading).text(),
+                    )
+                  })
                 
-              return articles
+                return articles
+              }
             })
             .get()
 

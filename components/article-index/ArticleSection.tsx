@@ -87,7 +87,7 @@ const ArticleSection = ({
         {Object.entries(groupedBySubheading).map((group, i) => {
           const [subheading, articles] = group
           const hasSubheading = subheading !== 'all'
-
+          let subheadingSection = ''
           return (
             <Box key={i}>
               {hasSubheading && (
@@ -110,8 +110,22 @@ const ArticleSection = ({
               )}
               <Stack>
                 {articles.map((article, i) => {
+                  //Check if the subheadingSection changes
+                  //if so, render the new subheadingSection
+                  let diffSubheadSection = false
+                  if(subheadingSection !== article.subheadingSection) {
+                    subheadingSection = article.subheadingSection
+                    diffSubheadSection = true
+                  }
+
                   return (
                     <div key={i}>
+                      {subheadingSection !== '' && 
+                        diffSubheadSection &&
+                        <Typography component={'h5'} sx={{ color: '#000' }}>
+                          {subheadingSection}
+                        </Typography>
+                      }
                       {article.soon ? (
                         <FutureArticle article={article} />
                       ) : (
