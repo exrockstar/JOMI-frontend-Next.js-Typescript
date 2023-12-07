@@ -7,6 +7,7 @@ export type Article = {
   publication_id: string
   categoryText: string
   level: number
+  subheadingSection: string
 }
 
 export type ArticleIndexSection = {
