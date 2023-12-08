@@ -31,7 +31,7 @@ const CategorySidebar: React.FC<Props> = ({ categories }) => {
         </CategoryButton>
       </Link>
       {categories.map((category) => {
-        const url = `/index#${category.slug}`
+        const url = `/categories/${category.slug}`
         const title = `View ${category.displayName} Articles`
         return (
           <CategoryButton
