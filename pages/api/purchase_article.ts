@@ -70,7 +70,7 @@ export default async function handler(req: NextApiRequest, res) {
         }
       })
       // redirect to purchase-success page to track article/rent purchases
-      const success_url = new URL('/purchase-success', origin)
+      const success_url = new URL('/checkout-success', origin)
       success_url.searchParams.append('from', encodeURIComponent(from))
 
       const params: Stripe.Checkout.SessionCreateParams = {

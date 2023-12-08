@@ -22,6 +22,7 @@ import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelper
 import dayjs from 'dayjs'
 import { amplitudeTrackPurchase } from 'apis/amplitude'
 import { analytics } from 'apis/analytics'
+import { OrderType } from 'graphql/types'
 
 /**
  * Page to track article purchase and rent events
@@ -46,24 +47,8 @@ const PurchaseSuccessPage = () => {
       const interval = order.description.includes('month') ? 'Monthly' :
         order.description.includes('year') ? 'Yearly' :
         'N/A'
-        
-      analytics.trackPurchase({
-        transaction_id: order._id,
-        value: order.amount,
-        currency: order.currency,
-        type: order.type,
-        description: order.description,
-        promoCode: "N/A",
-        interval: "ppa",
-        items: [
-          {
-            item_id: order._id,
-            item_name: order.description,
-            price: order.amount,
-            quantity: 1
-          }
-        ]
-      })
+      
+      
       amplitudeTrackPurchase({
         transaction_id: order._id,
         value: order.amount,
