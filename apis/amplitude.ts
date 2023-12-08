@@ -130,6 +130,32 @@ export const amplitudeTrackPurchase = (params: PurchaseParams) => {
 }
 
 /**
+ * Purpose: Track when a user completes a purchase
+ * (PPA, Subscription)
+ * @param params: An Object whose properties we use to add to the tracked event.
+ */
+export const amplitudeTrackPurchaseArticle = (params: PurchaseParams) => {
+  amplitude.track('Purchase Article', {
+    ...params,
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+  amplitudeAddToUserProps({ purchaseCount: 1, revenueFromUser: params.value})
+}
+
+/**
+ * Purpose: Track when a user completes a purchase
+ * (PPA, Subscription)
+ * @param params: An Object whose properties we use to add to the tracked event.
+ */
+export const amplitudeTrackRentArticle = (params: PurchaseParams) => {
+  amplitude.track('Rent Article', {
+    ...params,
+    anon_link_id: isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  })
+  amplitudeAddToUserProps({ purchaseCount: 1, revenueFromUser: params.value})
+}
+
+/**
  * Purpose: Track when a user performs a search
  * @param params: An Object whose properties we use to add to the tracked event.
  */

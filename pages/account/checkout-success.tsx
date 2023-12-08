@@ -21,7 +21,7 @@ import { getApolloUserClient } from 'apis/apollo-admin-client'
 import Cookies from 'cookies'
 import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelpers'
 import { OrderType } from 'graphql/types'
-import { amplitudeTrackPurchase } from 'apis/amplitude'
+import { amplitudeTrackPurchase, amplitudeTrackPurchaseArticle, amplitudeTrackRentArticle } from 'apis/amplitude'
 const CheckoutSuccessPage = () => {
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -51,32 +51,91 @@ const CheckoutSuccessPage = () => {
         'N/A'
 
     const promoCode = order.promoCode || "None"
-    analytics.trackPurchase({
-      transaction_id: order._id,
-      value: order.amount,
-      currency: order.currency,
-      type: order.type,
-      description: order.description,
-      promoCode: promoCode,
-      interval: interval,
-      items: [
-        {
-          item_id: order._id,
-          item_name: order.description,
-          price: order.amount,
-          quantity: 1
-        }
-      ]
-    })
-    amplitudeTrackPurchase({
-      transaction_id: order._id,
-      value: order.amount,
-      currency: order.currency,
-      type: OrderType.Individual,
-      description: order.description,
-      promoCode: promoCode,
-      interval: interval,
-    })
+
+    if(order.type === OrderType.Individual) {
+      analytics.trackPurchase({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: order.type,
+        description: order.description,
+        promoCode: promoCode,
+        interval: interval,
+        items: [
+          {
+            item_id: order._id,
+            item_name: order.description,
+            price: order.amount,
+            quantity: 1
+          }
+        ]
+      })
+
+      amplitudeTrackPurchase({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: OrderType.Individual,
+        description: order.description,
+        promoCode: promoCode,
+        interval: interval,
+      })
+    } else if(order.type === OrderType.PurchaseArticle){
+      analytics.trackPurchaseArticle({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: order.type,
+        description: order.description,
+        promoCode: "N/A",
+        interval: "ppa",
+        items: [
+          {
+            item_id: order._id,
+            item_name: order.description,
+            price: order.amount,
+            quantity: 1
+          }
+        ]
+      })
+      amplitudeTrackPurchaseArticle({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: OrderType.Individual,
+        description: order.description,
+        promoCode: promoCode,
+        interval: interval,
+      })
+    } else if (order.type === OrderType.RentArticle) {
+      analytics.trackRentArticle({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: order.type,
+        description: order.description,
+        promoCode: "N/A",
+        interval: "ppa",
+        items: [
+          {
+            item_id: order._id,
+            item_name: order.description,
+            price: order.amount,
+            quantity: 1
+          }
+        ]
+      })
+      amplitudeTrackRentArticle({
+        transaction_id: order._id,
+        value: order.amount,
+        currency: order.currency,
+        type: OrderType.Individual,
+        description: order.description,
+        promoCode: promoCode,
+        interval: interval,
+      })
+    }
+    
     //Track FB Pixel Subscribe event
     fbPixelTrackSubscribe(order.currency, order.amount, session.user.id)
     setLogged(true)
@@ -93,10 +152,15 @@ const CheckoutSuccessPage = () => {
         <Stack alignItems="center" mt={20}>
           <Logo type="dark" />
         </Stack>
-        <Alert severity="success">
-          Your subscription is successfully created.
-        </Alert>
-
+        {order?.type === OrderType.Individual ? 
+          <Alert severity="success">
+            Your subscription is successfully created.
+          </Alert>
+          :
+          <Alert severity="success">
+            Your purchase is successful. Redirecting to article...
+          </Alert>
+        }
         <Link href={`/account/subscription`} passHref legacyBehavior>
           <BlueLink ml={2}>Back to account page</BlueLink>
         </Link>

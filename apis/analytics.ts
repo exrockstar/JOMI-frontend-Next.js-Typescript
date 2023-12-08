@@ -204,6 +204,48 @@ const trackPurchase = (eventParams: PurchaseParams) => {
   })
 }
 
+const trackPurchaseArticle = (eventParams: PurchaseParams) => {
+  const isClient = typeof window !== 'undefined'
+  const referredFrom = isClient ? localStorage.getItem('referrer') ?? '' : ''
+  const referrerPath = isClient ? localStorage.getItem('referrerPath') ?? '' : ''
+  const anon_link_id = isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  window.dataLayer.push({
+    'event': 'purchase_article',
+    'transaction_id': eventParams.transaction_id,
+    'value': eventParams.value,
+    'promoCode': eventParams.promoCode,
+    'type': eventParams.type,
+    'description': eventParams.description,
+    'currency': eventParams.currency,
+    'items': eventParams.items,
+    'interval': eventParams.interval,
+    'referredFrom': referredFrom,
+    'referrerPath': referrerPath,
+    'anon_link_id': anon_link_id
+  })
+}
+
+const trackRentArticle = (eventParams: PurchaseParams) => {
+  const isClient = typeof window !== 'undefined'
+  const referredFrom = isClient ? localStorage.getItem('referrer') ?? '' : ''
+  const referrerPath = isClient ? localStorage.getItem('referrerPath') ?? '' : ''
+  const anon_link_id = isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
+  window.dataLayer.push({
+    'event': 'rent_article',
+    'transaction_id': eventParams.transaction_id,
+    'value': eventParams.value,
+    'promoCode': eventParams.promoCode,
+    'type': eventParams.type,
+    'description': eventParams.description,
+    'currency': eventParams.currency,
+    'items': eventParams.items,
+    'interval': eventParams.interval,
+    'referredFrom': referredFrom,
+    'referrerPath': referrerPath,
+    'anon_link_id': anon_link_id
+  })
+}
+
 const trackSearch = (query: string) => {
   if (!!query) {
     const isClient = typeof window !== 'undefined'
@@ -391,7 +433,7 @@ const trackRequestSubscription = (
   const anon_link_id = isClient ? localStorage.getItem('anon_link_id') ?? '' : ''
   
   window.dataLayer.push({
-    'event': 'initiate_rent_article',
+    'event': 'request_subscription',
     'institution_name': eventParams.institution_name,
     'referredFrom': referredFrom,
     'referrerPath': referrerPath,
@@ -420,5 +462,7 @@ export const analytics = {
   trackShowFeedback,
   trackInitPurchaseArticle,
   trackInitRentArticle,
-  trackRequestSubscription
+  trackRequestSubscription,
+  trackRentArticle,
+  trackPurchaseArticle,
 }
