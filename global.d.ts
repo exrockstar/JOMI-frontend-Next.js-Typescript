@@ -9,7 +9,7 @@ interface Window {
   analytics: {
     track(event: string, value: string): void
   }
-  dataLayer: any
+  dataLayer?: any | null
 }
 
 /**
