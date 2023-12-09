@@ -55,17 +55,17 @@ const GoogleGtag = ({ metadata }: Props) => {
     if (process.env.NODE_ENV === 'development') {
       config.debug_mode = true
     }
-    window.dataLayer.push({
-      'event': 'config',
-      'send_page_view': false,
-      'userId': `${user?._id || 'N/A'}`,
-      'user_type': user_type,
-      'specialty': specialty,
-      'user_role': user_role,
-      'institution_id': institution_id,
-      'institution_name': institution_name,
-      'sub_type': sub_type,
-      'title': metadata.title
+    window.dataLayer?.push({
+      event: 'config',
+      send_page_view: false,
+      userId: `${user?._id || 'N/A'}`,
+      user_type: user_type,
+      specialty: specialty,
+      user_role: user_role,
+      institution_id: institution_id,
+      institution_name: institution_name,
+      sub_type: sub_type,
+      title: metadata.title
     })
     setInitialized(true)
   }, [
@@ -88,13 +88,13 @@ const GoogleGtag = ({ metadata }: Props) => {
     if (!initialized) {
       return
     }
-    
-    window.dataLayer.push({
-      'event': 'page_view',
-      'page_path': location.pathname + location.search + location.hash,
-      'referredFrom': referredFrom,
-      'referrerPath': referrerPath,
-      'anon_link_id': anon_link_id
+
+    window.dataLayer?.push({
+      event: 'page_view',
+      page_path: location.pathname + location.search + location.hash,
+      referredFrom: referredFrom,
+      referrerPath: referrerPath,
+      anon_link_id: anon_link_id
     })
   }, [router.asPath, initialized, referredFrom, referrerPath, anon_link_id])
   return (
