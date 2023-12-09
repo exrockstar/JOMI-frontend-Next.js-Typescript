@@ -45,117 +45,15 @@ import ArticleTranslationsDialog from 'components/cms/articles-list/ArticleTrans
 import PurchaseSettingDialog from 'components/cms/articles-list/PurchaseSettingDialog'
 import { ARTICLE_CATEGORIES } from 'common/constants'
 import { countries } from 'components/cms/prices-list/countryList'
+import { useCategoriesQuery } from 'graphql/queries/categories.generated'
 
-const columnOptions: ColumnOption[] = [
-  {
-    columnName: 'title',
-    type: 'text',
-    label: 'Title',
-    operations: StringOperations
-  },
-  {
-    columnName: 'production_id',
-    type: 'text',
-    label: 'Production ID',
-    operations: StringOperations
-  },
-  {
-    columnName: 'publication_id',
-    type: 'text',
-    label: 'Publication ID',
-    operations: StringOperations
-  },
-  {
-    columnName: 'status',
-    type: 'text',
-    label: 'Status',
-    operations: StringOperations
-  },
-  {
-    columnName: 'published',
-    type: 'date',
-    label: 'Publish Date',
-    operations: DateOperations
-  },
-  {
-    columnName: 'preprint_date',
-    type: 'date',
-    label: 'Preprint Date',
-    operations: DateOperations
-  },
-  {
-    columnName: 'has_complete_abstract',
-    type: 'boolean',
-    label: 'Abstract Done?',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
-  },
-  {
-    columnName: 'restrictions.article',
-    type: 'select',
-    label: 'Restrictions',
-    operations: StringOperations,
-    values: ['Evaluation', 'Free', 'None', 'Requires_Subscription']
-  },
-  {
-    columnName: 'DOIStatus',
-    type: 'select',
-    label: 'DOI',
-    operations: StringOperations,
-    values: ['error', 'false', 'preprint', 'publish']
-  },
-  {
-    columnName: 'languages',
-    type: 'text',
-    label: 'Available Languages',
-    operations: StringOperations
-  },
-  {
-    columnName: 'enabled_languages',
-    type: 'text',
-    label: 'Enabled Languages',
-    operations: StringOperations
-  },
-  {
-    columnName: 'contentlength',
-    type: 'text',
-    label: `Content Length`,
-    operations: [
-      QueryOperation.GreaterThanOrEqual,
-      QueryOperation.LessThanOrEqual
-    ]
-  },
-  {
-    columnName: 'purchaseSettingEnabled',
-    type: 'boolean',
-    label: 'Purchase Setting',
-    operations: [QueryOperation.Equal, QueryOperation.NotEqual]
-  },
-  {
-    columnName: 'purchaseAllowedCountries',
-    type: 'select',
-    label: 'PPA Scope',
-    operations: [
-      QueryOperation.Equal,
-      QueryOperation.Contains,
-      QueryOperation.NotContains
-    ],
-    values: ['[]', ...countries.map((c) => c.code)],
-    labels: ['All Countries', ...countries.map((c) => c.label)]
-  },
-  {
-    columnName: 'categories',
-    type: 'select',
-    label: 'Categories',
-    operations: StringOperations,
-    values: ARTICLE_CATEGORIES
-  }
-]
 const ArticlesListPage = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
+  const { data: categoriesData } = useCategoriesQuery()
   const {
     articles,
     loading,
@@ -169,7 +67,117 @@ const ArticlesListPage = () => {
     searchTerm,
     refetch
   } = useArticlesList()
-
+  const columnOptions: ColumnOption[] = [
+    {
+      columnName: 'title',
+      type: 'text',
+      label: 'Title',
+      operations: StringOperations
+    },
+    {
+      columnName: 'production_id',
+      type: 'text',
+      label: 'Production ID',
+      operations: StringOperations
+    },
+    {
+      columnName: 'publication_id',
+      type: 'text',
+      label: 'Publication ID',
+      operations: StringOperations
+    },
+    {
+      columnName: 'status',
+      type: 'text',
+      label: 'Status',
+      operations: StringOperations
+    },
+    {
+      columnName: 'published',
+      type: 'date',
+      label: 'Publish Date',
+      operations: DateOperations
+    },
+    {
+      columnName: 'preprint_date',
+      type: 'date',
+      label: 'Preprint Date',
+      operations: DateOperations
+    },
+    {
+      columnName: 'has_complete_abstract',
+      type: 'boolean',
+      label: 'Abstract Done?',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+    },
+    {
+      columnName: 'restrictions.article',
+      type: 'select',
+      label: 'Restrictions',
+      operations: StringOperations,
+      values: ['Evaluation', 'Free', 'None', 'Requires_Subscription']
+    },
+    {
+      columnName: 'DOIStatus',
+      type: 'select',
+      label: 'DOI',
+      operations: StringOperations,
+      values: ['error', 'false', 'preprint', 'publish']
+    },
+    {
+      columnName: 'languages',
+      type: 'text',
+      label: 'Available Languages',
+      operations: StringOperations
+    },
+    {
+      columnName: 'enabled_languages',
+      type: 'text',
+      label: 'Enabled Languages',
+      operations: StringOperations
+    },
+    {
+      columnName: 'contentlength',
+      type: 'text',
+      label: `Content Length`,
+      operations: [
+        QueryOperation.GreaterThanOrEqual,
+        QueryOperation.LessThanOrEqual
+      ]
+    },
+    {
+      columnName: 'isRentArticleFeatureOn',
+      type: 'boolean',
+      label: 'Is Rent Enabled',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+    },
+    {
+      columnName: 'isPurchaseArticleFeatureOn',
+      type: 'boolean',
+      label: 'Is Purchase Enabled',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+    },
+    {
+      columnName: 'purchaseAllowedCountries',
+      type: 'select',
+      label: 'PPA Scope',
+      operations: [
+        QueryOperation.Equal,
+        QueryOperation.Contains,
+        QueryOperation.NotContains
+      ],
+      values: ['[]', ...countries.map((c) => c.code)],
+      labels: ['All Countries', ...countries.map((c) => c.label)]
+    },
+    {
+      columnName: 'categories',
+      type: 'select',
+      label: 'Categories',
+      operations: StringOperations,
+      labels: categoriesData?.categories?.map((c) => c.displayName),
+      values: categoriesData?.categories?.map((c) => c._id)
+    }
+  ]
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
     setDrawerOpen(!drawerOpen)
