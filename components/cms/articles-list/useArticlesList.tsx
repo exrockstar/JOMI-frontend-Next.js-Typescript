@@ -37,6 +37,7 @@ type State = {
   selectedItems: string[]
   refetch(): void
   allArticleIds: string[]
+  selectAllArticleIds: string[]
 } & UseListInputState
 
 const ArticlesListContext = createContext<State | null>(null)
@@ -81,6 +82,7 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
     nextFetchPolicy: 'network-only'
   })
   const allArticleIds = data?.allArticleIds
+  const selectAllArticleIds = data?.fetchArticles.selectAllArticleIds
 
   const refetch = () => {
     _reftech({
@@ -112,7 +114,8 @@ export const ArticlesListProvider: React.FC<PropsWithChildren> = ({
         selectedItems,
         setSelectedItems,
         refetch,
-        allArticleIds
+        allArticleIds,
+        selectAllArticleIds,
       }}
     >
       {children}

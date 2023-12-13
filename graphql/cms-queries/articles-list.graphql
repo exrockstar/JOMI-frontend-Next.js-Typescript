@@ -2,6 +2,7 @@ query ArticlesList($input: ArticleInputFetch!){
   allArticleIds
   fetchArticles(input: $input){
     totalCount
+    selectAllArticleIds
     articles{
       _id
       title
