@@ -62,11 +62,14 @@ const EditPriceDialog = ({ price, ...props }: Props) => {
   return (
     <Formik
       onSubmit={(values) => {
+        //Account for incorrect processing of floats (299.4 would break otherwise for example)
+        const updateAmount = parseFloat((values.unit_amount * 100).toFixed(2));
+
         updatePrice({
           variables: {
             id: price._id,
             input: {
-              amount: values.unit_amount * 100,
+              amount: updateAmount,
               countryCode: values.countryCode,
               interval: values.interval
             }
