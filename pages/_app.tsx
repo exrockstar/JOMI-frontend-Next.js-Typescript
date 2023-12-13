@@ -1,7 +1,7 @@
 import React, { memo, useEffect } from 'react'
 
 import '../styles/globals.css'
-import '../styles/generated.css'
+import '../styles/generated.scss'
 import '../styles/contentLabel.css'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'

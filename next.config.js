@@ -1,5 +1,5 @@
 const withPWA = require('next-pwa')
-
+const path = require('path')
 /** @type {import('next').NextConfig} */
 const config = {
   reactStrictMode: true,
@@ -81,7 +81,7 @@ const config = {
       {
         source: '/esbc',
         destination: '/conference'
-      },
+      }
     ]
   },
   pwa: {
@@ -106,6 +106,9 @@ const config = {
         transform: '@mui/lab/{{member}}'
       }
     }
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'styles')]
   },
   poweredByHeader: false
 }
