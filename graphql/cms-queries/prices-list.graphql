@@ -4,6 +4,28 @@ query PricesList($input: PriceFilterInput) {
   }
 }
 
+query PricesByCountry($input: PriceFilterInput!) {
+  pricesByCountry(input: $input) {
+    count,
+    countries {
+      code
+      name
+      prices {
+        _id
+        product
+        interval
+        unit_amount
+      }
+    }
+    defaultPrices {
+      ...PriceParts
+    }
+    allProductIds
+  }
+  
+}
+
+
 query GetDefaultPrices{
   prices: getDefaultPrices {
     product

@@ -108,7 +108,6 @@ export default function IndividualSubscription() {
                 </CTAButton>
               </PriceButtonContainer>
               <UpgradeSubscriptionDialog
-                priceId={yearUpgrade?.id}
                 priceNickname={yearUpgrade.nickname}
                 open={upgradeDialogOpen}
                 onClose={() => setUpgradeDialogOpen(false)}
@@ -165,6 +164,7 @@ export default function IndividualSubscription() {
                   promocode={promocode}
                   interval={price.interval}
                   productId={price.product}
+                  amount={price.unit_amount}
                 >
                   {description}
                 </PriceButton>

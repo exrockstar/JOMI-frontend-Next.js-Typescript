@@ -8,7 +8,7 @@ export type GetCombinedPromoCodeQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetCombinedPromoCodeQuery = { __typename?: 'Query', output: { __typename?: 'CombinedCodeOutput', promoCode?: { __typename?: 'PromoCode', _id: string, title: string, days?: number | null | undefined, price?: number | null | undefined, isSubscription: boolean, stripe?: { __typename?: 'StripePromo', price: string } | null | undefined } | null | undefined, stripeCode?: { __typename?: 'StripePromoCode', _id: string, name?: string | null | undefined, code: string, valid: boolean, couponId: string, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } };
+export type GetCombinedPromoCodeQuery = { __typename?: 'Query', output: { __typename?: 'CombinedCodeOutput', promoCode?: { __typename?: 'PromoCode', _id: string, title: string, days?: number | null | undefined, price?: number | null | undefined, isSubscription: boolean, interval?: Types.OrderInterval | null | undefined, stripe?: { __typename?: 'StripePromo', price: string } | null | undefined } | null | undefined, stripeCode?: { __typename?: 'StripePromoCode', _id: string, name?: string | null | undefined, code: string, valid: boolean, couponId: string, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } };
 
 export type HandleFreePromoCodeMutationVariables = Types.Exact<{
   code: Types.Scalars['String'];
@@ -30,6 +30,7 @@ export const GetCombinedPromoCodeDocument = gql`
       stripe {
         price
       }
+      interval
     }
     stripeCode {
       _id

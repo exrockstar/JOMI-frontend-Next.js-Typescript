@@ -1,14 +1,12 @@
-import { Add, Check, Close } from '@mui/icons-material'
+import { Check } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
   Box,
   Button,
-  CircularProgress,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
-  IconButton,
   Stack,
   TextField
 } from '@mui/material'
@@ -21,16 +19,15 @@ import {
 } from 'graphql/mutations/order.generated'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { frontPageTheme } from 'components/theme'
 import { useSession } from 'next-auth/react'
 import CTAButton from 'components/common/CTAButton'
 type Props = {
-  priceId: string
   priceNickname: string
 } & DialogProps
 const UpgradeSubscriptionDialog = (props: Props) => {
-  const { priceId, priceNickname, ...otherProps } = props
+  const { priceNickname, ...otherProps } = props
   const { data: session } = useSession()
   const [promocode, setPromocode] = useState('')
   const [promocodeApplied, setPromocodeApplied] = useState(false)
@@ -41,10 +38,7 @@ const UpgradeSubscriptionDialog = (props: Props) => {
     refetch: refetchPreview,
     loading: loadingPreview
   } = usePreviewUpgradeSubscriptionQuery({
-    skip: !priceId,
-    variables: {
-      price_id: priceId
-    },
+    skip: !props.open,
     onError(error) {
       enqueueSnackbar(error.message, { variant: 'error' })
     },
@@ -62,7 +56,6 @@ const UpgradeSubscriptionDialog = (props: Props) => {
   const handleUpgrade = async () => {
     await upgradeSubscription({
       variables: {
-        price_id: priceId,
         promocode: promocode
       },
       onCompleted(result) {
@@ -92,7 +85,9 @@ const UpgradeSubscriptionDialog = (props: Props) => {
               <Typography variant="body2" fontWeight={700}>
                 Amount (Prorated):
               </Typography>
-              <Typography color="text.secondary">{amount}</Typography>
+              <Typography color="text.secondary">
+                {loadingPreview ? 'Calculating Amount...' : amount}
+              </Typography>
             </Box>
 
             {isCard && (
@@ -133,7 +128,6 @@ const UpgradeSubscriptionDialog = (props: Props) => {
                   loading={loadingPreview}
                   onClick={() => {
                     refetchPreview({
-                      price_id: priceId,
                       promocode
                     }).then(({ data }) => {
                       const promocodeApplied =

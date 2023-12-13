@@ -64,7 +64,23 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const subscription_metadata = invoice.lines.data[0].metadata as any
   const metadata = price.metadata as unknown as PriceMetadata
 
-  const description = plan.nickname || price.nickname || subscription_metadata?.description
+  //converts "prod_surgical_attending" to "Surgical Attending"
+  const convertProductToDescription = (str: any) => {
+    return str
+      .split('_')
+      .filter((word) => word.toLowerCase() !== 'prod')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+  const descriptionName = convertProductToDescription(price.product)
+  const descriptionAmount = Math.round(price.unit_amount / 100)
+  const descriptionInterval = price.recurring.interval
+  const backupDescription = `${descriptionName} $${descriptionAmount}/${descriptionInterval}`
+
+  const description = plan.nickname || 
+    price.nickname || 
+    subscription_metadata?.description ||
+    backupDescription
 
   const discount = invoice.discount
   const order: OrderInput = {

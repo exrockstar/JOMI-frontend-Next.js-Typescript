@@ -2,10 +2,6 @@ fragment PriceParts on StripePrice {
   _id
   priceId
   product
-  countryCodes
-  countryCode
-  nickname
   interval
   unit_amount
-  currency
 }

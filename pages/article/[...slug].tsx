@@ -72,7 +72,7 @@ function SingleArticle({ article }: SingleArticleProps) {
 
   //Used to show the View Peer Review Form button
   useEffect(() => {
-    if(searchParams.get('pr') === 'true') {
+    if (searchParams.get('pr') === 'true') {
       setPeerReview(true)
     } else {
       setPeerReview(false)
@@ -137,15 +137,13 @@ function SingleArticle({ article }: SingleArticleProps) {
             </CTAButton>
           </Box>
         )}
-        {peerReview && 
+        {peerReview && (
           <Box position="fixed" right={170} bottom={16} sx={{ zIndex: 500 }}>
-            <CTAButton
-              href='https://docs.google.com/forms/d/e/1FAIpQLSeqB_XMf-QXaldTLpG5bZ9bSYGjup6hWM4pLD-yI0mJ9rdxZg/viewform?urp=gmail_link'
-            >
+            <CTAButton href="https://docs.google.com/forms/d/e/1FAIpQLSeqB_XMf-QXaldTLpG5bZ9bSYGjup6hWM4pLD-yI0mJ9rdxZg/viewform?urp=gmail_link">
               View Peer Review Form
             </CTAButton>
           </Box>
-        }
+        )}
       </div>
     )
   }, [article, feedbackButtonText, setShowFeedbackDialog, peerReview])
@@ -260,7 +258,8 @@ export const getStaticProps: GetStaticProps<
         redirect: {
           destination: `/article/${redirectDestination}`,
           statusCode: 301
-        }
+        },
+        revalidate: 10
       }
     }
 

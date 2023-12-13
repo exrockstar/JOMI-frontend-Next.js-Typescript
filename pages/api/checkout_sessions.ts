@@ -16,13 +16,40 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 })
 
 export default async function handler(req, res) {
-  const { priceId, stripeId, mode, description, amount, promocode, productId, interval } = req.body
+  const {
+    priceId,
+    stripeId,
+    mode,
+    description,
+    amount,
+    promocode,
+    productId,
+    interval
+  } = req.body
 
   if (req.method === 'POST') {
     try {
       let line_items: Stripe.Checkout.SessionCreateParams['line_items']
       if (mode === 'subscription') {
-        line_items = [{ price: priceId, quantity: 1 }]
+        if (priceId && !priceId.includes('internal')) {
+          // By Jasser: for v4 promocodes. it uses priceId. we don't have to change this.
+          line_items = [{ price: priceId, quantity: 1 }]
+        } else {
+          line_items = [
+            {
+              description,
+              quantity: 1,
+              price_data: {
+                recurring: {
+                  interval: interval
+                },
+                unit_amount: amount,
+                product: productId,
+                currency: 'USD'
+              }
+            }
+          ]
+        }
       } else {
         line_items = [
           {
@@ -38,7 +65,10 @@ export default async function handler(req, res) {
       if (promocode && productId && interval) {
         const product = `${snakeCase(productId)}_${interval}`
         const client = getApolloAdminClient(true)
-        const { data } = await client.query<GetStripePromoCodeByCodeQuery, GetStripePromoCodeByCodeQueryVariables>({
+        const { data } = await client.query<
+          GetStripePromoCodeByCodeQuery,
+          GetStripePromoCodeByCodeQueryVariables
+        >({
           query: GetStripePromoCodeByCodeDocument,
           variables: {
             code: promocode
@@ -54,7 +84,9 @@ export default async function handler(req, res) {
             coupon: output.couponId
           })
         } else {
-          throw new Error(`This code cannot be applied to the selected subscription.`)
+          throw new Error(
+            `This code cannot be applied to the selected subscription.`
+          )
         }
       }
       // Create Checkout Sessions from body params.
@@ -89,12 +121,22 @@ export default async function handler(req, res) {
           break
       }
 
-      logger.error(`[Checkout Session] Failed to create checkout session for user. ${err.message}`, {
-        userId: stripeId,
-        message
-      })
+      logger.error(
+        `[Checkout Session] Failed to create checkout session for user. ${err.message}`,
+        {
+          userId: stripeId,
+          message
+        }
+      )
 
-      res.redirect(303, `${req.headers.origin}/account/subscription/?error=${encodeURIComponent(message)}`).end()
+      res
+        .redirect(
+          303,
+          `${
+            req.headers.origin
+          }/account/subscription/?error=${encodeURIComponent(message)}`
+        )
+        .end()
     }
   } else {
     res.setHeader('Allow', 'POST')

@@ -23,7 +23,6 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
 
 export default async function handler(req: NextApiRequest, res) {
   const { userId, description, articleId, from, type, coupon } = req.body
-  console.log(userId, description, type, coupon)
   if (req.method === 'POST') {
     try {
       const secret = process.env.SECRET
@@ -51,7 +50,6 @@ export default async function handler(req: NextApiRequest, res) {
           }
         }
       })
-      console.log(JSON.stringify(userData))
       const purchaseOrRentPrice = await client.query<
         GetPriceByProductIdQuery,
         GetPriceByProductIdQueryVariables
@@ -72,14 +70,18 @@ export default async function handler(req: NextApiRequest, res) {
       // redirect to purchase-success page to track article/rent purchases
       const success_url = new URL('/account/checkout-success', origin)
       success_url.searchParams.append('from', encodeURIComponent(from))
-
+      const data = purchaseOrRentPrice.data?.getPriceByProductId
       const params: Stripe.Checkout.SessionCreateParams = {
         customer: userData?.data?.user.stripeData?.stripeId,
         line_items: [
           {
-            price: purchaseOrRentPrice.data?.getPriceByProductId?.priceId,
             quantity: 1,
-            description
+            description,
+            price_data: {
+              product: data?.product,
+              currency: 'USD',
+              unit_amount: data?.unit_amount
+            }
           }
         ],
 

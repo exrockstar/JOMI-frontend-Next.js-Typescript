@@ -27,7 +27,7 @@ export type GetPriceByProductIdQueryVariables = Types.Exact<{
 }>;
 
 
-export type GetPriceByProductIdQuery = { __typename?: 'Query', getPriceByProductId: { __typename?: 'StripePrice', _id: string, product: string, priceId: string, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined } };
+export type GetPriceByProductIdQuery = { __typename?: 'Query', getPriceByProductId: { __typename?: 'StripePrice', _id: string, product: string, priceId?: string | null | undefined, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined } };
 
 
 export const PurchaseArticleDocument = gql`

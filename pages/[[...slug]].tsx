@@ -163,7 +163,10 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
     })
 
     if (!data?.pageBySlug) {
-      throw new Error('Page not found')
+      return {
+        notFound: true,
+        revalidate: 10
+      }
     }
 
     const $ = cheerio.load(data?.pageBySlug.content)
@@ -205,7 +208,8 @@ export const getStaticProps: GetStaticProps<any, IParams> = async ({
   }
 
   return {
-    notFound: true
+    notFound: true,
+    revalidate: 10
   }
 }
 

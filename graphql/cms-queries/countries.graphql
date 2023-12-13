@@ -1,0 +1,20 @@
+
+query GetCountries($input: CountryListInput!){
+	getCountries(input: $input){
+		countries {
+			_id
+			code
+			name
+			trialsEnabled
+			articleRestriction
+			coefficient
+			multiplier
+		}
+		count
+		filteredCodes
+	}
+}
+
+mutation UpdateCountries($input: UpdateCountriesInput!){
+	result:updateCountries(input: $input)
+}
