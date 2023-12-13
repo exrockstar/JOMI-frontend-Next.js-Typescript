@@ -49,7 +49,8 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
     setPageSize,
     selectedItems,
     allArticleIds,
-    setSelectedItems
+    setSelectedItems,
+    selectAllArticleIds
   } = useArticlesList()
   const { enqueueSnackbar } = useSnackbar()
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -133,7 +134,7 @@ const ArticlesList: React.FC<Props> = ({ articles, totalCount }) => {
                   <Button
                     variant="outlined"
                     onClick={() => {
-                      setSelectedItems(allArticleIds)
+                      setSelectedItems(selectAllArticleIds)
                     }}
                     color="secondary"
                     size="small"

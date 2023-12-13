@@ -284,6 +284,7 @@ export type ArticleInputFetch = {
 export type ArticleOutput = {
   __typename?: 'ArticleOutput';
   articles: Array<Article>;
+  selectAllArticleIds: Array<Scalars['String']>;
   totalCount: Scalars['Int'];
 };
 
