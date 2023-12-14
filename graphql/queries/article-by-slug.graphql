@@ -136,7 +136,9 @@ query ArticlesBySlug($publication_id: String!, $locale: String) {
       views
     }
     enabled_languages
-    
+    disableProcedureTab
+    disableMainTab
+    disableTranscriptTab
   }
 }
 
