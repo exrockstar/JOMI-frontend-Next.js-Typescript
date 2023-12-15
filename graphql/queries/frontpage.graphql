@@ -33,6 +33,9 @@ query GetPricingSectionData {
    user {
     _id
    }
+  getTrialSettingsForCountry {
+    trialDuration
+  }
   getPricingSectionData {
     _id
     enabled

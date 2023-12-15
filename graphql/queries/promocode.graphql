@@ -22,6 +22,7 @@ query GetCombinedPromoCode($code: String!) {
       stripe {
         price
       }
+      interval
     }
     stripeCode{
       _id

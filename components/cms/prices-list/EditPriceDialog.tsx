@@ -1,7 +1,6 @@
 import { Edit } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -9,33 +8,25 @@ import {
   DialogProps,
   DialogTitle,
   Divider,
-  MenuItem,
-  Stack,
-  TextField
+  Stack
 } from '@mui/material'
 import FormikTextField from 'components/common/formik/FormikTextFIeld'
-import FormikSelect from 'components/common/formik/FormkSelect'
 import { Form, Formik } from 'formik'
 import { useUpdateGeographicPriceMutation } from 'graphql/cms-queries/price-management.generated'
-import { PricePartsFragmentDoc } from 'graphql/cms-queries/PriceParts.fragment.generated'
-import { OrderInterval, StripePrice } from 'graphql/types'
+import {
+  PricePartsFragment,
+  PricePartsFragmentDoc
+} from 'graphql/cms-queries/PriceParts.fragment.generated'
 import { useSnackbar } from 'notistack'
-import React from 'react'
-import CountrySelector from './CountrySelector'
 
 type Props = {
-  price?: StripePrice
+  price?: PricePartsFragment
 } & DialogProps
 
 const EditPriceDialog = ({ price, ...props }: Props) => {
   const { enqueueSnackbar } = useSnackbar()
   const product = price?.product
 
-  const isDefaultPrice = price?.countryCodes?.length <= 0
-  const isPurchaseOrRent = [
-    'product_rent_article',
-    'product_purchase_article'
-  ].includes(product)
   const [updatePrice, { client, loading: updatingPrice }] =
     useUpdateGeographicPriceMutation({
       onCompleted(result) {
@@ -63,14 +54,13 @@ const EditPriceDialog = ({ price, ...props }: Props) => {
     <Formik
       onSubmit={(values) => {
         //Account for incorrect processing of floats (299.4 would break otherwise for example)
-        const updateAmount = parseFloat((values.unit_amount * 100).toFixed(2));
+        const updateAmount = parseFloat((values.unit_amount * 100).toFixed(2))
 
         updatePrice({
           variables: {
             id: price._id,
             input: {
               amount: updateAmount,
-              countryCode: values.countryCode,
               interval: values.interval
             }
           }
@@ -78,7 +68,6 @@ const EditPriceDialog = ({ price, ...props }: Props) => {
       }}
       initialValues={{
         unit_amount: price.unit_amount / 100,
-        countryCode: price.countryCode,
         interval: price.interval
       }}
     >
@@ -88,26 +77,11 @@ const EditPriceDialog = ({ price, ...props }: Props) => {
           <Divider />
           <DialogContent>
             <Stack spacing={2} sx={{ minWidth: { xs: '100%', md: 600 } }}>
-              {!isDefaultPrice && (
-                <Box>
-                  <CountrySelector name="countryCode" />
-                </Box>
-              )}
               <FormikTextField
                 name="unit_amount"
                 label="Subscription Amount"
                 type="number"
               />
-              {!isPurchaseOrRent && (
-                <FormikSelect
-                  name="interval"
-                  label="Interval"
-                  id={'edit-price-interval'}
-                >
-                  <MenuItem value={OrderInterval.Month}>Month</MenuItem>
-                  <MenuItem value={OrderInterval.Year}>Year</MenuItem>
-                </FormikSelect>
-              )}
             </Stack>
           </DialogContent>
           <Divider />

@@ -22,6 +22,7 @@ export type PricingCardProps = {
   id: string
   selected?: boolean
   ctaText: string
+  trialDuration?: number
   onSelect?(id: string): void | Promise<void>
 } & StripePrice
 const PricingCard = (props: PricingCardProps) => {
@@ -29,7 +30,6 @@ const PricingCard = (props: PricingCardProps) => {
   const selected = props.selected
   const textColor = selected ? 'white' : 'text.secondary'
   const { data: session } = useSession()
-  const customerId = session?.user?._id
   const { enqueueSnackbar } = useSnackbar()
   const [addTrialOrder, { loading }] = useAddTrialOrderForUserMutation({
     onCompleted() {
@@ -40,8 +40,10 @@ const PricingCard = (props: PricingCardProps) => {
       })
     }
   })
-  const isTrial = props.unit_amount > 0
-  console.log(props.productName)
+  const isTrial = props.unit_amount <= 0
+  const description = isTrial
+    ? `Free Access for ${props.trialDuration} Days`
+    : 'Individual Subscription'
   return (
     <Stack
       p={4}
@@ -88,8 +90,8 @@ const PricingCard = (props: PricingCardProps) => {
           </Typography>
         </Stack>
         <Typography fontSize={'1.125rem'} fontWeight={600} lineHeight={'28px'}>
-          {props.nickname}
-        </Typography>{' '}
+          {description}
+        </Typography>
       </Stack>
       {/* Modify link to go to /account/subscription page for subscriptions */}
       {props.unit_amount > 0 ? (

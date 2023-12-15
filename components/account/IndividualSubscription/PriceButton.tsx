@@ -12,7 +12,7 @@ import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelper
 import { amplitudeTrackInitiateCheckout } from 'apis/amplitude'
 
 type Props = {
-  priceId: string
+  priceId?: string
   stripeId: string
   nickname: string
   mode: 'subscription' | 'payment'
@@ -35,14 +35,15 @@ const PriceButton = ({
 }: Props) => {
   const { data: session } = useSession()
   const { referredFrom, referrerPath } = useGoogleAnalyticsHelpers()
-  const [trackInitiateCheckoutMutation, { data, loading, error }] = useTrackInitiateCheckoutMutation({
-    variables: {
-      input: {
-        referredFrom,
-        referrerPath
+  const [trackInitiateCheckoutMutation, { data, loading, error }] =
+    useTrackInitiateCheckoutMutation({
+      variables: {
+        input: {
+          referredFrom,
+          referrerPath
+        }
       }
-    }
-  })
+    })
 
   return (
     <Box mb={1}>
@@ -52,8 +53,12 @@ const PriceButton = ({
         <input type="hidden" name="mode" value={mode} />
         <input type="hidden" name="description" value={nickname} />
         <input type="hidden" name="amount" value={amount} />
-        {productId && <input type="hidden" name="productId" value={productId} />}
-        {interval && <input type="hidden" name="interval" value={interval.toLowerCase()} />}
+        {productId && (
+          <input type="hidden" name="productId" value={productId} />
+        )}
+        {interval && (
+          <input type="hidden" name="interval" value={interval.toLowerCase()} />
+        )}
         <input type="hidden" name="promocode" value={promocode} />
         <PriceButtonContainer>
           {children}
@@ -72,7 +77,13 @@ const PriceButton = ({
                 promocode: promocode ? promocode : 'none'
               })
               trackInitiateCheckoutMutation()
-              fbPixelTrackInitiateCheckout('SubscriptionInitiate', [priceId], 'USD', amount, session.user.id)
+              fbPixelTrackInitiateCheckout(
+                'SubscriptionInitiate',
+                [priceId],
+                'USD',
+                amount,
+                session.user.id
+              )
             }}
             sx={{ px: 2.5, py: 1.875, lineHeight: 1.0 }}
           >

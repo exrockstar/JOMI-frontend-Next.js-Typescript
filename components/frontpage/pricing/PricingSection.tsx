@@ -1,18 +1,10 @@
-import {
-  Container,
-  Grid,
-  Hidden,
-  Stack,
-  Switch,
-  Typography
-} from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import { Container, Grid, Stack, Switch, Typography } from '@mui/material'
+import { useRef, useState } from 'react'
 import Heading from '../Heading'
-import PricingCard, { PricingCardProps } from './PricingCard'
+import PricingCard from './PricingCard'
 import { useGetPricingSectionDataQuery } from 'graphql/queries/frontpage.generated'
 import CircularLoader from 'components/common/CircularLoader'
 import { useOnClickOutside } from 'usehooks-ts'
-import { groupBy } from 'lodash'
 import { OrderInterval } from 'graphql/types'
 
 const PricingSection = () => {
@@ -30,7 +22,7 @@ const PricingSection = () => {
   const monthlyPrices = prices.filter((p) => p.interval === OrderInterval.Month)
   const yearlyPrices = prices.filter((p) => p.interval === OrderInterval.Year)
   const shownPrices = showMonthly ? monthlyPrices : yearlyPrices
-
+  const trialDuration = data?.getTrialSettingsForCountry.trialDuration
   return (
     <Container
       maxWidth="lg"
@@ -74,6 +66,7 @@ const PricingSection = () => {
                   <PricingCard
                     {...data}
                     id={data._id}
+                    trialDuration={trialDuration}
                     onSelect={(id) => setSelected(data.product)}
                     selected={isSelected}
                     ctaText={data.unit_amount > 0 ? 'Subscribe' : 'Start Trial'}

@@ -9,7 +9,14 @@ export type PricesListQueryVariables = Types.Exact<{
 }>;
 
 
-export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId: string, product: string, countryCodes?: Array<Types.CountryEnum> | null | undefined, countryCode?: Types.CountryEnum | null | undefined, nickname: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number, currency: string }> };
+export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> };
+
+export type PricesByCountryQueryVariables = Types.Exact<{
+  input: Types.PriceFilterInput;
+}>;
+
+
+export type PricesByCountryQuery = { __typename?: 'Query', pricesByCountry: { __typename?: 'PriceOutputByCountry', count: number, allProductIds: Array<string>, countries: Array<{ __typename?: 'PriceByCountry', code: Types.CountryEnum, name: string, prices: Array<{ __typename?: 'StripePrice', _id: string, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> }>, defaultPrices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> } };
 
 export type GetDefaultPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -52,6 +59,55 @@ export function usePricesListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type PricesListQueryHookResult = ReturnType<typeof usePricesListQuery>;
 export type PricesListLazyQueryHookResult = ReturnType<typeof usePricesListLazyQuery>;
 export type PricesListQueryResult = Apollo.QueryResult<PricesListQuery, PricesListQueryVariables>;
+export const PricesByCountryDocument = gql`
+    query PricesByCountry($input: PriceFilterInput!) {
+  pricesByCountry(input: $input) {
+    count
+    countries {
+      code
+      name
+      prices {
+        _id
+        product
+        interval
+        unit_amount
+      }
+    }
+    defaultPrices {
+      ...PriceParts
+    }
+    allProductIds
+  }
+}
+    ${PricePartsFragmentDoc}`;
+
+/**
+ * __usePricesByCountryQuery__
+ *
+ * To run a query within a React component, call `usePricesByCountryQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePricesByCountryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePricesByCountryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePricesByCountryQuery(baseOptions: Apollo.QueryHookOptions<PricesByCountryQuery, PricesByCountryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PricesByCountryQuery, PricesByCountryQueryVariables>(PricesByCountryDocument, options);
+      }
+export function usePricesByCountryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PricesByCountryQuery, PricesByCountryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PricesByCountryQuery, PricesByCountryQueryVariables>(PricesByCountryDocument, options);
+        }
+export type PricesByCountryQueryHookResult = ReturnType<typeof usePricesByCountryQuery>;
+export type PricesByCountryLazyQueryHookResult = ReturnType<typeof usePricesByCountryLazyQuery>;
+export type PricesByCountryQueryResult = Apollo.QueryResult<PricesByCountryQuery, PricesByCountryQueryVariables>;
 export const GetDefaultPricesDocument = gql`
     query GetDefaultPrices {
   prices: getDefaultPrices {

@@ -1,4 +1,3 @@
-import { serialize } from 'cookie'
 import {
   NextFetchEvent,
   NextMiddleware,
@@ -7,6 +6,24 @@ import {
 } from 'next/server'
 import { MiddlewareFactory } from './types'
 
+type IPResponse = {
+  country_code: string
+  region_code: string
+  city: string
+}
+
+async function getLocation(testIp: string) {
+  const response = await fetch(`http://ipwho.is/${testIp}`)
+  const data = (await response.json()) as IPResponse
+  const location = {
+    ip: testIp,
+    country: data.country_code,
+    region: data.region_code,
+    city: data.city
+  }
+
+  return location
+}
 /**
  * Sets the test_ip cookie to contain ip, country, region and city information.
  * @param req
@@ -21,32 +38,24 @@ export const withIpCookie: MiddlewareFactory = (next: NextMiddleware) => {
       const testIp = searchParams.get('test_ip')
       if (testIp === 'reset' || !testIp) {
         if (res instanceof NextResponse) {
-          // res.cookies.set('test_ip', '', {
-          //   httpOnly: true,
-          //   expires: new Date()
-          // })
           res.cookies.delete('test_ip')
         }
         return res
       }
       try {
-        const response = await fetch(`https://ipapi.co/${testIp}/json/`)
-        const data = await response.json()
-        const location = {
-          ip: testIp,
-          country: data.country_code,
-          region: data.region,
-          city: data.city
-        }
         if (res instanceof NextResponse) {
-          res.cookies.set('test_ip', JSON.stringify(location), {
-            httpOnly: true
-          })
-          res.cookies.set('jomi-ip', testIp)
+          if (!res.cookies.get('test_ip')) {
+            const location = await getLocation(testIp)
+
+            res.cookies.set('test_ip', JSON.stringify(location), {
+              httpOnly: true
+            })
+            res.cookies.set('jomi-ip', testIp)
+          }
         }
         request.nextUrl.searchParams.delete('test_ip')
       } catch (e) {
-        console.log('failed to set test_ip', e.message)
+        console.log(`failed to set test_ip`, e.message)
       }
 
       return res

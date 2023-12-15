@@ -28,8 +28,8 @@ mutation ResubscribeOrder($order_id: String!) {
   }
 }
 
-query PreviewUpgradeSubscription($price_id:String!, $promocode: String){
-  upgradeSubscriptionPreview(price_id: $price_id, promocode: $promocode){
+query PreviewUpgradeSubscription($promocode: String){
+  upgradeSubscriptionPreview(promocode: $promocode){
     amount
     description
     cardLast4
@@ -38,8 +38,8 @@ query PreviewUpgradeSubscription($price_id:String!, $promocode: String){
   }
 }
 
-mutation UpgradeSubscription($price_id:String!,$promocode: String){
-  upgradeSubscription(price_id: $price_id,promocode: $promocode)
+mutation UpgradeSubscription($promocode: String){
+  upgradeSubscription(promocode: $promocode)
 }
 
 mutation HandlePaymentFailed($order_id:String!,$error_code: String!){

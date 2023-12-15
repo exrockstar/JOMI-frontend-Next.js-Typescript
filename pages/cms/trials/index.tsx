@@ -23,6 +23,7 @@ import { TrialSettingsInput } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import { useSnackbar } from 'notistack'
 import EnabledCountryNote from 'components/cms/trials/EnabledCountryNote'
+import Link from 'next/link'
 
 const TrialsSettingsPage = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -88,11 +89,13 @@ const TrialsSettingsPage = () => {
                     color="text.secondary"
                     sx={{ display: 'block' }}
                   >
-                    Enable/Disable countries from accessing the Trials Feature.
+                    Please go to{' '}
+                    <Link href={'/cms/country-management'}>
+                      /cms/country-management
+                    </Link>{' '}
+                    to modify geographic scoping
                   </Typography>
-                  <EnabledCountryNote />
                 </Box>
-                <CountryList />
               </Box>
             </CountryListProvider>
             <TrialsSaveButton />

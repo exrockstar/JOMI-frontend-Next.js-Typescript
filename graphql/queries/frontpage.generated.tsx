@@ -11,7 +11,7 @@ export type FrontPageQuery = { __typename?: 'Query', articles: { __typename?: 'A
 export type GetPricingSectionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetPricingSectionDataQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string } | null | undefined, getPricingSectionData?: Array<{ __typename?: 'StripePrice', _id: string, enabled?: boolean | null | undefined, nickname: string, priceId: string, product: string, interval?: Types.OrderInterval | null | undefined, currency: string, unit_amount: number, productName?: string | null | undefined }> | null | undefined };
+export type GetPricingSectionDataQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string } | null | undefined, getTrialSettingsForCountry: { __typename?: 'TrialSettings', trialDuration: number }, getPricingSectionData?: Array<{ __typename?: 'StripePrice', _id: string, enabled?: boolean | null | undefined, nickname: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, currency: string, unit_amount: number, productName?: string | null | undefined }> | null | undefined };
 
 
 export const FrontPageDocument = gql`
@@ -77,6 +77,9 @@ export const GetPricingSectionDataDocument = gql`
     query GetPricingSectionData {
   user {
     _id
+  }
+  getTrialSettingsForCountry {
+    trialDuration
   }
   getPricingSectionData {
     _id

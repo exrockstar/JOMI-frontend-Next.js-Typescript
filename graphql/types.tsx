@@ -284,7 +284,7 @@ export type ArticleInputFetch = {
 export type ArticleOutput = {
   __typename?: 'ArticleOutput';
   articles: Array<Article>;
-  selectAllArticleIds: Array<Scalars['String']>;
+  selectAllArticleIds?: Maybe<Array<Scalars['String']>>;
   totalCount: Scalars['Int'];
 };
 
@@ -466,6 +466,17 @@ export type CounterInput = {
   sort_order?: InputMaybe<Scalars['Int']>;
 };
 
+export type Country = {
+  __typename?: 'Country';
+  _id: Scalars['ID'];
+  articleRestriction: ArticleRestrictionEnum;
+  code: CountryEnum;
+  coefficient: Scalars['Float'];
+  multiplier?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  trialsEnabled: Scalars['Boolean'];
+};
+
 export enum CountryEnum {
   Ad = 'AD',
   Ae = 'AE',
@@ -496,7 +507,6 @@ export enum CountryEnum {
   Bm = 'BM',
   Bn = 'BN',
   Bo = 'BO',
-  Bq = 'BQ',
   Br = 'BR',
   Bs = 'BS',
   Bt = 'BT',
@@ -587,6 +597,7 @@ export enum CountryEnum {
   Ki = 'KI',
   Km = 'KM',
   Kn = 'KN',
+  Kp = 'KP',
   Kr = 'KR',
   Kw = 'KW',
   Ky = 'KY',
@@ -697,7 +708,6 @@ export enum CountryEnum {
   Tz = 'TZ',
   Ua = 'UA',
   Ug = 'UG',
-  Um = 'UM',
   Us = 'US',
   Uy = 'UY',
   Uz = 'UZ',
@@ -710,12 +720,29 @@ export enum CountryEnum {
   Vu = 'VU',
   Wf = 'WF',
   Ws = 'WS',
+  Xk = 'XK',
   Ye = 'YE',
   Yt = 'YT',
   Za = 'ZA',
   Zm = 'ZM',
   Zw = 'ZW'
 }
+
+export type CountryListInput = {
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type CountryListOutput = {
+  __typename?: 'CountryListOutput';
+  count: Scalars['Int'];
+  countries: Array<Country>;
+  filteredCodes: Array<Scalars['String']>;
+};
 
 export type CreateInstitutionInput = {
   name?: InputMaybe<Scalars['String']>;
@@ -1269,6 +1296,7 @@ export type Mutation = {
   updateAnnouncement: Announcement;
   updateArticle?: Maybe<Article>;
   updateContentLength: Scalars['String'];
+  updateCountries: Scalars['String'];
   updateFeedbackSettings: FeedbackSettings;
   updateInstEmail: Scalars['Boolean'];
   updateInstitution?: Maybe<Institution>;
@@ -1671,6 +1699,11 @@ export type MutationUpdateArticleArgs = {
 };
 
 
+export type MutationUpdateCountriesArgs = {
+  input: UpdateCountriesInput;
+};
+
+
 export type MutationUpdateFeedbackSettingsArgs = {
   input: FeedbackSettingsInput;
 };
@@ -1792,7 +1825,6 @@ export type MutationUpdateUserCmsArgs = {
 
 
 export type MutationUpgradeSubscriptionArgs = {
-  price_id: Scalars['String'];
   promocode?: InputMaybe<Scalars['String']>;
 };
 
@@ -2197,8 +2229,32 @@ export type PreviouslyStatedInst = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type PriceByCountry = {
+  __typename?: 'PriceByCountry';
+  _id: Scalars['ID'];
+  articleRestriction: ArticleRestrictionEnum;
+  code: CountryEnum;
+  coefficient: Scalars['Float'];
+  multiplier?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  prices: Array<StripePrice>;
+  trialsEnabled: Scalars['Boolean'];
+};
+
 export type PriceFilterInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type PriceOutputByCountry = {
+  __typename?: 'PriceOutputByCountry';
+  allProductIds: Array<Scalars['String']>;
+  count: Scalars['Int'];
+  countries: Array<PriceByCountry>;
+  defaultPrices: Array<StripePrice>;
 };
 
 export type ProfileOptions = {
@@ -2289,6 +2345,7 @@ export type Query = {
   geolocation?: Maybe<Geolocation>;
   getAllOrders: OrderListOutput;
   getCombinedPromoCode: CombinedCodeOutput;
+  getCountries: CountryListOutput;
   getDefaultPrices: Array<StripePrice>;
   getFeedbackList: FeedbackListOutput;
   getFeedbackModalAccessTypes: Array<AccessTypeEnum>;
@@ -2312,9 +2369,9 @@ export type Query = {
   getStripePromoCodes: StripePromoCodeListOutput;
   getStripePromocodeRedeems: RedeemListOutput;
   getTrialSettings: TrialSettings;
+  getTrialSettingsForCountry: TrialSettings;
   getTypesWithAccess: Array<AccessTypeEnum>;
   hasArticleRestriction: Scalars['Boolean'];
-  hasServiceInCountry: Scalars['Boolean'];
   instArticleEventLogs: AccessEventsOutput;
   institutionAccessStats: InstitutionAccessStats;
   institutionBlocksOverTime: ChartData;
@@ -2336,6 +2393,7 @@ export type Query = {
   pageBySlug?: Maybe<Page>;
   pages: Array<PageForSlug>;
   prices: Array<StripePrice>;
+  pricesByCountry: PriceOutputByCountry;
   products: Array<StripeProduct>;
   profileOptions: ProfileOptions;
   promoCode?: Maybe<PromoCode>;
@@ -2453,6 +2511,11 @@ export type QueryGetAllOrdersArgs = {
 
 export type QueryGetCombinedPromoCodeArgs = {
   code: Scalars['String'];
+};
+
+
+export type QueryGetCountriesArgs = {
+  input: CountryListInput;
 };
 
 
@@ -2603,6 +2666,11 @@ export type QueryPricesArgs = {
 };
 
 
+export type QueryPricesByCountryArgs = {
+  input: PriceFilterInput;
+};
+
+
 export type QueryPromoCodeArgs = {
   code: Scalars['String'];
 };
@@ -2635,7 +2703,6 @@ export type QueryTriageQueueRequestsByInstitutionArgs = {
 
 
 export type QueryUpgradeSubscriptionPreviewArgs = {
-  price_id: Scalars['String'];
   promocode?: InputMaybe<Scalars['String']>;
 };
 
@@ -2870,7 +2937,7 @@ export type StripePrice = {
   enabled?: Maybe<Scalars['Boolean']>;
   interval?: Maybe<OrderInterval>;
   nickname: Scalars['String'];
-  priceId: Scalars['ID'];
+  priceId?: Maybe<Scalars['ID']>;
   product: Scalars['String'];
   productName?: Maybe<Scalars['String']>;
   unit_amount: Scalars['Int'];
@@ -3203,6 +3270,14 @@ export type UpdateContentInput = {
   outline?: InputMaybe<Scalars['String']>;
   toc?: InputMaybe<Array<ContentItemInput>>;
   transcription?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateCountriesInput = {
+  articleRestriction?: InputMaybe<ArticleRestrictionEnum>;
+  codes: Array<Scalars['String']>;
+  coefficient?: InputMaybe<Scalars['Float']>;
+  multiplier?: InputMaybe<Scalars['Float']>;
+  trialsEnabled?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type UpdateInstitutionInput = {

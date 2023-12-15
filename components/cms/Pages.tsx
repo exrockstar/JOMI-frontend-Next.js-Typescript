@@ -12,6 +12,7 @@ import {
   MonetizationOn,
   People,
   PhotoLibrary,
+  Public,
   Settings,
   ShoppingBasket,
   Subject
@@ -55,6 +56,12 @@ const SidebarItems: SidenavItem[] = [
     name: 'Trials Settings',
     icon: <MonetizationOn />,
     url: `${CMS_URL}/trials`,
+    disabled: false
+  },
+  {
+    name: 'Country Management',
+    icon: <Public />,
+    url: `${CMS_URL}/country-management`,
     disabled: false
   },
   {
