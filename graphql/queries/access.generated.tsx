@@ -76,6 +76,20 @@ export type InstFeedbackListQueryVariables = Types.Exact<{
 
 export type InstFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null | undefined, anon_link_id?: string | null | undefined, createdAt: any, updatedAt?: any | null | undefined, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null | undefined } | null | undefined, user?: { __typename?: 'User', email: string, user_type?: string | null | undefined, _id: string } | null | undefined }> } };
 
+export type CheckFrequentArticleViewsDataQueryVariables = Types.Exact<{
+  institution_id: Types.Scalars['String'];
+}>;
+
+
+export type CheckFrequentArticleViewsDataQuery = { __typename?: 'Query', result: number };
+
+export type CleanUpFrequentArticleViewsDataMutationVariables = Types.Exact<{
+  institution_id: Types.Scalars['String'];
+}>;
+
+
+export type CleanUpFrequentArticleViewsDataMutation = { __typename?: 'Mutation', result: string };
+
 
 export const InstitutionsAccessListDocument = gql`
     query InstitutionsAccessList($input: InstitutionInput!) {
@@ -581,3 +595,67 @@ export function useInstFeedbackListLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type InstFeedbackListQueryHookResult = ReturnType<typeof useInstFeedbackListQuery>;
 export type InstFeedbackListLazyQueryHookResult = ReturnType<typeof useInstFeedbackListLazyQuery>;
 export type InstFeedbackListQueryResult = Apollo.QueryResult<InstFeedbackListQuery, InstFeedbackListQueryVariables>;
+export const CheckFrequentArticleViewsDataDocument = gql`
+    query CheckFrequentArticleViewsData($institution_id: String!) {
+  result: checkFrequentArticleViews(institution_id: $institution_id)
+}
+    `;
+
+/**
+ * __useCheckFrequentArticleViewsDataQuery__
+ *
+ * To run a query within a React component, call `useCheckFrequentArticleViewsDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckFrequentArticleViewsDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckFrequentArticleViewsDataQuery({
+ *   variables: {
+ *      institution_id: // value for 'institution_id'
+ *   },
+ * });
+ */
+export function useCheckFrequentArticleViewsDataQuery(baseOptions: Apollo.QueryHookOptions<CheckFrequentArticleViewsDataQuery, CheckFrequentArticleViewsDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckFrequentArticleViewsDataQuery, CheckFrequentArticleViewsDataQueryVariables>(CheckFrequentArticleViewsDataDocument, options);
+      }
+export function useCheckFrequentArticleViewsDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckFrequentArticleViewsDataQuery, CheckFrequentArticleViewsDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckFrequentArticleViewsDataQuery, CheckFrequentArticleViewsDataQueryVariables>(CheckFrequentArticleViewsDataDocument, options);
+        }
+export type CheckFrequentArticleViewsDataQueryHookResult = ReturnType<typeof useCheckFrequentArticleViewsDataQuery>;
+export type CheckFrequentArticleViewsDataLazyQueryHookResult = ReturnType<typeof useCheckFrequentArticleViewsDataLazyQuery>;
+export type CheckFrequentArticleViewsDataQueryResult = Apollo.QueryResult<CheckFrequentArticleViewsDataQuery, CheckFrequentArticleViewsDataQueryVariables>;
+export const CleanUpFrequentArticleViewsDataDocument = gql`
+    mutation CleanUpFrequentArticleViewsData($institution_id: String!) {
+  result: cleanUpFrequentArticleViews(institution_id: $institution_id)
+}
+    `;
+export type CleanUpFrequentArticleViewsDataMutationFn = Apollo.MutationFunction<CleanUpFrequentArticleViewsDataMutation, CleanUpFrequentArticleViewsDataMutationVariables>;
+
+/**
+ * __useCleanUpFrequentArticleViewsDataMutation__
+ *
+ * To run a mutation, you first call `useCleanUpFrequentArticleViewsDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCleanUpFrequentArticleViewsDataMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cleanUpFrequentArticleViewsDataMutation, { data, loading, error }] = useCleanUpFrequentArticleViewsDataMutation({
+ *   variables: {
+ *      institution_id: // value for 'institution_id'
+ *   },
+ * });
+ */
+export function useCleanUpFrequentArticleViewsDataMutation(baseOptions?: Apollo.MutationHookOptions<CleanUpFrequentArticleViewsDataMutation, CleanUpFrequentArticleViewsDataMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CleanUpFrequentArticleViewsDataMutation, CleanUpFrequentArticleViewsDataMutationVariables>(CleanUpFrequentArticleViewsDataDocument, options);
+      }
+export type CleanUpFrequentArticleViewsDataMutationHookResult = ReturnType<typeof useCleanUpFrequentArticleViewsDataMutation>;
+export type CleanUpFrequentArticleViewsDataMutationResult = Apollo.MutationResult<CleanUpFrequentArticleViewsDataMutation>;
+export type CleanUpFrequentArticleViewsDataMutationOptions = Apollo.BaseMutationOptions<CleanUpFrequentArticleViewsDataMutation, CleanUpFrequentArticleViewsDataMutationVariables>;

@@ -54,7 +54,7 @@ const UserActivityTable = () => {
       },
       {
         columnName: 'institution',
-        value: institution_id,
+        value: [institution_id, null],
         operation: QueryOperation.Equal
       }
     ],

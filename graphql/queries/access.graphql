@@ -209,3 +209,11 @@ query InstFeedbackList($institution_id: String!, $input: FeedbackListInput!){
     count
   }
 }
+
+
+query CheckFrequentArticleViewsData($institution_id: String!){
+  result:checkFrequentArticleViews(institution_id: $institution_id)
+}
+mutation CleanUpFrequentArticleViewsData($institution_id: String!){
+  result:cleanUpFrequentArticleViews(institution_id: $institution_id)
+}

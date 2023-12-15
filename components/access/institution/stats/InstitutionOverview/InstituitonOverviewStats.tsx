@@ -2,6 +2,7 @@ import {
   Alert,
   Box,
   Card,
+  CardContent,
   CircularProgress,
   Divider,
   Grid,
@@ -23,6 +24,7 @@ import useInstitutionAccessInput from './useInstitutionAccessInput'
 import BlocksOverTimeCard from './BlocksOverTimeCard'
 import UsersOverTimeCard from './UsersOverTImeCard'
 import UsersOverTimeByUserType from './UsersOverTimeByUserType'
+import AdminControlPanel from './AdminControlPanel'
 
 type Props = {
   institutionId: string
@@ -60,6 +62,7 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
           </Tooltip>
         </Box>
       </Stack>
+      <AdminControlPanel />
       {loading && (
         <Stack py={10} alignItems="center">
           <CircularProgress />
