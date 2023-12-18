@@ -58,6 +58,30 @@ const TriageQueueFilter = (props: DrawerProps) => {
       operations: StringOperations
     },
     {
+      columnName: 'institution.category',
+      label: 'Institution Category',
+      type: 'select',
+      operations: StringOperations,
+      values: [
+        null,
+        'Hospital',
+        'Residency',
+        'Medical School',
+        'PA Program',
+        'SurgTech',
+        'Other'
+      ],
+      labels: [
+        'None',
+        'Hospital',
+        'Residency',
+        'Medical School',
+        'PA Program',
+        'SurgTech',
+        'Other'
+      ]
+    },
+    {
       columnName: 'institution.stats.userCount',
       label: 'User count',
       type: 'number',

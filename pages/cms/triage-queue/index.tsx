@@ -26,7 +26,6 @@ const TriageQueueListPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [showQuery, setShowQuery] = useState(false)
   const { filters, dbQueryString } = useTriageQueueList()
-  console.log(filters)
   return (
     <CmsLayout>
       <TriageQueueFilter
@@ -47,7 +46,16 @@ const TriageQueueListPage = () => {
               Show DB Query Parameters
             </Button>
           </Tooltip>
-          <Typography><Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>{filters.length == 0 ? 'None' : `${filters.length} total:` + filters.map((filter, i) => ` ${filter.columnName} ${filter.operation} ${filter.value}`)}</Typography>
+          <Typography>
+            <Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>
+            {filters.length == 0
+              ? 'None'
+              : `${filters.length} total:` +
+                filters.map(
+                  (filter, i) =>
+                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
+                )}
+          </Typography>
         </Stack>
         <DbQueryDialog
           open={showQuery}
