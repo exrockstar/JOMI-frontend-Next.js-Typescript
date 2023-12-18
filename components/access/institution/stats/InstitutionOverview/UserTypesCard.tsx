@@ -20,6 +20,7 @@ ChartJS.register(
   ChartDataLabels
 )
 
+ChartJS.defaults.plugins.datalabels.display = false
 type ViewData = {
   key: string
   views: number
@@ -64,6 +65,7 @@ const UserTypesCard = ({ user_types, title }: Props) => {
                   display: false
                 },
                 datalabels: {
+                  display: true,
                   anchor: 'end',
                   align: 'top'
                 }
