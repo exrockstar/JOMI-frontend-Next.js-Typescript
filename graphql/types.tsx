@@ -217,6 +217,9 @@ export type Article = {
   contentlength?: Maybe<Scalars['Int']>;
   created: Scalars['DateTime'];
   descriptionSEO?: Maybe<Scalars['String']>;
+  disableMainTab?: Maybe<Scalars['Boolean']>;
+  disableProcedureTab?: Maybe<Scalars['Boolean']>;
+  disableTranscriptTab?: Maybe<Scalars['Boolean']>;
   display_last?: Maybe<Scalars['String']>;
   edit_last?: Maybe<Scalars['String']>;
   enabled_languages?: Maybe<Array<Scalars['String']>>;

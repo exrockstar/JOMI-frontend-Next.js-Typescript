@@ -102,7 +102,11 @@ function a11yProps(index) {
 function BasicTabs({ article }) {
   const isSmallDevice = useMediaQuery('(max-width:600px)')
   const router = useRouter()
-  const tabs = ['', 'procedure-outline', 'transcript']
+  let tabs = []
+  if(!article?.disableMainTab) tabs.push('')
+  if(!article?.disableProcedureTab) tabs.push('procedure-outline')
+  if(!article?.disableTranscriptTab) tabs.push('transcript')
+
   const params = router.query.slug
   const [id, slug, text] = Array.isArray(params) ? [...params] : [params]
 
@@ -168,84 +172,112 @@ function BasicTabs({ article }) {
               mr: { md: 0, lg: 3 }
             }}
           >
-            <Tab
-              {...a11yProps(0)}
-              component={BlueLink}
-              href={getTabParams(0)}
-              sx={{ textAlign: 'center' }}
-            >
-              Main Text
-            </Tab>
-
-            <Tab
-              {...a11yProps(1)}
-              component={BlueLink}
-              href={getTabParams(1)}
-              sx={{ textAlign: 'center' }}
-            >
-              Procedure Outline
-            </Tab>
-            <Tab
-              {...a11yProps(2)}
-              component={BlueLink}
-              href={getTabParams(2)}
-              sx={{ textAlign: 'center' }}
-            >
-              Transcript
-            </Tab>
+            {tabs.map((tab, i) => {
+              switch(tab){
+                case '':
+                  return(
+                    <Tab
+                      {...a11yProps(i)}
+                      component={BlueLink}
+                      href={getTabParams(i)}
+                      sx={{ textAlign: 'center' }}
+                    >
+                      Main Text
+                    </Tab>
+                  )
+                case 'procedure-outline':
+                  return(
+                    <Tab
+                      {...a11yProps(i)}
+                      component={BlueLink}
+                      href={getTabParams(i)}
+                      sx={{ textAlign: 'center' }}
+                    >
+                      Procedure Outline
+                    </Tab>
+                  )
+                case 'transcript':
+                  return(
+                    <Tab
+                      {...a11yProps(i)}
+                      component={BlueLink}
+                      href={getTabParams(i)}
+                      sx={{ textAlign: 'center' }}
+                    >
+                      Transcript
+                    </Tab>
+                  )
+                default:
+                  break;
+              }
+              
+            })}
           </CustomTabsList>
         </TabsUnstyled>
       </Box>
-      <TabPanel value={value} index={0}>
-        <MainText
-          text={article?.content?.article}
-          toc={article?.content?.toc}
-          citations={article?.content?.citations}
-          article={article}
-        />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Outline
-          otoc={article?.content?.otoc}
-          outline={article?.content?.outline}
-        />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Box component="section">
-          <Typography variant="h2" fontSize={28}>
-            Transcription
-          </Typography>
-          <Box
-            sx={{
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              color: 'grey.800',
-              lineHeight: 1.42857143,
-              fontSize: '14px',
-              fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
-              p: {
-                margin: '0 0 10px'
-              },
-              '.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6': {
-                marginTop: '10px',
-                marginBottom: '10px',
-                fontWeight: 'unset',
-                lineHeight: 1.1,
-                color: 'inherit'
-              },
-              h3: {
-                fontSize: '1.5em'
-              },
-              h4: {
-                fontSize: '1.25em'
-              }
-            }}
-            dangerouslySetInnerHTML={{
-              __html: modifyHeaders(article?.content?.transcription)
-            }}
-          />
-        </Box>
-      </TabPanel>
+      {tabs.map((tab, i) => {
+        switch(tab){
+          case '':
+            return(
+              <TabPanel value={value} index={i}>
+                <MainText
+                  text={article?.content?.article}
+                  toc={article?.content?.toc}
+                  citations={article?.content?.citations}
+                  article={article}
+                />
+              </TabPanel>
+            )
+          case 'procedure-outline':
+            return(
+              <TabPanel value={value} index={i}>
+                <Outline
+                  otoc={article?.content?.otoc}
+                  outline={article?.content?.outline}
+                />
+              </TabPanel>
+            )
+          case 'transcript':
+            return(
+              <TabPanel value={value} index={i}>
+              <Box component="section">
+                <Typography variant="h2" fontSize={28}>
+                  Transcription
+                </Typography>
+                <Box
+                  sx={{
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                    color: 'grey.800',
+                    lineHeight: 1.42857143,
+                    fontSize: '14px',
+                    fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+                    p: {
+                      margin: '0 0 10px'
+                    },
+                    '.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6': {
+                      marginTop: '10px',
+                      marginBottom: '10px',
+                      fontWeight: 'unset',
+                      lineHeight: 1.1,
+                      color: 'inherit'
+                    },
+                    h3: {
+                      fontSize: '1.5em'
+                    },
+                    h4: {
+                      fontSize: '1.25em'
+                    }
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: modifyHeaders(article?.content?.transcription)
+                  }}
+                />
+              </Box>
+            </TabPanel>
+            )
+        }
+      })}
     </Box>
   )
 }
