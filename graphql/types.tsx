@@ -1227,6 +1227,7 @@ export type Mutation = {
   cancelJob: Scalars['String'];
   cancelOrder: Scalars['Boolean'];
   checkOutdatedTranslations: Scalars['Boolean'];
+  cleanUpFrequentArticleViews: Scalars['String'];
   completeUserRegistration: ExtendedRegistrationOutput;
   confirmEmail?: Maybe<Scalars['String']>;
   confirmInstEmail?: Maybe<Scalars['String']>;
@@ -1364,6 +1365,11 @@ export type MutationCancelJobArgs = {
 
 export type MutationCancelOrderArgs = {
   subscription_id: Scalars['String'];
+};
+
+
+export type MutationCleanUpFrequentArticleViewsArgs = {
+  institution_id: Scalars['String'];
 };
 
 
@@ -2335,6 +2341,7 @@ export type Query = {
   authorBySlug?: Maybe<Author>;
   authors: Array<Author>;
   categories?: Maybe<Array<Category>>;
+  checkFrequentArticleViews: Scalars['Int'];
   confSampleCases: Array<Article>;
   deleteInstitution: DeleteInstitutionOutput;
   featured_institutions: Array<Institution>;
@@ -2464,6 +2471,11 @@ export type QueryArticlesByIdsArgs = {
 
 export type QueryAuthorBySlugArgs = {
   slug: Scalars['String'];
+};
+
+
+export type QueryCheckFrequentArticleViewsArgs = {
+  institution_id: Scalars['String'];
 };
 
 

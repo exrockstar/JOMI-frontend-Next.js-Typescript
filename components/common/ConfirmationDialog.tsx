@@ -32,7 +32,12 @@ const ConfirmationDialog: React.FC<Props> = ({
       <DialogContent>{children}</DialogContent>
       <Divider />
       <DialogActions sx={{ p: 3 }}>
-        <Button onClick={onCancel} color="error" variant="outlined">
+        <Button
+          onClick={onCancel}
+          color="error"
+          variant="outlined"
+          disabled={loading}
+        >
           No
         </Button>
         <LoadingButton
