@@ -12,7 +12,8 @@ query TriageQueueList($input: TriageQueueInput!) {
       email
       institution_name
       countryCode
-      regionName
+      countryName
+      regionName      
       sentEmailAt
       user {
         _id

@@ -132,12 +132,17 @@ const TriageQueueList = () => {
                       )}
                     </Stack>
                   </TableCell>
-                  <TableCell>
-                    {user?.countryCode ?? item.countryCode ?? NotApplicable}
+                  <TableCell sx={{ minWidth: 200 }}>
+                    {item.countryName ? (
+                      <span>
+                        {item.countryName} (
+                        {user?.countryCode ?? item?.countryCode})
+                      </span>
+                    ) : (
+                      NotApplicable
+                    )}
                   </TableCell>
-                  <TableCell>
-                    {user?.regionName ?? item.regionName ?? NotApplicable}
-                  </TableCell>
+                  <TableCell>{item.regionName ?? NotApplicable}</TableCell>
                   <TableCell>
                     {user?.institution_name ??
                       item.institution_name ??

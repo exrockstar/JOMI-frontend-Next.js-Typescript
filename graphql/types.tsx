@@ -3152,6 +3152,7 @@ export type TriageQueue = {
   _id: Scalars['ID'];
   additional_info?: Maybe<AdditionalInfo>;
   countryCode?: Maybe<Scalars['String']>;
+  countryName?: Maybe<Scalars['String']>;
   created?: Maybe<Scalars['DateTime']>;
   display_name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
