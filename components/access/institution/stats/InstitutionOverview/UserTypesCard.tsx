@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Typography } from '@mui/material'
-
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -12,8 +12,15 @@ import React, { useMemo } from 'react'
 import { InstitutionUserTypeStat } from 'graphql/types'
 import { graphColors } from './getColors'
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip)
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  ChartDataLabels
+)
 
+ChartJS.defaults.plugins.datalabels.display = false
 type ViewData = {
   key: string
   views: number
@@ -56,6 +63,11 @@ const UserTypesCard = ({ user_types, title }: Props) => {
                 },
                 legend: {
                   display: false
+                },
+                datalabels: {
+                  display: true,
+                  anchor: 'end',
+                  align: 'top'
                 }
               },
               responsive: true,
@@ -63,7 +75,7 @@ const UserTypesCard = ({ user_types, title }: Props) => {
               scales: {
                 y: {
                   ticks: {
-                    stepSize: 200
+                    stepSize: 250
                   }
                 }
               }

@@ -18,9 +18,9 @@ import { Line } from 'react-chartjs-2'
 import { useRouter } from 'next/router'
 import { useInstitutionTrafficOverTimeQuery } from 'graphql/queries/access.generated'
 import { indigo, green, rose, zinc } from 'tailwindcss/colors'
-import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
 
+const colors = [indigo[500], indigo[300]]
 Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
 
 const UsersOverTimeCard = () => {
@@ -90,7 +90,7 @@ const UsersOverTimeCard = () => {
                 data={{
                   labels: chartData.labels,
                   datasets: chartData.datasets.map((x, i) => {
-                    const color = graphColors[i]
+                    const color = colors[i]
                     return {
                       data: x.data,
                       label: x.label,
