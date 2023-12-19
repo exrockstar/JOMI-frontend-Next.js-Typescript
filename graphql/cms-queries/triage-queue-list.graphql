@@ -119,3 +119,11 @@ mutation SendTriageQueueEmail($input: TriageQueueEmailInput!) {
     notes
   }
 }
+
+mutation AddCRMTagsToTriageQueueResults($input: TriageQueueInput!, $tags: [String!]!){
+  result: addCRMTagsToTriageQueueResults(input: $input, tags: $tags)
+}
+
+query AddCRMTagsToTriageQueueResultsPreview($input: TriageQueueInput!){
+  result: addCRMTagsToTriageQueueResultsPreview(input: $input)
+}

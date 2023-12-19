@@ -13,7 +13,8 @@ import {
   Link as MuiLink,
   Chip,
   Button,
-  TableRow
+  TableRow,
+  Box
 } from '@mui/material'
 import { StyledTableRow } from 'components/common/StyledTableRow'
 import dayjs from 'dayjs'
@@ -81,6 +82,19 @@ const TriageQueueList = () => {
   return (
     <Card>
       <TableContainer sx={{ minWidth: 1050 }}>
+        <Box>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={count}
+            rowsPerPage={pageSize}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
         <Table>
           <TriageQueueListHead />
           <TableBody>
@@ -228,15 +242,19 @@ const TriageQueueList = () => {
             )}
           </TableBody>
         </Table>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={count}
-          rowsPerPage={pageSize}
-          page={page - 1}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Box>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={count}
+            rowsPerPage={pageSize}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            showFirstButton
+            showLastButton
+          />
+        </Box>
       </TableContainer>
     </Card>
   )

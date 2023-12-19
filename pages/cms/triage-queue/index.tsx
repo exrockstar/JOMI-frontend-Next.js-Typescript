@@ -13,6 +13,7 @@ import {
   Tooltip
 } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
+import TagResultsToCRM from 'components/cms/triage-queue-list/TagResultsToCRM'
 import TriageQueueFilter from 'components/cms/triage-queue-list/TriageQueueFilter'
 import TriageQueueList from 'components/cms/triage-queue-list/TriageQueueList'
 import {
@@ -20,6 +21,7 @@ import {
   useTriageQueueList
 } from 'components/cms/triage-queue-list/useTriageQueueList'
 import DbQueryDialog from 'components/common/DbQueryDialog'
+import TableFilters from 'components/common/TableFilters'
 import { useState } from 'react'
 
 const TriageQueueListPage = () => {
@@ -46,29 +48,24 @@ const TriageQueueListPage = () => {
               Show DB Query Parameters
             </Button>
           </Tooltip>
-          <Typography>
-            <Typography fontWeight={'bold'}>Table Filters&nbsp;</Typography>
-            {filters.length == 0
-              ? 'None'
-              : `${filters.length} total:` +
-                filters.map(
-                  (filter, i) =>
-                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
-                )}
-          </Typography>
         </Stack>
         <DbQueryDialog
           open={showQuery}
           onClose={() => setShowQuery(false)}
           queryStr={dbQueryString}
         />
+
         <IconButton onClick={() => setDrawerOpen(true)}>
           <Badge color="secondary" badgeContent={filters?.length ?? null}>
             <FilterList />
           </Badge>
         </IconButton>
       </Stack>
+      <Stack px={2}>
+        <TagResultsToCRM />
+      </Stack>
       <Stack p={2}>
+        <TableFilters filters={filters} />
         <TriageQueueList />
       </Stack>
     </CmsLayout>
