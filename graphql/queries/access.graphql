@@ -85,15 +85,25 @@ query InstitutionTrafficOverTime($input: InstitutionAccessInput!, $groupBy: Stri
     labels
   }
 
-  institutionUsersOverTime(input: $input, groupBy: $groupBy){
-    datasets {
-      data
-      label
-    }
-    labels
-  }
+  # institutionUsersOverTime(input: $input, groupBy: $groupBy){
+  #   datasets {
+  #     data
+  #     label
+  #   }
+  #   labels
+  # }
 
-  institutionBlocksOverTime(input: $input, groupBy: $groupBy){
+  # institutionBlocksOverTime(input: $input, groupBy: $groupBy){
+  #   datasets {
+  #     data
+  #     label
+  #   }
+  #   labels
+  # }
+}
+query InstitutionUsersOverTime($input: InstitutionAccessInput!, $groupBy: String!){
+
+  institutionUsersOverTime(input: $input, groupBy: $groupBy){
     datasets {
       data
       label
@@ -127,7 +137,21 @@ query InstitutionTrafficBreakdown($input: InstitutionAccessInput!){
     }
     labels
   }
+  userCountByUserType:institutionUserCountBreakdownByUserType(input: $input){
+    datasets {
+      data
+      label
+    }
+    labels
+  }
   byContentType:institutionTrafficBreakdownByContentType(input: $input){
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+  userCountByContentType:institutionUserCountBreakdownByContentType(input: $input){
     datasets {
       data
       label

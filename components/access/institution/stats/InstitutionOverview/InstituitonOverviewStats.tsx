@@ -21,10 +21,9 @@ import TrafficOverTimeCard from './TrafficOverTimeCard'
 import TrafficOverTimeByUserType from './TrafficOverTimeByUserType'
 import ActivityBreakdownCard from './ActivityBreakdownCard'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
-import BlocksOverTimeCard from './BlocksOverTimeCard'
-import UsersOverTimeCard from './UsersOverTImeCard'
 import UsersOverTimeByUserType from './UsersOverTimeByUserType'
 import AdminControlPanel from './AdminControlPanel'
+import UsersOverTimeCard from './UsersOverTImeCard'
 
 type Props = {
   institutionId: string
@@ -148,23 +147,22 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
       {data && !!institution?.accessSettings?.displayTrafficGraph && (
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TrafficOverTimeCard />
-          </Grid>
-          <Grid item xs={12}>
             <UsersOverTimeCard />
           </Grid>
+
           <Grid item xs={12}>
-            <BlocksOverTimeCard />
+            <TrafficOverTimeCard />
+          </Grid>
+
+          <Grid item xs={12}>
+            <UsersOverTimeByUserType />
           </Grid>
           <Grid item xs={12}>
             <TrafficOverTimeByUserType />
           </Grid>
-          <Grid item xs={12}>
-            <UsersOverTimeByUserType />
-          </Grid>
           <Grid item xs={12} md={6}>
             <ActivityBreakdownCard
-              by="userType"
+              by="byUserType"
               title="Activity Breakdown By User Type"
               description="Shows activity breakdown by user type over the past period"
               showHideAllButtons
@@ -172,9 +170,24 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
           </Grid>
           <Grid item xs={12} md={6}>
             <ActivityBreakdownCard
-              by="contentType"
+              by="userCountByUserType"
+              title="User Count Breakdown By User Type"
+              description="Shows the number of users per user type over the past period"
+              showHideAllButtons
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ActivityBreakdownCard
+              by="byContentType"
               title="Activity Breakdown By Content Type"
               description="Shows activity breakdown by content type over the past period"
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ActivityBreakdownCard
+              by="userCountByContentType"
+              title="User Count Breakdown By Content Type"
+              description="Shows the number of users per content type over the past period"
             />
           </Grid>
         </Grid>

@@ -217,9 +217,9 @@ export type Article = {
   contentlength?: Maybe<Scalars['Int']>;
   created: Scalars['DateTime'];
   descriptionSEO?: Maybe<Scalars['String']>;
-  disableMainTab?: Maybe<Scalars['Boolean']>;
-  disableProcedureTab?: Maybe<Scalars['Boolean']>;
-  disableTranscriptTab?: Maybe<Scalars['Boolean']>;
+  disableMainTab: Scalars['Boolean'];
+  disableProcedureTab: Scalars['Boolean'];
+  disableTranscriptTab: Scalars['Boolean'];
   display_last?: Maybe<Scalars['String']>;
   edit_last?: Maybe<Scalars['String']>;
   enabled_languages?: Maybe<Array<Scalars['String']>>;
@@ -2390,6 +2390,8 @@ export type Query = {
   institutionTrafficBreakdownByUserType: ChartData;
   institutionTrafficOverTime: ChartData;
   institutionTrafficOverTimeByUserType: ChartData;
+  institutionUserCountBreakdownByContentType: ChartData;
+  institutionUserCountBreakdownByUserType: ChartData;
   institutionUserTypesStats: Array<InstitutionUserTypeStat>;
   institutionUsersOverTime: ChartData;
   institutionUsersOverTimeByUserType: ChartData;
@@ -2625,6 +2627,16 @@ export type QueryInstitutionTrafficOverTimeArgs = {
 
 export type QueryInstitutionTrafficOverTimeByUserTypeArgs = {
   groupBy: Scalars['String'];
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionUserCountBreakdownByContentTypeArgs = {
+  input: InstitutionAccessInput;
+};
+
+
+export type QueryInstitutionUserCountBreakdownByUserTypeArgs = {
   input: InstitutionAccessInput;
 };
 

@@ -30,7 +30,15 @@ export type InstitutionTrafficOverTimeQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, institutionUsersOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, institutionBlocksOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
+export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutionTrafficOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
+
+export type InstitutionUsersOverTimeQueryVariables = Types.Exact<{
+  input: Types.InstitutionAccessInput;
+  groupBy: Types.Scalars['String'];
+}>;
+
+
+export type InstitutionUsersOverTimeQuery = { __typename?: 'Query', institutionUsersOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
 
 export type InstitutionTrafficOverTimeByUserTypeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -45,7 +53,7 @@ export type InstitutionTrafficBreakdownQueryVariables = Types.Exact<{
 }>;
 
 
-export type InstitutionTrafficBreakdownQuery = { __typename?: 'Query', byUserType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, byContentType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
+export type InstitutionTrafficBreakdownQuery = { __typename?: 'Query', byUserType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, userCountByUserType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, byContentType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> }, userCountByContentType: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } };
 
 export type ArticleActivityStatsQueryVariables = Types.Exact<{
   input: Types.AccessFilterInput;
@@ -263,20 +271,6 @@ export const InstitutionTrafficOverTimeDocument = gql`
     }
     labels
   }
-  institutionUsersOverTime(input: $input, groupBy: $groupBy) {
-    datasets {
-      data
-      label
-    }
-    labels
-  }
-  institutionBlocksOverTime(input: $input, groupBy: $groupBy) {
-    datasets {
-      data
-      label
-    }
-    labels
-  }
 }
     `;
 
@@ -308,6 +302,46 @@ export function useInstitutionTrafficOverTimeLazyQuery(baseOptions?: Apollo.Lazy
 export type InstitutionTrafficOverTimeQueryHookResult = ReturnType<typeof useInstitutionTrafficOverTimeQuery>;
 export type InstitutionTrafficOverTimeLazyQueryHookResult = ReturnType<typeof useInstitutionTrafficOverTimeLazyQuery>;
 export type InstitutionTrafficOverTimeQueryResult = Apollo.QueryResult<InstitutionTrafficOverTimeQuery, InstitutionTrafficOverTimeQueryVariables>;
+export const InstitutionUsersOverTimeDocument = gql`
+    query InstitutionUsersOverTime($input: InstitutionAccessInput!, $groupBy: String!) {
+  institutionUsersOverTime(input: $input, groupBy: $groupBy) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+}
+    `;
+
+/**
+ * __useInstitutionUsersOverTimeQuery__
+ *
+ * To run a query within a React component, call `useInstitutionUsersOverTimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInstitutionUsersOverTimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInstitutionUsersOverTimeQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      groupBy: // value for 'groupBy'
+ *   },
+ * });
+ */
+export function useInstitutionUsersOverTimeQuery(baseOptions: Apollo.QueryHookOptions<InstitutionUsersOverTimeQuery, InstitutionUsersOverTimeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InstitutionUsersOverTimeQuery, InstitutionUsersOverTimeQueryVariables>(InstitutionUsersOverTimeDocument, options);
+      }
+export function useInstitutionUsersOverTimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InstitutionUsersOverTimeQuery, InstitutionUsersOverTimeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InstitutionUsersOverTimeQuery, InstitutionUsersOverTimeQueryVariables>(InstitutionUsersOverTimeDocument, options);
+        }
+export type InstitutionUsersOverTimeQueryHookResult = ReturnType<typeof useInstitutionUsersOverTimeQuery>;
+export type InstitutionUsersOverTimeLazyQueryHookResult = ReturnType<typeof useInstitutionUsersOverTimeLazyQuery>;
+export type InstitutionUsersOverTimeQueryResult = Apollo.QueryResult<InstitutionUsersOverTimeQuery, InstitutionUsersOverTimeQueryVariables>;
 export const InstitutionTrafficOverTimeByUserTypeDocument = gql`
     query InstitutionTrafficOverTimeByUserType($input: InstitutionAccessInput!, $groupBy: String!) {
   traffic: institutionTrafficOverTimeByUserType(input: $input, groupBy: $groupBy) {
@@ -364,7 +398,23 @@ export const InstitutionTrafficBreakdownDocument = gql`
     }
     labels
   }
+  userCountByUserType: institutionUserCountBreakdownByUserType(input: $input) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
   byContentType: institutionTrafficBreakdownByContentType(input: $input) {
+    datasets {
+      data
+      label
+    }
+    labels
+  }
+  userCountByContentType: institutionUserCountBreakdownByContentType(
+    input: $input
+  ) {
     datasets {
       data
       label
