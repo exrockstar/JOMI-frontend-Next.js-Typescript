@@ -1216,6 +1216,7 @@ export type MediaOutput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addCRMTagsToTriageQueueResults: Scalars['Boolean'];
   addCRMTagsToUsers: Scalars['Boolean'];
   addLanguagesToExistingArticles: Scalars['String'];
   addOrUpdateOrder: Scalars['Boolean'];
@@ -1328,6 +1329,12 @@ export type Mutation = {
   upgradeSubscription?: Maybe<Scalars['Boolean']>;
   upsertSocialUser: User;
   writeLog: Scalars['Boolean'];
+};
+
+
+export type MutationAddCrmTagsToTriageQueueResultsArgs = {
+  input?: InputMaybe<TriageQueueInput>;
+  tags: Array<Scalars['String']>;
 };
 
 
@@ -2325,6 +2332,7 @@ export type Query = {
   __typename?: 'Query';
   accessEvents: AccessEventsOutput;
   accessesByUserId?: Maybe<AccessEventsOutput>;
+  addCRMTagsToTriageQueueResultsPreview: Scalars['Int'];
   allArticleIds: Array<Scalars['String']>;
   allArticleVotes: Array<NewArticleVote>;
   allInstitutionsList: Array<Scalars['String']>;
@@ -2437,6 +2445,11 @@ export type QueryAccessEventsArgs = {
 
 export type QueryAccessesByUserIdArgs = {
   input: AccessesByUserIdInput;
+};
+
+
+export type QueryAddCrmTagsToTriageQueueResultsPreviewArgs = {
+  input?: InputMaybe<TriageQueueInput>;
 };
 
 

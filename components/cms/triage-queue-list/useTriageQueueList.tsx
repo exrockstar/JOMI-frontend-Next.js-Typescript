@@ -11,10 +11,11 @@ import {
   useState
 } from 'react'
 import { UseListInputState, useListInput } from 'components/hooks/useListInput'
+import { TriageQueueInput } from 'graphql/types'
 type State = {
   triageQueueRequests: TriageQueueListQuery['triageQueueRequests']['triage_requests']
   count: number
-
+  input: TriageQueueInput
   loading: boolean
   error: string
   refetch(): void
@@ -36,16 +37,17 @@ export const TriageQueueListProvider: React.FC<PropsWithChildren> = ({
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
 
+  const input: TriageQueueInput = {
+    skip: (page - 1) * pageSize,
+    limit: pageSize,
+    sort_by: sortBy,
+    sort_order: sortOrder,
+    filters: filters
+  }
   const { data, loading, error, refetch } = useTriageQueueListQuery({
     skip: !session?.user,
     variables: {
-      input: {
-        skip: (page - 1) * pageSize,
-        limit: pageSize,
-        sort_by: sortBy,
-        sort_order: sortOrder,
-        filters: filters
-      }
+      input: input
     }
   })
 
@@ -60,6 +62,7 @@ export const TriageQueueListProvider: React.FC<PropsWithChildren> = ({
     <InstitutionListContext.Provider
       value={{
         ...state,
+        input,
         triageQueueRequests: data?.triageQueueRequests.triage_requests,
         count: count,
         loading,

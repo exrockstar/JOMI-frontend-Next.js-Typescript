@@ -63,6 +63,21 @@ export type SendTriageQueueEmailMutationVariables = Types.Exact<{
 
 export type SendTriageQueueEmailMutation = { __typename?: 'Mutation', triageQueueRequest: { __typename?: 'TriageQueue', emailTemplate: string, notes?: string | null | undefined, _id: string, created?: any | null | undefined, updated?: any | null | undefined, type: Types.TriageQueueStatus, priority?: Types.TriagePriority | null | undefined, display_name?: string | null | undefined, institution_name?: string | null | undefined, email?: string | null | undefined, countryCode?: string | null | undefined, regionName?: string | null | undefined, market?: Types.TriageMarket | null | undefined, user?: { __typename?: 'User', _id: string, email: string, display_name?: string | null | undefined, user_type?: string | null | undefined, specialty?: string | null | undefined, countryCode?: string | null | undefined, regionName?: string | null | undefined, institution_name?: string | null | undefined, subActive: boolean, matchStatus?: Types.MatchStatus | null | undefined, matchedBy?: Types.MatchedBy | null | undefined } | null | undefined, additional_info?: { __typename?: 'AdditionalInfo', question?: string | null | undefined, response?: string | null | undefined, suggested_contact?: string | null | undefined, contactInfo?: string | null | undefined, request_email_sent?: boolean | null | undefined, pocs_email_sent?: Array<string> | null | undefined } | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string, points_of_contact?: Array<{ __typename?: 'ContactPerson', name: string, email: string, role: string, isMainContact?: boolean | null | undefined }> | null | undefined } | null | undefined } };
 
+export type AddCrmTagsToTriageQueueResultsMutationVariables = Types.Exact<{
+  input: Types.TriageQueueInput;
+  tags: Array<Types.Scalars['String']> | Types.Scalars['String'];
+}>;
+
+
+export type AddCrmTagsToTriageQueueResultsMutation = { __typename?: 'Mutation', result: boolean };
+
+export type AddCrmTagsToTriageQueueResultsPreviewQueryVariables = Types.Exact<{
+  input: Types.TriageQueueInput;
+}>;
+
+
+export type AddCrmTagsToTriageQueueResultsPreviewQuery = { __typename?: 'Query', result: number };
+
 
 export const TriageQueueListDocument = gql`
     query TriageQueueList($input: TriageQueueInput!) {
@@ -409,3 +424,68 @@ export function useSendTriageQueueEmailMutation(baseOptions?: Apollo.MutationHoo
 export type SendTriageQueueEmailMutationHookResult = ReturnType<typeof useSendTriageQueueEmailMutation>;
 export type SendTriageQueueEmailMutationResult = Apollo.MutationResult<SendTriageQueueEmailMutation>;
 export type SendTriageQueueEmailMutationOptions = Apollo.BaseMutationOptions<SendTriageQueueEmailMutation, SendTriageQueueEmailMutationVariables>;
+export const AddCrmTagsToTriageQueueResultsDocument = gql`
+    mutation AddCRMTagsToTriageQueueResults($input: TriageQueueInput!, $tags: [String!]!) {
+  result: addCRMTagsToTriageQueueResults(input: $input, tags: $tags)
+}
+    `;
+export type AddCrmTagsToTriageQueueResultsMutationFn = Apollo.MutationFunction<AddCrmTagsToTriageQueueResultsMutation, AddCrmTagsToTriageQueueResultsMutationVariables>;
+
+/**
+ * __useAddCrmTagsToTriageQueueResultsMutation__
+ *
+ * To run a mutation, you first call `useAddCrmTagsToTriageQueueResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCrmTagsToTriageQueueResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCrmTagsToTriageQueueResultsMutation, { data, loading, error }] = useAddCrmTagsToTriageQueueResultsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      tags: // value for 'tags'
+ *   },
+ * });
+ */
+export function useAddCrmTagsToTriageQueueResultsMutation(baseOptions?: Apollo.MutationHookOptions<AddCrmTagsToTriageQueueResultsMutation, AddCrmTagsToTriageQueueResultsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCrmTagsToTriageQueueResultsMutation, AddCrmTagsToTriageQueueResultsMutationVariables>(AddCrmTagsToTriageQueueResultsDocument, options);
+      }
+export type AddCrmTagsToTriageQueueResultsMutationHookResult = ReturnType<typeof useAddCrmTagsToTriageQueueResultsMutation>;
+export type AddCrmTagsToTriageQueueResultsMutationResult = Apollo.MutationResult<AddCrmTagsToTriageQueueResultsMutation>;
+export type AddCrmTagsToTriageQueueResultsMutationOptions = Apollo.BaseMutationOptions<AddCrmTagsToTriageQueueResultsMutation, AddCrmTagsToTriageQueueResultsMutationVariables>;
+export const AddCrmTagsToTriageQueueResultsPreviewDocument = gql`
+    query AddCRMTagsToTriageQueueResultsPreview($input: TriageQueueInput!) {
+  result: addCRMTagsToTriageQueueResultsPreview(input: $input)
+}
+    `;
+
+/**
+ * __useAddCrmTagsToTriageQueueResultsPreviewQuery__
+ *
+ * To run a query within a React component, call `useAddCrmTagsToTriageQueueResultsPreviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAddCrmTagsToTriageQueueResultsPreviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddCrmTagsToTriageQueueResultsPreviewQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddCrmTagsToTriageQueueResultsPreviewQuery(baseOptions: Apollo.QueryHookOptions<AddCrmTagsToTriageQueueResultsPreviewQuery, AddCrmTagsToTriageQueueResultsPreviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddCrmTagsToTriageQueueResultsPreviewQuery, AddCrmTagsToTriageQueueResultsPreviewQueryVariables>(AddCrmTagsToTriageQueueResultsPreviewDocument, options);
+      }
+export function useAddCrmTagsToTriageQueueResultsPreviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddCrmTagsToTriageQueueResultsPreviewQuery, AddCrmTagsToTriageQueueResultsPreviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddCrmTagsToTriageQueueResultsPreviewQuery, AddCrmTagsToTriageQueueResultsPreviewQueryVariables>(AddCrmTagsToTriageQueueResultsPreviewDocument, options);
+        }
+export type AddCrmTagsToTriageQueueResultsPreviewQueryHookResult = ReturnType<typeof useAddCrmTagsToTriageQueueResultsPreviewQuery>;
+export type AddCrmTagsToTriageQueueResultsPreviewLazyQueryHookResult = ReturnType<typeof useAddCrmTagsToTriageQueueResultsPreviewLazyQuery>;
+export type AddCrmTagsToTriageQueueResultsPreviewQueryResult = Apollo.QueryResult<AddCrmTagsToTriageQueueResultsPreviewQuery, AddCrmTagsToTriageQueueResultsPreviewQueryVariables>;

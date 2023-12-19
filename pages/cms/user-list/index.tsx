@@ -1,13 +1,10 @@
-import { Add, Download, FilterList, Visibility } from '@mui/icons-material'
+import { Add, Download } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import {
   Alert,
-  Badge,
   Box,
-  Button,
   CircularProgress,
   Drawer,
-  IconButton,
   Stack,
   Tooltip,
   Typography
@@ -24,20 +21,8 @@ import {
 } from 'components/cms/user-list/useUserManagementList'
 import { saveJsonToFile } from 'common/saveJsonToFile'
 import { useDownloadUserListLazyQuery } from 'graphql/cms-queries/user-list.generated'
-import {
-  StringOperations,
-  DateOperations,
-  NumericOperations
-} from 'components/common/FilterDrawer/operations'
-import {
-  UserRoles,
-  QueryOperation,
-  MatchStatus,
-  ColumnFilter,
-  SubType
-} from 'graphql/types'
+import { ColumnFilter } from 'graphql/types'
 import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
-import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useRouter } from 'next/router'
 import TagUsersToCRM from 'components/cms/user-list/TagUsersToCRM'
 import DbQueryDialog from 'components/common/DbQueryDialog'
