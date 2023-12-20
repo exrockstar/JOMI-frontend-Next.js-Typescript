@@ -38,3 +38,12 @@ mutation CreateOrderForUser($input: UpdateOrderInput!) {
     payment_status
   }
 }
+
+
+mutation AddCRMTagsToOrderListResults($input: OrderListInput!, $tags: [String!]!){
+  result: addCRMTagsToOrderListResults(input: $input, tags: $tags)
+}
+
+query AddCRMTagsToOrderListResultsPreview($input: OrderListInput!){
+  result: addCRMTagsToOrderListResultsPreview(input: $input)
+}

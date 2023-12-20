@@ -33,6 +33,21 @@ export type CreateOrderForUserMutationVariables = Types.Exact<{
 
 export type CreateOrderForUserMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, renewals?: number | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined } | null | undefined };
 
+export type AddCrmTagsToOrderListResultsMutationVariables = Types.Exact<{
+  input: Types.OrderListInput;
+  tags: Array<Types.Scalars['String']> | Types.Scalars['String'];
+}>;
+
+
+export type AddCrmTagsToOrderListResultsMutation = { __typename?: 'Mutation', result: boolean };
+
+export type AddCrmTagsToOrderListResultsPreviewQueryVariables = Types.Exact<{
+  input: Types.OrderListInput;
+}>;
+
+
+export type AddCrmTagsToOrderListResultsPreviewQuery = { __typename?: 'Query', result: number };
+
 
 export const CreateOrderDocument = gql`
     mutation CreateOrder($input: OrderInputForLocation!) {
@@ -184,3 +199,68 @@ export function useCreateOrderForUserMutation(baseOptions?: Apollo.MutationHookO
 export type CreateOrderForUserMutationHookResult = ReturnType<typeof useCreateOrderForUserMutation>;
 export type CreateOrderForUserMutationResult = Apollo.MutationResult<CreateOrderForUserMutation>;
 export type CreateOrderForUserMutationOptions = Apollo.BaseMutationOptions<CreateOrderForUserMutation, CreateOrderForUserMutationVariables>;
+export const AddCrmTagsToOrderListResultsDocument = gql`
+    mutation AddCRMTagsToOrderListResults($input: OrderListInput!, $tags: [String!]!) {
+  result: addCRMTagsToOrderListResults(input: $input, tags: $tags)
+}
+    `;
+export type AddCrmTagsToOrderListResultsMutationFn = Apollo.MutationFunction<AddCrmTagsToOrderListResultsMutation, AddCrmTagsToOrderListResultsMutationVariables>;
+
+/**
+ * __useAddCrmTagsToOrderListResultsMutation__
+ *
+ * To run a mutation, you first call `useAddCrmTagsToOrderListResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCrmTagsToOrderListResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCrmTagsToOrderListResultsMutation, { data, loading, error }] = useAddCrmTagsToOrderListResultsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      tags: // value for 'tags'
+ *   },
+ * });
+ */
+export function useAddCrmTagsToOrderListResultsMutation(baseOptions?: Apollo.MutationHookOptions<AddCrmTagsToOrderListResultsMutation, AddCrmTagsToOrderListResultsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCrmTagsToOrderListResultsMutation, AddCrmTagsToOrderListResultsMutationVariables>(AddCrmTagsToOrderListResultsDocument, options);
+      }
+export type AddCrmTagsToOrderListResultsMutationHookResult = ReturnType<typeof useAddCrmTagsToOrderListResultsMutation>;
+export type AddCrmTagsToOrderListResultsMutationResult = Apollo.MutationResult<AddCrmTagsToOrderListResultsMutation>;
+export type AddCrmTagsToOrderListResultsMutationOptions = Apollo.BaseMutationOptions<AddCrmTagsToOrderListResultsMutation, AddCrmTagsToOrderListResultsMutationVariables>;
+export const AddCrmTagsToOrderListResultsPreviewDocument = gql`
+    query AddCRMTagsToOrderListResultsPreview($input: OrderListInput!) {
+  result: addCRMTagsToOrderListResultsPreview(input: $input)
+}
+    `;
+
+/**
+ * __useAddCrmTagsToOrderListResultsPreviewQuery__
+ *
+ * To run a query within a React component, call `useAddCrmTagsToOrderListResultsPreviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAddCrmTagsToOrderListResultsPreviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAddCrmTagsToOrderListResultsPreviewQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddCrmTagsToOrderListResultsPreviewQuery(baseOptions: Apollo.QueryHookOptions<AddCrmTagsToOrderListResultsPreviewQuery, AddCrmTagsToOrderListResultsPreviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AddCrmTagsToOrderListResultsPreviewQuery, AddCrmTagsToOrderListResultsPreviewQueryVariables>(AddCrmTagsToOrderListResultsPreviewDocument, options);
+      }
+export function useAddCrmTagsToOrderListResultsPreviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AddCrmTagsToOrderListResultsPreviewQuery, AddCrmTagsToOrderListResultsPreviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AddCrmTagsToOrderListResultsPreviewQuery, AddCrmTagsToOrderListResultsPreviewQueryVariables>(AddCrmTagsToOrderListResultsPreviewDocument, options);
+        }
+export type AddCrmTagsToOrderListResultsPreviewQueryHookResult = ReturnType<typeof useAddCrmTagsToOrderListResultsPreviewQuery>;
+export type AddCrmTagsToOrderListResultsPreviewLazyQueryHookResult = ReturnType<typeof useAddCrmTagsToOrderListResultsPreviewLazyQuery>;
+export type AddCrmTagsToOrderListResultsPreviewQueryResult = Apollo.QueryResult<AddCrmTagsToOrderListResultsPreviewQuery, AddCrmTagsToOrderListResultsPreviewQueryVariables>;

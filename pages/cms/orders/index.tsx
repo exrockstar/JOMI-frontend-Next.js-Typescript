@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
 import OrdersList from 'components/cms/orders/list/OrdersList'
+import TagOrderResultsToCRM from 'components/cms/orders/list/TagOrderResultsToCRM'
 import { useOrdersListColumnOptions } from 'components/cms/orders/list/orderListColumnFilterOptions'
 import {
   OrdersListProvider,
@@ -69,6 +70,7 @@ const OrdersListPage = () => {
         </Tooltip>
       </Stack>
       <Stack px={2}>
+        <TagOrderResultsToCRM />
         <TableFilters filters={filters} />
       </Stack>
       {loading ? (
