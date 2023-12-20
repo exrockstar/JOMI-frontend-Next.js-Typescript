@@ -2,7 +2,7 @@ import {
   InstitutionsListQuery,
   useInstitutionsListQuery
 } from 'graphql/cms-queries/institutions-list.generated'
-import { InstitutionInput } from 'graphql/types'
+import { InstitutionInput, OrderListInput } from 'graphql/types'
 import { useSession } from 'next-auth/react'
 import {
   createContext,
@@ -21,6 +21,7 @@ type State = {
   loading: boolean
   error: string
   refetch(): void
+  input: OrderListInput
 } & UseListInputState &
   OrderListQuery['output']
 
@@ -39,7 +40,7 @@ export const OrdersListProvider: React.FC<PropsWithChildren> = ({
   const { data: session } = useSession()
   const [count, setCount] = useState(0)
 
-  const input: InstitutionInput = {
+  const input: OrderListInput = {
     skip: (page - 1) * pageSize,
     limit: pageSize,
     sort_by: sortBy,
@@ -67,6 +68,7 @@ export const OrdersListProvider: React.FC<PropsWithChildren> = ({
     <OrdersListContext.Provider
       value={{
         ...state,
+        input: input,
         count: count,
         dbQueryString: data?.output?.dbQueryString,
         error: error?.message,
