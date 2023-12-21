@@ -19,14 +19,14 @@ const ArticleVideo: React.FC<ArticleVideoProps> = ({
     <Box ml={0}>
       <Grid container>
         {isMobile &&
-          <Grid item xs={12} md={9.75} flexGrow={1}>
+          <Grid item xs={12} md={10} flexGrow={1}>
             <VideoBlock article={article} />
           </Grid>
         }
         {article.chapters?.length > 0 && 
           <ChaptersListGrid
             item
-            md={2.25}
+            md={2}
             xs={12}
             pr={{ xs: 0, md: 1 }}
             flexGrow={1}
@@ -35,7 +35,7 @@ const ArticleVideo: React.FC<ArticleVideoProps> = ({
           </ChaptersListGrid>
         }
         {!isMobile && article.chapters?.length > 0 ? 
-          <Grid item xs={12} md={9.75} flexGrow={1}>
+          <Grid item xs={12} md={10} flexGrow={1}>
             <VideoBlock article={article} />
           </Grid> : 
           <Grid item xs={12} md={12} flexGrow={1} >

@@ -183,7 +183,7 @@ const ProductSelect = () => {
                 //render for one-time purchase products
                 if (product.endsWith('article')) {
                   return (
-                    <TableRow>
+                    <TableRow key={index}>
                       <TableCell>
                         <Typography sx={{ width: 250 }} variant="body2">
                           {product}

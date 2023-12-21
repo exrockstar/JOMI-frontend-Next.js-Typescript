@@ -137,10 +137,10 @@ const FilterDrawer = ({ columnOptions, filters, onSubmit }: Props) => {
                 size="small"
                 onChange={(e) => handleColumnChange(index, e.target.value)}
               >
-                {columnOptions.map(({ columnName, label, type }) => {
+                {columnOptions.map(({ columnName, label, type }, index) => {
                   if (type === 'divider') {
                     return (
-                      <Divider sx={{ fontSize: 12, my: 2 }}>{label}</Divider>
+                      <Divider key={index} sx={{ fontSize: 12, my: 2 }}>{label}</Divider>
                     )
                   }
                   return (
