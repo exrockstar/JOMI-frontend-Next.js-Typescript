@@ -19,7 +19,9 @@ function ArticleSideBar({ article }: ArticleSideBarProps) {
   return (
     <Box display={'flex'} flexDirection={'column'}>
       <Box ref={myRef}>
-        <AccessBox article={article} />
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+          <AccessBox article={article} />
+        </Box>
         <Box>
           <Hidden smDown>
             <LanguageSwitcher enabledLanguages={article.enabled_languages} />

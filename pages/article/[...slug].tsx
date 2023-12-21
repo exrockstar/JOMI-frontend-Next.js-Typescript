@@ -46,6 +46,7 @@ import Error404 from 'components/error-pages/Error404'
 import { useAppState } from 'components/_appstate/useAppState'
 import CTAButton from 'components/common/CTAButton'
 import { useSearchParams } from 'next/navigation'
+import AccessBox from 'components/article/sidebar/AccessBox'
 
 const ArticlePassword = dynamic(
   () => import('components/article/ArticlePassword')
@@ -93,11 +94,14 @@ function SingleArticle({ article }: SingleArticleProps) {
           <LanguageSwitcher enabledLanguages={article.enabled_languages} />
         </Box>
         <TranslationDisclaimer article={article} />
+        <Box sx={{ display: { md: 'none' } }} mt={2}>
+          <AccessBox article={article} />
+        </Box>
         <Grid container mt={2} rowGap={1}>
           <Grid
             item
             bgcolor={'background.paper'}
-            lg={9}
+            md={9}
             xs={12}
             sx={{
               borderTopLeftRadius: { xs: 0, lg: 11 },
@@ -117,7 +121,7 @@ function SingleArticle({ article }: SingleArticleProps) {
           <Grid
             item
             bgcolor={'background.paper'}
-            lg={3}
+            md={3}
             xs={12}
             sx={{
               borderTopRightRadius: { xs: 0, lg: 11 },
