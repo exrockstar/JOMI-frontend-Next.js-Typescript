@@ -5,8 +5,8 @@ import {
   TableSortLabel,
   Box,
   TableCellProps,
-  SxProps
 } from '@mui/material'
+import { SxProps } from '@mui/system'
 import { Access, Institution, User } from 'graphql/types'
 import React from 'react'
 import { visuallyHidden } from '@mui/utils'

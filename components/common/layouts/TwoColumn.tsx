@@ -1,9 +1,9 @@
-import { Box, Grid } from '@mui/material'
+import { Box, Grid, GridSize } from '@mui/material'
 import React, { Children, PropsWithChildren } from 'react'
 
 type Props = {
-  left?: number
-  right?: number
+  left?: GridSize
+  right?: GridSize
 } & PropsWithChildren
 const TwoColumnLayout = ({ children, left = 6, right = 6 }: Props) => {
   const [leftChild, rightChild] = Children.toArray(children).slice(0, 2)

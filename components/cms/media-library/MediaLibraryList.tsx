@@ -1,4 +1,4 @@
-import { Edit, Delete, SaveAs, Close, OpenInNew } from '@mui/icons-material'
+import { Edit, Delete, Save, Close, OpenInNew } from '@mui/icons-material'
 import {
   Box,
   Card,
@@ -177,7 +177,7 @@ const MediaLibraryList: React.FC<Props> = ({ medias, count }) => {
                       <>
                         <Button
                           color="primary"
-                          startIcon={<SaveAs />}
+                          startIcon={<Save />}
                           sx={{ mr: 2 }}
                           variant="outlined"
                           onClick={() =>
