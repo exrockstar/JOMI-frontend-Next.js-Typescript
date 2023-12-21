@@ -146,9 +146,9 @@ const InstituitonOverviewStats = ({ institutionId, institution }: Props) => {
       )}
       {data && !!institution?.accessSettings?.displayTrafficGraph && (
         <Grid container spacing={2}>
-          {/* <Grid item xs={12}>
+          <Grid item xs={12}>
             <UsersOverTimeCard />
-          </Grid> */}
+          </Grid>
 
           <Grid item xs={12}>
             <TrafficOverTimeCard />
