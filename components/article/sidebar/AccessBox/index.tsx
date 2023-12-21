@@ -128,11 +128,9 @@ const AccessBox = ({ article }: AccessBoxProps) => {
       sx={{
         overflow: 'hidden',
         boxShadow: '-1px 2px 3px 0 rgb(10 0 0 / 22%)',
-        [theme.breakpoints.down('sm')]: {
-          width: '100vw',
-          borderTopRightRadius: 0,
-          borderBottomLeftRadius: 0
-        },
+        background: 'white',
+        borderRadius: 0,
+
         [theme.breakpoints.up('md')]: {
           width: '100%',
           borderTopRightRadius: '10px',

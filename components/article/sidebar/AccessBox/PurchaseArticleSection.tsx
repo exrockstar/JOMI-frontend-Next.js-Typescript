@@ -1,4 +1,4 @@
-import { Box, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Grid, Stack, Tooltip, Typography } from '@mui/material'
 import { ArticleAccessQuery } from 'graphql/queries/article-access.generated'
 import PurchaseArticleButton from './common/PurchaseArticleButton'
 import { useSession } from 'next-auth/react'
@@ -69,40 +69,44 @@ const PurchaseArticleSection = ({ data }: Props) => {
           >
             ${(price.unit_amount / 100).toFixed(0)}
           </Typography>
-          <Stack
-            direction="row"
-            gap={1}
-            mt={2}
-            alignItems={'stretch'}
-            justifyContent={'space-between'}
-          >
+          <Grid container spacing={1} mt={1}>
             {showPurchaseArticleButton && (
-              <PurchaseArticleButton
-                userId={userId}
-                purchaseDescription={purchaseDescription}
-                articleId={article._id}
-                text={`Purchase for $${(
-                  purchasePrice.unit_amount / 100
-                ).toFixed(0)}`}
-                type={OrderType.PurchaseArticle}
-                price={purchasePrice.unit_amount / 100}
-              />
+              <Grid item xs={12} sm={6} md={12} lg={6}>
+                <PurchaseArticleButton
+                  userId={userId}
+                  purchaseDescription={purchaseDescription}
+                  articleId={article._id}
+                  text={`Purchase for $${(
+                    purchasePrice.unit_amount / 100
+                  ).toFixed(0)}`}
+                  type={OrderType.PurchaseArticle}
+                  price={purchasePrice.unit_amount / 100}
+                />
+              </Grid>
             )}
             {showRentArticleButton && (
-              <Tooltip title={rentDescription}>
-                <div>
-                  <PurchaseArticleButton
-                    userId={userId}
-                    purchaseDescription={rentDescription}
-                    articleId={article._id}
-                    text={`Rent Article`}
-                    type={OrderType.RentArticle}
-                    price={rentPrice.unit_amount / 100}
-                  />
-                </div>
-              </Tooltip>
+              <Grid
+                item
+                xs={12}
+                sm={showPurchaseArticleButton ? 6 : 12}
+                md={12}
+                lg={showPurchaseArticleButton ? 6 : 12}
+              >
+                <Tooltip title={rentDescription}>
+                  <div>
+                    <PurchaseArticleButton
+                      userId={userId}
+                      purchaseDescription={rentDescription}
+                      articleId={article._id}
+                      text={`Rent Article`}
+                      type={OrderType.RentArticle}
+                      price={rentPrice.unit_amount / 100}
+                    />
+                  </div>
+                </Tooltip>
+              </Grid>
             )}
-          </Stack>
+          </Grid>
         </Box>
       )}
     </Box>

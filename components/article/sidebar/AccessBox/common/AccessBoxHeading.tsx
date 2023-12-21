@@ -90,8 +90,8 @@ const AccessBoxHeading = ({ data }: Props) => {
 
         width: '100vw',
         [theme.breakpoints.up('md')]: {
-          width: '100%',
-          borderTopRightRadius: '10px'
+          width: '100%'
+          // borderTopRightRadius: '10px'
         },
         borderTopRightRadius: 0,
         borderBottomLeftRadius: 0
