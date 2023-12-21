@@ -14,6 +14,7 @@ const ArticleVideo: React.FC<ArticleVideoProps> = ({
 }: ArticleVideoProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  console.log(article)
   return (
     <Box ml={0}>
       <Grid container>
@@ -22,17 +23,22 @@ const ArticleVideo: React.FC<ArticleVideoProps> = ({
             <VideoBlock article={article} />
           </Grid>
         }
-        <ChaptersListGrid
-          item
-          md={2.25}
-          xs={12}
-          pr={{ xs: 0, md: 1 }}
-          flexGrow={1}
-        >
-          <Chapters />
-        </ChaptersListGrid>
-        {!isMobile &&
+        {article.chapters?.length > 0 && 
+          <ChaptersListGrid
+            item
+            md={2.25}
+            xs={12}
+            pr={{ xs: 0, md: 1 }}
+            flexGrow={1}
+          >
+            <Chapters />
+          </ChaptersListGrid>
+        }
+        {!isMobile && article.chapters?.length > 0 ? 
           <Grid item xs={12} md={9.75} flexGrow={1}>
+            <VideoBlock article={article} />
+          </Grid> : 
+          <Grid item xs={12} md={12} flexGrow={1} >
             <VideoBlock article={article} />
           </Grid>
         }
