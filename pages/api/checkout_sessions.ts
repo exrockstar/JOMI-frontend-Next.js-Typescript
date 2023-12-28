@@ -24,16 +24,39 @@ export default async function handler(req, res) {
     amount,
     promocode,
     productId,
-    interval
+    interval,
+    duration
   } = req.body
-
+  let metadata: Stripe.MetadataParam = {}
   if (req.method === 'POST') {
     try {
       let line_items: Stripe.Checkout.SessionCreateParams['line_items']
+      let subscription_data: Stripe.Checkout.SessionCreateParams.SubscriptionData
       if (mode === 'subscription') {
-        if (priceId && !priceId.includes('internal')) {
-          // By Jasser: for v4 promocodes. it uses priceId. we don't have to change this.
-          line_items = [{ price: priceId, quantity: 1 }]
+        if (!productId) {
+          // By Jasser: for v4 promocodes. It Doesn't have productId so we just create an artibitrary product_data
+          line_items = [
+            {
+              description,
+              quantity: 1,
+              price_data: {
+                recurring: {
+                  interval: interval
+                },
+                unit_amount: amount,
+                product_data: {
+                  name: `CODE: ${description}`
+                },
+                currency: 'USD'
+              }
+            }
+          ]
+
+          subscription_data = {
+            metadata: {
+              description: `CODE: ${description}`
+            }
+          }
         } else {
           line_items = [
             {
@@ -49,17 +72,30 @@ export default async function handler(req, res) {
               }
             }
           ]
+          subscription_data = {
+            metadata: {
+              description: description
+            }
+          }
         }
       } else {
+        //for timed promcodes
         line_items = [
           {
             quantity: 1,
             description,
-            amount: parseInt(amount) * 100,
+            amount: amount,
             currency: 'USD',
             name: description
           }
         ]
+        metadata = {
+          handleTimedCodes: 'Yes',
+          promocode,
+          interval,
+          duration,
+          description: `CODE: ${description}`
+        }
       }
       const discounts: Stripe.Checkout.SessionCreateParams.Discount[] = []
       if (promocode && productId && interval) {
@@ -97,9 +133,11 @@ export default async function handler(req, res) {
         discounts,
         success_url: `${req.headers.origin}/account/checkout-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/account/subscription/?canceled=true`,
+        subscription_data,
         metadata: {
           priceId: priceId,
-          description: description
+          description: description,
+          ...metadata
         }
       })
 

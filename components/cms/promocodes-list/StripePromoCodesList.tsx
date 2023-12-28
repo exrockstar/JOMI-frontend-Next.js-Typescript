@@ -119,7 +119,7 @@ const StripePromoCodesList: React.FC<{}> = () => {
                     backgroundColor={stickyTableCellColor}
                   >
                     <Link
-                      href={`/cms/promocodes-list/${promocode._id}`}
+                      href={`/cms/promocodes-list/v6/${promocode._id}`}
                       component={NextLink}
                     >
                       {promocode.code}
@@ -202,7 +202,7 @@ const StripePromoCodesList: React.FC<{}> = () => {
                                 promocode?.applies_to.slice(2).length
                               } more.`}{' '}
                               <Link
-                                href={`/cms/promocodes-list/${promocode._id}`}
+                                href={`/cms/promocodes-list/v6/${promocode._id}`}
                               >
                                 View All ➔
                               </Link>

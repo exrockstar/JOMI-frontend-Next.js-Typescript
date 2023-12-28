@@ -12,17 +12,19 @@ import useGoogleAnalyticsHelpers from 'components/hooks/useGoogleAnalyticsHelper
 import { amplitudeTrackInitiateCheckout } from 'apis/amplitude'
 
 type Props = {
+  codeType?: string
   priceId?: string
   stripeId: string
   nickname: string
   mode: 'subscription' | 'payment'
   amount?: number
-
+  duration?: number
   promocode?: string
   interval?: OrderInterval
   productId?: string
 } & PropsWithChildren
 const PriceButton = ({
+  codeType,
   priceId,
   stripeId,
   nickname,
@@ -31,6 +33,7 @@ const PriceButton = ({
   promocode,
   interval,
   productId,
+  duration,
   children
 }: Props) => {
   const { data: session } = useSession()
@@ -60,8 +63,8 @@ const PriceButton = ({
           <input type="hidden" name="interval" value={interval.toLowerCase()} />
         )}
         <input type="hidden" name="promocode" value={promocode} />
-        <PriceButtonContainer>
-          {children}
+        <input type="hidden" name="duration" value={duration} />
+        {codeType == 'promoCode' ? (
           <CTAButton
             type="submit"
             role="link"
@@ -89,7 +92,38 @@ const PriceButton = ({
           >
             Subscribe Now
           </CTAButton>
-        </PriceButtonContainer>
+        ) : (
+          <PriceButtonContainer>
+            {children}
+            <CTAButton
+              type="submit"
+              role="link"
+              data-event={`Subscription Button - ${nickname}`}
+              onClick={(e) => {
+                analytics.trackCheckout(e)
+                amplitudeTrackInitiateCheckout({
+                  label: 'Individual Subscription',
+                  priceId,
+                  value: amount,
+                  userId: session && session.user ? session.user._id : 'anon',
+                  description: nickname,
+                  promocode: promocode ? promocode : 'none'
+                })
+                trackInitiateCheckoutMutation()
+                fbPixelTrackInitiateCheckout(
+                  'SubscriptionInitiate',
+                  [priceId],
+                  'USD',
+                  amount,
+                  session.user.id
+                )
+              }}
+              sx={{ px: 2.5, py: 1.875, lineHeight: 1.0 }}
+            >
+              Subscribe Now
+            </CTAButton>
+          </PriceButtonContainer>
+        )}
       </form>
     </Box>
   )

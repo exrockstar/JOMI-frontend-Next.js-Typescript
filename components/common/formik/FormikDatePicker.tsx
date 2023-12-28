@@ -14,6 +14,7 @@ const FormikDatePicker = ({ name, ...props }: Props) => {
   const { setFieldValue, setFieldError } = useFormikContext()
   return (
     <DatePicker
+      inputFormat="MM/DD/YYYY"
       clearable
       value={field.value ? dayjs(field.value) : null}
       onChange={(newValue: Dayjs) => {

@@ -7,7 +7,9 @@ import {
   IconButton,
   Stack,
   Tooltip,
-  Typography
+  Typography,
+  Tab,
+  Tabs
 } from '@mui/material'
 import Button from '@mui/material/Button'
 import SearchInput from 'components/access/SearchInput'
@@ -22,9 +24,8 @@ import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { ColumnFilter } from 'graphql/types'
 import NextLink from 'next/link'
 import { useState } from 'react'
-import DownloadIcon from '@mui/icons-material/Download'
 
-const PromoCodesListPage = () => {
+const PromoCodesList = () => {
   const { searchTerm, setSearchTerm, filters, setFilters, setPage } =
     useStripePromoCodesList()
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -34,8 +35,9 @@ const PromoCodesListPage = () => {
     setFilters(filters)
     setDrawerOpen(!drawerOpen)
   }
+  
   return (
-    <CmsLayout>
+    <div>
       <Drawer
         anchor={'right'}
         open={drawerOpen}
@@ -51,20 +53,15 @@ const PromoCodesListPage = () => {
         direction={'row'}
         justifyContent="space-between"
         p={2}
-        pt={5}
+        pt={0}
         alignItems={'center'}
       >
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          alignItems={{ xs: 'flex-start', md: 'center' }}
-          spacing={2}
-        >
-          <Typography variant="h4">Promo Codes</Typography>
+        <Stack display="flex" direction={'row'} spacing={2}>
           <Button
             startIcon={<Add />}
             variant="contained"
-            color="primary"
-            href={'/cms/promocodes-list/create'}
+            color='primary'
+            href={'/cms/promocodes-list/v6/create'}
             LinkComponent={NextLink}
           >
             Create Promo code
@@ -105,14 +102,14 @@ const PromoCodesListPage = () => {
       <Stack p={2}>
         <StripePromoCodesList />
       </Stack>
-    </CmsLayout>
+    </div>
   )
 }
 
 const PromoCodesListWrapper = () => {
   return (
     <StripePromoCodesListProvider>
-      <PromoCodesListPage></PromoCodesListPage>
+      <PromoCodesList></PromoCodesList>
     </StripePromoCodesListProvider>
   )
 }
