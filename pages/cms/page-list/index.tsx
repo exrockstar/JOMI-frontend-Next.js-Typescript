@@ -23,6 +23,10 @@ import {
 import PagesList from 'components/cms/pages-list/PagesList'
 import { LoadingButton } from '@mui/lab'
 import PageCreateModal from 'components/cms/pages-list/PageCreateModal'
+import { usePagesListLazyQuery } from 'graphql/cms-queries/pages-list.generated'
+import useCsvDownload from 'components/cms/useCsvDownload'
+import DownloadIcon from '@mui/icons-material/Download'
+import DownloadCsvButton from 'components/common/DownloadCsvButton'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -55,8 +59,45 @@ const PagesListPage = () => {
     setSearchTerm,
     setPage,
     setFilters,
-    filters
+    filters,
+    searchTerm,
+    sortBy,
+    sortOrder
   } = usePagesList()
+
+  const [fetchFunc] = usePagesListLazyQuery({ fetchPolicy: 'no-cache' })
+
+  const getMainData = (data) => {
+    return data?.fetchPages.pages ?? []
+  }
+
+  const convertFunc = (page) => {
+    return {
+      TITLE: page.title || 'N/A',
+      STATUS: page.status || 'N/A',
+      SLUG: page.slug || 'N/A',
+      AUTHOR: page.author
+        ? page.author.name.first + ' ' + page.author.name.last
+        : 'N/A'
+    }
+  }
+
+  const {
+    downloadCsv,
+    loading: csvLoading,
+    progress: csvProgress
+  } = useCsvDownload({
+    fetchFunc,
+    convertFunc,
+    getMainData,
+    totalCount,
+    collection: 'page-list',
+    search_term: searchTerm,
+    filters,
+    sort_by: sortBy,
+    sort_order: sortOrder
+  })
+
   const [addPageModalOpen, setAddPageModalOpen] = useState(false)
 
   const onSubmitFilter = (filters: ColumnFilter[]) => {
@@ -79,22 +120,41 @@ const PagesListPage = () => {
           onSubmit={onSubmitFilter}
         />
       </Drawer>
-      <Stack direction={'row'} justifyContent="space-between" px={2} pt={2}>
-        <Typography variant="h4" py={1}>
-          Pages
-        </Typography>
-        <Typography>
+      <Typography variant="h4" p={2} pt={5}>
+        Pages
+      </Typography>
+      <Stack
+        direction={'row'}
+        justifyContent="space-between"
+        px={2}
+        pt={0}
+        alignItems="center"
+      >
+        <Stack direction={'row'} spacing={2} alignItems={'center'}>
+          <LoadingButton
+            startIcon={<Add />}
+            variant="contained"
+            color="secondary"
+            onClick={() => setAddPageModalOpen(true)}
+          >
+            Create a Page
+          </LoadingButton>
+          <DownloadCsvButton
+            loading={csvLoading}
+            onClick={downloadCsv}
+            csvProgress={csvProgress}
+          />
           <Typography fontWeight={'bold'} marginTop={1}>
-            Table Filters&nbsp;
+            <Typography>Table Filters&nbsp;</Typography>
+            {filters.length == 0
+              ? 'None'
+              : `${filters.length} total:` +
+                filters.map(
+                  (filter, i) =>
+                    ` ${filter.columnName} ${filter.operation} ${filter.value}`
+                )}
           </Typography>
-          {filters.length == 0
-            ? 'None'
-            : `${filters.length} total:` +
-              filters.map(
-                (filter, i) =>
-                  ` ${filter.columnName} ${filter.operation} ${filter.value}`
-              )}
-        </Typography>
+        </Stack>
         <SearchInput
           onSubmit={(str) => {
             setSearchTerm(str)
@@ -124,15 +184,6 @@ const PagesListPage = () => {
           </Badge>
         </Tooltip>
       </Stack>
-      <LoadingButton
-        startIcon={<Add />}
-        variant="contained"
-        color="secondary"
-        onClick={() => setAddPageModalOpen(true)}
-        sx={{ width: 180, height: 40, ml: 2 }}
-      >
-        Create a Page
-      </LoadingButton>
       {loading ? (
         <Stack alignItems="center" justifyContent="center" height="90vh">
           <CircularProgress />

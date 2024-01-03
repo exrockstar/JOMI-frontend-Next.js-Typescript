@@ -86,6 +86,7 @@ const RefreshInstStatsButton = () => {
         </LoadingButton>
       ) : (
         <LoadingButton
+          variant="outlined"
           startIcon={<Refresh />}
           loading={isJobRunningData?.isJobRunning}
           disabled={isJobRunningData?.isJobRunning}
