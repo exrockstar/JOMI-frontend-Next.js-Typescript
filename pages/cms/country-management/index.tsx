@@ -1,15 +1,55 @@
 import { OpenInNew } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import CmsLayout from 'components/cms/CmsLayout'
 import CountryManagementList from 'components/cms/country-management/CountryManagementList'
 import UpdateCountriesDialog from 'components/cms/country-management/UpdateCountriesDialog'
 import { CountryManagementListProvider } from 'components/cms/country-management/useCountryManagementList'
+import useCsvDownload from 'components/cms/useCsvDownload'
+import { useGetCountriesLazyQuery } from 'graphql/cms-queries/countries.generated'
 import Link from 'next/link'
+import useCountryManagementList from 'components/cms/country-management/useCountryManagementList'
+import DownloadIcon from '@mui/icons-material/Download'
+import DownloadCsvButton from 'components/common/DownloadCsvButton'
 
 import { useState } from 'react'
 
 const TrialsSettingsPage = () => {
   const [open, setOpen] = useState(false)
+
+  const { filters, sortBy, sortOrder, count } = useCountryManagementList()
+  const [fetchFunc] = useGetCountriesLazyQuery({ fetchPolicy: 'no-cache' })
+
+  const getMainData = (data) => {
+    return data?.getCountries.countries ?? []
+  }
+
+  const convertFunc = (country) => {
+    return {
+      COUNTRY: country.name,
+      'COUNTRY CODE': country.code,
+      'TRIALS ENABLED': country.trialsEnabled ? 'Yes' : 'No',
+      'ARTICLE RESTRICTION': country.articleRestriction,
+      'PERCENTAGE FROM DEFAULT PRICE': country.coefficient,
+      MULTIPLIER: country.multiplier ?? 'None'
+    }
+  }
+
+  const {
+    downloadCsv,
+    loading: csvLoading,
+    progress: csvProgress
+  } = useCsvDownload({
+    fetchFunc,
+    convertFunc,
+    getMainData,
+    totalCount: count,
+    collection: 'country',
+    filters,
+    sort_by: sortBy,
+    sort_order: sortOrder
+  })
+
   return (
     <CmsLayout>
       <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
@@ -44,7 +84,7 @@ const TrialsSettingsPage = () => {
         </Stack>
       </Stack>
       <Stack px={2}>
-        <Box>
+        <Stack justifyContent={'space-between'} direction={'row'}>
           <Button
             variant="contained"
             color="primary"
@@ -54,21 +94,32 @@ const TrialsSettingsPage = () => {
           >
             Update Selected Countries
           </Button>
-        </Box>
+          <DownloadCsvButton
+            loading={csvLoading}
+            onClick={downloadCsv}
+            csvProgress={csvProgress}
+          />
+        </Stack>
       </Stack>
       <Stack>
-        <CountryManagementListProvider>
-          <UpdateCountriesDialog
-            open={open}
-            onClose={() => {
-              setOpen(false)
-            }}
-          />
-          <CountryManagementList />
-        </CountryManagementListProvider>
+        <UpdateCountriesDialog
+          open={open}
+          onClose={() => {
+            setOpen(false)
+          }}
+        />
+        <CountryManagementList />
       </Stack>
     </CmsLayout>
   )
 }
 
-export default TrialsSettingsPage
+const TrialsSettingsPageWrapper = () => {
+  return (
+    <CountryManagementListProvider>
+      <TrialsSettingsPage />
+    </CountryManagementListProvider>
+  )
+}
+
+export default TrialsSettingsPageWrapper

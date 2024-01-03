@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   CircularProgress,
+  LinearProgress,
   Drawer,
   IconButton,
   Stack,
@@ -28,6 +29,7 @@ import {
 import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useEffect, useState } from 'react'
 import { FilterList, Home } from '@mui/icons-material'
+import DownloadIcon from '@mui/icons-material/Download'
 import ArticlesList from 'components/cms/articles-list/ArticlesList'
 import {
   useCheckOutdatedTranslationsMutation,
@@ -46,6 +48,10 @@ import PurchaseSettingDialog from 'components/cms/articles-list/PurchaseSettingD
 import { ARTICLE_CATEGORIES } from 'common/constants'
 import { countries } from 'components/cms/prices-list/countryList'
 import { useCategoriesQuery } from 'graphql/queries/categories.generated'
+import useCsvDownload from 'components/cms/useCsvDownload'
+import { useArticlesListLazyQuery } from 'graphql/cms-queries/articles-list.generated'
+
+import DownloadCsvButton from 'components/common/DownloadCsvButton'
 
 const ArticlesListPage = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -60,13 +66,82 @@ const ArticlesListPage = () => {
     error,
     totalCount,
     setSearchTerm,
-    setPage,
     setFilters,
     filters,
     selectedItems,
     searchTerm,
+    sortBy,
+    sortOrder,
     refetch
   } = useArticlesList()
+
+  const [fetchFunc] = useArticlesListLazyQuery({ fetchPolicy: 'no-cache' })
+
+  const convertFunc = (item) => {
+    const production_id = item.production_id || 'N/A'
+    const publication_id = item.publication_id || 'N/A'
+
+    const ppaCountries = item.purchaseAllowedCountries
+    const ppAcountriesText =
+      ppaCountries?.length > 4
+        ? `${ppaCountries?.slice(0, 4).join(', ')} and ${
+            ppaCountries.length - 4
+          } others`
+        : `${ppaCountries?.slice(0, 4).join(', ')}`
+    return {
+      'PUBLICATION ID': publication_id,
+      TITLE: item.title,
+      'PRODUCTION ID': production_id,
+      'AUTHOR(S)':
+        item.authors.map((item) => item.display_name).join(', ') || 'N/A',
+      STATUS: item.status,
+      'PUBLISH DATE': item.published ? item.published.split('T')[0] : 'N/A',
+      'PREPRINT DATE': item.preprint_date
+        ? item.preprint_date.split('T')[0]
+        : 'N/A',
+      'ABSTRACT DONE?': item.has_complete_abstract ? 'Yes' : 'No',
+      RESTRICTION: item.restrictions?.article || 'N/A',
+      DOI: item.DOIStatus,
+      'AVAILABLE TRANSLATIONS': item.languages?.join(', ') ?? 'N/A',
+      'ENABLED TRANSLATIONS': item.enabled_languages?.join(', ') ?? 'N/A',
+      'OUTDATED TRANSLATIONS': !item.languages?.length
+        ? 'No translations'
+        : item.outdatedTranslations?.length
+        ? item.outdatedTranslations?.join(', ')
+        : 'Up to date',
+      'CONTENT LENGTH': item.contentlength,
+      CATEGORIES: item.categories
+        ? item.categories.map((item) => item.displayName).join(', ')
+        : 'N/A',
+      'RENT ENABLED': item.isRentArticleFeatureOn ? 'Yes' : 'No',
+      'PURCHASE ENABLED': item.isPurchaseArticleFeatureOn ? 'Yes' : 'No',
+      'PPA SCOPE':
+        item.purchaseAllowedCountries?.length > 0
+          ? ppAcountriesText
+          : 'All Countries'
+    }
+  }
+
+  const getMainData = (data) => {
+    return data?.fetchArticles?.articles ?? []
+  }
+
+  const {
+    downloadCsv,
+    loading: csvLoading,
+    progress: csvProgress
+  } = useCsvDownload({
+    fetchFunc,
+    convertFunc,
+    getMainData,
+    totalCount,
+    collection: 'article',
+    filters,
+    search_term: searchTerm,
+    sort_by: sortBy,
+    sort_order: sortOrder
+  })
+
   const columnOptions: ColumnOption[] = [
     {
       columnName: 'title',
@@ -178,6 +253,7 @@ const ArticlesListPage = () => {
       values: categoriesData?.categories?.map((c) => c._id)
     }
   ]
+
   const onSubmitFilter = (filters: ColumnFilter[]) => {
     setFilters([...filters])
     setDrawerOpen(!drawerOpen)
@@ -195,12 +271,14 @@ const ArticlesListPage = () => {
         enqueueSnackbar(error.message, { variant: 'error' })
       }
     })
+
   const [checkOutdated, { loading: checkOutdatedLoading }] =
     useCheckOutdatedTranslationsMutation({
       onCompleted() {
         refetch()
       }
     })
+
   const { data, refetch: refetchGenerated } = useScienceOpenLastGeneratedQuery()
   const [generateScienceOpen, { loading: updatingScienceOpen }] =
     useGenerateAllScienceOpenXmlMutation({
@@ -284,75 +362,79 @@ const ArticlesListPage = () => {
           </Badge>
         </Tooltip>
       </Stack>
-      <Stack px={2}>
-        <div>
-          <LoadingButton
-            onClick={() => {
-              updateWistiaMetadata()
-            }}
-            color="secondary"
-            variant="outlined"
-            loading={updatingWistia}
-          >
-            Update wistia metadata
-          </LoadingButton>
-          <Tooltip title={`Last generated at: ${lastGenerateDate}`} arrow>
-            <LoadingButton
-              color="secondary"
-              variant="outlined"
-              sx={{ ml: 2 }}
-              onClick={() => {
-                generateScienceOpen()
-              }}
-              loading={updatingScienceOpen}
-            >
-              Generate scienceopen.xml
-            </LoadingButton>
-          </Tooltip>
-          <Button
-            color="secondary"
-            variant="outlined"
-            sx={{ ml: 2 }}
-            onClick={() => setDialogOpen(true)}
-            disabled={!selectedItems.length}
-          >
-            Add Translations
-          </Button>
-          <Tooltip title={`Last generated at: ${lastGenerateDate}`} arrow>
-            <LoadingButton
-              color="secondary"
-              variant="outlined"
-              sx={{ ml: 2 }}
-              onClick={() => {
-                checkOutdated()
-              }}
-              loading={checkOutdatedLoading}
-            >
-              Check Outdated Translations
-            </LoadingButton>
-          </Tooltip>
-          <Button
-            color="secondary"
-            variant="outlined"
-            sx={{ ml: 2 }}
-            onClick={() => setPurchaseDialogOpen(true)}
-            disabled={!selectedItems.length}
-          >
-            Update Purchase Settings
-          </Button>
+      <Stack
+        px={2}
+        spacing={{ xs: 1, sm: 1 }}
+        direction="row"
+        useFlexGap
+        flexWrap="wrap"
+      >
+        <LoadingButton
+          onClick={() => {
+            updateWistiaMetadata()
+          }}
+          color="secondary"
+          variant="outlined"
+          loading={updatingWistia}
+        >
+          Update wistia metadata
+        </LoadingButton>
+        <Tooltip title={`Last generated at: ${lastGenerateDate}`} arrow>
           <LoadingButton
             color="secondary"
             variant="outlined"
-            sx={{ ml: 2 }}
             onClick={() => {
-              regenerateHomePage()
+              generateScienceOpen()
             }}
-            loading={regenerating}
-            startIcon={<Home />}
+            loading={updatingScienceOpen}
           >
-            Regenerate Home Page
+            Generate scienceopen.xml
           </LoadingButton>
-        </div>
+        </Tooltip>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={() => setDialogOpen(true)}
+          disabled={!selectedItems.length}
+        >
+          Add Translations
+        </Button>
+        <Tooltip title={`Last generated at: ${lastGenerateDate}`} arrow>
+          <LoadingButton
+            color="secondary"
+            variant="outlined"
+            onClick={() => {
+              checkOutdated()
+            }}
+            loading={checkOutdatedLoading}
+          >
+            Check Outdated Translations
+          </LoadingButton>
+        </Tooltip>
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={() => setPurchaseDialogOpen(true)}
+          disabled={!selectedItems.length}
+        >
+          Update Purchase Settings
+        </Button>
+        <LoadingButton
+          color="secondary"
+          variant="outlined"
+          onClick={() => {
+            regenerateHomePage()
+          }}
+          loading={regenerating}
+          startIcon={<Home />}
+        >
+          Regenerate Home Page
+        </LoadingButton>
+        <DownloadCsvButton
+          loading={csvLoading}
+          onClick={downloadCsv}
+          csvProgress={csvProgress}
+        />
       </Stack>
       <ArticleTranslationsDialog
         open={dialogOpen}

@@ -22,6 +22,8 @@ import FilterDrawer from 'components/common/FilterDrawer/FilterDrawer'
 import { ColumnFilter } from 'graphql/types'
 import NextLink from 'next/link'
 import { useState } from 'react'
+import DownloadIcon from '@mui/icons-material/Download'
+
 const PromoCodesListPage = () => {
   const { searchTerm, setSearchTerm, filters, setFilters, setPage } =
     useStripePromoCodesList()
@@ -45,7 +47,13 @@ const PromoCodesListPage = () => {
           filters={filters}
         />
       </Drawer>
-      <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
+      <Stack
+        direction={'row'}
+        justifyContent="space-between"
+        p={2}
+        pt={5}
+        alignItems={'center'}
+      >
         <Stack
           direction={{ xs: 'column', md: 'row' }}
           alignItems={{ xs: 'flex-start', md: 'center' }}
@@ -69,7 +77,7 @@ const PromoCodesListPage = () => {
             placeholder="Search promo code... e.g., 35OFF"
           />
         </Stack>
-        <Box>
+        <Stack direction={'row'} spacing={1}>
           <Tooltip title="Filter list">
             <Badge
               badgeContent={filters?.length}
@@ -91,7 +99,7 @@ const PromoCodesListPage = () => {
               </IconButton>
             </Badge>
           </Tooltip>
-        </Box>
+        </Stack>
       </Stack>
 
       <Stack p={2}>

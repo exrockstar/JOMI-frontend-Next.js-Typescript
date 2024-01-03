@@ -3,6 +3,7 @@ import { LoadingButton } from '@mui/lab'
 import {
   Alert,
   Badge,
+  Box,
   Button,
   CircularProgress,
   Drawer,
@@ -32,8 +33,13 @@ import { ColumnOption } from 'components/common/FilterDrawer/ColumnOption'
 import { useUpdateAllInstStatsMutation } from 'graphql/mutations/update-inst-stats.generated'
 import DbQueryDialog from 'components/common/DbQueryDialog'
 import RefreshInstStatsButton from 'components/institutions/RefreshInstStatsButton'
-import TransferInstitutionDataDialog from 'components/cms/institutions-list/TransferInstitutionDataDialog'
 import TransferDuplicateDomainDialog from 'components/cms/institutions-list/TransferDuplicateDomainsDialog'
+import DownloadIcon from '@mui/icons-material/Download'
+
+import useCsvDownload from 'components/cms/useCsvDownload'
+import { useInstitutionsListLazyQuery } from 'graphql/cms-queries/institutions-list.generated'
+import dayjs from 'dayjs'
+import DownloadCsvButton from 'components/common/DownloadCsvButton'
 
 const columnOptions: ColumnOption[] = [
   {
@@ -143,8 +149,54 @@ const InstitutionsListPage = () => {
     setSearchTerm,
     setFilters,
     searchTerm,
-    dbQueryString
+    dbQueryString,
+    sortBy,
+    sortOrder
   } = useInstitutionList()
+
+  const [fetchFunc] = useInstitutionsListLazyQuery({ fetchPolicy: 'no-cache' })
+
+  const getMainData = (data) => {
+    return data?.institutions.institutions
+  }
+
+  const convertFunc = (inst) => {
+    const created = dayjs(inst.created).format('MM/DD/YYYY')
+    const expiry = inst.expiry_date_cached
+      ? dayjs(inst.expiry_date_cached).format('MM/DD/YYYY')
+      : 'N/A'
+
+    return {
+      'INSTITUTION NAME': inst.name,
+      CATEGORY: inst.category ?? 'N/A',
+      USERS: inst.user_count,
+      ACCESS: inst.total_article_count,
+      'PENDING REQUESTS': inst.pending_requests,
+      'SENT REQUESTS': inst.sent_requests,
+      'TOTAL REQUESTING USERS': inst.total_requests,
+      'VIDEO BLOCKS': inst.stats?.videoBlocks ?? 0,
+      'UNUNIQUE VIDEO BLOCKS': inst.stats?.uniqueVideoBlocks ?? 0,
+      'DATE CREATED': created,
+      'ORDER STATUS': inst.subscription.status?.toUpperCase(),
+      EXPIRY: expiry
+    }
+  }
+
+  const {
+    downloadCsv,
+    loading: csvLoading,
+    progress: csvProgress
+  } = useCsvDownload({
+    fetchFunc,
+    convertFunc,
+    getMainData,
+    collection: 'institution',
+    search: searchTerm,
+    filters,
+    sort_by: sortBy,
+    sort_order: sortOrder,
+    totalCount: count
+  })
 
   const [updateInstStats, { loading: updating }] =
     useUpdateAllInstStatsMutation()
@@ -172,10 +224,22 @@ const InstitutionsListPage = () => {
         open={transferDialogOpen}
         onClose={() => setTransferDialogOpen(false)}
       />
-      <Stack direction={'row'} justifyContent="space-between" p={2} pt={5}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Typography variant="h4">Institution List</Typography>
-
+      <Typography variant="h4" p={2} pb={0}>
+        Institution List
+      </Typography>
+      <Stack
+        direction={'row'}
+        justifyContent="space-between"
+        p={2}
+        alignItems="flex-start"
+      >
+        <Stack
+          px={2}
+          spacing={{ xs: 1, sm: 1 }}
+          direction="row"
+          useFlexGap
+          flexWrap="wrap"
+        >
           <LoadingButton
             startIcon={<Add />}
             variant="contained"
@@ -200,33 +264,41 @@ const InstitutionsListPage = () => {
               color="primary"
               onClick={() => setShowQuery(true)}
               startIcon={<Visibility />}
+              variant="outlined"
             >
               Show DB Query Parameters
             </Button>
           </Tooltip>
+          <DownloadCsvButton
+            loading={csvLoading}
+            onClick={downloadCsv}
+            csvProgress={csvProgress}
+          />
         </Stack>
         <DbQueryDialog
-          open={showQuery}
           onClose={() => setShowQuery(false)}
+          open={showQuery}
           queryStr={dbQueryString}
         />
-        <Tooltip title={`Filter list.  ${filters?.length || 0} filters set`}>
-          <Badge
-            badgeContent={filters?.length}
-            color="secondary"
-            invisible={!filters?.length}
-            sx={{
-              '& .MuiBadge-badge': {
-                right: 8,
-                top: 12
-              }
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <FilterList />
-            </IconButton>
-          </Badge>
-        </Tooltip>
+        <Box>
+          <Tooltip title={`Filter list.  ${filters?.length || 0} filters set`}>
+            <Badge
+              badgeContent={filters?.length}
+              color="secondary"
+              invisible={!filters?.length}
+              sx={{
+                '& .MuiBadge-badge': {
+                  right: 8,
+                  top: 12
+                }
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                <FilterList />
+              </IconButton>
+            </Badge>
+          </Tooltip>
+        </Box>
       </Stack>
       <Stack px={2}>
         <SearchInput
