@@ -5,8 +5,10 @@ import Logo from 'components/common/Logo'
 import Head from 'next/head'
 
 const MarcRecords = () => {
+  const HOST = process.env.BACKEND_URL || 'jomi.com'
+
   const downloadFile = () => {
-    window.location.href = 'http://localhost:4000/download/record.mrc'
+    window.location.href = `https://${HOST}/download/record.mrc`
   }
   return (
     <>
