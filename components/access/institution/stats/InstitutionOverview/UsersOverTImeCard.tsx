@@ -200,7 +200,8 @@ const UsersOverTimeCard = () => {
                   scales: {
                     y: {
                       beginAtZero: true,
-                      stacked: true
+                      stacked: true,
+                      offset: true
                     },
                     x: {
                       stacked: true
