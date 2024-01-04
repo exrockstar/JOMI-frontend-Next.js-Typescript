@@ -233,11 +233,11 @@ const UserManagementListPage = () => {
               Download
             </LoadingButton>
           </Tooltip>
-          <DownloadCsvButton
+          {/* <DownloadCsvButton
             onClick={downloadCsv}
             loading={dLoading}
             csvProgress={csvProgress}
-          />
+          /> */}
         </Stack>
         <Box>
           <FilterButton />
