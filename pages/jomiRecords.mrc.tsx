@@ -26,10 +26,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     for await (const chunk of downloadStream) {
       data += chunk.toString()
     }
-
-    res.write(data)
     res.setHeader('Content-Type', 'text')
     res.setHeader('x-robots-tag', 'noindex')
+    res.write(data)
     res.end()
 
     return {
