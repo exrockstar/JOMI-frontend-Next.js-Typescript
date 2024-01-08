@@ -27,6 +27,7 @@ import {
   subscriptionColor,
   subscriptionText
 } from 'components/common/subscriptionUtils'
+import _ from 'lodash'
 
 const TriageQueueList = () => {
   const {
@@ -199,12 +200,9 @@ const TriageQueueList = () => {
                   <TableCell>{user?.specialty ?? NotSpecified}</TableCell>
                   <TableCell>
                     <Chip
-                      label={item.accessType ?? 'Unknown'}
+                      label={_.startCase(item.accessType ?? 'Unknown')}
                       size="small"
                       color={color}
-                      sx={{
-                        letterSpacing: 1.2
-                      }}
                     ></Chip>
                   </TableCell>
                   <TableCell>
