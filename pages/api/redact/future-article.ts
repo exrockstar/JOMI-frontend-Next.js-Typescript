@@ -62,13 +62,13 @@ async function redactVote(articleTitle, userId: string) {
   const NewArticleVotes =
     client.collection<ArticleVoteDocument>('newarticlevotes')
 
-  const { value } = await NewArticleVotes.findOneAndUpdate(
+  const value = (await NewArticleVotes.findOneAndUpdate(
     {
       article_title: articleTitle
     },
     { $pull: { users_voted: userId } },
     { returnDocument: 'after' }
-  )
+  )) as any
 
   return value?.users_voted?.length
 }
