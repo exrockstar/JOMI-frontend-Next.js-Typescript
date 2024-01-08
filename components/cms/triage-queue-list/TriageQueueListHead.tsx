@@ -68,8 +68,8 @@ const headCells: readonly HeadCell[] = [
     label: 'Specialty'
   },
   {
-    id: 'user.subActive',
-    label: 'Subscribed'
+    id: 'accessType',
+    label: 'Access Type'
   },
   {
     id: 'created',

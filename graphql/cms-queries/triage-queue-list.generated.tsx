@@ -9,7 +9,7 @@ export type TriageQueueListQueryVariables = Types.Exact<{
 }>;
 
 
-export type TriageQueueListQuery = { __typename?: 'Query', triageQueueRequests: { __typename?: 'TriageQueueOutput', count: number, dbQueryString: string, triage_requests: Array<{ __typename?: 'TriageQueue', _id: string, created?: any | null | undefined, updated?: any | null | undefined, type: Types.TriageQueueStatus, priority?: Types.TriagePriority | null | undefined, display_name?: string | null | undefined, email?: string | null | undefined, institution_name?: string | null | undefined, countryCode?: string | null | undefined, countryName?: string | null | undefined, regionName?: string | null | undefined, sentEmailAt?: any | null | undefined, notes?: string | null | undefined, market?: Types.TriageMarket | null | undefined, user?: { __typename?: 'User', _id: string, email: string, display_name?: string | null | undefined, user_type?: string | null | undefined, specialty?: string | null | undefined, countryCode?: string | null | undefined, regionName?: string | null | undefined, institution_name?: string | null | undefined, subActive: boolean } | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, stats?: { __typename?: 'InstitutionStats', userCount: number, loginCount?: number | null | undefined, articleCount?: number | null | undefined, totalArticleCount?: number | null | undefined } | null | undefined } | null | undefined }> } };
+export type TriageQueueListQuery = { __typename?: 'Query', triageQueueRequests: { __typename?: 'TriageQueueOutput', count: number, dbQueryString: string, triage_requests: Array<{ __typename?: 'TriageQueue', _id: string, created?: any | null | undefined, updated?: any | null | undefined, type: Types.TriageQueueStatus, priority?: Types.TriagePriority | null | undefined, display_name?: string | null | undefined, email?: string | null | undefined, institution_name?: string | null | undefined, countryCode?: string | null | undefined, countryName?: string | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, regionName?: string | null | undefined, sentEmailAt?: any | null | undefined, notes?: string | null | undefined, market?: Types.TriageMarket | null | undefined, user?: { __typename?: 'User', _id: string, email: string, display_name?: string | null | undefined, user_type?: string | null | undefined, specialty?: string | null | undefined, countryCode?: string | null | undefined, regionName?: string | null | undefined, institution_name?: string | null | undefined, subActive: boolean } | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string, category?: string | null | undefined, stats?: { __typename?: 'InstitutionStats', userCount: number, loginCount?: number | null | undefined, articleCount?: number | null | undefined, totalArticleCount?: number | null | undefined } | null | undefined } | null | undefined }> } };
 
 export type RequestsByUserQueryVariables = Types.Exact<{
   instId: Types.Scalars['String'];
@@ -95,6 +95,7 @@ export const TriageQueueListDocument = gql`
       institution_name
       countryCode
       countryName
+      accessType
       regionName
       sentEmailAt
       user {

@@ -10,11 +10,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
-  /** Mongo object id scalar type */
   ObjectId: any;
-  /** Any value */
   any: any;
 };
 
@@ -3203,6 +3200,7 @@ export enum TriagePriority {
 export type TriageQueue = {
   __typename?: 'TriageQueue';
   _id: Scalars['ID'];
+  accessType?: Maybe<AccessTypeEnum>;
   additional_info?: Maybe<AdditionalInfo>;
   countryCode?: Maybe<Scalars['String']>;
   countryName?: Maybe<Scalars['String']>;

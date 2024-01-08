@@ -7,6 +7,7 @@ import {
   StringOperations
 } from 'components/common/FilterDrawer/operations'
 import {
+  AccessTypeEnum,
   ColumnFilter,
   QueryOperation,
   TriageMarket,
@@ -114,9 +115,14 @@ const TriageQueueFilter = (props: DrawerProps) => {
       operations: [QueryOperation.Equal, QueryOperation.NotEqual]
     },
     {
-      columnName: 'user.isSubscribed', //user.subActive doesn't exist in the db
-      label: 'Subscribed',
-      type: 'boolean',
+      columnName: 'accessType', //user.subActive doesn't exist in the db
+      label: 'Access Type',
+      type: 'select',
+      labels: Object.values(AccessTypeEnum),
+      values: [
+        10000, 4002, 4003, 3002, 3003, 1001, 5000, 4000, 4001, 3005, 3006, 3004,
+        3000, 3001, 1000, 2000
+      ],
       operations: [QueryOperation.Equal, QueryOperation.NotEqual]
     },
     {

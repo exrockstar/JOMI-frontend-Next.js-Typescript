@@ -13,6 +13,7 @@ query TriageQueueList($input: TriageQueueInput!) {
       institution_name
       countryCode
       countryName
+      accessType
       regionName      
       sentEmailAt
       user {
