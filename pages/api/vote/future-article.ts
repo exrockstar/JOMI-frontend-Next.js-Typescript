@@ -66,7 +66,7 @@ async function submitVote(articleTitle, userId: string) {
   const NewArticleVotes =
     client.collection<ArticleVoteDocument>('newarticlevotes')
 
-  const { value } = await NewArticleVotes.findOneAndUpdate(
+  const value = (await NewArticleVotes.findOneAndUpdate(
     {
       article_title: articleTitle
     },
@@ -80,7 +80,7 @@ async function submitVote(articleTitle, userId: string) {
       upsert: true,
       returnDocument: 'after'
     }
-  )
+  )) as any
 
   return value?.users_voted?.length ?? 0
 }
