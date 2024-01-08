@@ -23,6 +23,10 @@ import Link from 'next/link'
 import React from 'react'
 import TriageQueueListHead from './TriageQueueListHead'
 import { useTriageQueueList } from './useTriageQueueList'
+import {
+  subscriptionColor,
+  subscriptionText
+} from 'components/common/subscriptionUtils'
 
 const TriageQueueList = () => {
   const {
@@ -101,8 +105,8 @@ const TriageQueueList = () => {
             {triageQueueRequests?.map((item) => {
               const user = item.user
               const inst = item.institution
-              const subscribedText = user?.subActive ? 'Yes' : 'No'
-              const subscribedColor = user?.subActive ? 'success' : 'error'
+              const color = subscriptionColor(item.accessType)
+              const userSubText = subscriptionText(item.accessType)
               const backgroundColor = rowBackground(item.type)
               return (
                 <StyledTableRow
@@ -195,11 +199,13 @@ const TriageQueueList = () => {
                   <TableCell>{user?.specialty ?? NotSpecified}</TableCell>
                   <TableCell>
                     <Chip
-                      color={subscribedColor}
-                      label={subscribedText}
+                      label={item.accessType ?? 'Unknown'}
                       size="small"
-                      variant="outlined"
-                    />
+                      color={color}
+                      sx={{
+                        letterSpacing: 1.2
+                      }}
+                    ></Chip>
                   </TableCell>
                   <TableCell>
                     {dayjs(item.created).format('MM/DD/YYYY')}
