@@ -176,7 +176,7 @@ export function SignUpForm() {
                 color="textSecondary"
                 fontSize={12}
               >
-                {`By clicking "Create Account", you agree to our `}
+                {`By clicking "Sign Up", you agree to our `}
                 <NextLink href="/terms-of-service" passHref legacyBehavior>
                   <BlueLink>Terms of Service</BlueLink>
                 </NextLink>
@@ -206,7 +206,7 @@ export function SignUpForm() {
                 type="submit"
                 sx={{ width: { xs: '100%', md: 150 } }}
               >
-                Sign up
+                Sign Up
               </SignupButton>
               <NextLink
                 href={{ pathname: '/login', query: router.query }}
