@@ -31,7 +31,7 @@ export type OrderListQueryVariables = Types.Exact<{
 }>;
 
 
-export type OrderListQuery = { __typename?: 'Query', output: { __typename?: 'OrderListOutput', count: number, dbQueryString: string, orders: Array<{ __typename?: 'Order', _id: string, institution?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, location?: string | null | undefined, start?: any | null | undefined, end?: any | null | undefined, created: any, plan_id?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, user_id?: string | null | undefined, db_user_id?: string | null | undefined, description?: string | null | undefined, promoCode?: string | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, latest_invoice?: string | null | undefined, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, renewals?: number | null | undefined, amount?: number | null | undefined, type?: Types.OrderType | null | undefined, notes?: string | null | undefined, customInstitutionName?: string | null | undefined, user?: { __typename?: 'User', _id: string, email: string, user_type?: string | null | undefined, specialty?: string | null | undefined } | null | undefined, institutionObject?: { __typename?: 'Institution', name: string, _id: string } | null | undefined }> } };
+export type OrderListQuery = { __typename?: 'Query', output: { __typename?: 'OrderListOutput', count: number, dbQueryString: string, orders: Array<{ __typename?: 'Order', _id: string, institution?: string | null | undefined, require_login?: Types.RequireLogin | null | undefined, location?: string | null | undefined, start?: any | null | undefined, end?: any | null | undefined, created: any, plan_id?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, user_id?: string | null | undefined, db_user_id?: string | null | undefined, description?: string | null | undefined, promoCode?: string | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined, status?: Types.OrderStatus | null | undefined, currency?: Types.OrderCurrency | null | undefined, latest_invoice?: string | null | undefined, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, renewals?: number | null | undefined, amount?: number | null | undefined, type?: Types.OrderType | null | undefined, notes?: string | null | undefined, customInstitutionName?: string | null | undefined, user?: { __typename?: 'User', _id: string, email: string, user_type?: string | null | undefined, specialty?: string | null | undefined, display_name?: string | null | undefined } | null | undefined, institutionObject?: { __typename?: 'Institution', name: string, _id: string } | null | undefined }> } };
 
 
 export const OrdersByUserIdDocument = gql`
@@ -189,6 +189,7 @@ export const OrderListDocument = gql`
         email
         user_type
         specialty
+        display_name
       }
       institutionObject {
         name
