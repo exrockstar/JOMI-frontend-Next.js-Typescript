@@ -36,6 +36,7 @@ const OrdersList = () => {
           <TableBody>
             {orders?.map((order, index) => {
               const isEven = index % 2 === 0
+              const orderer = order.institutionObject?.name || order.user?.display_name
               return (
                 <StyledTableRow key={order._id}>
                   <StickyTableCell
@@ -61,10 +62,13 @@ const OrdersList = () => {
                         href={`/cms/orders/${order._id}`}
                         component={NextLink}
                       >
-                        {order._id}
+                        {orderer}
                       </Link>
                     </Box>
                   </StickyTableCell>
+                  <TableCell>{order.status}</TableCell>
+                  <TableCell>{order.type}</TableCell>
+                  <TableCell>{order.amount}</TableCell>
                   <TableCell sx={{ minWidth: 180, color: 'text.secondary' }}>
                     {dayjs(order.created).format(dateFormat)}
                   </TableCell>
@@ -78,10 +82,6 @@ const OrdersList = () => {
                       ? dayjs(order.end).format(dateFormat)
                       : NotApplicable}
                   </TableCell>
-                  <TableCell>{order.status}</TableCell>
-
-                  <TableCell>{order.type}</TableCell>
-                  <TableCell>{order.amount}</TableCell>
                   <TableCell>{order.renewals}</TableCell>
                   <TableCell
                     sx={{

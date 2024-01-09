@@ -18,11 +18,22 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: '_id',
+    id: 'user.display_name',
     sticky: true,
-    label: 'Database ID'
+    label: 'Orderer'
   },
-
+  {
+    id: 'status',
+    label: 'Order Status'
+  },
+  {
+    id: 'type',
+    label: 'Order Type'
+  },
+  {
+    id: 'amount',
+    label: 'Amount'
+  },
   {
     id: 'created',
     label: 'Created Date'
@@ -34,19 +45,6 @@ const headCells: readonly HeadCell[] = [
   {
     id: 'end',
     label: 'End Date'
-  },
-  {
-    id: 'status',
-    label: 'Order Status'
-  },
-
-  {
-    id: 'type',
-    label: 'Order Type'
-  },
-  {
-    id: 'amount',
-    label: 'Amount'
   },
   {
     id: 'renewals',

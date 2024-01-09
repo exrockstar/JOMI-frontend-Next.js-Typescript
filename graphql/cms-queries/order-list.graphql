@@ -70,6 +70,7 @@ query OrderList($input:OrderListInput!) {
         email
         user_type
         specialty
+        display_name
       }
       institutionObject {
         name
