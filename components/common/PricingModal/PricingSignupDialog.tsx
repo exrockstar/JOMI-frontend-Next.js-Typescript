@@ -67,8 +67,8 @@ const PricingSignupDialog: React.FC = () => {
   const stripeId = user.stripeData?.stripeId
   const trialsAllowed = user.trialsAllowed
   const trialsEnabled = user.isTrialsFeatureEnabled
-  // const showTrialsForUser = trialsAllowed && trialsEnabled
-  const showTrialsForUser = true
+  const showTrialsForUser = trialsAllowed && trialsEnabled
+  // const showTrialsForUser = true //for testing only!
 
   if (!showPricingDialog) return null
 
