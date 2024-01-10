@@ -11,10 +11,17 @@ const CustomDatePicker = ({ defaultLabel, ...props }: Props) => {
     props.value ? dayjs(props.value as Dayjs) : null
   )
 
-  const onChange = (newVal: Dayjs) => {
+  const onChange = (newVal: Dayjs, ctx) => {
+    //allow date picker to accept MM/DD/YYYY format
+    if (ctx && dayjs(ctx, 'MM/DD/YYYY', true).isValid()) {
+      const formatted = dayjs(ctx).format('M/D/YYYY')
+      newVal = dayjs(formatted)
+    }
+
     setDate(newVal)
+
     if (!newVal || newVal.isValid()) {
-      props.onChange(newVal)
+      props.onChange(newVal, ctx)
     }
   }
   const isValid = !date || date.isValid()
