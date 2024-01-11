@@ -1,18 +1,19 @@
 import { Cancel, Refresh } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Box, CircularProgress } from '@mui/material'
+import { useInstitutionList } from 'components/cms/institutions-list/useInstitutionList'
 import {
   useRunJobManuallyMutation,
-  useIsJobRunningQuery,
   useIsJobRunningLazyQuery,
   useCancelJobMutation
 } from 'graphql/cms-queries/jobs.generated'
 import { useSnackbar } from 'notistack'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 const RefreshInstStatsButton = () => {
   const jobName = 'UpdateAllInstStats'
   const { enqueueSnackbar } = useSnackbar()
+  const { input, refetch: refreshList } = useInstitutionList()
   const [runJobManually, { called }] = useRunJobManuallyMutation({
     onError(error) {
       enqueueSnackbar(error.message, {
@@ -51,6 +52,7 @@ const RefreshInstStatsButton = () => {
 
       if (called && result.jobProgress >= 100) {
         enqueueSnackbar(`Completed job.`, { variant: 'success' })
+        refreshList()
       }
     },
     variables: {
@@ -90,6 +92,7 @@ const RefreshInstStatsButton = () => {
           startIcon={<Refresh />}
           loading={isJobRunningData?.isJobRunning}
           disabled={isJobRunningData?.isJobRunning}
+          title="Recalculates the institution stats for the found institutions. Use sparingly"
           loadingIndicator={
             <Box
               display="flex"
@@ -104,7 +107,8 @@ const RefreshInstStatsButton = () => {
           onClick={() => {
             runJobManually({
               variables: {
-                name: jobName
+                name: jobName,
+                data: input
               }
             })
           }}

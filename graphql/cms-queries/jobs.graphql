@@ -1,6 +1,6 @@
 
-mutation RunJobManually($name: String!){
-  runJobManually(name: $name)
+mutation RunJobManually($name: String!, $data: any){
+  runJobManually(name: $name, data: $data)
 }
 
   query IsJobRunning($name: String!){

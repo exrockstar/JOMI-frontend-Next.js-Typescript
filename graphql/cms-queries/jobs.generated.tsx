@@ -5,6 +5,7 @@ import * as Apollo from '@apollo/client';
 const defaultOptions =  {}
 export type RunJobManuallyMutationVariables = Types.Exact<{
   name: Types.Scalars['String'];
+  data?: Types.InputMaybe<Types.Scalars['any']>;
 }>;
 
 
@@ -26,8 +27,8 @@ export type CancelJobMutation = { __typename?: 'Mutation', cancelJob: string };
 
 
 export const RunJobManuallyDocument = gql`
-    mutation RunJobManually($name: String!) {
-  runJobManually(name: $name)
+    mutation RunJobManually($name: String!, $data: any) {
+  runJobManually(name: $name, data: $data)
 }
     `;
 export type RunJobManuallyMutationFn = Apollo.MutationFunction<RunJobManuallyMutation, RunJobManuallyMutationVariables>;
@@ -46,6 +47,7 @@ export type RunJobManuallyMutationFn = Apollo.MutationFunction<RunJobManuallyMut
  * const [runJobManuallyMutation, { data, loading, error }] = useRunJobManuallyMutation({
  *   variables: {
  *      name: // value for 'name'
+ *      data: // value for 'data'
  *   },
  * });
  */

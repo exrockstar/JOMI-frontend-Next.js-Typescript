@@ -16,6 +16,7 @@ import { UseListInputState, useListInput } from 'components/hooks/useListInput'
 type State = {
   loading: boolean
   error: string
+  input: InstitutionInput
   refetch(): void
 } & UseListInputState &
   InstitutionsListQuery['institutions']
@@ -67,6 +68,7 @@ export const InstitutionListProvider: React.FC<PropsWithChildren> = ({
         error: error?.message,
         institutions: data?.institutions.institutions,
         loading,
+        input: input,
         refetch
       }}
     >
