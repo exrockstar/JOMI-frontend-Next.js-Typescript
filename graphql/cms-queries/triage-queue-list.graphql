@@ -50,6 +50,7 @@ query RequestsByUser($instId: String!, $input: TriageQueueInput!) {
     triage_requests {
       _id
       email
+      inst_email
       display_name
       user_type
       specialty

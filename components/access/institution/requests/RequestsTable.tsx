@@ -131,7 +131,7 @@ const RequestsTable = ({ institutionID }: Props) => {
                 <RequestsTableHead />
                 <TableBody sx={{ borderRadius: 2 }}>
                   {requests?.map((request, index) => {
-                    const email = request.email
+                    const email = request.inst_email || request.email
                     const display_name = request.display_name
                     const authorized = email !== 'hidden'
                     const showDetails = detailsId === request._id
@@ -159,7 +159,19 @@ const RequestsTable = ({ institutionID }: Props) => {
                             </Tooltip>
                           </TableCell>
                           <TableCell>{request.requestCount} </TableCell>
-                          <TableCell>{email}</TableCell>
+                          <TableCell>
+                            {email}
+                            {!request.registered && (
+                              <div>
+                                <Typography
+                                  color="warning.main"
+                                  variant="caption"
+                                >
+                                  Not registered
+                                </Typography>
+                              </div>
+                            )}
+                          </TableCell>
                           <TableCell>{display_name}</TableCell>
                           <TableCell>{request.user_type}</TableCell>
                           <TableCell>{request.specialty}</TableCell>
