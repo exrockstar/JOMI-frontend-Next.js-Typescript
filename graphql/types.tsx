@@ -1578,6 +1578,7 @@ export type MutationResubscribeOrderArgs = {
 
 
 export type MutationRunJobManuallyArgs = {
+  data?: InputMaybe<Scalars['any']>;
   name: Scalars['String'];
 };
 
