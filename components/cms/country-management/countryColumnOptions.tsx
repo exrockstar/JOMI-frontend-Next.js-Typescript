@@ -37,7 +37,7 @@ export const countryColumnOptions: ColumnOption[] = [
   {
     label: 'Multiplier',
     columnName: 'multiplier',
-    type: 'select',
+    type: 'number',
     operations: NumericOperations
   }
 ]
