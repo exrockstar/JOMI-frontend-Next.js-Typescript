@@ -17,7 +17,6 @@ import uniq from 'lodash/uniq'
 import { useSessionStorage } from 'usehooks-ts'
 
 const defaultValue = {
-  articlesViewed: [],
   videosViewed: [],
   videosBlocked: [],
   announcementsShown: false,
@@ -48,13 +47,12 @@ const context = {
   setShowFeedbackDialog(val: ShowFeedbackDialogMethod) {},
   setShowFeedbackTime(val: number) {},
   setContextState: (state: typeof defaultValue) => {},
-  setArticlesViewed: (pub_id: String) => {},
   setVideosViewed: (pub_id: String) => {},
   setVideosBlocked: (pub_id: String) => {},
   setAnnouncementsShown(value: boolean) {},
   closeAnnouncement(cache_id: string) {},
   markNotificationAsRead(cache_id: string) {},
-  setShowPricingDialog(val: boolean) {},
+  setShowPricingDialog(val: boolean) {}
 }
 
 const AppContext = createContext<typeof context>(context)
@@ -76,8 +74,7 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
   )
   const [showPersonalAnnouncements, setShowPersonalAnnouncements] =
     useState(true)
-  const [showPricingDialog, setShowPricingDialog] =
-    useState(false)
+  const [showPricingDialog, setShowPricingDialog] = useState(false)
 
   const { data: session } = useSession()
   const { data: personalAnnouncementsData, updateQuery } =
@@ -125,13 +122,6 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const setContextState = (newState: (typeof context)['state']) => {
     setState(newState)
-  }
-
-  const setArticlesViewed = (pub_id: String) => {
-    setState({
-      ...state,
-      articlesViewed: [...state.articlesViewed, pub_id]
-    })
   }
 
   const setVideosViewed = (pub_id: String) => {
@@ -198,13 +188,12 @@ export const AppStateProvider: React.FC<PropsWithChildren> = ({ children }) => {
         setShowFeedbackDialog,
         setShowPersonalAnnouncements,
         setContextState,
-        setArticlesViewed,
         setVideosViewed,
         setVideosBlocked,
         setAnnouncementsShown,
         closeAnnouncement,
         markNotificationAsRead: markAnnouncementAsRead,
-        setShowPricingDialog,
+        setShowPricingDialog
       }}
     >
       {children}
