@@ -226,7 +226,7 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
 
           const alternativeUrls = locales.reduce((acc, lang, index) => {
             const urlLang = lang === 'en' ? '' : `/${lang}`
-            const href = `${origin}/article/${article.publication_id}/${article.slug}${urlLang}`
+            const href = `${defaultURL}${urlLang}`
 
             return {
               ...acc,
