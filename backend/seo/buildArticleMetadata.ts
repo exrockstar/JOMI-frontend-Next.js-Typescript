@@ -8,7 +8,8 @@ import { MetaData } from './MetaData'
 type Article = ArticlesBySlugQuery['articleBySlug']
 export function buildArticleMetadata(
   article: Article,
-  locale: string
+  locale: string,
+  tab: string
 ): MetaData {
   if (!article) return
   const title = `${article.title} | ${SITE_NAME}`
@@ -18,6 +19,9 @@ export function buildArticleMetadata(
   let public_url =
     BASE_URL + '/article/' + article.publication_id + '/' + article.slug
 
+  if (tab) {
+    public_url += `/${tab}`
+  }
   let ogUrl = public_url + ''
   if (!locale.startsWith('en')) {
     ogUrl += `/${locale}`

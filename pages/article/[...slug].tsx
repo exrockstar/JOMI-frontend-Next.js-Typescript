@@ -62,7 +62,7 @@ const isProduction = process.env.APP_ENV === 'production'
  * @param param0
  * @returns
  */
-function SingleArticle({ article }: SingleArticleProps) {
+function SingleArticle({ article, meta_data }: SingleArticleProps) {
   const [showArticle, setShowArticle] = useState(!article?.isPasswordProtected)
   const { feedbackButtonText, setShowFeedbackDialog } = useAppState()
   const [peerReview, setPeerReview] = useState(false)
@@ -291,6 +291,11 @@ export const getStaticProps: GetStaticProps<
     await client.query<SiteWideAnnouncementsQuery>({
       query: SiteWideAnnouncementsDocument
     })
+
+    let tab = ''
+    if (params.slug?.includes('procedure-outline')) {
+      tab = 'procedure-outline'
+    }
     return {
       props: {
         article: {
@@ -302,7 +307,11 @@ export const getStaticProps: GetStaticProps<
             outline: procedureOutline
           }
         },
-        meta_data: buildArticleMetadata(data.articleBySlug, lang as string),
+        meta_data: buildArticleMetadata(
+          data.articleBySlug,
+          lang as string,
+          tab
+        ),
         structured_data: buildArticleStructuredData(data.articleBySlug),
         [APOLLO_STATE_PROP_NAME]: client.cache.extract()
       },

@@ -22,8 +22,11 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
     const updated = new Date(article?.updated || 0).toISOString()
     let locales = ['en']
     if (article.enabled_languages) {
-      locales = locales.concat(article.enabled_languages).map((l) => l.toLowerCase())
+      locales = locales
+        .concat(article.enabled_languages)
+        .map((l) => l.toLowerCase())
     }
+    const tabs = ['', 'procedure-outline']
     let imageSection = {}
     let videoSection = {}
     let category = {}
@@ -38,7 +41,9 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
           {
             'image:image': {
               'image:loc': {
-                '#': `${origin}/api/files/${cleanParenthesis(article.image.filename)}`
+                '#': `${origin}/api/files/${cleanParenthesis(
+                  article.image.filename
+                )}`
               },
               'image:caption': {
                 '#': `${article.title.replace('&', '&amp;')}`
@@ -61,7 +66,10 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
         vidLength = article.vid_length
           .split(':')
           .reverse()
-          .reduce((memo, value, index) => memo + 60 * index * parseInt(value), 0)
+          .reduce(
+            (memo, value, index) => memo + 60 * index * parseInt(value),
+            0
+          )
       }
 
       if (!!article?.tags) {
@@ -80,7 +88,9 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
       }
 
       if (!!article?.categories) {
-        const categories = article.categories.map((category) => category.displayName?.replace('&', '&amp;'))
+        const categories = article.categories.map((category) =>
+          category.displayName?.replace('&', '&amp;')
+        )
 
         category = {
           ...category,
@@ -95,7 +105,9 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
       }
 
       if (Boolean(article.wistia_id) && article.assets.length > 0) {
-        let mp4Vids = article.assets.filter((a) => a.contentType === 'video/mp4')
+        let mp4Vids = article.assets.filter(
+          (a) => a.contentType === 'video/mp4'
+        )
 
         if (mp4Vids !== undefined && mp4Vids.length > 0) {
           mp4Vids = mp4Vids.sort((a, b) => a.fileSize - b.fileSize)
@@ -160,7 +172,9 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
               'video:description': {
                 '#': `${
                   article.content.abstract
-                    ? encodeURIComponent(article.content.abstract.replace(/<(?:.|\n)*?>/gm, ''))
+                    ? encodeURIComponent(
+                        article.content.abstract.replace(/<(?:.|\n)*?>/gm, '')
+                      )
                     : ''
                 }`
               },
@@ -192,52 +206,60 @@ export async function generateArticleSiteMap(article: Article, origin: string) {
       }
     }
 
-    const alternativeUrls = locales.reduce((acc, lang, index) => {
-      const urlLang = lang === 'en' ? '' : `/${lang}`
-      const href = `${origin}/article/${article.publication_id}/${article.slug}${urlLang}`
-
-      return {
-        ...acc,
-        [`#alternative-url-${index}`]: {
-          'xhtml:link': {
-            '@rel': 'alternate',
-            '@hreflang': lang.toLowerCase(),
-            '@href': href
-          }
-        }
-      }
-    }, {})
-
     const result = {
-      [`#resultabstract`]: locales.map((loc) => {
-        const urlLang = loc === 'en' ? '' : `/${loc}`
-        const defaultAlternative = {
-          'xhtml:link': {
-            '@rel': 'alternate',
-            '@hreflang': 'x-default',
-            '@href': `${origin}/article/${article.publication_id}/${article.slug}`
+      [`#resultabstract`]: tabs.map((tab) => {
+        return locales.map((loc) => {
+          const urlLang = loc === 'en' ? '' : `/${loc}`
+          let defaultURL = `${origin}/article/${article.publication_id}/${article.slug}`
+
+          if (tab) {
+            defaultURL += `/${tab}`
           }
-        }
-        return {
-          url: {
-            loc: {
-              '#': `${origin}/article/${article.publication_id}/${article.slug}${urlLang}`
-            },
-            ...alternativeUrls,
-            ...defaultAlternative,
-            ...imageSection,
-            ...videoSection,
-            lastmod: {
-              '#': `${updated}`
-            },
-            changefreq: {
-              '#': 'weekly'
-            },
-            priority: {
-              '#': '1.0'
+
+          const defaultAlternative = {
+            'xhtml:link': {
+              '@rel': 'alternate',
+              '@hreflang': 'x-default',
+              '@href': defaultURL
             }
           }
-        }
+
+          const alternativeUrls = locales.reduce((acc, lang, index) => {
+            const urlLang = lang === 'en' ? '' : `/${lang}`
+            const href = `${origin}/article/${article.publication_id}/${article.slug}${urlLang}`
+
+            return {
+              ...acc,
+              [`#alternative-url-${index}`]: {
+                'xhtml:link': {
+                  '@rel': 'alternate',
+                  '@hreflang': lang.toLowerCase(),
+                  '@href': href
+                }
+              }
+            }
+          }, {})
+          return {
+            url: {
+              loc: {
+                '#': `${defaultURL}${urlLang}`
+              },
+              ...alternativeUrls,
+              ...defaultAlternative,
+              ...imageSection,
+              ...videoSection,
+              lastmod: {
+                '#': `${updated}`
+              },
+              changefreq: {
+                '#': 'weekly'
+              },
+              priority: {
+                '#': '1.0'
+              }
+            }
+          }
+        })
       })
     }
 
