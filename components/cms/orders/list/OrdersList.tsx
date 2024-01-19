@@ -17,6 +17,7 @@ import dayjs from 'dayjs'
 import NextLink from 'next/link'
 import OrdersListPagination from './OrdersListPagination'
 import { StickyTableCell } from 'components/common/StickyTableCell'
+import { countries } from 'components/cms/prices-list/countryList'
 
 const OrdersList = () => {
   const { orders } = useOrdersList()
@@ -36,7 +37,8 @@ const OrdersList = () => {
           <TableBody>
             {orders?.map((order, index) => {
               const isEven = index % 2 === 0
-              const orderer = order.institutionObject?.name || order.user?.display_name
+              const orderer =
+                order.institutionObject?.name || order.user?.display_name
               return (
                 <StyledTableRow key={order._id}>
                   <StickyTableCell
@@ -67,6 +69,10 @@ const OrdersList = () => {
                     </Box>
                   </StickyTableCell>
                   <TableCell>{order.status}</TableCell>
+                  <TableCell>
+                    {countries.find((c) => c.code == order.user?.countryCode)
+                      ?.label ?? 'N/A'}
+                  </TableCell>
                   <TableCell>{order.type}</TableCell>
                   <TableCell>{order.amount}</TableCell>
                   <TableCell sx={{ minWidth: 180, color: 'text.secondary' }}>

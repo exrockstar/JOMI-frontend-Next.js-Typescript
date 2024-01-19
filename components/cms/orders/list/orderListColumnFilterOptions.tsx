@@ -14,7 +14,7 @@ import {
   RequireLogin
 } from 'graphql/types'
 import { snakeCase } from 'lodash'
-
+import { countries } from 'components/cms/prices-list/countryList'
 export const useOrdersListColumnOptions = () => {
   const { data: userTypesData } = useUserTypesAndSpecialtiesQuery()
   const userTypes = userTypesData?.userTypes?.map((u) => u.type) ?? []
@@ -166,6 +166,14 @@ export const useOrdersListColumnOptions = () => {
       type: 'select',
       values: userTypes,
       operations: [QueryOperation.Equal, QueryOperation.NotEqual]
+    },
+    {
+      label: 'User Country',
+      columnName: 'user.countryCode',
+      type: 'select',
+      operations: [QueryOperation.Equal, QueryOperation.NotEqual],
+      values: countries.map((c) => c.code),
+      labels: countries.map((c) => c.label)
     },
     {
       label: 'User Specialization',
