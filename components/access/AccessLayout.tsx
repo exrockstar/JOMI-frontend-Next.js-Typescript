@@ -12,6 +12,8 @@ import { Domain, Event, OpenInNew } from '@mui/icons-material'
 import Error403 from 'components/error-pages/Error403'
 import { LocalizationProvider } from '@mui/lab'
 import { useRouter } from 'next/router'
+import { ApolloProvider } from '@apollo/client'
+import { useApolloAccessPageClient } from 'apis/apollo-access-page-client'
 
 const DashboardLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -28,6 +30,7 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { data: session, status } = useSession()
   const [isSidebarOpen, setSidebarOpen] = useState(true)
   const role = session?.user?.role
+  const apolloClient = useApolloAccessPageClient()
   const isAuthorized = role === UserRoles.Admin || role === UserRoles.Librarian
   // if (status !== 'loading' && !isAuthorized) {
   //   return <Error403 />
@@ -80,36 +83,38 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
   }
   return (
     <ThemeProvider theme={cmsTheme}>
-      <LocalizationProvider
-        dateAdapter={AdapterDayjs}
-        dateFormats={{
-          keyboardDate: 'M/D/YYYY',
-          keyboardDateTime12h: 'M/D/YYY hh:mm A'
-        }}
-      >
-        <DashboardLayoutRoot>
-          <PageLoadingIndicator />
-          <Box
-            sx={{
-              display: 'flex',
-              flex: '1 1 auto',
-              flexDirection: 'column',
-              width: '100%'
-            }}
-          >
-            {children}
-          </Box>
-        </DashboardLayoutRoot>
-        <SideNav
-          open={isSidebarOpen}
-          rootUrl="/access"
-          onClose={() => {
-            setSidebarOpen(false)
+      <ApolloProvider client={apolloClient}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          dateFormats={{
+            keyboardDate: 'M/D/YYYY',
+            keyboardDateTime12h: 'M/D/YYY hh:mm A'
           }}
-          items={role === UserRoles.Admin ? items : []}
-          additionalButtons={buttons}
-        />
-      </LocalizationProvider>
+        >
+          <DashboardLayoutRoot>
+            <PageLoadingIndicator />
+            <Box
+              sx={{
+                display: 'flex',
+                flex: '1 1 auto',
+                flexDirection: 'column',
+                width: '100%'
+              }}
+            >
+              {children}
+            </Box>
+          </DashboardLayoutRoot>
+          <SideNav
+            open={isSidebarOpen}
+            rootUrl="/access"
+            onClose={() => {
+              setSidebarOpen(false)
+            }}
+            items={role === UserRoles.Admin ? items : []}
+            additionalButtons={buttons}
+          />
+        </LocalizationProvider>
+      </ApolloProvider>
     </ThemeProvider>
   )
 }
