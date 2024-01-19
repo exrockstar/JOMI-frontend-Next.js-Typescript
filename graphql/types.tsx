@@ -315,13 +315,13 @@ export enum ArticleSort {
 
 export type ArticleStats = {
   __typename?: 'ArticleStats';
-  averagePercentWatched: Scalars['Float'];
-  last_checked: Scalars['DateTime'];
-  pageLoads: Scalars['Int'];
-  percentOfVisitorsClickingPlay: Scalars['Float'];
-  plays: Scalars['Int'];
+  averagePercentWatched?: Maybe<Scalars['Float']>;
+  last_checked?: Maybe<Scalars['DateTime']>;
+  pageLoads?: Maybe<Scalars['Int']>;
+  percentOfVisitorsClickingPlay?: Maybe<Scalars['Float']>;
+  plays?: Maybe<Scalars['Int']>;
   views?: Maybe<Scalars['Int']>;
-  visitors: Scalars['Int'];
+  visitors?: Maybe<Scalars['Int']>;
 };
 
 export type Assets = {

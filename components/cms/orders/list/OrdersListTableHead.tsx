@@ -27,6 +27,10 @@ const headCells: readonly HeadCell[] = [
     label: 'Order Status'
   },
   {
+    id: 'user.countryCode',
+    label: 'Country'
+  },
+  {
     id: 'type',
     label: 'Order Type'
   },
