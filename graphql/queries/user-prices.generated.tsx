@@ -2,16 +2,16 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UserPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserPricesQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, user_type?: string | null | undefined, subActive: boolean, isTrialsFeatureEnabled: boolean, trialDuration?: number | null | undefined, trialsAllowed: boolean, activeOrder?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, isCanceled?: boolean | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, type?: Types.OrderType | null | undefined, amount?: number | null | undefined, promoCode?: string | null | undefined, currency?: Types.OrderCurrency | null | undefined, error_code?: string | null | undefined, erroredAt?: any | null | undefined, discount?: { __typename?: 'StripePromoCode', code: string, name?: string | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } | null | undefined, stripeData: { __typename?: 'UserStripeData', stripeId: string, prices: Array<{ __typename?: 'StripePrice', product: string, currency: string, nickname: string, unit_amount: number, unit_decimal?: string | null | undefined, interval?: Types.OrderInterval | null | undefined, id?: string | null | undefined }> } } | null | undefined };
+export type UserPricesQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, user_type?: string | null, subActive: boolean, isTrialsFeatureEnabled: boolean, trialDuration?: number | null, trialsAllowed: boolean, activeOrder?: { __typename?: 'Order', _id: string, start?: any | null, end?: any | null, description?: string | null, isCanceled?: boolean | null, plan_interval?: Types.OrderInterval | null, type?: Types.OrderType | null, amount?: number | null, promoCode?: string | null, currency?: Types.OrderCurrency | null, error_code?: string | null, erroredAt?: any | null, discount?: { __typename?: 'StripePromoCode', code: string, name?: string | null, duration?: Types.PromoCodeDuration | null, duration_in_months?: number | null, amount_off?: number | null, percent_off?: number | null } | null } | null, stripeData: { __typename?: 'UserStripeData', stripeId: string, prices: Array<{ __typename?: 'StripePrice', product: string, currency: string, nickname: string, unit_amount: number, unit_decimal?: string | null, interval?: Types.OrderInterval | null, id?: string | null }> } } | null };
 
 export type GetPaymentStatusQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetPaymentStatusQuery = { __typename?: 'Query', paymentStatus?: string | null | undefined };
+export type GetPaymentStatusQuery = { __typename?: 'Query', paymentStatus?: string | null };
 
 
 export const UserPricesDocument = gql`

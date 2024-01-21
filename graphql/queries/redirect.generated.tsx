@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type RedirectQueryVariables = Types.Exact<{
-  from: Types.Scalars['String'];
+  from: Types.Scalars['String']['input'];
 }>;
 
 
-export type RedirectQuery = { __typename?: 'Query', redirectFor?: { __typename?: 'Redirect', from: string, to: string, type: string } | null | undefined };
+export type RedirectQuery = { __typename?: 'Query', redirectFor?: { __typename?: 'Redirect', from: string, to: string, type: string } | null };
 
 
 export const RedirectDocument = gql`

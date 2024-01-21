@@ -2,9 +2,9 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UpdateInstEmailMutationVariables = Types.Exact<{
-  email: Types.Scalars['String'];
+  email: Types.Scalars['String']['input'];
 }>;
 
 

@@ -2,20 +2,20 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type SendInstitutionEmailConfirmationMutationVariables = Types.Exact<{
-  email: Types.Scalars['String'];
+  email: Types.Scalars['String']['input'];
 }>;
 
 
-export type SendInstitutionEmailConfirmationMutation = { __typename?: 'Mutation', sendInstEmailConfirmation?: boolean | null | undefined };
+export type SendInstitutionEmailConfirmationMutation = { __typename?: 'Mutation', sendInstEmailConfirmation?: boolean | null };
 
 export type ConfirmInstitutionEmailMutationVariables = Types.Exact<{
-  token: Types.Scalars['String'];
+  token: Types.Scalars['String']['input'];
 }>;
 
 
-export type ConfirmInstitutionEmailMutation = { __typename?: 'Mutation', token?: string | null | undefined };
+export type ConfirmInstitutionEmailMutation = { __typename?: 'Mutation', token?: string | null };
 
 
 export const SendInstitutionEmailConfirmationDocument = gql`

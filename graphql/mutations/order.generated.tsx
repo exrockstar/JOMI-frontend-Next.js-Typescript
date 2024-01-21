@@ -2,7 +2,7 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AddOrUpdateOrderMutationVariables = Types.Exact<{
   input: Types.OrderInput;
 }>;
@@ -11,43 +11,43 @@ export type AddOrUpdateOrderMutationVariables = Types.Exact<{
 export type AddOrUpdateOrderMutation = { __typename?: 'Mutation', addOrUpdateOrder: boolean };
 
 export type CancelOrderMutationVariables = Types.Exact<{
-  subscription_id: Types.Scalars['String'];
+  subscription_id: Types.Scalars['String']['input'];
 }>;
 
 
 export type CancelOrderMutation = { __typename?: 'Mutation', cancelOrder: boolean };
 
 export type UnsubscribeOrderMutationVariables = Types.Exact<{
-  order_id: Types.Scalars['String'];
+  order_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type UnsubscribeOrderMutation = { __typename?: 'Mutation', unsubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, type?: Types.OrderType | null | undefined } | null | undefined };
+export type UnsubscribeOrderMutation = { __typename?: 'Mutation', unsubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null, start?: any | null, end?: any | null, description?: string | null, type?: Types.OrderType | null } | null };
 
 export type ResubscribeOrderMutationVariables = Types.Exact<{
-  order_id: Types.Scalars['String'];
+  order_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type ResubscribeOrderMutation = { __typename?: 'Mutation', resubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null | undefined, start?: any | null | undefined, end?: any | null | undefined, description?: string | null | undefined, type?: Types.OrderType | null | undefined } | null | undefined };
+export type ResubscribeOrderMutation = { __typename?: 'Mutation', resubscribeOrder?: { __typename?: 'Order', _id: string, isCanceled?: boolean | null, start?: any | null, end?: any | null, description?: string | null, type?: Types.OrderType | null } | null };
 
 export type PreviewUpgradeSubscriptionQueryVariables = Types.Exact<{
-  promocode?: Types.InputMaybe<Types.Scalars['String']>;
+  promocode?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type PreviewUpgradeSubscriptionQuery = { __typename?: 'Query', upgradeSubscriptionPreview?: { __typename?: 'UpgradeSubscriptionPreview', amount: number, description: string, cardLast4: string, type: string, promocodeApplied: boolean } | null | undefined };
+export type PreviewUpgradeSubscriptionQuery = { __typename?: 'Query', upgradeSubscriptionPreview?: { __typename?: 'UpgradeSubscriptionPreview', amount: number, description: string, cardLast4: string, type: string, promocodeApplied: boolean } | null };
 
 export type UpgradeSubscriptionMutationVariables = Types.Exact<{
-  promocode?: Types.InputMaybe<Types.Scalars['String']>;
+  promocode?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type UpgradeSubscriptionMutation = { __typename?: 'Mutation', upgradeSubscription?: boolean | null | undefined };
+export type UpgradeSubscriptionMutation = { __typename?: 'Mutation', upgradeSubscription?: boolean | null };
 
 export type HandlePaymentFailedMutationVariables = Types.Exact<{
-  order_id: Types.Scalars['String'];
-  error_code: Types.Scalars['String'];
+  order_id: Types.Scalars['String']['input'];
+  error_code: Types.Scalars['String']['input'];
 }>;
 
 

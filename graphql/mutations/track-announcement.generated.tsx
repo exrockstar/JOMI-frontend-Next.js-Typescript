@@ -2,9 +2,9 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type TrackAnnouncementsMutationVariables = Types.Exact<{
-  _ids: Array<Types.Scalars['String']> | Types.Scalars['String'];
+  _ids: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
 }>;
 
 

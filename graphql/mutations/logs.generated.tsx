@@ -2,11 +2,11 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type WriteLogMutationVariables = Types.Exact<{
-  level: Types.Scalars['String'];
-  message: Types.Scalars['String'];
-  meta?: Types.InputMaybe<Types.Scalars['String']>;
+  level: Types.Scalars['String']['input'];
+  message: Types.Scalars['String']['input'];
+  meta?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 

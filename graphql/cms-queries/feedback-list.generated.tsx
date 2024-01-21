@@ -2,25 +2,25 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetFeedbackListQueryVariables = Types.Exact<{
   input: Types.FeedbackListInput;
 }>;
 
 
-export type GetFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null | undefined, anon_link_id?: string | null | undefined, createdAt: any, updatedAt?: any | null | undefined, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null | undefined } | null | undefined, user?: { __typename?: 'User', email: string, user_type?: string | null | undefined, _id: string } | null | undefined, _institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } };
+export type GetFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null, anon_link_id?: string | null, createdAt: any, updatedAt?: any | null, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null } | null, user?: { __typename?: 'User', email: string, user_type?: string | null, _id: string } | null, _institution?: { __typename?: 'Institution', _id: string, name: string } | null }> } };
 
 export type GetFeedbackSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetFeedbackSettingsQuery = { __typename?: 'Query', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null | undefined, updatedBy?: string | null | undefined, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
+export type GetFeedbackSettingsQuery = { __typename?: 'Query', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null, updatedBy?: string | null, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
 
 export type UpdateFeedbackSettingsMutationVariables = Types.Exact<{
   input: Types.FeedbackSettingsInput;
 }>;
 
 
-export type UpdateFeedbackSettingsMutation = { __typename?: 'Mutation', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null | undefined, updatedBy?: string | null | undefined, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
+export type UpdateFeedbackSettingsMutation = { __typename?: 'Mutation', settings: { __typename?: 'FeedbackSettings', updatedAt?: any | null, updatedBy?: string | null, selectedAccessTypes: Array<Types.AccessTypeEnum> } };
 
 
 export const GetFeedbackListDocument = gql`

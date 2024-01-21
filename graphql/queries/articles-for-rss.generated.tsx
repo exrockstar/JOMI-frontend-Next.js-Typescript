@@ -2,11 +2,11 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ArticlesForRssQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ArticlesForRssQuery = { __typename?: 'Query', articlesForRss: Array<{ __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, tags: Array<string>, slug?: string | null | undefined, vid_length?: string | null | undefined, wistia_id?: string | null | undefined, published?: any | null | undefined, updated: any, enabled_languages?: Array<string> | null | undefined, categories: Array<{ __typename?: 'Category', _id: string, displayName: string }>, content: { __typename?: 'Content', abstract?: string | null | undefined }, assets: Array<{ __typename?: 'Assets', url: string, width: number, height: number, fileSize: number, contentType: string, type: string }>, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined, thumbnail?: { __typename?: 'Thumbnail', url: string, width: number, height: number } | null | undefined } | null | undefined, stats?: { __typename?: 'ArticleStats', averagePercentWatched?: number | null | undefined, pageLoads?: number | null | undefined, percentOfVisitorsClickingPlay?: number | null | undefined, plays?: number | null | undefined, visitors?: number | null | undefined, views?: number | null | undefined } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }> };
+export type ArticlesForRssQuery = { __typename?: 'Query', articlesForRss: Array<{ __typename?: 'Article', _id: string, title: string, publication_id?: string | null, tags: Array<string>, slug?: string | null, vid_length?: string | null, wistia_id?: string | null, published?: any | null, updated: any, enabled_languages?: Array<string> | null, categories: Array<{ __typename?: 'Category', _id: string, displayName: string }>, content: { __typename?: 'Content', abstract?: string | null }, assets: Array<{ __typename?: 'Assets', url: string, width: number, height: number, fileSize: number, contentType: string, type: string }>, wistia?: { __typename?: 'Wistia', duration?: number | null, thumbnail?: { __typename?: 'Thumbnail', url: string, width: number, height: number } | null } | null, stats?: { __typename?: 'ArticleStats', averagePercentWatched?: number | null, pageLoads?: number | null, percentOfVisitorsClickingPlay?: number | null, plays?: number | null, visitors?: number | null, views?: number | null } | null, image?: { __typename?: 'Image', filename?: string | null } | null }> };
 
 
 export const ArticlesForRssDocument = gql`

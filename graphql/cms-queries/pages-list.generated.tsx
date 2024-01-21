@@ -3,23 +3,23 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { PagePartsFragmentDoc } from '../fragments/PageParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type PagesListQueryVariables = Types.Exact<{
   input: Types.PageInputFetch;
 }>;
 
 
-export type PagesListQuery = { __typename?: 'Query', fetchPages: { __typename?: 'PageOutput', totalCount: number, pages: Array<{ __typename?: 'Page', _id: string, title: string, status: Types.PageStatus, slug: string, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined }> } };
+export type PagesListQuery = { __typename?: 'Query', fetchPages: { __typename?: 'PageOutput', totalCount: number, pages: Array<{ __typename?: 'Page', _id: string, title: string, status: Types.PageStatus, slug: string, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null }> } };
 
 export type PageByIdQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type PageByIdQuery = { __typename?: 'Query', page?: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null | undefined, scripts?: Array<string> | null | undefined, meta_desc?: string | null | undefined, sidebar?: string | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined } | null | undefined };
+export type PageByIdQuery = { __typename?: 'Query', page?: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null, scripts?: Array<string> | null, meta_desc?: string | null, sidebar?: string | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null } | null };
 
 export type DeletePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
@@ -30,14 +30,14 @@ export type CreatePageMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreatePageMutation = { __typename?: 'Mutation', createPage: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null | undefined, scripts?: Array<string> | null | undefined, meta_desc?: string | null | undefined, sidebar?: string | null | undefined } };
+export type CreatePageMutation = { __typename?: 'Mutation', createPage: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null, scripts?: Array<string> | null, meta_desc?: string | null, sidebar?: string | null } };
 
 export type UpdatePageMutationVariables = Types.Exact<{
   input: Types.UpdatePageInput;
 }>;
 
 
-export type UpdatePageMutation = { __typename?: 'Mutation', page?: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null | undefined, scripts?: Array<string> | null | undefined, meta_desc?: string | null | undefined, sidebar?: string | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined } | null | undefined };
+export type UpdatePageMutation = { __typename?: 'Mutation', page?: { __typename?: 'Page', _id: string, created: any, updated: any, title: string, status: Types.PageStatus, slug: string, content?: string | null, scripts?: Array<string> | null, meta_desc?: string | null, sidebar?: string | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null } | null };
 
 
 export const PagesListDocument = gql`

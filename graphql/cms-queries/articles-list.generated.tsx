@@ -3,27 +3,27 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { ArticleListPartsFragmentDoc } from '../fragments/ArticleListParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ArticlesListQueryVariables = Types.Exact<{
   input: Types.ArticleInputFetch;
 }>;
 
 
-export type ArticlesListQuery = { __typename?: 'Query', allArticleIds: Array<string>, fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, selectAllArticleIds?: Array<string> | null | undefined, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, preprint_date?: any | null | undefined, has_complete_abstract?: boolean | null | undefined, DOIStatus?: string | null | undefined, languages?: Array<string> | null | undefined, enabled_languages?: Array<string> | null | undefined, outdatedTranslations?: Array<string> | null | undefined, contentlength?: number | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, content: { __typename?: 'Content', article?: string | null | undefined }, categories: Array<{ __typename?: 'Category', displayName: string }> }> } };
+export type ArticlesListQuery = { __typename?: 'Query', allArticleIds: Array<string>, fetchArticles: { __typename?: 'ArticleOutput', totalCount: number, selectAllArticleIds?: Array<string> | null, articles: Array<{ __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null, production_id?: string | null, published?: any | null, preprint_date?: any | null, has_complete_abstract?: boolean | null, DOIStatus?: string | null, languages?: Array<string> | null, enabled_languages?: Array<string> | null, outdatedTranslations?: Array<string> | null, contentlength?: number | null, isPurchaseArticleFeatureOn?: boolean | null, isRentArticleFeatureOn?: boolean | null, purchaseAllowedCountries?: Array<Types.CountryEnum> | null, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null }>, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null, content: { __typename?: 'Content', article?: string | null }, categories: Array<{ __typename?: 'Category', displayName: string }> }> } };
 
 export type UpdateArticleMutationVariables = Types.Exact<{
   input: Types.UpdateArticleInput;
 }>;
 
 
-export type UpdateArticleMutation = { __typename?: 'Mutation', article?: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } | null | undefined };
+export type UpdateArticleMutation = { __typename?: 'Mutation', article?: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null, descriptionSEO?: string | null, visibility: Types.VisibilityEnum, vid_length?: string | null, created: any, slug?: string | null, production_id?: string | null, published?: any | null, updated: any, preprint_date?: any | null, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null, isRentArticleFeatureOn?: boolean | null, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null, role?: string | null, slug?: string | null }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null, image?: { __typename?: 'Image', filename?: string | null, geometry?: { __typename?: 'Geometry', width: number, height: number } | null } | null, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null, wistia?: { __typename?: 'Wistia', duration?: number | null } | null } | null };
 
 export type GenerateDoiArticleMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GenerateDoiArticleMutation = { __typename?: 'Mutation', article: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null | undefined, descriptionSEO?: string | null | undefined, visibility: Types.VisibilityEnum, vid_length?: string | null | undefined, created: any, slug?: string | null | undefined, production_id?: string | null | undefined, published?: any | null | undefined, updated: any, preprint_date?: any | null | undefined, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null | undefined, role?: string | null | undefined, slug?: string | null | undefined }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', width: number, height: number } | null | undefined } | null | undefined, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null | undefined, wistia?: { __typename?: 'Wistia', duration?: number | null | undefined } | null | undefined } };
+export type GenerateDoiArticleMutation = { __typename?: 'Mutation', article: { __typename?: 'Article', _id: string, title: string, status: string, publication_id?: string | null, descriptionSEO?: string | null, visibility: Types.VisibilityEnum, vid_length?: string | null, created: any, slug?: string | null, production_id?: string | null, published?: any | null, updated: any, preprint_date?: any | null, tags: Array<string>, comment_count: number, isPurchaseArticleFeatureOn?: boolean | null, isRentArticleFeatureOn?: boolean | null, authors: Array<{ __typename?: 'Author', _id: string, display_name?: string | null, role?: string | null, slug?: string | null }>, categories: Array<{ __typename?: 'Category', _id: string, short: string, displayName: string, color: string, slug: string }>, hospital?: { __typename?: 'Hospital', name: string } | null, image?: { __typename?: 'Image', filename?: string | null, geometry?: { __typename?: 'Geometry', width: number, height: number } | null } | null, restrictions?: { __typename?: 'Restriction', article: Types.ArticleRestrictionEnum } | null, wistia?: { __typename?: 'Wistia', duration?: number | null } | null } };
 
 export type UpdateWistiaMetadataMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -35,7 +35,7 @@ export type TranslateArticlesMutationVariables = Types.Exact<{
 }>;
 
 
-export type TranslateArticlesMutation = { __typename?: 'Mutation', translateArticles: Array<{ __typename?: 'TranslationResult', publication_id: string, success: boolean, message?: string | null | undefined, language: string, slug: string }> };
+export type TranslateArticlesMutation = { __typename?: 'Mutation', translateArticles: Array<{ __typename?: 'TranslationResult', publication_id: string, success: boolean, message?: string | null, language: string, slug: string }> };
 
 export type CheckOutdatedTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -52,14 +52,14 @@ export type SetPurchaseSettingMutationVariables = Types.Exact<{
 }>;
 
 
-export type SetPurchaseSettingMutation = { __typename?: 'Mutation', updatePurchaseSetting: Array<{ __typename?: 'Article', publication_id?: string | null | undefined, slug?: string | null | undefined }> };
+export type SetPurchaseSettingMutation = { __typename?: 'Mutation', updatePurchaseSetting: Array<{ __typename?: 'Article', publication_id?: string | null, slug?: string | null }> };
 
 export type SelectedArticlesQueryVariables = Types.Exact<{
-  article_ids: Array<Types.Scalars['String']> | Types.Scalars['String'];
+  article_ids: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
 }>;
 
 
-export type SelectedArticlesQuery = { __typename?: 'Query', articlesByIds: Array<{ __typename?: 'Article', _id: string, purchaseAllowedCountries?: Array<Types.CountryEnum> | null | undefined, isPurchaseArticleFeatureOn?: boolean | null | undefined, isRentArticleFeatureOn?: boolean | null | undefined }> };
+export type SelectedArticlesQuery = { __typename?: 'Query', articlesByIds: Array<{ __typename?: 'Article', _id: string, purchaseAllowedCountries?: Array<Types.CountryEnum> | null, isPurchaseArticleFeatureOn?: boolean | null, isRentArticleFeatureOn?: boolean | null }> };
 
 
 export const ArticlesListDocument = gql`

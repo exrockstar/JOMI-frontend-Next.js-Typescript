@@ -3,13 +3,13 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { UserPartsFragmentDoc } from '../fragments/UserParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UpsertSocialUserMutationVariables = Types.Exact<{
   input: Types.SocialAuthInput;
 }>;
 
 
-export type UpsertSocialUserMutation = { __typename?: 'Mutation', upsertSocialUser: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } };
+export type UpsertSocialUserMutation = { __typename?: 'Mutation', upsertSocialUser: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null, last?: string | null } } };
 
 
 export const UpsertSocialUserDocument = gql`

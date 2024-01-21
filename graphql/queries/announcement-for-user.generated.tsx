@@ -2,19 +2,19 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AnnoucementForUserQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AnnoucementForUserQuery = { __typename?: 'Query', announcementForUser?: Array<{ __typename?: 'Announcement', _id: any, cache_id: string, backgroundColor?: string | null | undefined, content?: string | null | undefined, title?: string | null | undefined }> | null | undefined };
+export type AnnoucementForUserQuery = { __typename?: 'Query', announcementForUser?: Array<{ __typename?: 'Announcement', _id: any, cache_id: string, backgroundColor?: string | null, content?: string | null, title?: string | null }> | null };
 
 export type SiteWideAnnouncementsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteWideAnnouncementsQuery = { __typename?: 'Query', getSiteWideAnnouncements?: Array<{ __typename?: 'Announcement', _id: any, cache_id: string, backgroundColor?: string | null | undefined, content?: string | null | undefined, isPermanent?: boolean | null | undefined, type: Types.AnnouncementType }> | null | undefined };
+export type SiteWideAnnouncementsQuery = { __typename?: 'Query', getSiteWideAnnouncements?: Array<{ __typename?: 'Announcement', _id: any, cache_id: string, backgroundColor?: string | null, content?: string | null, isPermanent?: boolean | null, type: Types.AnnouncementType }> | null };
 
 export type MarkAnnouncementAsReadMutationVariables = Types.Exact<{
-  cacheId: Types.Scalars['String'];
+  cacheId: Types.Scalars['String']['input'];
 }>;
 
 

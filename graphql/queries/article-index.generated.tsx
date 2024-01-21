@@ -2,7 +2,7 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AllArticleVotesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
@@ -14,14 +14,14 @@ export type GetUserArticleVotesQueryVariables = Types.Exact<{ [key: string]: nev
 export type GetUserArticleVotesQuery = { __typename?: 'Query', userArticleVotes: Array<{ __typename?: 'NewArticleVote', t: string, v: number }> };
 
 export type AddVoteMutationVariables = Types.Exact<{
-  article_title: Types.Scalars['String'];
+  article_title: Types.Scalars['String']['input'];
 }>;
 
 
 export type AddVoteMutation = { __typename?: 'Mutation', addVote: { __typename?: 'NewArticleVote', t: string, v: number } };
 
 export type RedactVoteMutationVariables = Types.Exact<{
-  article_title: Types.Scalars['String'];
+  article_title: Types.Scalars['String']['input'];
 }>;
 
 

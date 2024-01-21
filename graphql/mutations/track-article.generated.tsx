@@ -2,7 +2,7 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type TrackArticleMutationVariables = Types.Exact<{
   input: Types.TrackArticleInput;
 }>;
@@ -15,7 +15,7 @@ export type TrackVideoPlayMutationVariables = Types.Exact<{
 }>;
 
 
-export type TrackVideoPlayMutation = { __typename?: 'Mutation', trackVideoPlay?: string | null | undefined };
+export type TrackVideoPlayMutation = { __typename?: 'Mutation', trackVideoPlay?: string | null };
 
 export type TrackVideoTimeMutationVariables = Types.Exact<{
   input: Types.TrackVideoTimeInput;
@@ -29,7 +29,7 @@ export type TrackVideoBlockMutationVariables = Types.Exact<{
 }>;
 
 
-export type TrackVideoBlockMutation = { __typename?: 'Mutation', trackVideoBlock?: string | null | undefined };
+export type TrackVideoBlockMutation = { __typename?: 'Mutation', trackVideoBlock?: string | null };
 
 export type TrackSubscribeMutationVariables = Types.Exact<{
   input: Types.TrackSubscribeInput;

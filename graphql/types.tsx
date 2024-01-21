@@ -3,90 +3,92 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  DateTime: any;
-  ObjectId: any;
-  any: any;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
+  ObjectId: { input: any; output: any; }
+  any: { input: any; output: any; }
 };
 
 export type Access = {
   __typename?: 'Access';
   accessType?: Maybe<AccessTypeEnum>;
   activity: ActivityType;
-  anon_link_id?: Maybe<Scalars['String']>;
-  article_categories_flat: Scalars['String'];
-  article_publication_id?: Maybe<Scalars['String']>;
-  article_title?: Maybe<Scalars['String']>;
-  block_type?: Maybe<Scalars['String']>;
-  created: Scalars['DateTime'];
+  anon_link_id?: Maybe<Scalars['String']['output']>;
+  article_categories_flat: Scalars['String']['output'];
+  article_publication_id?: Maybe<Scalars['String']['output']>;
+  article_title?: Maybe<Scalars['String']['output']>;
+  block_type?: Maybe<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
   geolocation?: Maybe<GeoLocation>;
   institution?: Maybe<Institution>;
-  ip_address_str?: Maybe<Scalars['String']>;
-  locationId?: Maybe<Scalars['String']>;
+  ip_address_str?: Maybe<Scalars['String']['output']>;
+  locationId?: Maybe<Scalars['String']['output']>;
   matchedBy?: Maybe<MatchedBy>;
-  orderId?: Maybe<Scalars['String']>;
-  order_amount?: Maybe<Scalars['Float']>;
-  promoCode?: Maybe<Scalars['String']>;
-  referredFrom?: Maybe<Scalars['String']>;
-  referrerPath?: Maybe<Scalars['String']>;
-  searchTerm?: Maybe<Scalars['String']>;
-  time_watched?: Maybe<Scalars['Float']>;
-  uniqueView?: Maybe<Scalars['Boolean']>;
+  orderId?: Maybe<Scalars['String']['output']>;
+  order_amount?: Maybe<Scalars['Float']['output']>;
+  promoCode?: Maybe<Scalars['String']['output']>;
+  referredFrom?: Maybe<Scalars['String']['output']>;
+  referrerPath?: Maybe<Scalars['String']['output']>;
+  searchTerm?: Maybe<Scalars['String']['output']>;
+  time_watched?: Maybe<Scalars['Float']['output']>;
+  uniqueView?: Maybe<Scalars['Boolean']['output']>;
   user?: Maybe<User>;
-  user_agent?: Maybe<Scalars['String']>;
-  user_id?: Maybe<Scalars['String']>;
+  user_agent?: Maybe<Scalars['String']['output']>;
+  user_id?: Maybe<Scalars['String']['output']>;
 };
 
 export type AccessEventsOutput = {
   __typename?: 'AccessEventsOutput';
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   events: Array<Access>;
 };
 
 export type AccessFilterInput = {
-  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   globalFilters?: InputMaybe<Array<ColumnFilter>>;
-  institution_id?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
-  startDate?: InputMaybe<Scalars['DateTime']>;
+  institution_id?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type AccessSettings = {
   __typename?: 'AccessSettings';
-  displayTrafficGraph: Scalars['Boolean'];
+  displayTrafficGraph: Scalars['Boolean']['output'];
 };
 
 export type AccessSettingsInput = {
-  displayTrafficGraph?: InputMaybe<Scalars['Boolean']>;
+  displayTrafficGraph?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type AccessType = {
   __typename?: 'AccessType';
   accessType?: Maybe<AccessTypeEnum>;
-  customInstitutionName?: Maybe<Scalars['String']>;
-  expiry?: Maybe<Scalars['DateTime']>;
-  institution_id?: Maybe<Scalars['String']>;
-  institution_name?: Maybe<Scalars['String']>;
-  isTrial?: Maybe<Scalars['Boolean']>;
-  locationId?: Maybe<Scalars['String']>;
+  customInstitutionName?: Maybe<Scalars['String']['output']>;
+  expiry?: Maybe<Scalars['DateTime']['output']>;
+  institution_id?: Maybe<Scalars['String']['output']>;
+  institution_name?: Maybe<Scalars['String']['output']>;
+  isTrial?: Maybe<Scalars['Boolean']['output']>;
+  locationId?: Maybe<Scalars['String']['output']>;
   matchStatus?: Maybe<MatchStatus>;
   matchedBy?: Maybe<MatchedBy>;
-  orderId?: Maybe<Scalars['String']>;
-  requireLogin?: Maybe<Scalars['Boolean']>;
-  shouldRequestInstVerification?: Maybe<Scalars['String']>;
-  subscriptionExpiresAt?: Maybe<Scalars['DateTime']>;
-  viaTemporaryIp?: Maybe<Scalars['Boolean']>;
+  orderId?: Maybe<Scalars['String']['output']>;
+  requireLogin?: Maybe<Scalars['Boolean']['output']>;
+  shouldRequestInstVerification?: Maybe<Scalars['String']['output']>;
+  subscriptionExpiresAt?: Maybe<Scalars['DateTime']['output']>;
+  viaTemporaryIp?: Maybe<Scalars['Boolean']['output']>;
 };
 
 /** Types of access granted to the user/visitor when viewing an article */
@@ -110,12 +112,12 @@ export enum AccessTypeEnum {
 }
 
 export type AccessesByUserIdInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
-  userID: Scalars['String'];
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
+  userID: Scalars['String']['input'];
 };
 
 export enum ActivityType {
@@ -134,58 +136,58 @@ export enum ActivityType {
 }
 
 export type AddUserInput = {
-  display_name?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
-  firstName?: InputMaybe<Scalars['String']>;
+  display_name?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
   image?: InputMaybe<ImageInput>;
-  institution?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
-  matched_institution_name?: InputMaybe<Scalars['String']>;
-  password: Scalars['String'];
+  institution?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  matched_institution_name?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
   user_role: UserRoles;
-  user_type: Scalars['String'];
+  user_type: Scalars['String']['input'];
 };
 
 export type AdditionalInfo = {
   __typename?: 'AdditionalInfo';
-  contactInfo?: Maybe<Scalars['String']>;
-  pocs_email_sent?: Maybe<Array<Scalars['String']>>;
-  question?: Maybe<Scalars['String']>;
-  request_email_sent?: Maybe<Scalars['Boolean']>;
-  response?: Maybe<Scalars['String']>;
-  suggested_contact?: Maybe<Scalars['String']>;
+  contactInfo?: Maybe<Scalars['String']['output']>;
+  pocs_email_sent?: Maybe<Array<Scalars['String']['output']>>;
+  question?: Maybe<Scalars['String']['output']>;
+  request_email_sent?: Maybe<Scalars['Boolean']['output']>;
+  response?: Maybe<Scalars['String']['output']>;
+  suggested_contact?: Maybe<Scalars['String']['output']>;
 };
 
 export type Announcement = {
   __typename?: 'Announcement';
-  _id: Scalars['ObjectId'];
+  _id: Scalars['ObjectId']['output'];
   author?: Maybe<User>;
-  backgroundColor?: Maybe<Scalars['String']>;
-  cache_id: Scalars['String'];
-  content?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  deleted?: Maybe<Scalars['Boolean']>;
-  enabled: Scalars['Boolean'];
+  backgroundColor?: Maybe<Scalars['String']['output']>;
+  cache_id: Scalars['String']['output'];
+  content?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deleted?: Maybe<Scalars['Boolean']['output']>;
+  enabled: Scalars['Boolean']['output'];
   filters?: Maybe<Array<FilterExpression>>;
-  isPermanent?: Maybe<Scalars['Boolean']>;
-  lastEditedBy?: Maybe<Scalars['String']>;
-  limit?: Maybe<Scalars['Float']>;
-  title?: Maybe<Scalars['String']>;
+  isPermanent?: Maybe<Scalars['Boolean']['output']>;
+  lastEditedBy?: Maybe<Scalars['String']['output']>;
+  limit?: Maybe<Scalars['Float']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
   type: AnnouncementType;
-  unique_views?: Maybe<Scalars['Int']>;
-  updatedAt: Scalars['DateTime'];
+  unique_views?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['DateTime']['output'];
   user_views?: Maybe<UserViews>;
-  views: Scalars['Float'];
+  views: Scalars['Float']['output'];
 };
 
 export type AnnouncementInput = {
-  _id: Scalars['String'];
-  backgroundColor: Scalars['String'];
-  content: Scalars['String'];
-  enabled: Scalars['Boolean'];
+  _id: Scalars['String']['input'];
+  backgroundColor: Scalars['String']['input'];
+  content: Scalars['String']['input'];
+  enabled: Scalars['Boolean']['input'];
   filters: Array<FilterExpressionInput>;
-  isPermanent: Scalars['Boolean'];
-  title?: InputMaybe<Scalars['String']>;
+  isPermanent: Scalars['Boolean']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
   type: AnnouncementType;
 };
 
@@ -198,105 +200,105 @@ export enum AnnouncementType {
 
 export type Article = {
   __typename?: 'Article';
-  DOIStatus?: Maybe<Scalars['String']>;
-  _id: Scalars['ID'];
-  all_priority_sort?: Maybe<Scalars['Float']>;
+  DOIStatus?: Maybe<Scalars['String']['output']>;
+  _id: Scalars['ID']['output'];
+  all_priority_sort?: Maybe<Scalars['Float']['output']>;
   articleAccessType: AccessType;
   assets: Array<Assets>;
   authors: Array<Author>;
-  authors_attr_html?: Maybe<Scalars['String']>;
+  authors_attr_html?: Maybe<Scalars['String']['output']>;
   categories: Array<Category>;
-  category_priority_sort?: Maybe<Scalars['Float']>;
+  category_priority_sort?: Maybe<Scalars['Float']['output']>;
   chapters: Array<Chapter>;
-  comment_count: Scalars['Int'];
-  comment_status?: Maybe<Scalars['String']>;
+  comment_count: Scalars['Int']['output'];
+  comment_status?: Maybe<Scalars['String']['output']>;
   content: Content;
-  contentlength?: Maybe<Scalars['Int']>;
-  created: Scalars['DateTime'];
-  descriptionSEO?: Maybe<Scalars['String']>;
-  disableMainTab: Scalars['Boolean'];
-  disableProcedureTab: Scalars['Boolean'];
-  disableTranscriptTab: Scalars['Boolean'];
-  display_last?: Maybe<Scalars['String']>;
-  edit_last?: Maybe<Scalars['String']>;
-  enabled_languages?: Maybe<Array<Scalars['String']>>;
-  has_complete_abstract?: Maybe<Scalars['Boolean']>;
+  contentlength?: Maybe<Scalars['Int']['output']>;
+  created: Scalars['DateTime']['output'];
+  descriptionSEO?: Maybe<Scalars['String']['output']>;
+  disableMainTab: Scalars['Boolean']['output'];
+  disableProcedureTab: Scalars['Boolean']['output'];
+  disableTranscriptTab: Scalars['Boolean']['output'];
+  display_last?: Maybe<Scalars['String']['output']>;
+  edit_last?: Maybe<Scalars['String']['output']>;
+  enabled_languages?: Maybe<Array<Scalars['String']['output']>>;
+  has_complete_abstract?: Maybe<Scalars['Boolean']['output']>;
   hospital?: Maybe<Hospital>;
   image?: Maybe<Image>;
-  isFree: Scalars['Boolean'];
-  isPasswordProtected: Scalars['Boolean'];
-  isPurchaseArticleFeatureOn?: Maybe<Scalars['Boolean']>;
-  isRentArticleFeatureOn?: Maybe<Scalars['Boolean']>;
-  languages?: Maybe<Array<Scalars['String']>>;
-  outdatedTranslations?: Maybe<Array<Scalars['String']>>;
-  preprint_date?: Maybe<Scalars['DateTime']>;
-  previousWistiaIDS?: Maybe<Array<Maybe<Scalars['String']>>>;
-  production_id?: Maybe<Scalars['String']>;
-  publication_id?: Maybe<Scalars['String']>;
-  published?: Maybe<Scalars['DateTime']>;
+  isFree: Scalars['Boolean']['output'];
+  isPasswordProtected: Scalars['Boolean']['output'];
+  isPurchaseArticleFeatureOn?: Maybe<Scalars['Boolean']['output']>;
+  isRentArticleFeatureOn?: Maybe<Scalars['Boolean']['output']>;
+  languages?: Maybe<Array<Scalars['String']['output']>>;
+  outdatedTranslations?: Maybe<Array<Scalars['String']['output']>>;
+  preprint_date?: Maybe<Scalars['DateTime']['output']>;
+  previousWistiaIDS?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  production_id?: Maybe<Scalars['String']['output']>;
+  publication_id?: Maybe<Scalars['String']['output']>;
+  published?: Maybe<Scalars['DateTime']['output']>;
   purchaseAllowedCountries?: Maybe<Array<CountryEnum>>;
-  rentDuration: Scalars['Int'];
+  rentDuration: Scalars['Int']['output'];
   restrictions?: Maybe<Restriction>;
-  showPurchaseArticle: Scalars['Boolean'];
-  showRentArticle: Scalars['Boolean'];
-  slug?: Maybe<Scalars['String']>;
+  showPurchaseArticle: Scalars['Boolean']['output'];
+  showRentArticle: Scalars['Boolean']['output'];
+  slug?: Maybe<Scalars['String']['output']>;
   stats?: Maybe<ArticleStats>;
-  status: Scalars['String'];
-  tags: Array<Scalars['String']>;
-  title: Scalars['String'];
-  updated: Scalars['DateTime'];
-  vid_length?: Maybe<Scalars['String']>;
+  status: Scalars['String']['output'];
+  tags: Array<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  updated: Scalars['DateTime']['output'];
+  vid_length?: Maybe<Scalars['String']['output']>;
   visibility: VisibilityEnum;
   wistia?: Maybe<Wistia>;
-  wistia_id?: Maybe<Scalars['String']>;
+  wistia_id?: Maybe<Scalars['String']['output']>;
 };
 
 export type ArticleForSlug = {
   __typename?: 'ArticleForSlug';
-  _id: Scalars['ID'];
-  publication_id?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
-  title: Scalars['String'];
+  _id: Scalars['ID']['output'];
+  publication_id?: Maybe<Scalars['String']['output']>;
+  slug: Scalars['String']['output'];
+  title: Scalars['String']['output'];
 };
 
 export type ArticleInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  authorId?: InputMaybe<Scalars['String']>;
-  categoryId?: InputMaybe<Scalars['String']>;
-  display?: InputMaybe<Scalars['String']>;
-  page?: InputMaybe<Scalars['Int']>;
-  perPage?: InputMaybe<Scalars['Int']>;
-  q?: InputMaybe<Scalars['String']>;
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  authorId?: InputMaybe<Scalars['String']['input']>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
+  display?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  q?: InputMaybe<Scalars['String']['input']>;
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
   sort_by?: InputMaybe<ArticleSort>;
 };
 
 export type ArticleInputFetch = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search_term?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search_term?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ArticleOutput = {
   __typename?: 'ArticleOutput';
   articles: Array<Article>;
-  selectAllArticleIds?: Maybe<Array<Scalars['String']>>;
-  totalCount: Scalars['Int'];
+  selectAllArticleIds?: Maybe<Array<Scalars['String']['output']>>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type ArticlePurchaseInput = {
-  amount: Scalars['Float'];
-  articleId: Scalars['String'];
-  description: Scalars['String'];
-  end?: InputMaybe<Scalars['DateTime']>;
-  start?: InputMaybe<Scalars['DateTime']>;
-  stripeCoupon?: InputMaybe<Scalars['String']>;
+  amount: Scalars['Float']['input'];
+  articleId: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  end?: InputMaybe<Scalars['DateTime']['input']>;
+  start?: InputMaybe<Scalars['DateTime']['input']>;
+  stripeCoupon?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<OrderType>;
-  user_id: Scalars['String'];
+  user_id: Scalars['String']['input'];
 };
 
 export enum ArticleRestrictionEnum {
@@ -315,80 +317,80 @@ export enum ArticleSort {
 
 export type ArticleStats = {
   __typename?: 'ArticleStats';
-  averagePercentWatched?: Maybe<Scalars['Float']>;
-  last_checked?: Maybe<Scalars['DateTime']>;
-  pageLoads?: Maybe<Scalars['Int']>;
-  percentOfVisitorsClickingPlay?: Maybe<Scalars['Float']>;
-  plays?: Maybe<Scalars['Int']>;
-  views?: Maybe<Scalars['Int']>;
-  visitors?: Maybe<Scalars['Int']>;
+  averagePercentWatched?: Maybe<Scalars['Float']['output']>;
+  last_checked?: Maybe<Scalars['DateTime']['output']>;
+  pageLoads?: Maybe<Scalars['Int']['output']>;
+  percentOfVisitorsClickingPlay?: Maybe<Scalars['Float']['output']>;
+  plays?: Maybe<Scalars['Int']['output']>;
+  views?: Maybe<Scalars['Int']['output']>;
+  visitors?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Assets = {
   __typename?: 'Assets';
-  _id?: Maybe<Scalars['ID']>;
-  contentType: Scalars['String'];
-  fileSize: Scalars['Float'];
-  height: Scalars['Int'];
-  type: Scalars['String'];
-  url: Scalars['String'];
-  width: Scalars['Int'];
+  _id?: Maybe<Scalars['ID']['output']>;
+  contentType: Scalars['String']['output'];
+  fileSize: Scalars['Float']['output'];
+  height: Scalars['Int']['output'];
+  type: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+  width: Scalars['Int']['output'];
 };
 
 export type Author = {
   __typename?: 'Author';
-  _id: Scalars['ID'];
-  display_name?: Maybe<Scalars['String']>;
+  _id: Scalars['ID']['output'];
+  display_name?: Maybe<Scalars['String']['output']>;
   image?: Maybe<Image>;
   name?: Maybe<Name>;
-  role?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
-  specialty?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
+  specialty?: Maybe<Scalars['String']['output']>;
 };
 
 export type Category = {
   __typename?: 'Category';
-  _id: Scalars['ID'];
-  color: Scalars['String'];
-  desc: Scalars['String'];
-  displayName: Scalars['String'];
-  name: Scalars['String'];
-  short: Scalars['String'];
-  slug: Scalars['String'];
-  sortOrder: Scalars['Int'];
+  _id: Scalars['ID']['output'];
+  color: Scalars['String']['output'];
+  desc: Scalars['String']['output'];
+  displayName: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  short: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  sortOrder: Scalars['Int']['output'];
 };
 
 export type Chapter = {
   __typename?: 'Chapter';
-  number: Scalars['Int'];
+  number: Scalars['Int']['output'];
   subchapters?: Maybe<Array<SubChapter>>;
-  time: Scalars['Int'];
-  title: Scalars['String'];
+  time: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
 };
 
 export type ChartData = {
   __typename?: 'ChartData';
   datasets: Array<ChartDataset>;
-  labels: Array<Scalars['String']>;
+  labels: Array<Scalars['String']['output']>;
 };
 
 export type ChartDataset = {
   __typename?: 'ChartDataset';
-  data: Array<Scalars['Float']>;
-  label: Scalars['String'];
+  data: Array<Scalars['Float']['output']>;
+  label: Scalars['String']['output'];
 };
 
 export type Choice = {
   __typename?: 'Choice';
-  description: Scalars['String'];
-  value: Scalars['Float'];
+  description: Scalars['String']['output'];
+  value: Scalars['Float']['output'];
 };
 
 export type ColumnFilter = {
-  columnName: Scalars['String'];
-  not?: InputMaybe<Scalars['Boolean']>;
+  columnName: Scalars['String']['input'];
+  not?: InputMaybe<Scalars['Boolean']['input']>;
   operation: QueryOperation;
-  value?: InputMaybe<Scalars['any']>;
+  value?: InputMaybe<Scalars['any']['input']>;
 };
 
 export type CombinedCodeOutput = {
@@ -399,82 +401,82 @@ export type CombinedCodeOutput = {
 
 export type ContactPerson = {
   __typename?: 'ContactPerson';
-  email: Scalars['String'];
-  isMainContact?: Maybe<Scalars['Boolean']>;
-  name: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  role: Scalars['String'];
+  email: Scalars['String']['output'];
+  isMainContact?: Maybe<Scalars['Boolean']['output']>;
+  name: Scalars['String']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  role: Scalars['String']['output'];
 };
 
 export type ContactPersonInput = {
-  email: Scalars['String'];
-  isMainContact: Scalars['Boolean'];
-  name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  role: Scalars['String'];
+  email: Scalars['String']['input'];
+  isMainContact: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  role: Scalars['String']['input'];
 };
 
 export type Content = {
   __typename?: 'Content';
-  abstract?: Maybe<Scalars['String']>;
-  article?: Maybe<Scalars['String']>;
-  citations?: Maybe<Scalars['String']>;
-  cite_this_article?: Maybe<Scalars['String']>;
+  abstract?: Maybe<Scalars['String']['output']>;
+  article?: Maybe<Scalars['String']['output']>;
+  citations?: Maybe<Scalars['String']['output']>;
+  cite_this_article?: Maybe<Scalars['String']['output']>;
   otoc: Array<ContentItem>;
-  outline?: Maybe<Scalars['String']>;
+  outline?: Maybe<Scalars['String']['output']>;
   toc: Array<ContentItem>;
-  transcription?: Maybe<Scalars['String']>;
+  transcription?: Maybe<Scalars['String']['output']>;
 };
 
 export type ContentItem = {
   __typename?: 'ContentItem';
-  _id: Scalars['ID'];
-  id: Scalars['ID'];
-  number: Scalars['Int'];
+  _id: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  number: Scalars['Int']['output'];
   subheaders: Array<SubItem>;
-  text: Scalars['String'];
+  text: Scalars['String']['output'];
 };
 
 export type ContentItemInput = {
-  number: Scalars['Int'];
+  number: Scalars['Int']['input'];
   subheaders?: InputMaybe<Array<SubItemInput>>;
-  text: Scalars['String'];
+  text: Scalars['String']['input'];
 };
 
 export type CounterAttribute = {
-  attributeName: Scalars['String'];
-  value: Scalars['String'];
+  attributeName: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 };
 
 export type CounterFilter = {
-  filterName: Scalars['String'];
-  value: Scalars['String'];
+  filterName: Scalars['String']['input'];
+  value: Scalars['String']['input'];
 };
 
 export type CounterInput = {
-  institution_id?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  metric_types?: InputMaybe<Array<Scalars['String']>>;
+  institution_id?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  metric_types?: InputMaybe<Array<Scalars['String']['input']>>;
   report_attributes?: InputMaybe<Array<CounterAttribute>>;
   report_filters?: InputMaybe<Array<CounterFilter>>;
-  report_id?: InputMaybe<Scalars['String']>;
-  reporting_period_end?: InputMaybe<Scalars['DateTime']>;
-  reporting_period_start?: InputMaybe<Scalars['DateTime']>;
-  search_term?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  report_id?: InputMaybe<Scalars['String']['input']>;
+  reporting_period_end?: InputMaybe<Scalars['DateTime']['input']>;
+  reporting_period_start?: InputMaybe<Scalars['DateTime']['input']>;
+  search_term?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Country = {
   __typename?: 'Country';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   articleRestriction: ArticleRestrictionEnum;
   code: CountryEnum;
-  coefficient: Scalars['Float'];
-  multiplier?: Maybe<Scalars['Float']>;
-  name: Scalars['String'];
-  trialsEnabled: Scalars['Boolean'];
+  coefficient: Scalars['Float']['output'];
+  multiplier?: Maybe<Scalars['Float']['output']>;
+  name: Scalars['String']['output'];
+  trialsEnabled: Scalars['Boolean']['output'];
 };
 
 export enum CountryEnum {
@@ -730,75 +732,75 @@ export enum CountryEnum {
 
 export type CountryListInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CountryListOutput = {
   __typename?: 'CountryListOutput';
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   countries: Array<Country>;
-  filteredCodes: Array<Scalars['String']>;
+  filteredCodes: Array<Scalars['String']['output']>;
 };
 
 export type CreateInstitutionInput = {
-  name?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreatePageInput = {
-  author?: InputMaybe<Scalars['String']>;
-  content?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  scripts?: InputMaybe<Array<Scalars['String']>>;
-  slug?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
+  author?: InputMaybe<Scalars['String']['input']>;
+  content?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  scripts?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type CreatePromoCodeInput = {
-  amount_off?: InputMaybe<Scalars['Float']>;
-  applies_to?: InputMaybe<Array<Scalars['String']>>;
-  code: Scalars['String'];
+  amount_off?: InputMaybe<Scalars['Float']['input']>;
+  applies_to?: InputMaybe<Array<Scalars['String']['input']>>;
+  code: Scalars['String']['input'];
   duration?: InputMaybe<PromoCodeDuration>;
-  duration_in_months?: InputMaybe<Scalars['Float']>;
-  max_redemptions?: InputMaybe<Scalars['Float']>;
-  name?: InputMaybe<Scalars['String']>;
-  percent_off?: InputMaybe<Scalars['Float']>;
-  redeem_by?: InputMaybe<Scalars['DateTime']>;
+  duration_in_months?: InputMaybe<Scalars['Float']['input']>;
+  max_redemptions?: InputMaybe<Scalars['Float']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  percent_off?: InputMaybe<Scalars['Float']['input']>;
+  redeem_by?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type CreateRedirectInput = {
-  from: Scalars['String'];
-  name?: InputMaybe<Scalars['String']>;
-  to: Scalars['String'];
-  track?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<Scalars['String']>;
+  from: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  to: Scalars['String']['input'];
+  track?: InputMaybe<Scalars['Boolean']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateSignInTokenInput = {
-  id: Scalars['String'];
-  redirect: Scalars['String'];
+  id: Scalars['String']['input'];
+  redirect: Scalars['String']['input'];
 };
 
 export type DeleteInstitutionInput = {
-  _id?: InputMaybe<Scalars['ID']>;
+  _id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type DeleteInstitutionOutput = {
   __typename?: 'DeleteInstitutionOutput';
-  _id?: Maybe<Scalars['ID']>;
+  _id?: Maybe<Scalars['ID']['output']>;
 };
 
 export type DeleteRedirectInput = {
-  _id?: InputMaybe<Scalars['ID']>;
+  _id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type DeleteRedirectOutput = {
   __typename?: 'DeleteRedirectOutput';
-  _id?: Maybe<Scalars['ID']>;
+  _id?: Maybe<Scalars['ID']['output']>;
 };
 
 export enum EmailPreference {
@@ -808,75 +810,75 @@ export enum EmailPreference {
 }
 
 export type ExtendedRegistrationInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  first_name: Scalars['String'];
-  institution_name?: InputMaybe<Scalars['String']>;
-  institutional_email?: InputMaybe<Scalars['String']>;
-  last_name: Scalars['String'];
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
-  specialty: Scalars['ID'];
-  user_type: Scalars['String'];
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  first_name: Scalars['String']['input'];
+  institution_name?: InputMaybe<Scalars['String']['input']>;
+  institutional_email?: InputMaybe<Scalars['String']['input']>;
+  last_name: Scalars['String']['input'];
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
+  specialty: Scalars['ID']['input'];
+  user_type: Scalars['String']['input'];
 };
 
 export type ExtendedRegistrationOutput = {
   __typename?: 'ExtendedRegistrationOutput';
-  matchedWithInstitution?: Maybe<Scalars['Boolean']>;
+  matchedWithInstitution?: Maybe<Scalars['Boolean']['output']>;
   updatedAccess: AccessType;
   updatedUser: User;
 };
 
 export type Feedback = {
   __typename?: 'Feedback';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   _institution?: Maybe<Institution>;
-  anon_link_id?: Maybe<Scalars['String']>;
-  comment?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  institution: Scalars['String'];
-  method?: Maybe<Scalars['String']>;
+  anon_link_id?: Maybe<Scalars['String']['output']>;
+  comment?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  institution: Scalars['String']['output'];
+  method?: Maybe<Scalars['String']['output']>;
   question?: Maybe<FeedbackQuestion>;
-  questionId: Scalars['String'];
-  type: Scalars['String'];
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  questionId: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
-  value: Scalars['any'];
+  value: Scalars['any']['output'];
 };
 
 export type FeedbackListInput = {
-  endDAte?: InputMaybe<Scalars['DateTime']>;
+  endDAte?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
-  startDate?: InputMaybe<Scalars['DateTime']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type FeedbackListOutput = {
   __typename?: 'FeedbackListOutput';
-  count: Scalars['Int'];
-  dbQueryString?: Maybe<Scalars['String']>;
+  count: Scalars['Int']['output'];
+  dbQueryString?: Maybe<Scalars['String']['output']>;
   items: Array<Feedback>;
 };
 
 export type FeedbackQuestion = {
   __typename?: 'FeedbackQuestion';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   choices?: Maybe<Array<Choice>>;
-  createdAt: Scalars['DateTime'];
-  createdBy: Scalars['String'];
-  disabled: Scalars['Boolean'];
-  legends?: Maybe<Array<Scalars['String']>>;
-  question: Scalars['String'];
-  type: Scalars['String'];
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['String']['output'];
+  disabled: Scalars['Boolean']['output'];
+  legends?: Maybe<Array<Scalars['String']['output']>>;
+  question: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type FeedbackSettings = {
   __typename?: 'FeedbackSettings';
   selectedAccessTypes: Array<AccessTypeEnum>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  updatedBy?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
+  updatedBy?: Maybe<Scalars['String']['output']>;
 };
 
 export type FeedbackSettingsInput = {
@@ -893,91 +895,93 @@ export enum FileExtensions {
 
 export type FilterExpression = {
   __typename?: 'FilterExpression';
-  columnName?: Maybe<Scalars['String']>;
-  id: Scalars['String'];
-  level: Scalars['Int'];
+  columnName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  level: Scalars['Int']['output'];
   operator: Operators;
-  parentId?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['any']>;
+  parentId?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['any']['output']>;
 };
 
 export type FilterExpressionInput = {
-  columnName?: InputMaybe<Scalars['String']>;
-  id: Scalars['String'];
-  level: Scalars['Int'];
+  columnName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  level: Scalars['Int']['input'];
   operator: Operators;
-  parentId?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['any']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['any']['input']>;
 };
 
 export type GeoLocation = {
   __typename?: 'GeoLocation';
-  continentCode?: Maybe<Scalars['String']>;
-  countryCode?: Maybe<Scalars['String']>;
-  regionCode?: Maybe<Scalars['String']>;
-  regionName?: Maybe<Scalars['String']>;
+  continentCode?: Maybe<Scalars['String']['output']>;
+  countryCode?: Maybe<Scalars['String']['output']>;
+  regionCode?: Maybe<Scalars['String']['output']>;
+  regionName?: Maybe<Scalars['String']['output']>;
 };
 
 export type GeographicPriceInput = {
-  amount?: InputMaybe<Scalars['Int']>;
+  amount?: InputMaybe<Scalars['Int']['input']>;
   countryCode: CountryEnum;
   interval?: InputMaybe<OrderInterval>;
-  percentageFromDefaultPrice?: InputMaybe<Scalars['Int']>;
-  product_id: Scalars['String'];
+  percentageFromDefaultPrice?: InputMaybe<Scalars['Int']['input']>;
+  product_id: Scalars['String']['input'];
 };
 
 export type Geolocation = {
   __typename?: 'Geolocation';
-  capitolCity?: Maybe<Scalars['String']>;
-  countryCode?: Maybe<Scalars['String']>;
-  countryName?: Maybe<Scalars['String']>;
-  regionName?: Maybe<Scalars['String']>;
+  capitolCity?: Maybe<Scalars['String']['output']>;
+  countryCode?: Maybe<Scalars['String']['output']>;
+  countryName?: Maybe<Scalars['String']['output']>;
+  regionName?: Maybe<Scalars['String']['output']>;
 };
 
 export type Geometry = {
   __typename?: 'Geometry';
-  height: Scalars['Float'];
-  width: Scalars['Float'];
+  height: Scalars['Float']['output'];
+  width: Scalars['Float']['output'];
 };
 
 export type GetInstitutionInput = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 export type Hospital = {
   __typename?: 'Hospital';
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
 };
 
 export type Image = {
   __typename?: 'Image';
   extension?: Maybe<FileExtensions>;
-  filename?: Maybe<Scalars['String']>;
-  filesize?: Maybe<Scalars['String']>;
-  foreign?: Maybe<Scalars['String']>;
-  format?: Maybe<Scalars['String']>;
+  filename?: Maybe<Scalars['String']['output']>;
+  filesize?: Maybe<Scalars['String']['output']>;
+  foreign?: Maybe<Scalars['String']['output']>;
+  format?: Maybe<Scalars['String']['output']>;
   geometry?: Maybe<Geometry>;
-  length?: Maybe<Scalars['Float']>;
+  length?: Maybe<Scalars['Float']['output']>;
   metadata?: Maybe<ImageMetadata>;
-  path?: Maybe<Scalars['Float']>;
+  path?: Maybe<Scalars['Float']['output']>;
 };
 
 export type ImageInput = {
-  filename?: InputMaybe<Scalars['String']>;
-  format?: InputMaybe<Scalars['String']>;
-  length?: InputMaybe<Scalars['Int']>;
+  filename?: InputMaybe<Scalars['String']['input']>;
+  format?: InputMaybe<Scalars['String']['input']>;
+  length?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ImageMetadata = {
   __typename?: 'ImageMetadata';
-  description?: Maybe<Scalars['String']>;
-  extension?: Maybe<Scalars['String']>;
-  filesize?: Maybe<Scalars['String']>;
-  format?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
+  extension?: Maybe<Scalars['String']['output']>;
+  filesize?: Maybe<Scalars['String']['output']>;
+  format?: Maybe<Scalars['String']['output']>;
   geometry?: Maybe<Geometry>;
-  original_name?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  original_name?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
 };
+
+
 
 export type InsertPromoCodeInput = {
   _id: Scalars['ID'];
@@ -998,50 +1002,50 @@ export type InsertPromoCodeInput = {
 
 export type Institution = {
   __typename?: 'Institution';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   accessSettings: AccessSettings;
-  aliases: Array<Scalars['String']>;
-  aliases_str: Scalars['String'];
+  aliases: Array<Scalars['String']['output']>;
+  aliases_str: Scalars['String']['output'];
   articleViewsOverTime: ChartData;
-  article_count: Scalars['Int'];
-  article_count_anon: Scalars['Int'];
-  automated_status: Scalars['String'];
-  category?: Maybe<Scalars['String']>;
-  closed_queries_count: Scalars['Int'];
+  article_count: Scalars['Int']['output'];
+  article_count_anon: Scalars['Int']['output'];
+  automated_status: Scalars['String']['output'];
+  category?: Maybe<Scalars['String']['output']>;
+  closed_queries_count: Scalars['Int']['output'];
   contacts: InstitutionContacts;
-  created?: Maybe<Scalars['DateTime']>;
-  domains: Array<Scalars['String']>;
-  expiry: Scalars['Int'];
-  expiry_date_cached?: Maybe<Scalars['DateTime']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  domains: Array<Scalars['String']['output']>;
+  expiry: Scalars['Int']['output'];
+  expiry_date_cached?: Maybe<Scalars['DateTime']['output']>;
   image?: Maybe<Image>;
-  lastChecked?: Maybe<Scalars['DateTime']>;
+  lastChecked?: Maybe<Scalars['DateTime']['output']>;
   locations: Array<Location>;
-  matchName?: Maybe<Scalars['String']>;
-  name: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  open_queries_count: Scalars['Int'];
-  pending_requests?: Maybe<Scalars['Int']>;
+  matchName?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  open_queries_count: Scalars['Int']['output'];
+  pending_requests?: Maybe<Scalars['Int']['output']>;
   points_of_contact?: Maybe<Array<ContactPerson>>;
-  restrictMatchByName?: Maybe<Scalars['Boolean']>;
+  restrictMatchByName?: Maybe<Scalars['Boolean']['output']>;
   restrictions: Restrictions;
-  sent_requests: Scalars['Int'];
-  show_on_subscribers_page?: Maybe<Scalars['Boolean']>;
+  sent_requests: Scalars['Int']['output'];
+  show_on_subscribers_page?: Maybe<Scalars['Boolean']['output']>;
   stats?: Maybe<InstitutionStats>;
-  subscriber_display_name?: Maybe<Scalars['String']>;
+  subscriber_display_name?: Maybe<Scalars['String']['output']>;
   subscription: InstitutionSubscription;
-  total_article_count: Scalars['Int'];
-  total_requests?: Maybe<Scalars['Int']>;
-  updated?: Maybe<Scalars['DateTime']>;
-  urlLink?: Maybe<Scalars['String']>;
-  user_count: Scalars['Int'];
+  total_article_count: Scalars['Int']['output'];
+  total_requests?: Maybe<Scalars['Int']['output']>;
+  updated?: Maybe<Scalars['DateTime']['output']>;
+  urlLink?: Maybe<Scalars['String']['output']>;
+  user_count: Scalars['Int']['output'];
 };
 
 export type InstitutionAccessInput = {
-  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   globalFilters?: InputMaybe<Array<ColumnFilter>>;
-  institutionId: Scalars['String'];
-  startDate?: InputMaybe<Scalars['DateTime']>;
+  institutionId: Scalars['String']['input'];
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export enum InstitutionAccessState {
@@ -1052,30 +1056,30 @@ export enum InstitutionAccessState {
 
 export type InstitutionAccessStats = {
   __typename?: 'InstitutionAccessStats';
-  activeUsers: Scalars['Float'];
-  anonUserCount: Scalars['Float'];
-  anonymousArticleViews: Scalars['Float'];
-  articleViewsByUser: Scalars['Float'];
-  totalArticleViews: Scalars['Float'];
-  totalLogins: Scalars['Float'];
-  uniqueVideoBlocks: Scalars['Float'];
-  users: Scalars['Float'];
-  videoBlocks: Scalars['Float'];
+  activeUsers: Scalars['Float']['output'];
+  anonUserCount: Scalars['Float']['output'];
+  anonymousArticleViews: Scalars['Float']['output'];
+  articleViewsByUser: Scalars['Float']['output'];
+  totalArticleViews: Scalars['Float']['output'];
+  totalLogins: Scalars['Float']['output'];
+  uniqueVideoBlocks: Scalars['Float']['output'];
+  users: Scalars['Float']['output'];
+  videoBlocks: Scalars['Float']['output'];
 };
 
 export type InstitutionArticleStats = {
   __typename?: 'InstitutionArticleStats';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   article?: Maybe<Article>;
-  articleViews: Scalars['Int'];
-  uniqueViews: Scalars['Int'];
-  user_ids: Array<Scalars['String']>;
+  articleViews: Scalars['Int']['output'];
+  uniqueViews: Scalars['Int']['output'];
+  user_ids: Array<Scalars['String']['output']>;
 };
 
 export type InstitutionArticleStatsOutput = {
   __typename?: 'InstitutionArticleStatsOutput';
   items: Array<InstitutionArticleStats>;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 export type InstitutionContacts = {
@@ -1085,99 +1089,99 @@ export type InstitutionContacts = {
 
 export type InstitutionInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  showExpiry?: InputMaybe<Scalars['Boolean']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  showExpiry?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type InstitutionOutput = {
   __typename?: 'InstitutionOutput';
-  count: Scalars['Int'];
-  dbQueryString: Scalars['String'];
+  count: Scalars['Int']['output'];
+  dbQueryString: Scalars['String']['output'];
   institutions: Array<Institution>;
 };
 
 export type InstitutionStats = {
   __typename?: 'InstitutionStats';
-  articleCount?: Maybe<Scalars['Int']>;
-  articleCountAnon?: Maybe<Scalars['Int']>;
-  lastChecked?: Maybe<Scalars['DateTime']>;
-  loginCount?: Maybe<Scalars['Int']>;
-  totalArticleCount?: Maybe<Scalars['Int']>;
-  totalSearches?: Maybe<Scalars['Int']>;
-  uniqueVideoBlocks?: Maybe<Scalars['Int']>;
-  userCount: Scalars['Int'];
-  videoBlocks?: Maybe<Scalars['Int']>;
+  articleCount?: Maybe<Scalars['Int']['output']>;
+  articleCountAnon?: Maybe<Scalars['Int']['output']>;
+  lastChecked?: Maybe<Scalars['DateTime']['output']>;
+  loginCount?: Maybe<Scalars['Int']['output']>;
+  totalArticleCount?: Maybe<Scalars['Int']['output']>;
+  totalSearches?: Maybe<Scalars['Int']['output']>;
+  uniqueVideoBlocks?: Maybe<Scalars['Int']['output']>;
+  userCount: Scalars['Int']['output'];
+  videoBlocks?: Maybe<Scalars['Int']['output']>;
 };
 
 export type InstitutionSubscription = {
   __typename?: 'InstitutionSubscription';
   expiredOrderStatus?: Maybe<OrderType>;
-  last_checked?: Maybe<Scalars['String']>;
-  order?: Maybe<Scalars['String']>;
+  last_checked?: Maybe<Scalars['String']['output']>;
+  order?: Maybe<Scalars['String']['output']>;
   status?: Maybe<StatusType>;
 };
 
 export type InstitutionUserTypeStat = {
   __typename?: 'InstitutionUserTypeStat';
-  count: Scalars['Float'];
-  user_type: Scalars['String'];
+  count: Scalars['Float']['output'];
+  user_type: Scalars['String']['output'];
 };
 
 export type IpRange = {
   __typename?: 'IpRange';
-  _id: Scalars['ID'];
-  created?: Maybe<Scalars['DateTime']>;
-  end: Scalars['Float'];
-  end_string: Scalars['String'];
-  institution: Scalars['String'];
-  lastEditedBy?: Maybe<Scalars['String']>;
-  location: Scalars['String'];
-  notes?: Maybe<Scalars['String']>;
-  start: Scalars['Float'];
-  start_string: Scalars['String'];
-  updated?: Maybe<Scalars['DateTime']>;
+  _id: Scalars['ID']['output'];
+  created?: Maybe<Scalars['DateTime']['output']>;
+  end: Scalars['Float']['output'];
+  end_string: Scalars['String']['output'];
+  institution: Scalars['String']['output'];
+  lastEditedBy?: Maybe<Scalars['String']['output']>;
+  location: Scalars['String']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  start: Scalars['Float']['output'];
+  start_string: Scalars['String']['output'];
+  updated?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type IpRangeInput = {
-  end: Scalars['String'];
-  institution: Scalars['String'];
-  location: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  start: Scalars['String'];
+  end: Scalars['String']['input'];
+  institution: Scalars['String']['input'];
+  location: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  start: Scalars['String']['input'];
 };
 
 export type Location = {
   __typename?: 'Location';
-  _id: Scalars['ID'];
-  address?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  comment?: Maybe<Scalars['String']>;
-  continent?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  created?: Maybe<Scalars['DateTime']>;
+  _id: Scalars['ID']['output'];
+  address?: Maybe<Scalars['String']['output']>;
+  city?: Maybe<Scalars['String']['output']>;
+  comment?: Maybe<Scalars['String']['output']>;
+  continent?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
   ip_ranges: Array<IpRange>;
   orders: Array<Order>;
-  region?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  updated?: Maybe<Scalars['DateTime']>;
-  zip?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  updated?: Maybe<Scalars['DateTime']['output']>;
+  zip?: Maybe<Scalars['String']['output']>;
 };
 
 export type LocationInput = {
-  address?: InputMaybe<Scalars['String']>;
-  city?: InputMaybe<Scalars['String']>;
-  comment?: InputMaybe<Scalars['String']>;
-  continent?: InputMaybe<Scalars['String']>;
-  country?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['String']>;
-  institution: Scalars['String'];
-  region?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
-  zip?: InputMaybe<Scalars['String']>;
+  address?: InputMaybe<Scalars['String']['input']>;
+  city?: InputMaybe<Scalars['String']['input']>;
+  comment?: InputMaybe<Scalars['String']['input']>;
+  continent?: InputMaybe<Scalars['String']['input']>;
+  country?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  institution: Scalars['String']['input'];
+  region?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
+  zip?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Specifies how user was matched to an institution */
@@ -1200,31 +1204,31 @@ export enum MatchedBy {
 
 export type Media = {
   __typename?: 'Media';
-  _id: Scalars['ObjectId'];
-  filename: Scalars['String'];
-  length: Scalars['Int'];
+  _id: Scalars['ObjectId']['output'];
+  filename: Scalars['String']['output'];
+  length: Scalars['Int']['output'];
   metadata?: Maybe<MediaMeta>;
-  uploadDate?: Maybe<Scalars['DateTime']>;
+  uploadDate?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type MediaInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type MediaMeta = {
   __typename?: 'MediaMeta';
-  description?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
 };
 
 export type MediaOutput = {
   __typename?: 'MediaOutput';
-  count?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']['output']>;
   files: Array<Media>;
 };
 
@@ -1241,13 +1245,13 @@ export type Mutation = {
   addTrialOrderForUser: Scalars['Boolean'];
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
-  cancelJob: Scalars['String'];
-  cancelOrder: Scalars['Boolean'];
-  checkOutdatedTranslations: Scalars['Boolean'];
-  cleanUpFrequentArticleViews: Scalars['String'];
+  cancelJob: Scalars['String']['output'];
+  cancelOrder: Scalars['Boolean']['output'];
+  checkOutdatedTranslations: Scalars['Boolean']['output'];
+  cleanUpFrequentArticleViews: Scalars['String']['output'];
   completeUserRegistration: ExtendedRegistrationOutput;
-  confirmEmail?: Maybe<Scalars['String']>;
-  confirmInstEmail?: Maybe<Scalars['String']>;
+  confirmEmail?: Maybe<Scalars['String']['output']>;
+  confirmInstEmail?: Maybe<Scalars['String']['output']>;
   createAnnouncement: Announcement;
   createGeographicPrice?: Maybe<StripePrice>;
   createInstitution: Institution;
@@ -1256,15 +1260,15 @@ export type Mutation = {
   createOrder?: Maybe<Order>;
   createOrderForUser?: Maybe<Order>;
   createPage: Page;
-  createPublicationRequest: Scalars['Boolean'];
+  createPublicationRequest: Scalars['Boolean']['output'];
   createRedirect: Redirect;
-  createSignInToken: Scalars['String'];
+  createSignInToken: Scalars['String']['output'];
   createStripePromoCode: StripePromoCode;
   createUser: User;
-  deleteAnnouncement: Scalars['String'];
+  deleteAnnouncement: Scalars['String']['output'];
   deleteIpRange: IpRange;
   deleteLocation?: Maybe<Location>;
-  deleteMedia: Scalars['String'];
+  deleteMedia: Scalars['String']['output'];
   deleteOrder?: Maybe<Order>;
   deletePage: Page;
   deletePrice?: Maybe<StripePrice>;
@@ -1276,52 +1280,52 @@ export type Mutation = {
   forgotPasswordCms: Scalars['Boolean'];
   generateAllScienceOpenXml: Scalars['String'];
   generateDOI: Article;
-  generateScienceOpenXmlByArticle: Scalars['String'];
+  generateScienceOpenXmlByArticle: Scalars['String']['output'];
   getInstitution: Institution;
-  handleFailedOrderPayment: Scalars['Boolean'];
-  handleFreePromoCode: Scalars['Boolean'];
-  loginToArticle: Scalars['Boolean'];
-  markAnnouncementAsRead: Array<Scalars['String']>;
+  handleFailedOrderPayment: Scalars['Boolean']['output'];
+  handleFreePromoCode: Scalars['Boolean']['output'];
+  loginToArticle: Scalars['Boolean']['output'];
+  markAnnouncementAsRead: Array<Scalars['String']['output']>;
   redactVote: NewArticleVote;
-  removeTemporaryAccessById: Scalars['Boolean'];
-  requestSubscription: Scalars['Boolean'];
-  resetPasswordCms?: Maybe<Scalars['String']>;
+  removeTemporaryAccessById: Scalars['Boolean']['output'];
+  requestSubscription: Scalars['Boolean']['output'];
+  resetPasswordCms?: Maybe<Scalars['String']['output']>;
   resubscribeOrder?: Maybe<Order>;
-  runJobManually: Scalars['String'];
-  sendEmailConfirmation?: Maybe<Scalars['Boolean']>;
-  sendInstEmailConfirmation?: Maybe<Scalars['Boolean']>;
+  runJobManually: Scalars['String']['output'];
+  sendEmailConfirmation?: Maybe<Scalars['Boolean']['output']>;
+  sendInstEmailConfirmation?: Maybe<Scalars['Boolean']['output']>;
   sendTriageQueueEmail: TriageQueue;
   setEnabledAnnouncement: Announcement;
   signIn?: Maybe<User>;
   signInUsingOldToken?: Maybe<User>;
-  signUp: Scalars['String'];
-  syncDefaultPricesToDb: Scalars['Boolean'];
-  toggleTrialAccess: Scalars['Boolean'];
+  signUp: Scalars['String']['output'];
+  syncDefaultPricesToDb: Scalars['Boolean']['output'];
+  toggleTrialAccess: Scalars['Boolean']['output'];
   tokenSignIn?: Maybe<User>;
-  trackAnnouncement: Scalars['Boolean'];
-  trackAnnouncements: Scalars['Boolean'];
-  trackArticle: Scalars['Boolean'];
+  trackAnnouncement: Scalars['Boolean']['output'];
+  trackAnnouncements: Scalars['Boolean']['output'];
+  trackArticle: Scalars['Boolean']['output'];
   trackFeedack?: Maybe<Feedback>;
-  trackInitiateCheckout: Scalars['Boolean'];
-  trackLogin: Scalars['Boolean'];
-  trackRequestInstSubscription: Scalars['Boolean'];
-  trackSearch: Scalars['Boolean'];
-  trackShowFeedback: Scalars['Boolean'];
-  trackSubscribe: Scalars['Boolean'];
-  trackVideoBlock?: Maybe<Scalars['String']>;
-  trackVideoPlay?: Maybe<Scalars['String']>;
-  trackVideoTime: Scalars['Boolean'];
-  transferDuplicateDomains: Scalars['String'];
-  transferInstitutionData: Scalars['String'];
+  trackInitiateCheckout: Scalars['Boolean']['output'];
+  trackLogin: Scalars['Boolean']['output'];
+  trackRequestInstSubscription: Scalars['Boolean']['output'];
+  trackSearch: Scalars['Boolean']['output'];
+  trackShowFeedback: Scalars['Boolean']['output'];
+  trackSubscribe: Scalars['Boolean']['output'];
+  trackVideoBlock?: Maybe<Scalars['String']['output']>;
+  trackVideoPlay?: Maybe<Scalars['String']['output']>;
+  trackVideoTime: Scalars['Boolean']['output'];
+  transferDuplicateDomains: Scalars['String']['output'];
+  transferInstitutionData: Scalars['String']['output'];
   translateArticles: Array<TranslationResult>;
-  triggerUpdateUserSubscription: Scalars['String'];
+  triggerUpdateUserSubscription: Scalars['String']['output'];
   unsubscribeOrder?: Maybe<Order>;
   updateAnnouncement: Announcement;
   updateArticle?: Maybe<Article>;
-  updateContentLength: Scalars['String'];
-  updateCountries: Scalars['String'];
+  updateContentLength: Scalars['String']['output'];
+  updateCountries: Scalars['String']['output'];
   updateFeedbackSettings: FeedbackSettings;
-  updateInstEmail: Scalars['Boolean'];
+  updateInstEmail: Scalars['Boolean']['output'];
   updateInstitution?: Maybe<Institution>;
   updateInstitutionContacts?: Maybe<Institution>;
   updateIpRange?: Maybe<IpRange>;
@@ -1330,10 +1334,10 @@ export type Mutation = {
   updateOrder?: Maybe<Order>;
   updateOrderCms?: Maybe<Order>;
   updatePage?: Maybe<Page>;
-  updatePassword: Scalars['Boolean'];
-  updatePreference: Scalars['Boolean'];
+  updatePassword: Scalars['Boolean']['output'];
+  updatePreference: Scalars['Boolean']['output'];
   updatePrice?: Maybe<StripePrice>;
-  updateProfile: Scalars['Boolean'];
+  updateProfile: Scalars['Boolean']['output'];
   updatePurchaseSetting: Array<Article>;
   updateRedirect?: Maybe<Redirect>;
   updateSiteSettings: SiteSetting;
@@ -1343,28 +1347,28 @@ export type Mutation = {
   updateTriageResponse: TriageQueue;
   updateTrialSettings: TrialSettings;
   updateUserCms: User;
-  updateWistiaMetadata: Scalars['String'];
-  upgradeSubscription?: Maybe<Scalars['Boolean']>;
+  updateWistiaMetadata: Scalars['String']['output'];
+  upgradeSubscription?: Maybe<Scalars['Boolean']['output']>;
   upsertSocialUser: User;
-  writeLog: Scalars['Boolean'];
+  writeLog: Scalars['Boolean']['output'];
 };
 
 
 export type MutationAddCrmTagsToOrderListResultsArgs = {
   input?: InputMaybe<OrderListInput>;
-  tags: Array<Scalars['String']>;
+  tags: Array<Scalars['String']['input']>;
 };
 
 
 export type MutationAddCrmTagsToTriageQueueResultsArgs = {
   input?: InputMaybe<TriageQueueInput>;
-  tags: Array<Scalars['String']>;
+  tags: Array<Scalars['String']['input']>;
 };
 
 
 export type MutationAddCrmTagsToUsersArgs = {
   input?: InputMaybe<UserInput>;
-  tags: Array<Scalars['String']>;
+  tags: Array<Scalars['String']['input']>;
 };
 
 
@@ -1384,28 +1388,28 @@ export type MutationAddPurchaseArticleOrderArgs = {
 
 
 export type MutationAddVoteArgs = {
-  article_title: Scalars['String'];
+  article_title: Scalars['String']['input'];
 };
 
 
 export type MutationApplyInstitutionToTriageArgs = {
-  id: Scalars['String'];
-  institution_id: Scalars['String'];
+  id: Scalars['String']['input'];
+  institution_id: Scalars['String']['input'];
 };
 
 
 export type MutationCancelJobArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 
 export type MutationCancelOrderArgs = {
-  subscription_id: Scalars['String'];
+  subscription_id: Scalars['String']['input'];
 };
 
 
 export type MutationCleanUpFrequentArticleViewsArgs = {
-  institution_id: Scalars['String'];
+  institution_id: Scalars['String']['input'];
 };
 
 
@@ -1415,12 +1419,12 @@ export type MutationCompleteUserRegistrationArgs = {
 
 
 export type MutationConfirmEmailArgs = {
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 };
 
 
 export type MutationConfirmInstEmailArgs = {
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 };
 
 
@@ -1485,37 +1489,37 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteAnnouncementArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteIpRangeArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteLocationArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteMediaArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteOrderArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationDeletePageArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationDeletePriceArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -1524,19 +1528,25 @@ export type MutationDeletePromoCodeArgs = {
 };
 
 
+
+
+
 export type MutationDeleteRedirectArgs = {
   input?: InputMaybe<DeleteRedirectInput>;
 };
 
 
 export type MutationDeleteSignInTokenArgs = {
-  user_id: Scalars['String'];
+  user_id: Scalars['String']['input'];
 };
 
 
 export type MutationDeleteStripePromocodeArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
+
+
+
 
 
 export type MutationEditPromoCodeArgs = {
@@ -1545,17 +1555,17 @@ export type MutationEditPromoCodeArgs = {
 
 
 export type MutationForgotPasswordCmsArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationGenerateDoiArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationGenerateScienceOpenXmlByArticleArgs = {
-  publication_id: Scalars['String'];
+  publication_id: Scalars['String']['input'];
 };
 
 
@@ -1565,34 +1575,34 @@ export type MutationGetInstitutionArgs = {
 
 
 export type MutationHandleFailedOrderPaymentArgs = {
-  error_code: Scalars['String'];
-  order_id: Scalars['String'];
+  error_code: Scalars['String']['input'];
+  order_id: Scalars['String']['input'];
 };
 
 
 export type MutationHandleFreePromoCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
 export type MutationLoginToArticleArgs = {
-  password: Scalars['String'];
-  publication_id: Scalars['String'];
+  password: Scalars['String']['input'];
+  publication_id: Scalars['String']['input'];
 };
 
 
 export type MutationMarkAnnouncementAsReadArgs = {
-  cacheId: Scalars['String'];
+  cacheId: Scalars['String']['input'];
 };
 
 
 export type MutationRedactVoteArgs = {
-  article_title: Scalars['String'];
+  article_title: Scalars['String']['input'];
 };
 
 
 export type MutationRemoveTemporaryAccessByIdArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 
@@ -1602,29 +1612,29 @@ export type MutationRequestSubscriptionArgs = {
 
 
 export type MutationResetPasswordCmsArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
+  newPassword: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 
 export type MutationResubscribeOrderArgs = {
-  order_id: Scalars['String'];
+  order_id: Scalars['String']['input'];
 };
 
 
 export type MutationRunJobManuallyArgs = {
-  data?: InputMaybe<Scalars['any']>;
-  name: Scalars['String'];
+  data?: InputMaybe<Scalars['any']['input']>;
+  name: Scalars['String']['input'];
 };
 
 
 export type MutationSendEmailConfirmationArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type MutationSendInstEmailConfirmationArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -1634,8 +1644,8 @@ export type MutationSendTriageQueueEmailArgs = {
 
 
 export type MutationSetEnabledAnnouncementArgs = {
-  _id: Scalars['String'];
-  enabled: Scalars['Boolean'];
+  _id: Scalars['String']['input'];
+  enabled: Scalars['Boolean']['input'];
 };
 
 
@@ -1645,7 +1655,7 @@ export type MutationSignInArgs = {
 
 
 export type MutationSignInUsingOldTokenArgs = {
-  tokenId: Scalars['String'];
+  tokenId: Scalars['String']['input'];
 };
 
 
@@ -1655,23 +1665,23 @@ export type MutationSignUpArgs = {
 
 
 export type MutationToggleTrialAccessArgs = {
-  user_id: Scalars['String'];
-  value: Scalars['Boolean'];
+  user_id: Scalars['String']['input'];
+  value: Scalars['Boolean']['input'];
 };
 
 
 export type MutationTokenSignInArgs = {
-  token: Scalars['String'];
+  token: Scalars['String']['input'];
 };
 
 
 export type MutationTrackAnnouncementArgs = {
-  _id: Scalars['String'];
+  _id: Scalars['String']['input'];
 };
 
 
 export type MutationTrackAnnouncementsArgs = {
-  _ids: Array<Scalars['String']>;
+  _ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -1741,7 +1751,7 @@ export type MutationTranslateArticlesArgs = {
 
 
 export type MutationUnsubscribeOrderArgs = {
-  order_id: Scalars['String'];
+  order_id: Scalars['String']['input'];
 };
 
 
@@ -1766,7 +1776,7 @@ export type MutationUpdateFeedbackSettingsArgs = {
 
 
 export type MutationUpdateInstEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
@@ -1777,12 +1787,12 @@ export type MutationUpdateInstitutionArgs = {
 
 export type MutationUpdateInstitutionContactsArgs = {
   contacts: Array<ContactPersonInput>;
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type MutationUpdateIpRangeArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   input: IpRangeInput;
 };
 
@@ -1798,13 +1808,13 @@ export type MutationUpdateMediaLibraryArgs = {
 
 
 export type MutationUpdateOrderArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   input: OrderInputForLocation;
 };
 
 
 export type MutationUpdateOrderCmsArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   input: UpdateOrderInput;
 };
 
@@ -1825,7 +1835,7 @@ export type MutationUpdatePreferenceArgs = {
 
 
 export type MutationUpdatePriceArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   input: UpdatePriceInput;
 };
 
@@ -1881,7 +1891,7 @@ export type MutationUpdateUserCmsArgs = {
 
 
 export type MutationUpgradeSubscriptionArgs = {
-  promocode?: InputMaybe<Scalars['String']>;
+  promocode?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1891,25 +1901,25 @@ export type MutationUpsertSocialUserArgs = {
 
 
 export type MutationWriteLogArgs = {
-  level: Scalars['String'];
-  message: Scalars['String'];
-  meta?: InputMaybe<Scalars['String']>;
+  level: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  meta?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Name = {
   __typename?: 'Name';
-  first?: Maybe<Scalars['String']>;
-  last?: Maybe<Scalars['String']>;
-  middle?: Maybe<Scalars['String']>;
-  nickname?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['String']['output']>;
+  last?: Maybe<Scalars['String']['output']>;
+  middle?: Maybe<Scalars['String']['output']>;
+  nickname?: Maybe<Scalars['String']['output']>;
 };
 
 export type NewArticleVote = {
   __typename?: 'NewArticleVote';
-  article_title: Scalars['String'];
-  t: Scalars['String'];
-  users_voted: Array<Scalars['String']>;
-  v: Scalars['Int'];
+  article_title: Scalars['String']['output'];
+  t: Scalars['String']['output'];
+  users_voted: Array<Scalars['String']['output']>;
+  v: Scalars['Int']['output'];
 };
 
 export enum Operators {
@@ -1929,45 +1939,45 @@ export enum Operators {
 
 export type Order = {
   __typename?: 'Order';
-  _id: Scalars['ID'];
-  amount?: Maybe<Scalars['Float']>;
+  _id: Scalars['ID']['output'];
+  amount?: Maybe<Scalars['Float']['output']>;
   article?: Maybe<Article>;
-  articleId?: Maybe<Scalars['String']>;
-  created: Scalars['DateTime'];
-  createdBy?: Maybe<Scalars['String']>;
+  articleId?: Maybe<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['String']['output']>;
   currency?: Maybe<OrderCurrency>;
-  customInstitutionName?: Maybe<Scalars['String']>;
-  db_user_id?: Maybe<Scalars['String']>;
-  deleted?: Maybe<Scalars['Boolean']>;
-  description?: Maybe<Scalars['String']>;
+  customInstitutionName?: Maybe<Scalars['String']['output']>;
+  db_user_id?: Maybe<Scalars['String']['output']>;
+  deleted?: Maybe<Scalars['Boolean']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   discount?: Maybe<StripePromoCode>;
-  end?: Maybe<Scalars['DateTime']>;
-  error_code?: Maybe<Scalars['String']>;
-  erroredAt?: Maybe<Scalars['DateTime']>;
-  institution?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['DateTime']['output']>;
+  error_code?: Maybe<Scalars['String']['output']>;
+  erroredAt?: Maybe<Scalars['DateTime']['output']>;
+  institution?: Maybe<Scalars['String']['output']>;
   institutionObject?: Maybe<Institution>;
-  isCanceled?: Maybe<Scalars['Boolean']>;
-  isTrialPeriod?: Maybe<Scalars['Boolean']>;
-  lastEditedBy?: Maybe<Scalars['String']>;
-  latest_invoice?: Maybe<Scalars['String']>;
-  location?: Maybe<Scalars['String']>;
-  notes?: Maybe<Scalars['String']>;
+  isCanceled?: Maybe<Scalars['Boolean']['output']>;
+  isTrialPeriod?: Maybe<Scalars['Boolean']['output']>;
+  lastEditedBy?: Maybe<Scalars['String']['output']>;
+  latest_invoice?: Maybe<Scalars['String']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
   payment_status?: Maybe<OrderPaymentStatus>;
-  plan_id?: Maybe<Scalars['String']>;
+  plan_id?: Maybe<Scalars['String']['output']>;
   plan_interval?: Maybe<OrderInterval>;
-  promoCode?: Maybe<Scalars['String']>;
-  renewals?: Maybe<Scalars['Int']>;
+  promoCode?: Maybe<Scalars['String']['output']>;
+  renewals?: Maybe<Scalars['Int']['output']>;
   require_login?: Maybe<RequireLogin>;
-  restricted_specialties: Array<Scalars['String']>;
-  restricted_user_types: Array<Scalars['String']>;
-  start?: Maybe<Scalars['DateTime']>;
+  restricted_specialties: Array<Scalars['String']['output']>;
+  restricted_user_types: Array<Scalars['String']['output']>;
+  start?: Maybe<Scalars['DateTime']['output']>;
   status?: Maybe<OrderStatus>;
-  stripeCoupon?: Maybe<Scalars['String']>;
-  stripePromoCode?: Maybe<Scalars['String']>;
+  stripeCoupon?: Maybe<Scalars['String']['output']>;
+  stripePromoCode?: Maybe<Scalars['String']['output']>;
   type?: Maybe<OrderType>;
-  updated: Scalars['DateTime'];
+  updated: Scalars['DateTime']['output'];
   user?: Maybe<User>;
-  user_id?: Maybe<Scalars['String']>;
+  user_id?: Maybe<Scalars['String']['output']>;
 };
 
 export enum OrderCurrency {
@@ -2131,34 +2141,35 @@ export enum OrderCurrency {
 }
 
 export type OrderInput = {
-  amount: Scalars['Float'];
-  created: Scalars['DateTime'];
-  description?: InputMaybe<Scalars['String']>;
-  end: Scalars['DateTime'];
-  isTrialPeriod?: InputMaybe<Scalars['Boolean']>;
-  latest_invoice?: InputMaybe<Scalars['String']>;
-  plan_id?: InputMaybe<Scalars['String']>;
-  plan_interval: Scalars['String'];
-  promoCode?: InputMaybe<Scalars['String']>;
-  start: Scalars['DateTime'];
-  stripeCoupon?: InputMaybe<Scalars['String']>;
-  stripePromoCode?: InputMaybe<Scalars['String']>;
+  amount: Scalars['Float']['input'];
+  amplitudeSessionId?: InputMaybe<Scalars['Float']['input']>;
+  created: Scalars['DateTime']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  end: Scalars['DateTime']['input'];
+  isTrialPeriod?: InputMaybe<Scalars['Boolean']['input']>;
+  latest_invoice?: InputMaybe<Scalars['String']['input']>;
+  plan_id?: InputMaybe<Scalars['String']['input']>;
+  plan_interval: Scalars['String']['input'];
+  promoCode?: InputMaybe<Scalars['String']['input']>;
+  start: Scalars['DateTime']['input'];
+  stripeCoupon?: InputMaybe<Scalars['String']['input']>;
+  stripePromoCode?: InputMaybe<Scalars['String']['input']>;
   type: OrderType;
-  user_id: Scalars['String'];
+  user_id: Scalars['String']['input'];
 };
 
 export type OrderInputForLocation = {
-  amount: Scalars['Float'];
+  amount: Scalars['Float']['input'];
   currency?: InputMaybe<OrderCurrency>;
-  description?: InputMaybe<Scalars['String']>;
-  end: Scalars['DateTime'];
-  institution: Scalars['String'];
-  location: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  end: Scalars['DateTime']['input'];
+  institution: Scalars['String']['input'];
+  location: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
   require_login: RequireLogin;
-  restricted_specialties?: InputMaybe<Array<Scalars['String']>>;
-  restricted_user_types?: InputMaybe<Array<Scalars['String']>>;
-  start: Scalars['DateTime'];
+  restricted_specialties?: InputMaybe<Array<Scalars['String']['input']>>;
+  restricted_user_types?: InputMaybe<Array<Scalars['String']['input']>>;
+  start: Scalars['DateTime']['input'];
   type: OrderType;
 };
 
@@ -2172,17 +2183,17 @@ export enum OrderInterval {
 
 export type OrderListInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type OrderListOutput = {
   __typename?: 'OrderListOutput';
-  count: Scalars['Int'];
-  dbQueryString: Scalars['String'];
+  count: Scalars['Int']['output'];
+  dbQueryString: Scalars['String']['output'];
   orders: Array<Order>;
 };
 
@@ -2219,40 +2230,40 @@ export enum OrderType {
 
 export type Page = {
   __typename?: 'Page';
-  _id: Scalars['String'];
+  _id: Scalars['String']['output'];
   author?: Maybe<User>;
-  content?: Maybe<Scalars['String']>;
-  created: Scalars['DateTime'];
-  meta_desc?: Maybe<Scalars['String']>;
-  scripts?: Maybe<Array<Scalars['String']>>;
-  sidebar?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
+  content?: Maybe<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
+  meta_desc?: Maybe<Scalars['String']['output']>;
+  scripts?: Maybe<Array<Scalars['String']['output']>>;
+  sidebar?: Maybe<Scalars['String']['output']>;
+  slug: Scalars['String']['output'];
   status: PageStatus;
-  title: Scalars['String'];
-  updated: Scalars['DateTime'];
+  title: Scalars['String']['output'];
+  updated: Scalars['DateTime']['output'];
 };
 
 export type PageForSlug = {
   __typename?: 'PageForSlug';
-  _id: Scalars['String'];
-  slug: Scalars['String'];
-  title: Scalars['String'];
-  updated: Scalars['DateTime'];
+  _id: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  title: Scalars['String']['output'];
+  updated: Scalars['DateTime']['output'];
 };
 
 export type PageInputFetch = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search_term?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search_term?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type PageOutput = {
   __typename?: 'PageOutput';
   pages: Array<Page>;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 export enum PageStatus {
@@ -2262,53 +2273,53 @@ export enum PageStatus {
 
 export type PartialRequest = {
   __typename?: 'PartialRequest';
-  created?: Maybe<Scalars['DateTime']>;
-  message?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
 };
 
 export type Payment = {
   __typename?: 'Payment';
-  _id: Scalars['ID'];
-  amount: Scalars['Float'];
-  coupon?: Maybe<Scalars['String']>;
-  created: Scalars['DateTime'];
-  invoiceId: Scalars['String'];
+  _id: Scalars['ID']['output'];
+  amount: Scalars['Float']['output'];
+  coupon?: Maybe<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
+  invoiceId: Scalars['String']['output'];
   order?: Maybe<Order>;
-  orderId: Scalars['String'];
+  orderId: Scalars['String']['output'];
   user?: Maybe<User>;
-  userId: Scalars['String'];
+  userId: Scalars['String']['output'];
 };
 
 export type PreviouslyStatedInst = {
   __typename?: 'PreviouslyStatedInst';
-  date: Scalars['DateTime'];
-  name?: Maybe<Scalars['String']>;
+  date: Scalars['DateTime']['output'];
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 export type PriceByCountry = {
   __typename?: 'PriceByCountry';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   articleRestriction: ArticleRestrictionEnum;
   code: CountryEnum;
-  coefficient: Scalars['Float'];
-  multiplier?: Maybe<Scalars['Float']>;
-  name: Scalars['String'];
+  coefficient: Scalars['Float']['output'];
+  multiplier?: Maybe<Scalars['Float']['output']>;
+  name: Scalars['String']['output'];
   prices: Array<StripePrice>;
-  trialsEnabled: Scalars['Boolean'];
+  trialsEnabled: Scalars['Boolean']['output'];
 };
 
 export type PriceFilterInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type PriceOutputByCountry = {
   __typename?: 'PriceOutputByCountry';
-  allProductIds: Array<Scalars['String']>;
-  count: Scalars['Int'];
+  allProductIds: Array<Scalars['String']['output']>;
+  count: Scalars['Int']['output'];
   countries: Array<PriceByCountry>;
   defaultPrices: Array<StripePrice>;
 };
@@ -2321,9 +2332,9 @@ export type ProfileOptions = {
 
 export type Project = {
   __typename?: 'Project';
-  hashed_id: Scalars['String'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
+  hashed_id: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type PromoCode = {
@@ -2345,7 +2356,7 @@ export type PromoCode = {
   times_redeemed?: Maybe<Scalars['Int']>;
   title: Scalars['String'];
   type: PromoCodeType;
-  updated: Scalars['DateTime'];
+  updated: Scalars['DateTime']['output'];
 };
 
 export enum PromoCodeDuration {
@@ -2377,25 +2388,25 @@ export enum PromoCodeType {
 }
 
 export type PublicationRequestInput = {
-  abstract: Scalars['String'];
-  email: Scalars['String'];
-  full_name: Scalars['String'];
-  institution: Scalars['String'];
-  procedure: Scalars['String'];
-  rationale: Scalars['String'];
-  specialty: Scalars['String'];
-  type: Scalars['String'];
+  abstract: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  full_name: Scalars['String']['input'];
+  institution: Scalars['String']['input'];
+  procedure: Scalars['String']['input'];
+  rationale: Scalars['String']['input'];
+  specialty: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 };
 
 export type Query = {
   __typename?: 'Query';
   accessEvents: AccessEventsOutput;
   accessesByUserId?: Maybe<AccessEventsOutput>;
-  addCRMTagsToOrderListResultsPreview: Scalars['Int'];
-  addCRMTagsToTriageQueueResultsPreview: Scalars['Int'];
-  allArticleIds: Array<Scalars['String']>;
+  addCRMTagsToOrderListResultsPreview: Scalars['Int']['output'];
+  addCRMTagsToTriageQueueResultsPreview: Scalars['Int']['output'];
+  allArticleIds: Array<Scalars['String']['output']>;
   allArticleVotes: Array<NewArticleVote>;
-  allInstitutionsList: Array<Scalars['String']>;
+  allInstitutionsList: Array<Scalars['String']['output']>;
   announcement: Announcement;
   announcementForUser?: Maybe<Array<Announcement>>;
   announcements: Array<Announcement>;
@@ -2409,7 +2420,7 @@ export type Query = {
   authorBySlug?: Maybe<Author>;
   authors: Array<Author>;
   categories?: Maybe<Array<Category>>;
-  checkFrequentArticleViews: Scalars['Int'];
+  checkFrequentArticleViews: Scalars['Int']['output'];
   confSampleCases: Array<Article>;
   deleteInstitution: DeleteInstitutionOutput;
   featured_institutions: Array<Institution>;
@@ -2419,7 +2430,7 @@ export type Query = {
   fetchRedirectById?: Maybe<Redirect>;
   fetchRedirects: RedirectOutput;
   files: MediaOutput;
-  genCounterReport: Scalars['String'];
+  genCounterReport: Scalars['String']['output'];
   geolocation?: Maybe<Geolocation>;
   getAllOrders: OrderListOutput;
   getAllPromoCodes?: Maybe<PromoCodeListOutput>;
@@ -2431,8 +2442,8 @@ export type Query = {
   getFeedbackQuestionsForUser?: Maybe<FeedbackQuestion>;
   getFeedbackSettings: FeedbackSettings;
   getFeedbacksByInstitutionId: FeedbackListOutput;
-  getIsRequestInstSubButtonPaperOn: Scalars['Boolean'];
-  getPaymentIntentStatus?: Maybe<Scalars['String']>;
+  getIsRequestInstSubButtonPaperOn: Scalars['Boolean']['output'];
+  getPaymentIntentStatus?: Maybe<Scalars['String']['output']>;
   getPriceByProductId: StripePrice;
   getPricingSectionData?: Maybe<Array<StripePrice>>;
   getPromoDetail?: Maybe<PromoCode>;
@@ -2451,7 +2462,7 @@ export type Query = {
   getTrialSettings: TrialSettings;
   getTrialSettingsForCountry: TrialSettings;
   getTypesWithAccess: Array<AccessTypeEnum>;
-  hasArticleRestriction: Scalars['Boolean'];
+  hasArticleRestriction: Scalars['Boolean']['output'];
   instArticleEventLogs: AccessEventsOutput;
   institutionAccessStats: InstitutionAccessStats;
   institutionBlocksOverTime: ChartData;
@@ -2467,8 +2478,8 @@ export type Query = {
   institutionUsersOverTimeByUserType: ChartData;
   institution_subs: Array<Institution>;
   institutions: InstitutionOutput;
-  isJobRunning: Scalars['Boolean'];
-  jobProgress: Scalars['Float'];
+  isJobRunning: Scalars['Boolean']['output'];
+  jobProgress: Scalars['Float']['output'];
   latestArticles: Array<Article>;
   orderById?: Maybe<Order>;
   ordersByUserId?: Maybe<Array<Order>>;
@@ -2480,10 +2491,10 @@ export type Query = {
   profileOptions: ProfileOptions;
   promoCode?: Maybe<PromoCode>;
   redirectFor?: Maybe<Redirect>;
-  scienceOpenLastGeneratedAt?: Maybe<Scalars['DateTime']>;
+  scienceOpenLastGeneratedAt?: Maybe<Scalars['DateTime']['output']>;
   showFeedbackModal: ShowFeedbackModalOutput;
   specialties?: Maybe<Array<Specialty>>;
-  testUpdateArticleStatsJob: Scalars['String'];
+  testUpdateArticleStatsJob: Scalars['String']['output'];
   triageQueueById?: Maybe<TriageQueue>;
   triageQueueRequests: TriageQueueOutput;
   triageQueueRequestsByInstitution: TriageRequestsByUserOutput;
@@ -2521,7 +2532,7 @@ export type QueryAddCrmTagsToTriageQueueResultsPreviewArgs = {
 
 
 export type QueryAnnouncementArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2531,13 +2542,13 @@ export type QueryArticleAccessStatsArgs = {
 
 
 export type QueryArticleByIdArgs = {
-  article_id: Scalars['String'];
+  article_id: Scalars['String']['input'];
 };
 
 
 export type QueryArticleBySlugArgs = {
-  locale?: InputMaybe<Scalars['String']>;
-  publication_id: Scalars['String'];
+  locale?: InputMaybe<Scalars['String']['input']>;
+  publication_id: Scalars['String']['input'];
 };
 
 
@@ -2547,17 +2558,17 @@ export type QueryArticlesArgs = {
 
 
 export type QueryArticlesByIdsArgs = {
-  article_ids: Array<Scalars['String']>;
+  article_ids: Array<Scalars['String']['input']>;
 };
 
 
 export type QueryAuthorBySlugArgs = {
-  slug: Scalars['String'];
+  slug: Scalars['String']['input'];
 };
 
 
 export type QueryCheckFrequentArticleViewsArgs = {
-  institution_id: Scalars['String'];
+  institution_id: Scalars['String']['input'];
 };
 
 
@@ -2572,7 +2583,7 @@ export type QueryFetchArticlesArgs = {
 
 
 export type QueryFetchPageByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2582,7 +2593,7 @@ export type QueryFetchPagesArgs = {
 
 
 export type QueryFetchRedirectByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2612,7 +2623,7 @@ export type QueryGetAllPromoCodesArgs = {
 
 
 export type QueryGetCombinedPromoCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
@@ -2627,18 +2638,18 @@ export type QueryGetFeedbackListArgs = {
 
 
 export type QueryGetFeedbackQuestionsForUserArgs = {
-  anon_link_id: Scalars['String'];
+  anon_link_id: Scalars['String']['input'];
 };
 
 
 export type QueryGetFeedbacksByInstitutionIdArgs = {
   input: FeedbackListInput;
-  institution_id: Scalars['String'];
+  institution_id: Scalars['String']['input'];
 };
 
 
 export type QueryGetPriceByProductIdArgs = {
-  product_id: Scalars['String'];
+  product_id: Scalars['String']['input'];
 };
 
 
@@ -2647,23 +2658,26 @@ export type QueryGetPromoDetailArgs = {
 };
 
 
+
+
+
 export type QueryGetPurchasedArticlesByUserIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryGetScienceOpenArticleByPubIdArgs = {
-  publication_id: Scalars['String'];
+  publication_id: Scalars['String']['input'];
 };
 
 
 export type QueryGetStripePromoCodeArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryGetStripePromoCodeByCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
@@ -2673,7 +2687,7 @@ export type QueryGetStripePromoCodesArgs = {
 
 
 export type QueryGetStripePromocodeRedeemsArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   input: RedeemListInput;
 };
 
@@ -2689,13 +2703,13 @@ export type QueryInstitutionAccessStatsArgs = {
 
 
 export type QueryInstitutionBlocksOverTimeArgs = {
-  groupBy: Scalars['String'];
+  groupBy: Scalars['String']['input'];
   input: InstitutionAccessInput;
 };
 
 
 export type QueryInstitutionByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2710,13 +2724,13 @@ export type QueryInstitutionTrafficBreakdownByUserTypeArgs = {
 
 
 export type QueryInstitutionTrafficOverTimeArgs = {
-  groupBy: Scalars['String'];
+  groupBy: Scalars['String']['input'];
   input: InstitutionAccessInput;
 };
 
 
 export type QueryInstitutionTrafficOverTimeByUserTypeArgs = {
-  groupBy: Scalars['String'];
+  groupBy: Scalars['String']['input'];
   input: InstitutionAccessInput;
 };
 
@@ -2737,13 +2751,13 @@ export type QueryInstitutionUserTypesStatsArgs = {
 
 
 export type QueryInstitutionUsersOverTimeArgs = {
-  groupBy: Scalars['String'];
+  groupBy: Scalars['String']['input'];
   input: InstitutionAccessInput;
 };
 
 
 export type QueryInstitutionUsersOverTimeByUserTypeArgs = {
-  groupBy: Scalars['String'];
+  groupBy: Scalars['String']['input'];
   input: InstitutionAccessInput;
 };
 
@@ -2754,27 +2768,27 @@ export type QueryInstitutionsArgs = {
 
 
 export type QueryIsJobRunningArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 
 export type QueryJobProgressArgs = {
-  name: Scalars['String'];
+  name: Scalars['String']['input'];
 };
 
 
 export type QueryOrderByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryOrdersByUserIdArgs = {
-  user_id: Scalars['String'];
+  user_id: Scalars['String']['input'];
 };
 
 
 export type QueryPageBySlugArgs = {
-  slug: Scalars['String'];
+  slug: Scalars['String']['input'];
 };
 
 
@@ -2789,22 +2803,22 @@ export type QueryPricesByCountryArgs = {
 
 
 export type QueryPromoCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
 
 
 export type QueryRedirectForArgs = {
-  from: Scalars['String'];
+  from: Scalars['String']['input'];
 };
 
 
 export type QueryShowFeedbackModalArgs = {
-  anon_link_id: Scalars['String'];
+  anon_link_id: Scalars['String']['input'];
 };
 
 
 export type QueryTriageQueueByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2815,27 +2829,27 @@ export type QueryTriageQueueRequestsArgs = {
 
 export type QueryTriageQueueRequestsByInstitutionArgs = {
   input?: InputMaybe<TriageQueueInput>;
-  instId: Scalars['String'];
+  instId: Scalars['String']['input'];
 };
 
 
 export type QueryUpgradeSubscriptionPreviewArgs = {
-  promocode?: InputMaybe<Scalars['String']>;
+  promocode?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryUserByEmailArgs = {
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
 };
 
 
 export type QueryUserByIdArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryUserDetailArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
@@ -2846,7 +2860,7 @@ export type QueryUsersArgs = {
 
 export type QueryUsersByInstitutionArgs = {
   input?: InputMaybe<UserInput>;
-  instId: Scalars['String'];
+  instId: Scalars['String']['input'];
 };
 
 export enum QueryOperation {
@@ -2868,51 +2882,51 @@ export enum QueryOperation {
 
 export type RedeemListInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type RedeemListOutput = {
   __typename?: 'RedeemListOutput';
   items: Array<Payment>;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 export type Redirect = {
   __typename?: 'Redirect';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   author?: Maybe<User>;
-  created?: Maybe<Scalars['DateTime']>;
-  from: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  from: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   stats?: Maybe<Array<RedirectStats>>;
-  to: Scalars['String'];
-  track?: Maybe<Scalars['Boolean']>;
-  type: Scalars['String'];
-  updated?: Maybe<Scalars['DateTime']>;
+  to: Scalars['String']['output'];
+  track?: Maybe<Scalars['Boolean']['output']>;
+  type: Scalars['String']['output'];
+  updated?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type RedirectInput = {
-  limit?: InputMaybe<Scalars['Int']>;
-  search_term?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search_term?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type RedirectOutput = {
   __typename?: 'RedirectOutput';
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   redirects: Array<Redirect>;
 };
 
 export type RedirectStats = {
   __typename?: 'RedirectStats';
-  ip: Scalars['String'];
-  time: Scalars['DateTime'];
+  ip: Scalars['String']['output'];
+  time: Scalars['DateTime']['output'];
   user?: Maybe<User>;
 };
 
@@ -2933,47 +2947,47 @@ export type Restrictions = {
 
 export type ScienceOpenXml = {
   __typename?: 'ScienceOpenXml';
-  _id: Scalars['ID'];
-  articleId: Scalars['String'];
-  articlePublicationId: Scalars['String'];
-  generatedAt: Scalars['DateTime'];
-  generatedXml: Scalars['String'];
+  _id: Scalars['ID']['output'];
+  articleId: Scalars['String']['output'];
+  articlePublicationId: Scalars['String']['output'];
+  generatedAt: Scalars['DateTime']['output'];
+  generatedXml: Scalars['String']['output'];
 };
 
 export type ShowFeedbackModalOutput = {
   __typename?: 'ShowFeedbackModalOutput';
-  show: Scalars['Boolean'];
-  showNextAt: Scalars['Int'];
+  show: Scalars['Boolean']['output'];
+  showNextAt: Scalars['Int']['output'];
 };
 
 export type SignInInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 export type SignUpInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName?: InputMaybe<Scalars['String']>;
-  password: Scalars['String'];
-  phoneNumber?: InputMaybe<Scalars['String']>;
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SiteSetting = {
   __typename?: 'SiteSetting';
-  _id: Scalars['String'];
-  displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
-  isPurchaseArticleFeatureOn: Scalars['Boolean'];
-  isRentArticleFeatureOn: Scalars['Boolean'];
-  isRequestInstSubButtonPaperOn: Scalars['Boolean'];
-  isTrialFeatureOn?: Maybe<Scalars['Boolean']>;
-  rentDuration: Scalars['Float'];
-  scienceOpenXmlGeneratedAt: Scalars['DateTime'];
-  trialDuration?: Maybe<Scalars['Float']>;
-  updated: Scalars['DateTime'];
+  _id: Scalars['String']['output'];
+  displayPurchaseAndRentToAdminOnly: Scalars['Boolean']['output'];
+  isPurchaseArticleFeatureOn: Scalars['Boolean']['output'];
+  isRentArticleFeatureOn: Scalars['Boolean']['output'];
+  isRequestInstSubButtonPaperOn: Scalars['Boolean']['output'];
+  isTrialFeatureOn?: Maybe<Scalars['Boolean']['output']>;
+  rentDuration: Scalars['Float']['output'];
+  scienceOpenXmlGeneratedAt: Scalars['DateTime']['output'];
+  trialDuration?: Maybe<Scalars['Float']['output']>;
+  updated: Scalars['DateTime']['output'];
   updatedBy?: Maybe<User>;
 };
 
@@ -2987,26 +3001,26 @@ export type Social = {
 
 export type SocialAuthDetails = {
   __typename?: 'SocialAuthDetails';
-  displayName?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  id: Scalars['ID'];
+  displayName?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   name?: Maybe<SocialName>;
   provider?: Maybe<SocialProviderEnum>;
 };
 
 export type SocialAuthDetailsInput = {
-  displayName?: InputMaybe<Scalars['String']>;
-  email: Scalars['String'];
-  id: Scalars['String'];
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  id: Scalars['String']['input'];
 };
 
 export type SocialAuthInput = {
-  displayName?: InputMaybe<Scalars['ID']>;
-  email: Scalars['String'];
-  familyName?: InputMaybe<Scalars['String']>;
-  givenName?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  middleName?: InputMaybe<Scalars['String']>;
+  displayName?: InputMaybe<Scalars['ID']['input']>;
+  email: Scalars['String']['input'];
+  familyName?: InputMaybe<Scalars['String']['input']>;
+  givenName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  middleName?: InputMaybe<Scalars['String']['input']>;
   provider: SocialProviderEnum;
 };
 
@@ -3018,9 +3032,9 @@ export type SocialInput = {
 
 export type SocialName = {
   __typename?: 'SocialName';
-  familyName?: Maybe<Scalars['String']>;
-  givenName?: Maybe<Scalars['String']>;
-  middleName?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']['output']>;
+  givenName?: Maybe<Scalars['String']['output']>;
+  middleName?: Maybe<Scalars['String']['output']>;
 };
 
 export enum SocialProviderEnum {
@@ -3032,8 +3046,8 @@ export enum SocialProviderEnum {
 
 export type Specialty = {
   __typename?: 'Specialty';
-  _id: Scalars['ID'];
-  name: Scalars['String'];
+  _id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export enum StatusType {
@@ -3047,86 +3061,86 @@ export enum StatusType {
 
 export type StripePrice = {
   __typename?: 'StripePrice';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   countryCode?: Maybe<CountryEnum>;
   countryCodes?: Maybe<Array<CountryEnum>>;
-  currency: Scalars['String'];
-  enabled?: Maybe<Scalars['Boolean']>;
+  currency: Scalars['String']['output'];
+  enabled?: Maybe<Scalars['Boolean']['output']>;
   interval?: Maybe<OrderInterval>;
-  nickname: Scalars['String'];
-  priceId?: Maybe<Scalars['ID']>;
-  product: Scalars['String'];
-  productName?: Maybe<Scalars['String']>;
-  unit_amount: Scalars['Int'];
-  unit_decimal?: Maybe<Scalars['String']>;
+  nickname: Scalars['String']['output'];
+  priceId?: Maybe<Scalars['ID']['output']>;
+  product: Scalars['String']['output'];
+  productName?: Maybe<Scalars['String']['output']>;
+  unit_amount: Scalars['Int']['output'];
+  unit_decimal?: Maybe<Scalars['String']['output']>;
 };
 
 export type StripeProduct = {
   __typename?: 'StripeProduct';
-  description?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
   prices: Array<StripePrice>;
 };
 
 export type StripePromo = {
   __typename?: 'StripePromo';
-  price: Scalars['String'];
+  price: Scalars['String']['output'];
 };
 
 export type StripePromoCode = {
   __typename?: 'StripePromoCode';
-  _id: Scalars['String'];
-  active?: Maybe<Scalars['Boolean']>;
-  amount_off?: Maybe<Scalars['Float']>;
-  applies_to?: Maybe<Array<Scalars['String']>>;
-  code: Scalars['String'];
-  couponId: Scalars['String'];
-  created: Scalars['DateTime'];
+  _id: Scalars['String']['output'];
+  active?: Maybe<Scalars['Boolean']['output']>;
+  amount_off?: Maybe<Scalars['Float']['output']>;
+  applies_to?: Maybe<Array<Scalars['String']['output']>>;
+  code: Scalars['String']['output'];
+  couponId: Scalars['String']['output'];
+  created: Scalars['DateTime']['output'];
   createdBy?: Maybe<User>;
   duration?: Maybe<PromoCodeDuration>;
-  duration_in_months?: Maybe<Scalars['Float']>;
-  max_redemptions?: Maybe<Scalars['Float']>;
-  name?: Maybe<Scalars['String']>;
-  percent_off?: Maybe<Scalars['Float']>;
-  redeem_by?: Maybe<Scalars['DateTime']>;
-  times_redeemed: Scalars['Float'];
-  updatedBy?: Maybe<Scalars['String']>;
-  valid: Scalars['Boolean'];
+  duration_in_months?: Maybe<Scalars['Float']['output']>;
+  max_redemptions?: Maybe<Scalars['Float']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  percent_off?: Maybe<Scalars['Float']['output']>;
+  redeem_by?: Maybe<Scalars['DateTime']['output']>;
+  times_redeemed: Scalars['Float']['output'];
+  updatedBy?: Maybe<Scalars['String']['output']>;
+  valid: Scalars['Boolean']['output'];
 };
 
 export type StripePromoCodeListInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type StripePromoCodeListOutput = {
   __typename?: 'StripePromoCodeListOutput';
   items: Array<StripePromoCode>;
-  totalCount: Scalars['Int'];
+  totalCount: Scalars['Int']['output'];
 };
 
 export type SubChapter = {
   __typename?: 'SubChapter';
-  number: Scalars['Int'];
-  parent: Scalars['Int'];
-  time: Scalars['Int'];
-  title: Scalars['String'];
+  number: Scalars['Int']['output'];
+  parent: Scalars['Int']['output'];
+  time: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
 };
 
 export type SubItem = {
   __typename?: 'SubItem';
-  id: Scalars['ID'];
-  number: Scalars['Int'];
-  text: Scalars['String'];
+  id: Scalars['ID']['output'];
+  number: Scalars['Int']['output'];
+  text: Scalars['String']['output'];
 };
 
 export type SubItemInput = {
-  number: Scalars['Int'];
-  text: Scalars['String'];
+  number: Scalars['Int']['input'];
+  text: Scalars['String']['input'];
 };
 
 export enum SubType {
@@ -3137,114 +3151,114 @@ export enum SubType {
 }
 
 export type SubscriptionInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  contact?: InputMaybe<Scalars['String']>;
-  display_name: Scalars['String'];
-  email: Scalars['String'];
-  institution_name: Scalars['String'];
-  message: Scalars['String'];
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  contact?: InputMaybe<Scalars['String']['input']>;
+  display_name: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  institution_name: Scalars['String']['input'];
+  message: Scalars['String']['input'];
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubscriptionType = {
   __typename?: 'SubscriptionType';
-  fromInst?: Maybe<Scalars['String']>;
-  lastChecked: Scalars['DateTime'];
+  fromInst?: Maybe<Scalars['String']['output']>;
+  lastChecked: Scalars['DateTime']['output'];
   lastSubType?: Maybe<SubType>;
-  lastSubTypeExpiry?: Maybe<Scalars['DateTime']>;
+  lastSubTypeExpiry?: Maybe<Scalars['DateTime']['output']>;
   subType?: Maybe<SubType>;
 };
 
 export type TemporaryAccess = {
   __typename?: 'TemporaryAccess';
-  _id: Scalars['ID'];
-  expiresAt: Scalars['DateTime'];
+  _id: Scalars['ID']['output'];
+  expiresAt: Scalars['DateTime']['output'];
   institution: Institution;
-  source_ip: Scalars['String'];
+  source_ip: Scalars['String']['output'];
   user: User;
 };
 
 export type Thumbnail = {
   __typename?: 'Thumbnail';
-  height: Scalars['Int'];
-  url: Scalars['String'];
-  width: Scalars['Int'];
+  height: Scalars['Int']['output'];
+  url: Scalars['String']['output'];
+  width: Scalars['Int']['output'];
 };
 
 export type TrackArticleInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  publication_id: Scalars['String'];
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
-  uniqueView?: InputMaybe<Scalars['Boolean']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  publication_id: Scalars['String']['input'];
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
+  uniqueView?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type TrackFeedbackInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  article_publication_id?: InputMaybe<Scalars['String']>;
-  comment?: InputMaybe<Scalars['String']>;
-  feedback_id?: InputMaybe<Scalars['String']>;
-  method?: InputMaybe<Scalars['String']>;
-  questionId: Scalars['String'];
-  type: Scalars['String'];
-  user?: InputMaybe<Scalars['String']>;
-  value: Scalars['any'];
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  article_publication_id?: InputMaybe<Scalars['String']['input']>;
+  comment?: InputMaybe<Scalars['String']['input']>;
+  feedback_id?: InputMaybe<Scalars['String']['input']>;
+  method?: InputMaybe<Scalars['String']['input']>;
+  questionId: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+  user?: InputMaybe<Scalars['String']['input']>;
+  value: Scalars['any']['input'];
 };
 
 export type TrackInitiateCheckoutInput = {
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TrackRequestInstSubscriptionInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TrackSubscribeInput = {
-  orderAmount: Scalars['Float'];
+  orderAmount: Scalars['Float']['input'];
 };
 
 export type TrackVideoInput = {
-  anon_link_id?: InputMaybe<Scalars['String']>;
-  block_type?: InputMaybe<Scalars['String']>;
-  publication_id: Scalars['String'];
-  referredFrom?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
-  uniqueView?: InputMaybe<Scalars['Boolean']>;
+  anon_link_id?: InputMaybe<Scalars['String']['input']>;
+  block_type?: InputMaybe<Scalars['String']['input']>;
+  publication_id: Scalars['String']['input'];
+  referredFrom?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
+  uniqueView?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type TrackVideoTimeInput = {
-  increment: Scalars['Int'];
-  time_watched: Scalars['Float'];
-  vidWatchId: Scalars['String'];
+  increment: Scalars['Int']['input'];
+  time_watched: Scalars['Float']['input'];
+  vidWatchId: Scalars['String']['input'];
 };
 
 export type TransferDomainsInput = {
-  domain: Scalars['String'];
-  to: Scalars['String'];
+  domain: Scalars['String']['input'];
+  to: Scalars['String']['input'];
 };
 
 export type TransferInstDataInput = {
-  from: Array<Scalars['String']>;
-  to: Scalars['String'];
+  from: Array<Scalars['String']['input']>;
+  to: Scalars['String']['input'];
 };
 
 export type TranslateArticlesInput = {
-  article_ids: Array<Scalars['String']>;
-  enableImmediately?: InputMaybe<Scalars['Boolean']>;
-  languages: Array<Scalars['String']>;
+  article_ids: Array<Scalars['String']['input']>;
+  enableImmediately?: InputMaybe<Scalars['Boolean']['input']>;
+  languages: Array<Scalars['String']['input']>;
 };
 
 export type TranslationResult = {
   __typename?: 'TranslationResult';
-  language: Scalars['String'];
-  message?: Maybe<Scalars['String']>;
-  publication_id: Scalars['String'];
-  slug: Scalars['String'];
-  success: Scalars['Boolean'];
+  language: Scalars['String']['output'];
+  message?: Maybe<Scalars['String']['output']>;
+  publication_id: Scalars['String']['output'];
+  slug: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export enum TriageMarket {
@@ -3266,53 +3280,53 @@ export enum TriagePriority {
 
 export type TriageQueue = {
   __typename?: 'TriageQueue';
-  _id: Scalars['ID'];
+  _id: Scalars['ID']['output'];
   accessType?: Maybe<AccessTypeEnum>;
   additional_info?: Maybe<AdditionalInfo>;
-  countryCode?: Maybe<Scalars['String']>;
-  countryName?: Maybe<Scalars['String']>;
-  created?: Maybe<Scalars['DateTime']>;
-  display_name?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  emailTemplate: Scalars['String'];
+  countryCode?: Maybe<Scalars['String']['output']>;
+  countryName?: Maybe<Scalars['String']['output']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  display_name?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  emailTemplate: Scalars['String']['output'];
   institution?: Maybe<Institution>;
-  institution_name?: Maybe<Scalars['String']>;
+  institution_name?: Maybe<Scalars['String']['output']>;
   market?: Maybe<TriageMarket>;
-  notes?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']['output']>;
   priority?: Maybe<TriagePriority>;
-  regionName?: Maybe<Scalars['String']>;
-  sentEmailAt?: Maybe<Scalars['DateTime']>;
+  regionName?: Maybe<Scalars['String']['output']>;
+  sentEmailAt?: Maybe<Scalars['DateTime']['output']>;
   type: TriageQueueStatus;
-  updated?: Maybe<Scalars['DateTime']>;
+  updated?: Maybe<Scalars['DateTime']['output']>;
   user?: Maybe<User>;
 };
 
 
 export type TriageQueueEmailTemplateArgs = {
-  pocName?: InputMaybe<Scalars['String']>;
+  pocName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TriageQueueEmailInput = {
-  contactEmail: Scalars['String'];
-  id: Scalars['String'];
-  includeRequestorToCc: Scalars['Boolean'];
-  pocName?: InputMaybe<Scalars['String']>;
+  contactEmail: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  includeRequestorToCc: Scalars['Boolean']['input'];
+  pocName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TriageQueueInput = {
-  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
-  startDate?: InputMaybe<Scalars['DateTime']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type TriageQueueOutput = {
   __typename?: 'TriageQueueOutput';
-  count: Scalars['Int'];
-  dbQueryString: Scalars['String'];
+  count: Scalars['Int']['output'];
+  dbQueryString: Scalars['String']['output'];
   triage_requests: Array<TriageQueue>;
 };
 
@@ -3330,152 +3344,159 @@ export enum TriageQueueStatus {
 
 export type TriageRequestByUser = {
   __typename?: 'TriageRequestByUser';
-  _id: Scalars['ID'];
-  articleCount?: Maybe<Scalars['Float']>;
-  display_name?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  inst_email?: Maybe<Scalars['String']>;
-  institution?: Maybe<Scalars['String']>;
-  last_request_date?: Maybe<Scalars['DateTime']>;
-  last_visited?: Maybe<Scalars['DateTime']>;
-  loginCount?: Maybe<Scalars['Float']>;
-  registered?: Maybe<Scalars['DateTime']>;
-  requestCount?: Maybe<Scalars['Int']>;
+  _id: Scalars['ID']['output'];
+  articleCount?: Maybe<Scalars['Float']['output']>;
+  display_name?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  inst_email?: Maybe<Scalars['String']['output']>;
+  institution?: Maybe<Scalars['String']['output']>;
+  last_request_date?: Maybe<Scalars['DateTime']['output']>;
+  last_visited?: Maybe<Scalars['DateTime']['output']>;
+  loginCount?: Maybe<Scalars['Float']['output']>;
+  registered?: Maybe<Scalars['DateTime']['output']>;
+  requestCount?: Maybe<Scalars['Int']['output']>;
   requests: Array<PartialRequest>;
-  specialty?: Maybe<Scalars['String']>;
-  user_type?: Maybe<Scalars['String']>;
+  specialty?: Maybe<Scalars['String']['output']>;
+  user_type?: Maybe<Scalars['String']['output']>;
 };
 
 export type TriageRequestsByUserOutput = {
   __typename?: 'TriageRequestsByUserOutput';
-  count: Scalars['Int'];
-  totalRequestCount?: Maybe<Scalars['Int']>;
+  count: Scalars['Int']['output'];
+  totalRequestCount?: Maybe<Scalars['Int']['output']>;
   triage_requests: Array<TriageRequestByUser>;
 };
 
 export type TrialSettings = {
   __typename?: 'TrialSettings';
-  enabledCountries: Array<Scalars['String']>;
-  isTrialFeatureOn: Scalars['Boolean'];
-  trialDuration: Scalars['Float'];
+  enabledCountries: Array<Scalars['String']['output']>;
+  isTrialFeatureOn: Scalars['Boolean']['output'];
+  trialDuration: Scalars['Float']['output'];
 };
 
 export type TrialSettingsInput = {
-  enabledCountries: Array<Scalars['String']>;
-  isTrialFeatureOn: Scalars['Boolean'];
-  trialDuration: Scalars['Float'];
+  enabledCountries: Array<Scalars['String']['input']>;
+  isTrialFeatureOn: Scalars['Boolean']['input'];
+  trialDuration: Scalars['Float']['input'];
 };
 
 export type UpdateArticleInput = {
-  DOIStatus?: InputMaybe<Scalars['String']>;
+  DOIStatus?: InputMaybe<Scalars['String']['input']>;
   content?: InputMaybe<UpdateContentInput>;
-  has_complete_abstract?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['ID'];
-  preprint_date?: InputMaybe<Scalars['DateTime']>;
-  production_id?: InputMaybe<Scalars['String']>;
-  publication_id?: InputMaybe<Scalars['String']>;
-  published?: InputMaybe<Scalars['DateTime']>;
-  restrictions?: InputMaybe<Scalars['String']>;
-  status?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
+  has_complete_abstract?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['ID']['input'];
+  preprint_date?: InputMaybe<Scalars['DateTime']['input']>;
+  production_id?: InputMaybe<Scalars['String']['input']>;
+  publication_id?: InputMaybe<Scalars['String']['input']>;
+  published?: InputMaybe<Scalars['DateTime']['input']>;
+  restrictions?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateContentInput = {
-  abstract?: InputMaybe<Scalars['String']>;
-  article?: InputMaybe<Scalars['String']>;
-  citations?: InputMaybe<Scalars['String']>;
-  cite_this_article?: InputMaybe<Scalars['String']>;
+  abstract?: InputMaybe<Scalars['String']['input']>;
+  article?: InputMaybe<Scalars['String']['input']>;
+  citations?: InputMaybe<Scalars['String']['input']>;
+  cite_this_article?: InputMaybe<Scalars['String']['input']>;
   otoc?: InputMaybe<Array<ContentItemInput>>;
-  outline?: InputMaybe<Scalars['String']>;
+  outline?: InputMaybe<Scalars['String']['input']>;
   toc?: InputMaybe<Array<ContentItemInput>>;
-  transcription?: InputMaybe<Scalars['String']>;
+  transcription?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCountriesInput = {
   articleRestriction?: InputMaybe<ArticleRestrictionEnum>;
-  codes: Array<Scalars['String']>;
-  coefficient?: InputMaybe<Scalars['Float']>;
-  multiplier?: InputMaybe<Scalars['Float']>;
-  trialsEnabled?: InputMaybe<Scalars['Boolean']>;
+  codes: Array<Scalars['String']['input']>;
+  coefficient?: InputMaybe<Scalars['Float']['input']>;
+  multiplier?: InputMaybe<Scalars['Float']['input']>;
+  trialsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateInstitutionInput = {
   accessSettings?: InputMaybe<AccessSettingsInput>;
-  aliases?: InputMaybe<Array<Scalars['String']>>;
-  category?: InputMaybe<Scalars['String']>;
-  domains?: InputMaybe<Array<Scalars['String']>>;
-  id: Scalars['ID'];
+  aliases?: InputMaybe<Array<Scalars['String']['input']>>;
+  category?: InputMaybe<Scalars['String']['input']>;
+  domains?: InputMaybe<Array<Scalars['String']['input']>>;
+  id: Scalars['ID']['input'];
   image?: InputMaybe<ImageInput>;
-  name: Scalars['String'];
-  notes?: InputMaybe<Scalars['String']>;
-  restrictMatchByName?: InputMaybe<Scalars['Boolean']>;
-  show_on_subscribers_page?: InputMaybe<Scalars['Boolean']>;
-  subscriber_display_name?: InputMaybe<Scalars['String']>;
-  urlLink?: InputMaybe<Scalars['String']>;
+  name: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  restrictMatchByName?: InputMaybe<Scalars['Boolean']['input']>;
+  show_on_subscribers_page?: InputMaybe<Scalars['Boolean']['input']>;
+  subscriber_display_name?: InputMaybe<Scalars['String']['input']>;
+  urlLink?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateMediaLibraryInput = {
-  description?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  title: Scalars['String'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type UpdateOrderInput = {
-  amount?: InputMaybe<Scalars['Float']>;
-  articleId?: InputMaybe<Scalars['String']>;
+  amount?: InputMaybe<Scalars['Float']['input']>;
+  articleId?: InputMaybe<Scalars['String']['input']>;
   currency?: InputMaybe<OrderCurrency>;
-  customInstitutionName?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  end?: InputMaybe<Scalars['DateTime']>;
-  institution?: InputMaybe<Scalars['String']>;
-  isCanceled?: InputMaybe<Scalars['Boolean']>;
-  location?: InputMaybe<Scalars['String']>;
-  notes?: InputMaybe<Scalars['String']>;
+  customInstitutionName?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['DateTime']['input']>;
+  institution?: InputMaybe<Scalars['String']['input']>;
+  isCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  location?: InputMaybe<Scalars['String']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
   payment_status?: InputMaybe<OrderPaymentStatus>;
   plan_interval?: InputMaybe<OrderInterval>;
-  promoCode?: InputMaybe<Scalars['String']>;
+  promoCode?: InputMaybe<Scalars['String']['input']>;
   require_login?: InputMaybe<RequireLogin>;
-  restricted_specialties?: InputMaybe<Array<Scalars['String']>>;
-  restricted_user_types?: InputMaybe<Array<Scalars['String']>>;
-  start?: InputMaybe<Scalars['DateTime']>;
+  restricted_specialties?: InputMaybe<Array<Scalars['String']['input']>>;
+  restricted_user_types?: InputMaybe<Array<Scalars['String']['input']>>;
+  start?: InputMaybe<Scalars['DateTime']['input']>;
   status?: InputMaybe<OrderStatus>;
   type?: InputMaybe<OrderType>;
-  user_id?: InputMaybe<Scalars['String']>;
+  user_id?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdatePageInput = {
-  content?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  meta_desc?: InputMaybe<Scalars['String']>;
-  password?: InputMaybe<Scalars['String']>;
-  scripts?: InputMaybe<Array<Scalars['String']>>;
-  sidebar?: InputMaybe<Scalars['String']>;
-  slug: Scalars['String'];
-  status?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
+  content?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  meta_desc?: InputMaybe<Scalars['String']['input']>;
+  password?: InputMaybe<Scalars['String']['input']>;
+  scripts?: InputMaybe<Array<Scalars['String']['input']>>;
+  sidebar?: InputMaybe<Scalars['String']['input']>;
+  slug: Scalars['String']['input'];
+  status?: InputMaybe<Scalars['String']['input']>;
+  title: Scalars['String']['input'];
 };
 
 export type UpdatePasswordInput = {
-  newPassword: Scalars['String'];
-  oldPassword?: InputMaybe<Scalars['String']>;
+  newPassword: Scalars['String']['input'];
+  oldPassword?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdatePriceInput = {
-  amount: Scalars['Int'];
+  amount: Scalars['Int']['input'];
   countryCode?: InputMaybe<CountryEnum>;
   interval?: InputMaybe<OrderInterval>;
 };
 
-export type UpdateProfileInput = {
-  display_name?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  institution_name?: InputMaybe<Scalars['String']>;
-  institutional_email?: InputMaybe<Scalars['String']>;
-  interests?: InputMaybe<Array<Scalars['String']>>;
-  lastName?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  specialty?: InputMaybe<Scalars['ID']>;
-  user_type?: InputMaybe<Scalars['String']>;
+
+
+export type UpdatePromoCodeInput = {
+  _id: Scalars['ID'];
+  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
+  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
+  days?: InputMaybe<Scalars['Int']>;
+  expiration?: InputMaybe<Scalars['DateTime']>;
+  interval?: InputMaybe<OrderInterval>;
+  isSubscription?: InputMaybe<Scalars['Boolean']>;
+  notes?: InputMaybe<Scalars['String']>;
+  numberOfCodes?: InputMaybe<Scalars['Int']>;
+  numberUnused?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['Int']>;
+  times_redeemed?: InputMaybe<Scalars['Int']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<PromoCodeType>;
 };
 
 export type UpdatePromoCodeInput = {
@@ -3496,189 +3517,189 @@ export type UpdatePromoCodeInput = {
 };
 
 export type UpdatePurchaseSettingInput = {
-  article_ids: Array<Scalars['String']>;
-  isPurchaseArticleFeatureOn: Scalars['Boolean'];
-  isRentArticleFeatureOn: Scalars['Boolean'];
+  article_ids: Array<Scalars['String']['input']>;
+  isPurchaseArticleFeatureOn: Scalars['Boolean']['input'];
+  isRentArticleFeatureOn: Scalars['Boolean']['input'];
   purchaseAllowedCountries?: InputMaybe<Array<CountryEnum>>;
 };
 
 export type UpdateRedirectInput = {
-  from?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  name?: InputMaybe<Scalars['String']>;
-  to?: InputMaybe<Scalars['String']>;
-  track?: InputMaybe<Scalars['Boolean']>;
-  type?: InputMaybe<Scalars['String']>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  to?: InputMaybe<Scalars['String']['input']>;
+  track?: InputMaybe<Scalars['Boolean']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateSiteSettingInput = {
-  displayPurchaseAndRentToAdminOnly: Scalars['Boolean'];
-  isPurchaseArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
-  isRentArticleFeatureOn?: InputMaybe<Scalars['Boolean']>;
-  isRequestInstSubButtonPaperOn?: InputMaybe<Scalars['Boolean']>;
-  isTrialFeatureOn?: InputMaybe<Scalars['Boolean']>;
-  rentDuration?: InputMaybe<Scalars['Float']>;
-  trialDuration?: InputMaybe<Scalars['Float']>;
-  updated?: InputMaybe<Scalars['DateTime']>;
+  displayPurchaseAndRentToAdminOnly: Scalars['Boolean']['input'];
+  isPurchaseArticleFeatureOn?: InputMaybe<Scalars['Boolean']['input']>;
+  isRentArticleFeatureOn?: InputMaybe<Scalars['Boolean']['input']>;
+  isRequestInstSubButtonPaperOn?: InputMaybe<Scalars['Boolean']['input']>;
+  isTrialFeatureOn?: InputMaybe<Scalars['Boolean']['input']>;
+  rentDuration?: InputMaybe<Scalars['Float']['input']>;
+  trialDuration?: InputMaybe<Scalars['Float']['input']>;
+  updated?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type UpdateStripeCodeInput = {
-  active?: InputMaybe<Scalars['Boolean']>;
-  couponId: Scalars['String'];
-  max_redemptions?: InputMaybe<Scalars['Float']>;
-  name?: InputMaybe<Scalars['String']>;
-  redeem_by?: InputMaybe<Scalars['DateTime']>;
-  times_redeemed?: InputMaybe<Scalars['Float']>;
-  valid?: InputMaybe<Scalars['Boolean']>;
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  couponId: Scalars['String']['input'];
+  max_redemptions?: InputMaybe<Scalars['Float']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  redeem_by?: InputMaybe<Scalars['DateTime']['input']>;
+  times_redeemed?: InputMaybe<Scalars['Float']['input']>;
+  valid?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UpdateTriageInput = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
   market?: InputMaybe<TriageMarket>;
   priority?: InputMaybe<TriagePriority>;
   type?: InputMaybe<TriageQueueStatus>;
 };
 
 export type UpdateTriageNotesInput = {
-  id: Scalars['String'];
-  notes: Scalars['String'];
+  id: Scalars['String']['input'];
+  notes: Scalars['String']['input'];
 };
 
 export type UpdateTriageResponseInput = {
-  id: Scalars['String'];
-  response: Scalars['String'];
+  id: Scalars['String']['input'];
+  response: Scalars['String']['input'];
 };
 
 export type UpdateUserInput = {
-  deleted?: InputMaybe<Scalars['Boolean']>;
-  display_name?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
-  emailNeedsConfirm?: InputMaybe<Scalars['Boolean']>;
-  emailVerifiedAt?: InputMaybe<Scalars['DateTime']>;
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  display_name?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  emailNeedsConfirm?: InputMaybe<Scalars['Boolean']['input']>;
+  emailVerifiedAt?: InputMaybe<Scalars['DateTime']['input']>;
   email_preference?: InputMaybe<EmailPreference>;
-  firstName?: InputMaybe<Scalars['String']>;
-  hasManualBlock?: InputMaybe<Scalars['Boolean']>;
-  id: Scalars['String'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  hasManualBlock?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['String']['input'];
   image?: InputMaybe<ImageInput>;
-  instEmailVerified?: InputMaybe<Scalars['Boolean']>;
-  instEmailVerifiedAt?: InputMaybe<Scalars['DateTime']>;
-  inst_email?: InputMaybe<Scalars['String']>;
-  institution?: InputMaybe<Scalars['String']>;
-  institution_name?: InputMaybe<Scalars['String']>;
-  interests?: InputMaybe<Array<Scalars['String']>>;
-  isTrialFeatureOn?: InputMaybe<Scalars['Boolean']>;
-  lastName?: InputMaybe<Scalars['String']>;
-  manualBlockMessage?: InputMaybe<Scalars['String']>;
-  matched_institution_name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  referer?: InputMaybe<Scalars['String']>;
-  referrerPath?: InputMaybe<Scalars['String']>;
+  instEmailVerified?: InputMaybe<Scalars['Boolean']['input']>;
+  instEmailVerifiedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  inst_email?: InputMaybe<Scalars['String']['input']>;
+  institution?: InputMaybe<Scalars['String']['input']>;
+  institution_name?: InputMaybe<Scalars['String']['input']>;
+  interests?: InputMaybe<Array<Scalars['String']['input']>>;
+  isTrialFeatureOn?: InputMaybe<Scalars['Boolean']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  manualBlockMessage?: InputMaybe<Scalars['String']['input']>;
+  matched_institution_name?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  referer?: InputMaybe<Scalars['String']['input']>;
+  referrerPath?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<UserRoles>;
-  slug?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
   social?: InputMaybe<SocialInput>;
-  source_ip?: InputMaybe<Scalars['String']>;
-  specialty?: InputMaybe<Scalars['String']>;
-  trialAccessAt?: InputMaybe<Scalars['DateTime']>;
-  trialDuration?: InputMaybe<Scalars['Int']>;
-  trialsAllowed?: InputMaybe<Scalars['Boolean']>;
-  user_type?: InputMaybe<Scalars['String']>;
+  source_ip?: InputMaybe<Scalars['String']['input']>;
+  specialty?: InputMaybe<Scalars['String']['input']>;
+  trialAccessAt?: InputMaybe<Scalars['DateTime']['input']>;
+  trialDuration?: InputMaybe<Scalars['Int']['input']>;
+  trialsAllowed?: InputMaybe<Scalars['Boolean']['input']>;
+  user_type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpgradeSubscriptionPreview = {
   __typename?: 'UpgradeSubscriptionPreview';
-  amount: Scalars['Float'];
-  cardLast4: Scalars['String'];
-  description: Scalars['String'];
-  promocodeApplied: Scalars['Boolean'];
-  type: Scalars['String'];
+  amount: Scalars['Float']['output'];
+  cardLast4: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  promocodeApplied: Scalars['Boolean']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['ID'];
-  accessExpiredAt?: Maybe<Scalars['DateTime']>;
+  _id: Scalars['ID']['output'];
+  accessExpiredAt?: Maybe<Scalars['DateTime']['output']>;
   accessType: AccessType;
   activeOrder?: Maybe<Order>;
-  anon_link_id?: Maybe<Scalars['String']>;
-  articleCount?: Maybe<Scalars['Int']>;
-  countryCode?: Maybe<Scalars['String']>;
-  created: Scalars['DateTime'];
-  deleted?: Maybe<Scalars['Boolean']>;
-  display_name?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  emailNeedsConfirm?: Maybe<Scalars['Boolean']>;
-  emailVerified: Scalars['Boolean'];
-  emailVerifiedAt?: Maybe<Scalars['DateTime']>;
+  anon_link_id?: Maybe<Scalars['String']['output']>;
+  articleCount?: Maybe<Scalars['Int']['output']>;
+  countryCode?: Maybe<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
+  deleted?: Maybe<Scalars['Boolean']['output']>;
+  display_name?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  emailNeedsConfirm?: Maybe<Scalars['Boolean']['output']>;
+  emailVerified: Scalars['Boolean']['output'];
+  emailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
   email_preference?: Maybe<EmailPreference>;
-  hasManualBlock?: Maybe<Scalars['Boolean']>;
-  hasRequestedSubscription?: Maybe<Scalars['Boolean']>;
-  howFound?: Maybe<Scalars['String']>;
+  hasManualBlock?: Maybe<Scalars['Boolean']['output']>;
+  hasRequestedSubscription?: Maybe<Scalars['Boolean']['output']>;
+  howFound?: Maybe<Scalars['String']['output']>;
   image?: Maybe<Image>;
-  instEmailVerified?: Maybe<Scalars['Boolean']>;
-  instEmailVerifiedAt?: Maybe<Scalars['DateTime']>;
-  inst_email?: Maybe<Scalars['String']>;
-  institution?: Maybe<Scalars['String']>;
-  institution_name?: Maybe<Scalars['String']>;
-  institutionalEmail?: Maybe<Scalars['String']>;
-  interests?: Maybe<Array<Scalars['String']>>;
-  isPasswordSet: Scalars['Boolean'];
-  isSubscribed?: Maybe<Scalars['Boolean']>;
-  isSubscribedFromInst?: Maybe<Scalars['Boolean']>;
-  isTrialFeatureOn?: Maybe<Scalars['Boolean']>;
-  isTrialsFeatureEnabled: Scalars['Boolean'];
+  instEmailVerified?: Maybe<Scalars['Boolean']['output']>;
+  instEmailVerifiedAt?: Maybe<Scalars['DateTime']['output']>;
+  inst_email?: Maybe<Scalars['String']['output']>;
+  institution?: Maybe<Scalars['String']['output']>;
+  institution_name?: Maybe<Scalars['String']['output']>;
+  institutionalEmail?: Maybe<Scalars['String']['output']>;
+  interests?: Maybe<Array<Scalars['String']['output']>>;
+  isPasswordSet: Scalars['Boolean']['output'];
+  isSubscribed?: Maybe<Scalars['Boolean']['output']>;
+  isSubscribedFromInst?: Maybe<Scalars['Boolean']['output']>;
+  isTrialFeatureOn?: Maybe<Scalars['Boolean']['output']>;
+  isTrialsFeatureEnabled: Scalars['Boolean']['output'];
   lastSubType?: Maybe<SubType>;
-  last_visited?: Maybe<Scalars['DateTime']>;
-  loginCount?: Maybe<Scalars['Int']>;
-  manualBlockMessage?: Maybe<Scalars['String']>;
+  last_visited?: Maybe<Scalars['DateTime']['output']>;
+  loginCount?: Maybe<Scalars['Int']['output']>;
+  manualBlockMessage?: Maybe<Scalars['String']['output']>;
   matchStatus?: Maybe<MatchStatus>;
   matchedBy?: Maybe<MatchedBy>;
-  matched_institution_name?: Maybe<Scalars['String']>;
+  matched_institution_name?: Maybe<Scalars['String']['output']>;
   name: Name;
-  numSearches?: Maybe<Scalars['Int']>;
+  numSearches?: Maybe<Scalars['Int']['output']>;
   offsiteAccesses: Array<TemporaryAccess>;
-  phone?: Maybe<Scalars['String']>;
-  prev_source_ip?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  prev_source_ip?: Maybe<Scalars['String']['output']>;
   previouslyStatedInstitutions?: Maybe<Array<PreviouslyStatedInst>>;
-  promo_code?: Maybe<Scalars['String']>;
-  referer?: Maybe<Scalars['String']>;
-  referrerPath?: Maybe<Scalars['String']>;
-  regionName?: Maybe<Scalars['String']>;
-  requestSubscriptionCount?: Maybe<Scalars['Float']>;
+  promo_code?: Maybe<Scalars['String']['output']>;
+  referer?: Maybe<Scalars['String']['output']>;
+  referrerPath?: Maybe<Scalars['String']['output']>;
+  regionName?: Maybe<Scalars['String']['output']>;
+  requestSubscriptionCount?: Maybe<Scalars['Float']['output']>;
   role: UserRoles;
-  showFeedbackQuestions: Scalars['Boolean'];
-  signInToken?: Maybe<Scalars['String']>;
-  slug?: Maybe<Scalars['String']>;
+  showFeedbackQuestions: Scalars['Boolean']['output'];
+  signInToken?: Maybe<Scalars['String']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
   social?: Maybe<Social>;
-  source_ip?: Maybe<Scalars['String']>;
-  specialty?: Maybe<Scalars['String']>;
+  source_ip?: Maybe<Scalars['String']['output']>;
+  specialty?: Maybe<Scalars['String']['output']>;
   stripeData: UserStripeData;
-  subActive: Scalars['Boolean'];
+  subActive: Scalars['Boolean']['output'];
   subscription?: Maybe<SubscriptionType>;
-  total_time_watched?: Maybe<Scalars['Float']>;
-  trialAccessAt?: Maybe<Scalars['DateTime']>;
-  trialDuration?: Maybe<Scalars['Float']>;
-  trialsAllowed: Scalars['Boolean'];
-  user_type?: Maybe<Scalars['String']>;
-  user_type_other?: Maybe<Scalars['String']>;
+  total_time_watched?: Maybe<Scalars['Float']['output']>;
+  trialAccessAt?: Maybe<Scalars['DateTime']['output']>;
+  trialDuration?: Maybe<Scalars['Float']['output']>;
+  trialsAllowed: Scalars['Boolean']['output'];
+  user_type?: Maybe<Scalars['String']['output']>;
+  user_type_other?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserInput = {
-  endDate?: InputMaybe<Scalars['DateTime']>;
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
   filters?: InputMaybe<Array<ColumnFilter>>;
   globalFilters?: InputMaybe<Array<ColumnFilter>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  showAuthorsOnly?: InputMaybe<Scalars['Boolean']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
-  startDate?: InputMaybe<Scalars['DateTime']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  showAuthorsOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
 export type UserOutput = {
   __typename?: 'UserOutput';
-  count: Scalars['Int'];
-  dbQueryString: Scalars['String'];
+  count: Scalars['Int']['output'];
+  dbQueryString: Scalars['String']['output'];
   users: Array<User>;
 };
 
@@ -3692,18 +3713,18 @@ export enum UserRoles {
 
 export type UserStripeData = {
   __typename?: 'UserStripeData';
-  isTrialsFeatureEnabled?: Maybe<Scalars['Boolean']>;
+  isTrialsFeatureEnabled?: Maybe<Scalars['Boolean']['output']>;
   prices: Array<StripePrice>;
-  stripeId: Scalars['String'];
-  trialDuration?: Maybe<Scalars['Int']>;
-  trial_order_count?: Maybe<Scalars['Int']>;
+  stripeId: Scalars['String']['output'];
+  trialDuration?: Maybe<Scalars['Int']['output']>;
+  trial_order_count?: Maybe<Scalars['Int']['output']>;
 };
 
 export type UserType = {
   __typename?: 'UserType';
-  _id: Scalars['ObjectId'];
-  pricingBracket: Scalars['String'];
-  type: Scalars['String'];
+  _id: Scalars['ObjectId']['output'];
+  pricingBracket: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type UserViews = {
@@ -3711,13 +3732,13 @@ export type UserViews = {
   by_country: Array<ViewType>;
   by_institution: Array<ViewType>;
   by_user_type: Array<ViewType>;
-  total: Scalars['Int'];
+  total: Scalars['Int']['output'];
 };
 
 export type ViewType = {
   __typename?: 'ViewType';
-  key: Scalars['String'];
-  views: Scalars['Float'];
+  key: Scalars['String']['output'];
+  views: Scalars['Float']['output'];
 };
 
 export enum VisibilityEnum {
@@ -3727,14 +3748,14 @@ export enum VisibilityEnum {
 
 export type Wistia = {
   __typename?: 'Wistia';
-  description?: Maybe<Scalars['String']>;
-  duration?: Maybe<Scalars['Float']>;
-  internal_id?: Maybe<Scalars['ID']>;
-  name?: Maybe<Scalars['String']>;
-  progress?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
+  duration?: Maybe<Scalars['Float']['output']>;
+  internal_id?: Maybe<Scalars['ID']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  progress?: Maybe<Scalars['String']['output']>;
   project?: Maybe<Project>;
-  status?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']['output']>;
   thumbnail?: Maybe<Thumbnail>;
-  updated?: Maybe<Scalars['String']>;
-  uploaded?: Maybe<Scalars['String']>;
+  updated?: Maybe<Scalars['String']['output']>;
+  uploaded?: Maybe<Scalars['String']['output']>;
 };

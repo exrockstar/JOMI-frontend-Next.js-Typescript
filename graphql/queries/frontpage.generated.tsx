@@ -2,16 +2,16 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type FrontPageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type FrontPageQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleOutput', totalCount: number }, latestArticles: Array<{ __typename?: 'Article', _id: string, title: string, slug?: string | null | undefined, publication_id?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined, categories: Array<{ __typename?: 'Category', color: string, slug: string, displayName: string, _id: string }>, authors: Array<{ __typename?: 'Author', display_name?: string | null | undefined, slug?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined } | null | undefined }>, hospital?: { __typename?: 'Hospital', name: string } | null | undefined }> };
+export type FrontPageQuery = { __typename?: 'Query', articles: { __typename?: 'ArticleOutput', totalCount: number }, latestArticles: Array<{ __typename?: 'Article', _id: string, title: string, slug?: string | null, publication_id?: string | null, image?: { __typename?: 'Image', filename?: string | null } | null, categories: Array<{ __typename?: 'Category', color: string, slug: string, displayName: string, _id: string }>, authors: Array<{ __typename?: 'Author', display_name?: string | null, slug?: string | null, image?: { __typename?: 'Image', filename?: string | null } | null }>, hospital?: { __typename?: 'Hospital', name: string } | null }> };
 
 export type GetPricingSectionDataQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetPricingSectionDataQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string } | null | undefined, getTrialSettingsForCountry: { __typename?: 'TrialSettings', trialDuration: number }, getPricingSectionData?: Array<{ __typename?: 'StripePrice', _id: string, enabled?: boolean | null | undefined, nickname: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, currency: string, unit_amount: number, productName?: string | null | undefined }> | null | undefined };
+export type GetPricingSectionDataQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string } | null, getTrialSettingsForCountry: { __typename?: 'TrialSettings', trialDuration: number }, getPricingSectionData?: Array<{ __typename?: 'StripePrice', _id: string, enabled?: boolean | null, nickname: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, currency: string, unit_amount: number, productName?: string | null }> | null };
 
 
 export const FrontPageDocument = gql`

@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetCountriesQueryVariables = Types.Exact<{
   input: Types.CountryListInput;
 }>;
 
 
-export type GetCountriesQuery = { __typename?: 'Query', getCountries: { __typename?: 'CountryListOutput', count: number, filteredCodes: Array<string>, countries: Array<{ __typename?: 'Country', _id: string, code: Types.CountryEnum, name: string, trialsEnabled: boolean, articleRestriction: Types.ArticleRestrictionEnum, coefficient: number, multiplier?: number | null | undefined }> } };
+export type GetCountriesQuery = { __typename?: 'Query', getCountries: { __typename?: 'CountryListOutput', count: number, filteredCodes: Array<string>, countries: Array<{ __typename?: 'Country', _id: string, code: Types.CountryEnum, name: string, trialsEnabled: boolean, articleRestriction: Types.ArticleRestrictionEnum, coefficient: number, multiplier?: number | null }> } };
 
 export type UpdateCountriesMutationVariables = Types.Exact<{
   input: Types.UpdateCountriesInput;

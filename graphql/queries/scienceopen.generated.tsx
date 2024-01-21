@@ -2,18 +2,18 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetScienceOpenPubIdsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
 export type GetScienceOpenPubIdsQuery = { __typename?: 'Query', getScienceOpenArticlesXml: Array<{ __typename?: 'ScienceOpenXml', articlePublicationId: string, generatedAt: any }> };
 
 export type GetScienceOpenXmlByPublicationIdQueryVariables = Types.Exact<{
-  pub_id: Types.Scalars['String'];
+  pub_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetScienceOpenXmlByPublicationIdQuery = { __typename?: 'Query', getScienceOpenArticleByPubId?: { __typename?: 'ScienceOpenXml', generatedXml: string, articlePublicationId: string, generatedAt: any } | null | undefined };
+export type GetScienceOpenXmlByPublicationIdQuery = { __typename?: 'Query', getScienceOpenArticleByPubId?: { __typename?: 'ScienceOpenXml', generatedXml: string, articlePublicationId: string, generatedAt: any } | null };
 
 export type GenerateAllScienceOpenXmlMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
@@ -23,7 +23,7 @@ export type GenerateAllScienceOpenXmlMutation = { __typename?: 'Mutation', gener
 export type ScienceOpenLastGeneratedQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ScienceOpenLastGeneratedQuery = { __typename?: 'Query', scienceOpenLastGeneratedAt?: any | null | undefined };
+export type ScienceOpenLastGeneratedQuery = { __typename?: 'Query', scienceOpenLastGeneratedAt?: any | null };
 
 
 export const GetScienceOpenPubIdsDocument = gql`

@@ -2,20 +2,20 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type InstitutionsAccessListQueryVariables = Types.Exact<{
   input: Types.InstitutionInput;
 }>;
 
 
-export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null | undefined, sent_requests: number, created?: any | null | undefined, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null | undefined }, articleViewsOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } }> } };
+export type InstitutionsAccessListQuery = { __typename?: 'Query', output: { __typename?: 'InstitutionOutput', count: number, institutions: Array<{ __typename?: 'Institution', _id: string, name: string, user_count: number, total_article_count: number, pending_requests?: number | null, sent_requests: number, created?: any | null, subscription: { __typename?: 'InstitutionSubscription', status?: Types.StatusType | null }, articleViewsOverTime: { __typename?: 'ChartData', labels: Array<string>, datasets: Array<{ __typename?: 'ChartDataset', data: Array<number>, label: string }> } }> } };
 
 export type AccessEventsQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.AccessFilterInput>;
 }>;
 
 
-export type AccessEventsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null | undefined, article_title?: string | null | undefined, article_publication_id?: string | null | undefined, created: any, ip_address_str?: string | null | undefined, matchedBy?: Types.MatchedBy | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, time_watched?: number | null | undefined, referredFrom?: string | null | undefined, referrerPath?: string | null | undefined, user?: { __typename?: 'User', display_name?: string | null | undefined, email: string, referer?: string | null | undefined, referrerPath?: string | null | undefined } | null | undefined, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null | undefined, regionName?: string | null | undefined } | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } };
+export type AccessEventsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null, article_title?: string | null, article_publication_id?: string | null, created: any, ip_address_str?: string | null, matchedBy?: Types.MatchedBy | null, accessType?: Types.AccessTypeEnum | null, time_watched?: number | null, referredFrom?: string | null, referrerPath?: string | null, user?: { __typename?: 'User', display_name?: string | null, email: string, referer?: string | null, referrerPath?: string | null } | null, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null, regionName?: string | null } | null, institution?: { __typename?: 'Institution', _id: string, name: string } | null }> } };
 
 export type InstutionAccessOverviewQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
@@ -26,7 +26,7 @@ export type InstutionAccessOverviewQuery = { __typename?: 'Query', institutionAc
 
 export type InstitutionTrafficOverTimeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
-  groupBy: Types.Scalars['String'];
+  groupBy: Types.Scalars['String']['input'];
 }>;
 
 
@@ -34,7 +34,7 @@ export type InstitutionTrafficOverTimeQuery = { __typename?: 'Query', institutio
 
 export type InstitutionUsersOverTimeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
-  groupBy: Types.Scalars['String'];
+  groupBy: Types.Scalars['String']['input'];
 }>;
 
 
@@ -42,7 +42,7 @@ export type InstitutionUsersOverTimeQuery = { __typename?: 'Query', institutionU
 
 export type InstitutionTrafficOverTimeByUserTypeQueryVariables = Types.Exact<{
   input: Types.InstitutionAccessInput;
-  groupBy: Types.Scalars['String'];
+  groupBy: Types.Scalars['String']['input'];
 }>;
 
 
@@ -60,14 +60,14 @@ export type ArticleActivityStatsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ArticleActivityStatsQuery = { __typename?: 'Query', articleAccessStats: { __typename?: 'InstitutionArticleStatsOutput', totalCount: number, items: Array<{ __typename?: 'InstitutionArticleStats', _id: string, articleViews: number, uniqueViews: number, article?: { __typename?: 'Article', title: string, publication_id?: string | null | undefined, slug?: string | null | undefined, status: string } | null | undefined }> } };
+export type ArticleActivityStatsQuery = { __typename?: 'Query', articleAccessStats: { __typename?: 'InstitutionArticleStatsOutput', totalCount: number, items: Array<{ __typename?: 'InstitutionArticleStats', _id: string, articleViews: number, uniqueViews: number, article?: { __typename?: 'Article', title: string, publication_id?: string | null, slug?: string | null, status: string } | null }> } };
 
 export type InstArticleEventLogsQueryVariables = Types.Exact<{
   input: Types.AccessFilterInput;
 }>;
 
 
-export type InstArticleEventLogsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null | undefined, article_title?: string | null | undefined, article_publication_id?: string | null | undefined, created: any, ip_address_str?: string | null | undefined, time_watched?: number | null | undefined, user?: { __typename?: 'User', display_name?: string | null | undefined, email: string } | null | undefined, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null | undefined, regionName?: string | null | undefined } | null | undefined, institution?: { __typename?: 'Institution', name: string } | null | undefined }> } };
+export type InstArticleEventLogsQuery = { __typename?: 'Query', output: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', activity: Types.ActivityType, user_id?: string | null, article_title?: string | null, article_publication_id?: string | null, created: any, ip_address_str?: string | null, time_watched?: number | null, user?: { __typename?: 'User', display_name?: string | null, email: string } | null, geolocation?: { __typename?: 'GeoLocation', countryCode?: string | null, regionName?: string | null } | null, institution?: { __typename?: 'Institution', name: string } | null }> } };
 
 export type GenCounterReportQueryVariables = Types.Exact<{
   input: Types.CounterInput;
@@ -77,22 +77,22 @@ export type GenCounterReportQueryVariables = Types.Exact<{
 export type GenCounterReportQuery = { __typename?: 'Query', genCounterReport: string };
 
 export type InstFeedbackListQueryVariables = Types.Exact<{
-  institution_id: Types.Scalars['String'];
+  institution_id: Types.Scalars['String']['input'];
   input: Types.FeedbackListInput;
 }>;
 
 
-export type InstFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null | undefined, anon_link_id?: string | null | undefined, createdAt: any, updatedAt?: any | null | undefined, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null | undefined } | null | undefined, user?: { __typename?: 'User', email: string, user_type?: string | null | undefined, _id: string } | null | undefined }> } };
+export type InstFeedbackListQuery = { __typename?: 'Query', output: { __typename?: 'FeedbackListOutput', count: number, items: Array<{ __typename?: 'Feedback', _id: string, type: string, questionId: string, value: any, comment?: string | null, anon_link_id?: string | null, createdAt: any, updatedAt?: any | null, question?: { __typename?: 'FeedbackQuestion', question: string, choices?: Array<{ __typename?: 'Choice', value: number }> | null } | null, user?: { __typename?: 'User', email: string, user_type?: string | null, _id: string } | null }> } };
 
 export type CheckFrequentArticleViewsDataQueryVariables = Types.Exact<{
-  institution_id: Types.Scalars['String'];
+  institution_id: Types.Scalars['String']['input'];
 }>;
 
 
 export type CheckFrequentArticleViewsDataQuery = { __typename?: 'Query', result: number };
 
 export type CleanUpFrequentArticleViewsDataMutationVariables = Types.Exact<{
-  institution_id: Types.Scalars['String'];
+  institution_id: Types.Scalars['String']['input'];
 }>;
 
 

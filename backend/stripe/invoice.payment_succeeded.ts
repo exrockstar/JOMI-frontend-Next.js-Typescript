@@ -16,7 +16,7 @@ import { logger } from 'logger/logger'
 
 import Stripe from 'stripe'
 import { PriceMetadata } from './common/PriceMetadata'
-import { amplitudeTrackRenewal } from 'apis/amplitude'
+import { amplitudeGetSessionId, amplitudeTrackRenewal } from 'apis/amplitude'
 import { analytics } from 'apis/analytics'
 
 const API_KEY = process.env.STRIPE_SECRET_KEY
@@ -79,6 +79,7 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     subscription_details: subscription_details
   })
   const discount = invoice.discount
+  const ampSessionId = amplitudeGetSessionId()
   const order: OrderInput = {
     start,
     end,
@@ -92,7 +93,8 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     type: OrderType.Individual,
     promoCode: metadata?.promoCode,
     stripeCoupon: discount?.coupon?.id,
-    stripePromoCode: discount?.promotion_code as string
+    stripePromoCode: discount?.promotion_code as string,
+    amplitudeSessionId: ampSessionId
   }
 
   logger.info(
@@ -109,31 +111,29 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const client = getApolloAdminClient(true)
 
   try {
-    const { data } = await client.mutate<
-      AddOrUpdateOrderMutation,
-      AddOrUpdateOrderMutationVariables
-    >({
+    const amplitudeSessionId = amplitudeGetSessionId()
+    const { data } = await client.mutate<AddOrUpdateOrderMutation, AddOrUpdateOrderMutationVariables>({
       variables: {
-        input: order
+        input: order,
       },
       mutation: AddOrUpdateOrderDocument
     })
-
-    amplitudeTrackRenewal({
-      transaction_id: order.plan_id,
-      value: order.amount,
-      promoCode: order.promoCode,
-      type: order.type,
-      userId: order.user_id,
-      items: [
-        {
-          item_id: order.plan_id,
-          item_name: order.description,
-          price: order.amount,
-          quantity: 1
-        }
-      ]
-    })
+    //temp comment out. Testing new renewal tracking setup, see backend code for details
+    // amplitudeTrackRenewal({
+    //   transaction_id: order.plan_id,
+    //   value: order.amount,
+    //   promoCode: order.promoCode,
+    //   type: order.type,
+    //   userId: order.user_id,
+    //   items: [
+    //     {
+    //       item_id: order.plan_id,
+    //       item_name: order.description,
+    //       price: order.amount,
+    //       quantity: 1
+    //     }
+    //   ]
+    // })
 
     analytics.trackRenewal({
       transaction_id: order.plan_id,
