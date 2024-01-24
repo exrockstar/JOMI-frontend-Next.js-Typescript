@@ -35,6 +35,8 @@ const CheckoutSuccessPage = () => {
   const [trackSubscribeMutation] = useTrackSubscribeMutation()
   const { referredFrom, referrerPath, anon_link_id } =
     useGoogleAnalyticsHelpers()
+  const from = router.query.from
+  const redirectUrl = decodeURIComponent(from as string)
   useEffect(() => {
     const isClient = typeof window !== 'undefined'
     if (!order?._id) return
@@ -152,18 +154,18 @@ const CheckoutSuccessPage = () => {
         <Stack alignItems="center" mt={20}>
           <Logo type="dark" />
         </Stack>
-        {order?.type === OrderType.Individual ? 
-          <Alert severity="success">
-            Your subscription is successfully created.
-          </Alert>
-          :
-          <Alert severity="success">
-            Your purchase is successful. Redirecting to article...
-          </Alert>
+        <Alert>
+          Order Successful!
+        </Alert>
+        {order?.type === OrderType.Individual ?
+          <Link href={`/account/subscription`} passHref legacyBehavior>
+            <BlueLink ml={2}>Go Back</BlueLink>
+          </Link>
+          : 
+          <Link href={redirectUrl} passHref legacyBehavior>
+            <BlueLink ml={2}>Go Back</BlueLink>
+          </Link>
         }
-        <Link href={`/account/subscription`} passHref legacyBehavior>
-          <BlueLink ml={2}>Back to account page</BlueLink>
-        </Link>
       </Stack>
     </Container>
   )
