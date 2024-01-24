@@ -31,14 +31,16 @@ export async function handleCheckoutSessionCompleted(
   if (session.mode !== 'payment' || session.payment_status !== 'paid') return
 
   try {
-    const priceId = session.metadata.priceId
-    if (!priceId) {
+    const handleTimedCodes = session.metadata.handleTimedCodes === 'Yes'
+    if (!handleTimedCodes) {
       return handlePurchaseArticle(session)
     }
-    const price = await stripe.prices.retrieve(priceId)
-    const metadata = price.metadata as unknown as PriceMetadata
 
-    const end = dayjs().add(metadata.Days, 'day').add(1, 'hour').toDate()
+    const metadata = session.metadata
+    const end = dayjs()
+      .add(parseInt(metadata.duration), 'day')
+      .add(1, 'hour')
+      .toDate()
     const start = dayjs().subtract(1, 'day').toDate()
 
     const order: OrderInput = {
@@ -47,12 +49,12 @@ export async function handleCheckoutSessionCompleted(
       amount: session.amount_total / 100,
       user_id: session.customer as string,
       created: dayjs().toDate(),
-      plan_interval: price.recurring?.interval ?? 'day',
-      description: price.nickname,
-      type: metadata.Type as unknown as OrderType,
+      plan_interval: 'day',
+      description: metadata.description,
+      type: OrderType.Individual,
       latest_invoice: null,
       plan_id: null,
-      promoCode: metadata.Code
+      promoCode: metadata.promocode
     }
 
     const client = getApolloAdminClient()
@@ -68,7 +70,6 @@ export async function handleCheckoutSessionCompleted(
     logger.info(
       '[WebhookHandler] handleCheckoutSessionCompleted  - Successful',
       {
-        promoCodeId: metadata['Original Code'],
         userId: session.customer
       }
     )

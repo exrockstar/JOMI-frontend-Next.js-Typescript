@@ -1,0 +1,65 @@
+
+
+query GetAllPromoCodes($input: PromoCodeListInput!){
+  getAllPromoCodes(
+    input: $input
+  ){
+    promocodes {
+      _id
+      created
+      createdAt
+      bulkUsedCodes
+      bulkUnusedCodes
+      numberUnused
+      notes
+      interval
+      type
+      days
+      expiration
+      price
+      isSubscription
+      updated
+      title
+      times_redeemed
+      institution {
+        _id
+        name
+      }
+		}
+    count
+    dbQueryString
+  }
+}
+
+query GetPromoCodeDetail($code: String!) {
+  getPromoDetail(code: $code){
+    _id
+    created
+    createdAt
+    bulkUsedCodes
+    bulkUnusedCodes
+    numberUnused
+    notes
+    interval
+    type
+    days
+    expiration
+    price
+    isSubscription
+    updated
+    title
+    times_redeemed
+  }
+}
+
+mutation AddPromoCode($input: InsertPromoCodeInput!){
+  addPromoCode(input: $input)
+}
+
+mutation EditPromoCode($input: UpdatePromoCodeInput!){
+  editPromoCode(input: $input)
+}
+
+mutation DeletePromoCode($code: String!){
+  deletePromoCode(code: $code)
+}

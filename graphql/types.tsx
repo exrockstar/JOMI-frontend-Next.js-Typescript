@@ -979,6 +979,23 @@ export type ImageMetadata = {
   title?: Maybe<Scalars['String']>;
 };
 
+export type InsertPromoCodeInput = {
+  _id: Scalars['ID'];
+  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
+  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
+  days?: InputMaybe<Scalars['Int']>;
+  expiration: Scalars['DateTime'];
+  interval: OrderInterval;
+  isSubscription: Scalars['Boolean'];
+  notes?: InputMaybe<Scalars['String']>;
+  numberOfCodes?: InputMaybe<Scalars['Int']>;
+  numberUnused?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['Int']>;
+  times_redeemed?: InputMaybe<Scalars['Int']>;
+  title: Scalars['String'];
+  type: PromoCodeType;
+};
+
 export type Institution = {
   __typename?: 'Institution';
   _id: Scalars['ID'];
@@ -1218,6 +1235,7 @@ export type Mutation = {
   addCRMTagsToUsers: Scalars['Boolean'];
   addLanguagesToExistingArticles: Scalars['String'];
   addOrUpdateOrder: Scalars['Boolean'];
+  addPromoCode?: Maybe<Scalars['Boolean']>;
   addPurchaseArticleOrder: Scalars['Boolean'];
   addTranslationsHash: Scalars['String'];
   addTrialOrderForUser: Scalars['Boolean'];
@@ -1250,9 +1268,11 @@ export type Mutation = {
   deleteOrder?: Maybe<Order>;
   deletePage: Page;
   deletePrice?: Maybe<StripePrice>;
+  deletePromoCode: Scalars['Boolean'];
   deleteRedirect: DeleteRedirectOutput;
   deleteSignInToken: Scalars['Boolean'];
   deleteStripePromocode: Scalars['Boolean'];
+  editPromoCode: Scalars['Boolean'];
   forgotPasswordCms: Scalars['Boolean'];
   generateAllScienceOpenXml: Scalars['String'];
   generateDOI: Article;
@@ -1350,6 +1370,11 @@ export type MutationAddCrmTagsToUsersArgs = {
 
 export type MutationAddOrUpdateOrderArgs = {
   input: OrderInput;
+};
+
+
+export type MutationAddPromoCodeArgs = {
+  input: InsertPromoCodeInput;
 };
 
 
@@ -1494,6 +1519,11 @@ export type MutationDeletePriceArgs = {
 };
 
 
+export type MutationDeletePromoCodeArgs = {
+  code: Scalars['String'];
+};
+
+
 export type MutationDeleteRedirectArgs = {
   input?: InputMaybe<DeleteRedirectInput>;
 };
@@ -1506,6 +1536,11 @@ export type MutationDeleteSignInTokenArgs = {
 
 export type MutationDeleteStripePromocodeArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationEditPromoCodeArgs = {
+  input: UpdatePromoCodeInput;
 };
 
 
@@ -2300,12 +2335,14 @@ export type PromoCode = {
   createdAt: Scalars['DateTime'];
   days?: Maybe<Scalars['Int']>;
   expiration: Scalars['DateTime'];
+  institution?: Maybe<Institution>;
   interval?: Maybe<OrderInterval>;
   isSubscription: Scalars['Boolean'];
-  notes: Scalars['String'];
+  notes?: Maybe<Scalars['String']>;
   numberUnused?: Maybe<Scalars['Int']>;
   price?: Maybe<Scalars['Int']>;
   stripe?: Maybe<StripePromo>;
+  times_redeemed?: Maybe<Scalars['Int']>;
   title: Scalars['String'];
   type: PromoCodeType;
   updated: Scalars['DateTime'];
@@ -2316,6 +2353,23 @@ export enum PromoCodeDuration {
   Once = 'once',
   Repeating = 'repeating'
 }
+
+export type PromoCodeListInput = {
+  filters?: InputMaybe<Array<ColumnFilter>>;
+  isSubscription?: InputMaybe<Scalars['Boolean']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  sort_by?: InputMaybe<Scalars['String']>;
+  sort_order?: InputMaybe<Scalars['Int']>;
+};
+
+export type PromoCodeListOutput = {
+  __typename?: 'PromoCodeListOutput';
+  count: Scalars['Int'];
+  dbQueryString: Scalars['String'];
+  promocodes: Array<PromoCode>;
+};
 
 export enum PromoCodeType {
   Individual = 'individual',
@@ -2368,6 +2422,7 @@ export type Query = {
   genCounterReport: Scalars['String'];
   geolocation?: Maybe<Geolocation>;
   getAllOrders: OrderListOutput;
+  getAllPromoCodes?: Maybe<PromoCodeListOutput>;
   getCombinedPromoCode: CombinedCodeOutput;
   getCountries: CountryListOutput;
   getDefaultPrices: Array<StripePrice>;
@@ -2380,6 +2435,7 @@ export type Query = {
   getPaymentIntentStatus?: Maybe<Scalars['String']>;
   getPriceByProductId: StripePrice;
   getPricingSectionData?: Maybe<Array<StripePrice>>;
+  getPromoDetail?: Maybe<PromoCode>;
   getPurchaseAndRentPrices: Array<StripePrice>;
   getPurchasedArticles: Array<Order>;
   getPurchasedArticlesByUserId: Array<Order>;
@@ -2550,6 +2606,11 @@ export type QueryGetAllOrdersArgs = {
 };
 
 
+export type QueryGetAllPromoCodesArgs = {
+  input: PromoCodeListInput;
+};
+
+
 export type QueryGetCombinedPromoCodeArgs = {
   code: Scalars['String'];
 };
@@ -2578,6 +2639,11 @@ export type QueryGetFeedbacksByInstitutionIdArgs = {
 
 export type QueryGetPriceByProductIdArgs = {
   product_id: Scalars['String'];
+};
+
+
+export type QueryGetPromoDetailArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -3410,6 +3476,23 @@ export type UpdateProfileInput = {
   phone?: InputMaybe<Scalars['String']>;
   specialty?: InputMaybe<Scalars['ID']>;
   user_type?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdatePromoCodeInput = {
+  _id: Scalars['ID'];
+  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
+  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
+  days?: InputMaybe<Scalars['Int']>;
+  expiration?: InputMaybe<Scalars['DateTime']>;
+  interval?: InputMaybe<OrderInterval>;
+  isSubscription?: InputMaybe<Scalars['Boolean']>;
+  notes?: InputMaybe<Scalars['String']>;
+  numberOfCodes?: InputMaybe<Scalars['Int']>;
+  numberUnused?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['Int']>;
+  times_redeemed?: InputMaybe<Scalars['Int']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<PromoCodeType>;
 };
 
 export type UpdatePurchaseSettingInput = {

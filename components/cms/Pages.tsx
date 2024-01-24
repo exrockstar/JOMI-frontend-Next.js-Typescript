@@ -73,7 +73,7 @@ const SidebarItems: SidenavItem[] = [
   {
     name: 'Promo codes',
     icon: <LocalOffer />,
-    url: `${CMS_URL}/promocodes-list`,
+    url: `${CMS_URL}/promocodes-list/v6`,
     disabled: false
   },
   {

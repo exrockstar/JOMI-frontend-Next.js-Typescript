@@ -42,7 +42,9 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     return false
   }
 
-  const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string)
+  const subscription = await stripe.subscriptions.retrieve(
+    invoice.subscription as string
+  )
 
   const created = new Date(0)
   const start = new Date(0)
@@ -60,28 +62,22 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
   const subscrpition_data = subscription.items.data[0]
   const plan = subscrpition_data.plan
   const price = subscrpition_data.price
-  //subscription_metadata - used to get description for old orders
+  // subscription_metadata - used to get description
   const subscription_metadata = invoice.lines.data[0].metadata as any
-  const metadata = price.metadata as unknown as PriceMetadata
-
-  //converts "prod_surgical_attending" to "Surgical Attending"
-  const convertProductToDescription = (str: any) => {
-    return str
-      .split('_')
-      .filter((word) => word.toLowerCase() !== 'prod')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-  const descriptionName = convertProductToDescription(price.product)
-  const descriptionAmount = Math.round(price.unit_amount / 100)
-  const descriptionInterval = price.recurring.interval
-  const backupDescription = `${descriptionName} $${descriptionAmount}/${descriptionInterval}`
-
-  const description = plan.nickname || 
-    price.nickname || 
-    subscription_metadata?.description ||
-    backupDescription
-
+  const metadata = subscrpition_data.metadata as any
+  //@ts-ignore
+  const subscription_details = invoice.subscription_details?.metadata
+  const description =
+    subscription_metadata?.description ??
+    metadata.description ??
+    subscription_details?.description
+  logger.info('description', {
+    description: metadata.metadata,
+    line_items: subscription_metadata?.description,
+    priceNickname: price.nickname,
+    //@ts-ignore
+    subscription_details: subscription_details
+  })
   const discount = invoice.discount
   const order: OrderInput = {
     start,
@@ -94,23 +90,29 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     description: description,
     latest_invoice: invoice.id,
     type: OrderType.Individual,
-    promoCode: metadata.Code,
+    promoCode: metadata?.promoCode,
     stripeCoupon: discount?.coupon?.id,
     stripePromoCode: discount?.promotion_code as string
   }
 
-  logger.info(`[WebhookHandler] Invoice.Payment_Succeeded. Creating/Updating Order...`, {
-    plan_id: invoice.subscription,
-    userId: invoice.customer,
-    plan_interval: price.recurring.interval,
-    plan_nickname: plan.nickname,
-    description: description
-  })
+  logger.info(
+    `[WebhookHandler] Invoice.Payment_Succeeded. Creating/Updating Order...`,
+    {
+      plan_id: invoice.subscription,
+      userId: invoice.customer,
+      plan_interval: price.recurring.interval,
+      plan_nickname: plan.nickname,
+      description: description
+    }
+  )
 
   const client = getApolloAdminClient(true)
 
   try {
-    const { data } = await client.mutate<AddOrUpdateOrderMutation, AddOrUpdateOrderMutationVariables>({
+    const { data } = await client.mutate<
+      AddOrUpdateOrderMutation,
+      AddOrUpdateOrderMutationVariables
+    >({
       variables: {
         input: order
       },
@@ -150,7 +152,10 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     })
 
     if (discount.coupon) {
-      await client.mutate<UpdateStripeCodeMutation, UpdateStripeCodeMutationVariables>({
+      await client.mutate<
+        UpdateStripeCodeMutation,
+        UpdateStripeCodeMutationVariables
+      >({
         variables: {
           input: {
             couponId: discount.coupon.id as string,
@@ -163,7 +168,10 @@ export async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     }
   } catch (e) {
     if (e instanceof ApolloError) {
-      logger.error(`[WebhookHandler] Create/Update order failed. ${e.message}`, e)
+      logger.error(
+        `[WebhookHandler] Create/Update order failed. ${e.message}`,
+        e
+      )
 
       throw Error(`Create/Update order failed. ${e.message}`)
     }

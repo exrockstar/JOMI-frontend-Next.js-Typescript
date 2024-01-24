@@ -1,6 +1,9 @@
 import { Alert } from '@mui/lab'
 import { Box, Stack, TextField, Typography } from '@mui/material'
-import { useGetCombinedPromoCodeLazyQuery, useHandleFreePromoCodeMutation } from 'graphql/queries/promocode.generated'
+import {
+  useGetCombinedPromoCodeLazyQuery,
+  useHandleFreePromoCodeMutation
+} from 'graphql/queries/promocode.generated'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
@@ -139,15 +142,51 @@ const PromoCode = ({ stripeId, onStripeCodeChange }: Props) => {
       </form>
       {!!promoCode?.price && (
         <Stack my={2}>
-          <PriceButton
-            priceId={promoCode.stripe?.price}
-            nickname={promoCode.title}
-            stripeId={stripeId}
-            mode={promoCode.isSubscription ? 'subscription' : 'payment'}
-            amount={promoCode.price}
-          >
-            {promoCode.title}
-          </PriceButton>
+          <Alert sx={{ my: 2, width: '450px', display: 'flex' }}>
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              spacing={5}
+            >
+              <Stack>
+                <Typography>
+                  <b>Title:</b> {promoCode.title}
+                </Typography>
+                {promoCode.price && (
+                  <Typography>
+                    <b>Subscription Price: </b>
+                    {`$${promoCode.price}`}
+                  </Typography>
+                )}
+                {promoCode.interval && (
+                  <Typography>
+                    <b>Interval: </b>
+                    {promoCode.interval}
+                  </Typography>
+                )}
+                {!promoCode.isSubscription && (
+                  <Typography>
+                    <b>Duration: </b>
+                    {promoCode.days}
+                  </Typography>
+                )}
+              </Stack>
+              <Stack justifyContent={'center'}>
+                <PriceButton
+                  codeType="promoCode"
+                  nickname={promoCode.title}
+                  stripeId={stripeId}
+                  mode={promoCode.isSubscription ? 'subscription' : 'payment'}
+                  amount={promoCode.price * 100}
+                  interval={promoCode.interval}
+                  promocode={code}
+                  duration={promoCode.days}
+                >
+                  {promoCode.title}
+                </PriceButton>
+              </Stack>
+            </Stack>
+          </Alert>
         </Stack>
       )}
       {!!stripeCode && (
@@ -168,7 +207,8 @@ const PromoCode = ({ stripeId, onStripeCodeChange }: Props) => {
           }
           <Box sx={{ my: 1 }}>
             <Typography variant="caption">
-              Please select a subscription above. If applicable, this code will be automatically applied at checkout.
+              Please select a subscription above. If applicable, this code will
+              be automatically applied at checkout.
             </Typography>
           </Box>
         </Alert>

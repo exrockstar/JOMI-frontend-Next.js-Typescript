@@ -7,6 +7,7 @@ import {
   useGetPaymentStatusQuery,
   useUserPricesQuery
 } from 'graphql/queries/user-prices.generated'
+import { useGetPromoCodeDetailQuery } from 'graphql/cms-queries/promocode-list.generated'
 import { analytics } from 'apis/analytics'
 import PromoCode from './IndividualSubscription/PromoCode'
 import PriceButton, {
@@ -29,6 +30,12 @@ export default function IndividualSubscription() {
     skip: !session.user
   })
 
+  const { data: promoCodeDetail } = useGetPromoCodeDetailQuery({
+    skip: !data?.user?.activeOrder?.promoCode,
+    variables: { code: data?.user?.activeOrder?.promoCode },
+    fetchPolicy: 'network-only'
+  })
+
   const [errorHidden, setErrorHidden] = useLocalStorage('order.error-at', null)
   useEffect(() => {
     fbPixelTrackViewContent('Account', 'Subscription Info Page')
@@ -44,7 +51,6 @@ export default function IndividualSubscription() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   const user = data?.user
 
   if (loading || error || !user)
@@ -53,7 +59,6 @@ export default function IndividualSubscription() {
         <CircularProgress />
       </Wrapper>
     )
-
   const prices = user.stripeData?.prices
   const stripeId = user.stripeData?.stripeId
   const order = user.activeOrder
@@ -63,12 +68,12 @@ export default function IndividualSubscription() {
   const showTrialsForUser = trialsAllowed && trialsEnabled
   const hasCompletedRegistration = !!user.user_type
   const isTrialOrder = order?.type === OrderType.Trial
-  const canUpgrade =
-    !isTrialOrder && order?.plan_interval !== OrderInterval.Year
   const yearUpgrade = prices.find((p) => p.interval === OrderInterval.Year)
+  const canUpgrade =
+    !isTrialOrder && order?.plan_interval !== OrderInterval.Year && yearUpgrade
   const getDescription = (nickname, unit_amount, interval) => {
     // transforms "Medical Professional $250/year" to "Medical Professional"
-    const baseNickname = nickname.replace(/\$.*/g, '').trim() || user.user_type
+    const baseNickname = nickname?.replace(/\$.*/g, '').trim() || user.user_type
 
     return (
       <Typography fontFamily="Manrope">
@@ -95,20 +100,20 @@ export default function IndividualSubscription() {
           {!isTrialOrder && (
             <ActiveOrder order={order} onUpdateSubscription={refetch} />
           )}
-          {canUpgrade && (
+          {canUpgrade && !order.description.includes('CODE:') && (
             <div>
               <PriceButtonContainer>
                 {getDescription(
-                  yearUpgrade.nickname,
-                  (yearUpgrade.unit_amount / 100).toFixed(0),
-                  yearUpgrade.interval.toLowerCase()
+                  yearUpgrade?.nickname,
+                  (yearUpgrade?.unit_amount / 100).toFixed(0),
+                  yearUpgrade?.interval.toLowerCase()
                 )}
                 <CTAButton onClick={() => setUpgradeDialogOpen(true)}>
                   Upgrade Subscription
                 </CTAButton>
               </PriceButtonContainer>
               <UpgradeSubscriptionDialog
-                priceNickname={yearUpgrade.nickname}
+                priceNickname={yearUpgrade?.nickname}
                 open={upgradeDialogOpen}
                 onClose={() => setUpgradeDialogOpen(false)}
               />
@@ -154,6 +159,7 @@ export default function IndividualSubscription() {
                 (price.unit_amount / 100).toFixed(0),
                 price.interval.toLowerCase()
               )
+
               return (
                 <PriceButton
                   key={price.id}

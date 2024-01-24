@@ -33,7 +33,7 @@ const CreateStripePromoCodePage = () => {
           variant: 'success'
         }
       )
-      location.href = '/cms/promocodes-list'
+      location.href = '/cms/promocodes-list/v6'
     }
   })
   return (
