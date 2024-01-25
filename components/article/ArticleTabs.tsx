@@ -103,9 +103,9 @@ function BasicTabs({ article }) {
   const isSmallDevice = useMediaQuery('(max-width:600px)')
   const router = useRouter()
   let tabs = []
-  if(!article?.disableMainTab) tabs.push('')
-  if(!article?.disableProcedureTab) tabs.push('procedure-outline')
-  if(!article?.disableTranscriptTab) tabs.push('transcript')
+  if (!article?.disableMainTab) tabs.push('')
+  if (!article?.disableProcedureTab) tabs.push('procedure-outline')
+  if (!article?.disableTranscriptTab) tabs.push('transcript')
 
   const params = router.query.slug
   const [id, slug, text] = Array.isArray(params) ? [...params] : [params]
@@ -126,23 +126,27 @@ function BasicTabs({ article }) {
 
   const handleChange = (event: any, newValue: number) => {
     event.preventDefault()
-    setValue(newValue)
+
     let text = getUrl(newValue)
     const slugQuery = router.query.slug
     let params = Array.isArray(slugQuery) ? slugQuery : [slugQuery]
     const language = params.find((param) => LOCALES.includes(param))
     const [id, slug] = params
     params = [id, slug, text, language].filter((val) => !!val)
-    router.push(
-      {
-        query: {
-          ...router.query,
-          slug: params
-        }
-      },
-      null,
-      { shallow: true }
-    )
+    router
+      .push(
+        {
+          query: {
+            ...router.query,
+            slug: params
+          }
+        },
+        null,
+        { shallow: true }
+      )
+      .then(() => {
+        setValue(newValue) //only change tabs after route completed
+      })
     analytics.event('Click', `Article Tabs - ${text.trim() || 'Main'}`)
   }
 
@@ -157,6 +161,8 @@ function BasicTabs({ article }) {
     return '/article/' + params.join('/')
   }
   const Tab = isSmallDevice ? CustomTabMobile : CustomTab
+  const currentTab = getUrl(value)
+
   return (
     <Box width={'100%'}>
       <Box ml={isSmallDevice ? 0 : 2} mt={isSmallDevice ? 0 : 1}>
@@ -173,9 +179,9 @@ function BasicTabs({ article }) {
             }}
           >
             {tabs.map((tab, i) => {
-              switch(tab){
+              switch (tab) {
                 case '':
-                  return(
+                  return (
                     <Tab
                       {...a11yProps(i)}
                       component={BlueLink}
@@ -186,7 +192,7 @@ function BasicTabs({ article }) {
                     </Tab>
                   )
                 case 'procedure-outline':
-                  return(
+                  return (
                     <Tab
                       {...a11yProps(i)}
                       component={BlueLink}
@@ -197,7 +203,7 @@ function BasicTabs({ article }) {
                     </Tab>
                   )
                 case 'transcript':
-                  return(
+                  return (
                     <Tab
                       {...a11yProps(i)}
                       component={BlueLink}
@@ -208,18 +214,17 @@ function BasicTabs({ article }) {
                     </Tab>
                   )
                 default:
-                  break;
+                  break
               }
-              
             })}
           </CustomTabsList>
         </TabsUnstyled>
       </Box>
-      {tabs.map((tab, i) => {
-        switch(tab){
+      {[currentTab].map((tab, i) => {
+        switch (tab) {
           case '':
-            return(
-              <TabPanel value={value} index={i}>
+            return (
+              <TabPanel>
                 <MainText
                   text={article?.content?.article}
                   toc={article?.content?.toc}
@@ -229,8 +234,8 @@ function BasicTabs({ article }) {
               </TabPanel>
             )
           case 'procedure-outline':
-            return(
-              <TabPanel value={value} index={i}>
+            return (
+              <TabPanel>
                 <Outline
                   otoc={article?.content?.otoc}
                   outline={article?.content?.outline}
@@ -238,43 +243,43 @@ function BasicTabs({ article }) {
               </TabPanel>
             )
           case 'transcript':
-            return(
-              <TabPanel value={value} index={i}>
-              <Box component="section">
-                <Typography variant="h2" fontSize={28}>
-                  Transcription
-                </Typography>
-                <Box
-                  sx={{
-                    wordWrap: 'break-word',
-                    overflowWrap: 'break-word',
-                    color: 'grey.800',
-                    lineHeight: 1.42857143,
-                    fontSize: '14px',
-                    fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
-                    p: {
-                      margin: '0 0 10px'
-                    },
-                    '.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6': {
-                      marginTop: '10px',
-                      marginBottom: '10px',
-                      fontWeight: 'unset',
-                      lineHeight: 1.1,
-                      color: 'inherit'
-                    },
-                    h3: {
-                      fontSize: '1.5em'
-                    },
-                    h4: {
-                      fontSize: '1.25em'
-                    }
-                  }}
-                  dangerouslySetInnerHTML={{
-                    __html: modifyHeaders(article?.content?.transcription)
-                  }}
-                />
-              </Box>
-            </TabPanel>
+            return (
+              <TabPanel>
+                <Box component="section">
+                  <Typography variant="h2" fontSize={28}>
+                    Transcription
+                  </Typography>
+                  <Box
+                    sx={{
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                      color: 'grey.800',
+                      lineHeight: 1.42857143,
+                      fontSize: '14px',
+                      fontFamily: '"Helvetica Neue",Helvetica,Arial,sans-serif',
+                      p: {
+                        margin: '0 0 10px'
+                      },
+                      '.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6': {
+                        marginTop: '10px',
+                        marginBottom: '10px',
+                        fontWeight: 'unset',
+                        lineHeight: 1.1,
+                        color: 'inherit'
+                      },
+                      h3: {
+                        fontSize: '1.5em'
+                      },
+                      h4: {
+                        fontSize: '1.25em'
+                      }
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: modifyHeaders(article?.content?.transcription)
+                    }}
+                  />
+                </Box>
+              </TabPanel>
             )
         }
       })}

@@ -18,8 +18,8 @@ export function buildArticleMetadata(
   const cleanedDescription = decode(description)
   let public_url =
     BASE_URL + '/article/' + article.publication_id + '/' + article.slug
-
-  if (tab) {
+  const isMainTab = !tab
+  if (!isMainTab) {
     public_url += `/${tab}`
   }
   let ogUrl = public_url + ''
@@ -102,51 +102,53 @@ export function buildArticleMetadata(
     meta['twitter:image'] = `${BASE_URL}/api/files/${image.filename}`
   }
 
-  meta['citation_abstract'] = decode(article.content?.abstract?.slice(0, 155))
-  meta['citation_title'] = article.title
-  meta['citation_public_url'] = public_url
+  //if main tab add citation metadata
+  if (isMainTab) {
+    meta['citation_abstract'] = decode(article.content?.abstract?.slice(0, 155))
+    meta['citation_title'] = article.title
+    meta['citation_public_url'] = public_url
+    if (tag_list) {
+      meta['citation_keywords'] = tag_list
+    }
 
-  if (tag_list) {
-    meta['citation_keywords'] = tag_list
+    if (category_list) {
+      meta['citation_section'] = category_list
+    }
+
+    const pub_date = dayjs(article.published)
+    const created_date = dayjs(article.created)
+    const modified_date = dayjs(article.updated)
+
+    const GOOGLE_SCHOLAR_FORMAT = 'YYYY/MM/DD'
+    if (article.published) {
+      const pub_date_string = pub_date.format(GOOGLE_SCHOLAR_FORMAT)
+      const issue = pub_date.month()
+      const volume = pub_date.year()
+
+      meta['article:published_time'] = pub_date_string
+      meta['citation_publication_date'] = pub_date_string
+      meta['citation_date'] = pub_date_string
+      meta['citation_issue'] = `${issue}`
+      meta['citation_volume'] = `${volume}`
+      meta['citation_year'] = `${volume}`
+    } else {
+      meta['citation_publication_date'] = created_date.year().toString()
+    }
+
+    if (article.publication_id) {
+      const prefix = 'https://doi.org/10.24296/jomi/'
+
+      meta['citation_doi'] = `${prefix}${article.publication_id}`
+    }
+
+    meta['citation_online_date'] = created_date.format(GOOGLE_SCHOLAR_FORMAT)
+    meta['article:modified_time'] = modified_date.format(GOOGLE_SCHOLAR_FORMAT)
+    meta['citation_journal_title'] = SITE_NAME
+    meta['citation_journal_abbrev'] = 'JOMI'
+    meta['citation_issn'] = '2373-6003'
+    meta['citation_language'] = 'en-US'
+    meta['citation_id'] = article._id
   }
-
-  if (category_list) {
-    meta['citation_section'] = category_list
-  }
-
-  const pub_date = dayjs(article.published)
-  const created_date = dayjs(article.created)
-  const modified_date = dayjs(article.updated)
-
-  const GOOGLE_SCHOLAR_FORMAT = 'YYYY/MM/DD'
-  if (article.published) {
-    const pub_date_string = pub_date.format(GOOGLE_SCHOLAR_FORMAT)
-    const issue = pub_date.month()
-    const volume = pub_date.year()
-
-    meta['article:published_time'] = pub_date_string
-    meta['citation_publication_date'] = pub_date_string
-    meta['citation_date'] = pub_date_string
-    meta['citation_issue'] = `${issue}`
-    meta['citation_volume'] = `${volume}`
-    meta['citation_year'] = `${volume}`
-  } else {
-    meta['citation_publication_date'] = created_date.year().toString()
-  }
-
-  if (article.publication_id) {
-    const prefix = 'https://doi.org/10.24296/jomi/'
-
-    meta['citation_doi'] = `${prefix}${article.publication_id}`
-  }
-
-  meta['citation_online_date'] = created_date.format(GOOGLE_SCHOLAR_FORMAT)
-  meta['article:modified_time'] = modified_date.format(GOOGLE_SCHOLAR_FORMAT)
-  meta['citation_journal_title'] = SITE_NAME
-  meta['citation_journal_abbrev'] = 'JOMI'
-  meta['citation_issn'] = '2373-6003'
-  meta['citation_language'] = 'en-US'
-  meta['citation_id'] = article._id
 
   return {
     ...defaultMeta,

@@ -293,8 +293,11 @@ export const getStaticProps: GetStaticProps<
     })
 
     let tab = ''
-    if (params.slug?.includes('procedure-outline')) {
+    if (params.slug.includes('procedure-outline')) {
       tab = 'procedure-outline'
+    }
+    if (params.slug.includes('transcript')) {
+      tab = 'transcript'
     }
     return {
       props: {
@@ -312,7 +315,7 @@ export const getStaticProps: GetStaticProps<
           lang as string,
           tab
         ),
-        structured_data: buildArticleStructuredData(data.articleBySlug),
+        structured_data: buildArticleStructuredData(data.articleBySlug, tab),
         [APOLLO_STATE_PROP_NAME]: client.cache.extract()
       },
       revalidate: 3600

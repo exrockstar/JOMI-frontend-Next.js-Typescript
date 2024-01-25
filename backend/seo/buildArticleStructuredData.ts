@@ -4,9 +4,12 @@ type Articles = ArticlesQuery['articleOutput']['articles']
 
 type Article = ArticlesBySlugQuery['articleBySlug'] | Unpacked<Articles>
 
-export const buildArticleStructuredDataObject = (article: Article) => {
+export const buildArticleStructuredDataObject = (
+  article: Article,
+  tab: string
+) => {
   const { slug, authors, descriptionSEO, publication_id } = article
-  const articleUrl = `https://jomi.com/article/${publication_id}/${slug}`
+  let articleUrl = `https://jomi.com/article/${publication_id}/${slug}`
   const defaultImgUrl = 'https://jomi.com/img/01_standard_white.png'
   const articleImgUrl =
     article.image && `https://jomi.com/api/files/${article.image.filename}`
@@ -17,6 +20,9 @@ export const buildArticleStructuredDataObject = (article: Article) => {
       : article.preprint_date
     : article.published
 
+  if (tab) {
+    articleUrl += '/' + tab
+  }
   const authorsData = authors
     ? authors.map((author) => ({
         '@type': 'Person',
@@ -60,8 +66,8 @@ export const buildArticleStructuredDataObject = (article: Article) => {
   }
 }
 
-export const buildArticleStructuredData = (article: Article) => {
-  const obj = buildArticleStructuredDataObject(article)
+export const buildArticleStructuredData = (article: Article, tab: string) => {
+  const obj = buildArticleStructuredDataObject(article, tab)
 
   return JSON.stringify(obj, null, 2)
 }
