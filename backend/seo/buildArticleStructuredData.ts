@@ -6,7 +6,7 @@ type Article = ArticlesBySlugQuery['articleBySlug'] | Unpacked<Articles>
 
 export const buildArticleStructuredDataObject = (
   article: Article,
-  tab: string
+  tab: string = ''
 ) => {
   const { slug, authors, descriptionSEO, publication_id } = article
   let articleUrl = `https://jomi.com/article/${publication_id}/${slug}`
