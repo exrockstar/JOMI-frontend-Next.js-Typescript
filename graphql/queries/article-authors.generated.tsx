@@ -2,11 +2,11 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ArticleAuthorsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type ArticleAuthorsQuery = { __typename?: 'Query', output: { __typename?: 'ArticleOutput', articles: Array<{ __typename?: 'Article', authors: Array<{ __typename?: 'Author', slug?: string | null | undefined, _id: string }> }> } };
+export type ArticleAuthorsQuery = { __typename?: 'Query', output: { __typename?: 'ArticleOutput', articles: Array<{ __typename?: 'Article', authors: Array<{ __typename?: 'Author', slug?: string | null, _id: string }> }> } };
 
 
 export const ArticleAuthorsDocument = gql`

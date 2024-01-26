@@ -2,14 +2,14 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ResetPasswordMutationVariables = Types.Exact<{
-  token: Types.Scalars['String'];
-  newPassword: Types.Scalars['String'];
+  token: Types.Scalars['String']['input'];
+  newPassword: Types.Scalars['String']['input'];
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', token?: string | null | undefined };
+export type ResetPasswordMutation = { __typename?: 'Mutation', token?: string | null };
 
 
 export const ResetPasswordDocument = gql`

@@ -2,16 +2,16 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetCombinedPromoCodeQueryVariables = Types.Exact<{
-  code: Types.Scalars['String'];
+  code: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetCombinedPromoCodeQuery = { __typename?: 'Query', output: { __typename?: 'CombinedCodeOutput', promoCode?: { __typename?: 'PromoCode', _id: string, title: string, days?: number | null | undefined, price?: number | null | undefined, isSubscription: boolean, interval?: Types.OrderInterval | null | undefined, stripe?: { __typename?: 'StripePromo', price: string } | null | undefined } | null | undefined, stripeCode?: { __typename?: 'StripePromoCode', _id: string, name?: string | null | undefined, code: string, valid: boolean, couponId: string, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, amount_off?: number | null | undefined, percent_off?: number | null | undefined } | null | undefined } };
+export type GetCombinedPromoCodeQuery = { __typename?: 'Query', output: { __typename?: 'CombinedCodeOutput', promoCode?: { __typename?: 'PromoCode', _id: string, title: string, days?: number | null, price?: number | null, isSubscription: boolean, interval?: Types.OrderInterval | null, stripe?: { __typename?: 'StripePromo', price: string } | null } | null, stripeCode?: { __typename?: 'StripePromoCode', _id: string, name?: string | null, code: string, valid: boolean, couponId: string, duration?: Types.PromoCodeDuration | null, duration_in_months?: number | null, amount_off?: number | null, percent_off?: number | null } | null } };
 
 export type HandleFreePromoCodeMutationVariables = Types.Exact<{
-  code: Types.Scalars['String'];
+  code: Types.Scalars['String']['input'];
 }>;
 
 

@@ -2,24 +2,24 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type RunJobManuallyMutationVariables = Types.Exact<{
-  name: Types.Scalars['String'];
-  data?: Types.InputMaybe<Types.Scalars['any']>;
+  name: Types.Scalars['String']['input'];
+  data?: Types.InputMaybe<Types.Scalars['any']['input']>;
 }>;
 
 
 export type RunJobManuallyMutation = { __typename?: 'Mutation', runJobManually: string };
 
 export type IsJobRunningQueryVariables = Types.Exact<{
-  name: Types.Scalars['String'];
+  name: Types.Scalars['String']['input'];
 }>;
 
 
 export type IsJobRunningQuery = { __typename?: 'Query', isJobRunning: boolean, jobProgress: number };
 
 export type CancelJobMutationVariables = Types.Exact<{
-  name: Types.Scalars['String'];
+  name: Types.Scalars['String']['input'];
 }>;
 
 

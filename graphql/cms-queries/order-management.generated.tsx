@@ -3,39 +3,39 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { OrderPartsFragmentDoc } from './OrderParts.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateOrderMutationVariables = Types.Exact<{
   input: Types.OrderInputForLocation;
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, restricted_user_types: Array<string>, restricted_specialties: Array<string>, deleted?: boolean | null | undefined, notes?: string | null | undefined, customInstitutionName?: string | null | undefined } | null | undefined };
+export type CreateOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null, end?: any | null, isCanceled?: boolean | null, description?: string | null, plan_interval?: Types.OrderInterval | null, currency?: Types.OrderCurrency | null, type?: Types.OrderType | null, created: any, updated: any, lastEditedBy?: string | null, createdBy?: string | null, status?: Types.OrderStatus | null, amount?: number | null, require_login?: Types.RequireLogin | null, restricted_user_types: Array<string>, restricted_specialties: Array<string>, deleted?: boolean | null, notes?: string | null, customInstitutionName?: string | null } | null };
 
 export type UpdateOrderMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
   input: Types.OrderInputForLocation;
 }>;
 
 
-export type UpdateOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, restricted_user_types: Array<string>, restricted_specialties: Array<string>, deleted?: boolean | null | undefined, notes?: string | null | undefined, customInstitutionName?: string | null | undefined } | null | undefined };
+export type UpdateOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null, end?: any | null, isCanceled?: boolean | null, description?: string | null, plan_interval?: Types.OrderInterval | null, currency?: Types.OrderCurrency | null, type?: Types.OrderType | null, created: any, updated: any, lastEditedBy?: string | null, createdBy?: string | null, status?: Types.OrderStatus | null, amount?: number | null, require_login?: Types.RequireLogin | null, restricted_user_types: Array<string>, restricted_specialties: Array<string>, deleted?: boolean | null, notes?: string | null, customInstitutionName?: string | null } | null };
 
 export type DeleteOrderMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type DeleteOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string } | null | undefined };
+export type DeleteOrderMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string } | null };
 
 export type CreateOrderForUserMutationVariables = Types.Exact<{
   input: Types.UpdateOrderInput;
 }>;
 
 
-export type CreateOrderForUserMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null | undefined, end?: any | null | undefined, isCanceled?: boolean | null | undefined, description?: string | null | undefined, plan_interval?: Types.OrderInterval | null | undefined, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, created: any, updated: any, lastEditedBy?: string | null | undefined, createdBy?: string | null | undefined, status?: Types.OrderStatus | null | undefined, amount?: number | null | undefined, require_login?: Types.RequireLogin | null | undefined, renewals?: number | null | undefined, payment_status?: Types.OrderPaymentStatus | null | undefined } | null | undefined };
+export type CreateOrderForUserMutation = { __typename?: 'Mutation', order?: { __typename?: 'Order', _id: string, start?: any | null, end?: any | null, isCanceled?: boolean | null, description?: string | null, plan_interval?: Types.OrderInterval | null, currency?: Types.OrderCurrency | null, type?: Types.OrderType | null, created: any, updated: any, lastEditedBy?: string | null, createdBy?: string | null, status?: Types.OrderStatus | null, amount?: number | null, require_login?: Types.RequireLogin | null, renewals?: number | null, payment_status?: Types.OrderPaymentStatus | null } | null };
 
 export type AddCrmTagsToOrderListResultsMutationVariables = Types.Exact<{
   input: Types.OrderListInput;
-  tags: Array<Types.Scalars['String']> | Types.Scalars['String'];
+  tags: Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input'];
 }>;
 
 

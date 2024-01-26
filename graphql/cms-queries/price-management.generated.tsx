@@ -3,28 +3,28 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { PricePartsFragmentDoc } from './PriceParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateGeographicPriceMutationVariables = Types.Exact<{
   input: Types.GeographicPriceInput;
 }>;
 
 
-export type CreateGeographicPriceMutation = { __typename?: 'Mutation', createGeographicPrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number } | null | undefined };
+export type CreateGeographicPriceMutation = { __typename?: 'Mutation', createGeographicPrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, unit_amount: number } | null };
 
 export type UpdateGeographicPriceMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
   input: Types.UpdatePriceInput;
 }>;
 
 
-export type UpdateGeographicPriceMutation = { __typename?: 'Mutation', updatePrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number } | null | undefined };
+export type UpdateGeographicPriceMutation = { __typename?: 'Mutation', updatePrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, unit_amount: number } | null };
 
 export type DeletePriceMutationVariables = Types.Exact<{
-  priceId: Types.Scalars['String'];
+  priceId: Types.Scalars['String']['input'];
 }>;
 
 
-export type DeletePriceMutation = { __typename?: 'Mutation', deletePrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number } | null | undefined };
+export type DeletePriceMutation = { __typename?: 'Mutation', deletePrice?: { __typename?: 'StripePrice', _id: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, unit_amount: number } | null };
 
 export type SyncPricesFromStripeMutationVariables = Types.Exact<{ [key: string]: never; }>;
 

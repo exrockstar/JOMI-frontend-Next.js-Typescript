@@ -91,6 +91,10 @@ export const amplitudeAddToUserProps = (props: Object) => {
   amplitude.identify(identifyEvent)
 }
 
+export const amplitudeGetSessionId = () => {
+  return amplitude.getSessionId()
+}
+
 /**
  * Purpose: Track an article view statistic
  * @param params: An Object whose properties we use to add to the tracked event.

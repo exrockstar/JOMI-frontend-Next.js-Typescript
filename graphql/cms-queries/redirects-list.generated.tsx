@@ -3,41 +3,41 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { RedirectPartsFragmentDoc } from './RedirectParts.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type RedirectsListQueryVariables = Types.Exact<{
   input: Types.RedirectInput;
 }>;
 
 
-export type RedirectsListQuery = { __typename?: 'Query', fetchRedirects: { __typename?: 'RedirectOutput', count: number, redirects: Array<{ __typename?: 'Redirect', _id: string, from: string, to: string, type: string, name?: string | null | undefined, track?: boolean | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null | undefined }> } };
+export type RedirectsListQuery = { __typename?: 'Query', fetchRedirects: { __typename?: 'RedirectOutput', count: number, redirects: Array<{ __typename?: 'Redirect', _id: string, from: string, to: string, type: string, name?: string | null, track?: boolean | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null }> } };
 
 export type RedirectByIdQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type RedirectByIdQuery = { __typename?: 'Query', redirect?: { __typename?: 'Redirect', _id: string, created?: any | null | undefined, updated?: any | null | undefined, name?: string | null | undefined, from: string, to: string, type: string, track?: boolean | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null | undefined } | null | undefined };
+export type RedirectByIdQuery = { __typename?: 'Query', redirect?: { __typename?: 'Redirect', _id: string, created?: any | null, updated?: any | null, name?: string | null, from: string, to: string, type: string, track?: boolean | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null } | null };
 
 export type DeleteRedirectMutationVariables = Types.Exact<{
   input: Types.DeleteRedirectInput;
 }>;
 
 
-export type DeleteRedirectMutation = { __typename?: 'Mutation', deleteRedirect: { __typename?: 'DeleteRedirectOutput', _id?: string | null | undefined } };
+export type DeleteRedirectMutation = { __typename?: 'Mutation', deleteRedirect: { __typename?: 'DeleteRedirectOutput', _id?: string | null } };
 
 export type UpdateRedirectMutationVariables = Types.Exact<{
   input: Types.UpdateRedirectInput;
 }>;
 
 
-export type UpdateRedirectMutation = { __typename?: 'Mutation', redirect?: { __typename?: 'Redirect', _id: string, created?: any | null | undefined, updated?: any | null | undefined, name?: string | null | undefined, from: string, to: string, type: string, track?: boolean | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null | undefined } | null | undefined };
+export type UpdateRedirectMutation = { __typename?: 'Mutation', redirect?: { __typename?: 'Redirect', _id: string, created?: any | null, updated?: any | null, name?: string | null, from: string, to: string, type: string, track?: boolean | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null } | null };
 
 export type CreateRedirectMutationVariables = Types.Exact<{
   input: Types.CreateRedirectInput;
 }>;
 
 
-export type CreateRedirectMutation = { __typename?: 'Mutation', redirect: { __typename?: 'Redirect', _id: string, created?: any | null | undefined, updated?: any | null | undefined, name?: string | null | undefined, from: string, to: string, type: string, track?: boolean | null | undefined, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null | undefined } };
+export type CreateRedirectMutation = { __typename?: 'Mutation', redirect: { __typename?: 'Redirect', _id: string, created?: any | null, updated?: any | null, name?: string | null, from: string, to: string, type: string, track?: boolean | null, author?: { __typename?: 'User', name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null, stats?: Array<{ __typename?: 'RedirectStats', time: any }> | null } };
 
 
 export const RedirectsListDocument = gql`

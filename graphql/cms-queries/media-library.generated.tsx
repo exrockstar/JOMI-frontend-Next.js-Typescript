@@ -2,16 +2,16 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type MediaLibraryQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.MediaInput>;
 }>;
 
 
-export type MediaLibraryQuery = { __typename?: 'Query', files: { __typename?: 'MediaOutput', count?: number | null | undefined, files: Array<{ __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null | undefined, metadata?: { __typename?: 'MediaMeta', title?: string | null | undefined, description?: string | null | undefined } | null | undefined }> } };
+export type MediaLibraryQuery = { __typename?: 'Query', files: { __typename?: 'MediaOutput', count?: number | null, files: Array<{ __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null, metadata?: { __typename?: 'MediaMeta', title?: string | null, description?: string | null } | null }> } };
 
 export type DeleteMediaMutationVariables = Types.Exact<{
-  _id: Types.Scalars['String'];
+  _id: Types.Scalars['String']['input'];
 }>;
 
 
@@ -22,9 +22,9 @@ export type UpdateMediaLibraryMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateMediaLibraryMutation = { __typename?: 'Mutation', mediaLibrary?: { __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null | undefined, metadata?: { __typename?: 'MediaMeta', title?: string | null | undefined, description?: string | null | undefined } | null | undefined } | null | undefined };
+export type UpdateMediaLibraryMutation = { __typename?: 'Mutation', mediaLibrary?: { __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null, metadata?: { __typename?: 'MediaMeta', title?: string | null, description?: string | null } | null } | null };
 
-export type MediaLibraryPartFragment = { __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null | undefined, metadata?: { __typename?: 'MediaMeta', title?: string | null | undefined, description?: string | null | undefined } | null | undefined };
+export type MediaLibraryPartFragment = { __typename?: 'Media', _id: any, filename: string, length: number, uploadDate?: any | null, metadata?: { __typename?: 'MediaMeta', title?: string | null, description?: string | null } | null };
 
 export const MediaLibraryPartFragmentDoc = gql`
     fragment MediaLibraryPart on Media {

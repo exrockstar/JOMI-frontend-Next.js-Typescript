@@ -3,29 +3,29 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { AnnouncementPartsFragmentDoc, AnnouncementViewsFragmentDoc } from '../fragments/AnnouncementParts.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AnnouncementsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type AnnouncementsQuery = { __typename?: 'Query', announcements: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined }> };
+export type AnnouncementsQuery = { __typename?: 'Query', announcements: Array<{ __typename?: 'Announcement', _id: any, lastEditedBy?: string | null, isPermanent?: boolean | null, limit?: number | null, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null, title?: string | null, content?: string | null, author?: { __typename?: 'User', _id: string, display_name?: string | null } | null, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null, columnName?: string | null, operator: Types.Operators, value?: any | null, level: number }> | null }> };
 
 export type AnnouncementQueryVariables = Types.Exact<{
-  _id: Types.Scalars['String'];
+  _id: Types.Scalars['String']['input'];
 }>;
 
 
-export type AnnouncementQuery = { __typename?: 'Query', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, views: number, unique_views?: number | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined, user_views?: { __typename?: 'UserViews', total: number, by_country: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_institution: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_user_type: Array<{ __typename?: 'ViewType', key: string, views: number }> } | null | undefined } };
+export type AnnouncementQuery = { __typename?: 'Query', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null, isPermanent?: boolean | null, limit?: number | null, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null, title?: string | null, content?: string | null, views: number, unique_views?: number | null, author?: { __typename?: 'User', _id: string, display_name?: string | null } | null, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null, columnName?: string | null, operator: Types.Operators, value?: any | null, level: number }> | null, user_views?: { __typename?: 'UserViews', total: number, by_country: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_institution: Array<{ __typename?: 'ViewType', key: string, views: number }>, by_user_type: Array<{ __typename?: 'ViewType', key: string, views: number }> } | null } };
 
 export type ToggleAnnouncementMutationVariables = Types.Exact<{
-  _id: Types.Scalars['String'];
-  enabled: Types.Scalars['Boolean'];
+  _id: Types.Scalars['String']['input'];
+  enabled: Types.Scalars['Boolean']['input'];
 }>;
 
 
-export type ToggleAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
+export type ToggleAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null, isPermanent?: boolean | null, limit?: number | null, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null, title?: string | null, content?: string | null, author?: { __typename?: 'User', _id: string, display_name?: string | null } | null, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null, columnName?: string | null, operator: Types.Operators, value?: any | null, level: number }> | null } };
 
 export type DeleteAnnouncementMutationVariables = Types.Exact<{
-  _id: Types.Scalars['String'];
+  _id: Types.Scalars['String']['input'];
 }>;
 
 
@@ -34,14 +34,14 @@ export type DeleteAnnouncementMutation = { __typename?: 'Mutation', result: stri
 export type CreateAnnouncementMutationVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CreateAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
+export type CreateAnnouncementMutation = { __typename?: 'Mutation', announcement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null, isPermanent?: boolean | null, limit?: number | null, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null, title?: string | null, content?: string | null, author?: { __typename?: 'User', _id: string, display_name?: string | null } | null, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null, columnName?: string | null, operator: Types.Operators, value?: any | null, level: number }> | null } };
 
 export type UpdateAnnouncementMutationVariables = Types.Exact<{
   input: Types.AnnouncementInput;
 }>;
 
 
-export type UpdateAnnouncementMutation = { __typename?: 'Mutation', updateAnnouncement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null | undefined, isPermanent?: boolean | null | undefined, limit?: number | null | undefined, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null | undefined, title?: string | null | undefined, content?: string | null | undefined, author?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null | undefined, columnName?: string | null | undefined, operator: Types.Operators, value?: any | null | undefined, level: number }> | null | undefined } };
+export type UpdateAnnouncementMutation = { __typename?: 'Mutation', updateAnnouncement: { __typename?: 'Announcement', _id: any, lastEditedBy?: string | null, isPermanent?: boolean | null, limit?: number | null, cache_id: string, enabled: boolean, createdAt: any, updatedAt: any, type: Types.AnnouncementType, backgroundColor?: string | null, title?: string | null, content?: string | null, author?: { __typename?: 'User', _id: string, display_name?: string | null } | null, filters?: Array<{ __typename?: 'FilterExpression', id: string, parentId?: string | null, columnName?: string | null, operator: Types.Operators, value?: any | null, level: number }> | null } };
 
 
 export const AnnouncementsDocument = gql`

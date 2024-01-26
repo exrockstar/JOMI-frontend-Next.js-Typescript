@@ -2,18 +2,18 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type SiteSettingsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, isRequestInstSubButtonPaperOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type SiteSettingsQuery = { __typename?: 'Query', getSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, isRequestInstSubButtonPaperOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null, _id: string } | null } };
 
 export type UpdateSiteSettingsMutationVariables = Types.Exact<{
   input: Types.UpdateSiteSettingInput;
 }>;
 
 
-export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, isRequestInstSubButtonPaperOn: boolean, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null | undefined, _id: string } | null | undefined } };
+export type UpdateSiteSettingsMutation = { __typename?: 'Mutation', updateSiteSettings: { __typename?: 'SiteSetting', isRentArticleFeatureOn: boolean, isPurchaseArticleFeatureOn: boolean, displayPurchaseAndRentToAdminOnly: boolean, rentDuration: number, isRequestInstSubButtonPaperOn: boolean, updated: any, updatedBy?: { __typename?: 'User', display_name?: string | null, _id: string } | null } };
 
 export type AddHashToTranslationsMutationVariables = Types.Exact<{ [key: string]: never; }>;
 

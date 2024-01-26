@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type TrackFeedbackMutationVariables = Types.Exact<{
   input: Types.TrackFeedbackInput;
 }>;
 
 
-export type TrackFeedbackMutation = { __typename?: 'Mutation', trackFeedack?: { __typename?: 'Feedback', _id: string } | null | undefined };
+export type TrackFeedbackMutation = { __typename?: 'Mutation', trackFeedack?: { __typename?: 'Feedback', _id: string } | null };
 
 export type TrackShowFeedbackMutationVariables = Types.Exact<{
   input: Types.TrackVideoInput;
@@ -18,11 +18,11 @@ export type TrackShowFeedbackMutationVariables = Types.Exact<{
 export type TrackShowFeedbackMutation = { __typename?: 'Mutation', trackShowFeedback: boolean };
 
 export type GetFeedbackQuestionsQueryVariables = Types.Exact<{
-  anon_link_id: Types.Scalars['String'];
+  anon_link_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetFeedbackQuestionsQuery = { __typename?: 'Query', question?: { __typename?: 'FeedbackQuestion', _id: string, question: string, legends?: Array<string> | null | undefined, type: string, choices?: Array<{ __typename?: 'Choice', value: number, description: string }> | null | undefined } | null | undefined };
+export type GetFeedbackQuestionsQuery = { __typename?: 'Query', question?: { __typename?: 'FeedbackQuestion', _id: string, question: string, legends?: Array<string> | null, type: string, choices?: Array<{ __typename?: 'Choice', value: number, description: string }> | null } | null };
 
 
 export const TrackFeedbackDocument = gql`

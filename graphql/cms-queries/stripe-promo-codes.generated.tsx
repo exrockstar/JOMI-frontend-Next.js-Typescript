@@ -2,52 +2,52 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetStripePromoCodesQueryVariables = Types.Exact<{
   input: Types.StripePromoCodeListInput;
 }>;
 
 
-export type GetStripePromoCodesQuery = { __typename?: 'Query', getStripePromoCodes: { __typename?: 'StripePromoCodeListOutput', totalCount: number, items: Array<{ __typename?: 'StripePromoCode', _id: string, amount_off?: number | null | undefined, percent_off?: number | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, name?: string | null | undefined, applies_to?: Array<string> | null | undefined, redeem_by?: any | null | undefined, code: string, couponId: string, created: any, max_redemptions?: number | null | undefined, times_redeemed: number, valid: boolean, active?: boolean | null | undefined }> } };
+export type GetStripePromoCodesQuery = { __typename?: 'Query', getStripePromoCodes: { __typename?: 'StripePromoCodeListOutput', totalCount: number, items: Array<{ __typename?: 'StripePromoCode', _id: string, amount_off?: number | null, percent_off?: number | null, duration?: Types.PromoCodeDuration | null, duration_in_months?: number | null, name?: string | null, applies_to?: Array<string> | null, redeem_by?: any | null, code: string, couponId: string, created: any, max_redemptions?: number | null, times_redeemed: number, valid: boolean, active?: boolean | null }> } };
 
 export type GetStripePromoCodeQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetStripePromoCodeQuery = { __typename?: 'Query', getStripePromoCode: { __typename?: 'StripePromoCode', _id: string, amount_off?: number | null | undefined, percent_off?: number | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, name?: string | null | undefined, applies_to?: Array<string> | null | undefined, redeem_by?: any | null | undefined, code: string, couponId: string, created: any, max_redemptions?: number | null | undefined, times_redeemed: number, valid: boolean, active?: boolean | null | undefined, createdBy?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined } };
+export type GetStripePromoCodeQuery = { __typename?: 'Query', getStripePromoCode: { __typename?: 'StripePromoCode', _id: string, amount_off?: number | null, percent_off?: number | null, duration?: Types.PromoCodeDuration | null, duration_in_months?: number | null, name?: string | null, applies_to?: Array<string> | null, redeem_by?: any | null, code: string, couponId: string, created: any, max_redemptions?: number | null, times_redeemed: number, valid: boolean, active?: boolean | null, createdBy?: { __typename?: 'User', _id: string, display_name?: string | null } | null } };
 
 export type GetStripePromoCodeByCodeQueryVariables = Types.Exact<{
-  code: Types.Scalars['String'];
+  code: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetStripePromoCodeByCodeQuery = { __typename?: 'Query', getStripePromoCodeByCode: { __typename?: 'StripePromoCode', _id: string, amount_off?: number | null | undefined, percent_off?: number | null | undefined, duration?: Types.PromoCodeDuration | null | undefined, duration_in_months?: number | null | undefined, name?: string | null | undefined, applies_to?: Array<string> | null | undefined, redeem_by?: any | null | undefined, code: string, couponId: string, created: any, max_redemptions?: number | null | undefined, times_redeemed: number, valid: boolean, active?: boolean | null | undefined, createdBy?: { __typename?: 'User', _id: string, display_name?: string | null | undefined } | null | undefined } };
+export type GetStripePromoCodeByCodeQuery = { __typename?: 'Query', getStripePromoCodeByCode: { __typename?: 'StripePromoCode', _id: string, amount_off?: number | null, percent_off?: number | null, duration?: Types.PromoCodeDuration | null, duration_in_months?: number | null, name?: string | null, applies_to?: Array<string> | null, redeem_by?: any | null, code: string, couponId: string, created: any, max_redemptions?: number | null, times_redeemed: number, valid: boolean, active?: boolean | null, createdBy?: { __typename?: 'User', _id: string, display_name?: string | null } | null } };
 
 export type PromoCodeRedeemListQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
   input: Types.RedeemListInput;
 }>;
 
 
-export type PromoCodeRedeemListQuery = { __typename?: 'Query', orders: { __typename?: 'RedeemListOutput', totalCount: number, items: Array<{ __typename?: 'Payment', _id: string, userId: string, created: any, amount: number, invoiceId: string, user?: { __typename?: 'User', email: string } | null | undefined, order?: { __typename?: 'Order', _id: string, description?: string | null | undefined } | null | undefined }> } };
+export type PromoCodeRedeemListQuery = { __typename?: 'Query', orders: { __typename?: 'RedeemListOutput', totalCount: number, items: Array<{ __typename?: 'Payment', _id: string, userId: string, created: any, amount: number, invoiceId: string, user?: { __typename?: 'User', email: string } | null, order?: { __typename?: 'Order', _id: string, description?: string | null } | null }> } };
 
 export type CreateStripeCodeMutationVariables = Types.Exact<{
   input: Types.CreatePromoCodeInput;
 }>;
 
 
-export type CreateStripeCodeMutation = { __typename?: 'Mutation', createStripePromoCode: { __typename?: 'StripePromoCode', _id: string, couponId: string, valid: boolean, code: string, name?: string | null | undefined } };
+export type CreateStripeCodeMutation = { __typename?: 'Mutation', createStripePromoCode: { __typename?: 'StripePromoCode', _id: string, couponId: string, valid: boolean, code: string, name?: string | null } };
 
 export type UpdateStripeCodeMutationVariables = Types.Exact<{
   input: Types.UpdateStripeCodeInput;
 }>;
 
 
-export type UpdateStripeCodeMutation = { __typename?: 'Mutation', updateStripePromoCode: { __typename?: 'StripePromoCode', _id: string, couponId: string, valid: boolean, code: string, name?: string | null | undefined } };
+export type UpdateStripeCodeMutation = { __typename?: 'Mutation', updateStripePromoCode: { __typename?: 'StripePromoCode', _id: string, couponId: string, valid: boolean, code: string, name?: string | null } };
 
 export type DeleteStripePromoCodeMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 

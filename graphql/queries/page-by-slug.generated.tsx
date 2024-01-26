@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type PageBySlugQueryVariables = Types.Exact<{
-  slug: Types.Scalars['String'];
+  slug: Types.Scalars['String']['input'];
 }>;
 
 
-export type PageBySlugQuery = { __typename?: 'Query', pageBySlug?: { __typename?: 'Page', _id: string, status: Types.PageStatus, scripts?: Array<string> | null | undefined, sidebar?: string | null | undefined, created: any, updated: any, title: string, slug: string, content?: string | null | undefined, meta_desc?: string | null | undefined } | null | undefined };
+export type PageBySlugQuery = { __typename?: 'Query', pageBySlug?: { __typename?: 'Page', _id: string, status: Types.PageStatus, scripts?: Array<string> | null, sidebar?: string | null, created: any, updated: any, title: string, slug: string, content?: string | null, meta_desc?: string | null } | null };
 
 
 export const PageBySlugDocument = gql`

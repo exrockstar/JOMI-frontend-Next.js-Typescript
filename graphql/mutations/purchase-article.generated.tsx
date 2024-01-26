@@ -2,7 +2,7 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type PurchaseArticleMutationVariables = Types.Exact<{
   input: Types.ArticlePurchaseInput;
 }>;
@@ -13,21 +13,21 @@ export type PurchaseArticleMutation = { __typename?: 'Mutation', addPurchaseArti
 export type GetPurchasedArticlesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetPurchasedArticlesQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Order', _id: string, description?: string | null | undefined, amount?: number | null | undefined, created: any, currency?: Types.OrderCurrency | null | undefined, type?: Types.OrderType | null | undefined, end?: any | null | undefined, article?: { __typename?: 'Article', slug?: string | null | undefined, publication_id?: string | null | undefined, title: string } | null | undefined }> };
+export type GetPurchasedArticlesQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Order', _id: string, description?: string | null, amount?: number | null, created: any, currency?: Types.OrderCurrency | null, type?: Types.OrderType | null, end?: any | null, article?: { __typename?: 'Article', slug?: string | null, publication_id?: string | null, title: string } | null }> };
 
 export type GetPurchasedArticlesByUserIdQueryVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetPurchasedArticlesByUserIdQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Order', _id: string, description?: string | null | undefined, amount?: number | null | undefined, created: any, type?: Types.OrderType | null | undefined, end?: any | null | undefined, article?: { __typename?: 'Article', slug?: string | null | undefined, publication_id?: string | null | undefined, title: string } | null | undefined }> };
+export type GetPurchasedArticlesByUserIdQuery = { __typename?: 'Query', articles: Array<{ __typename?: 'Order', _id: string, description?: string | null, amount?: number | null, created: any, type?: Types.OrderType | null, end?: any | null, article?: { __typename?: 'Article', slug?: string | null, publication_id?: string | null, title: string } | null }> };
 
 export type GetPriceByProductIdQueryVariables = Types.Exact<{
-  product_id: Types.Scalars['String'];
+  product_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetPriceByProductIdQuery = { __typename?: 'Query', getPriceByProductId: { __typename?: 'StripePrice', _id: string, product: string, priceId?: string | null | undefined, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined } };
+export type GetPriceByProductIdQuery = { __typename?: 'Query', getPriceByProductId: { __typename?: 'StripePrice', _id: string, product: string, priceId?: string | null, unit_amount: number, countryCode?: Types.CountryEnum | null } };
 
 
 export const PurchaseArticleDocument = gql`

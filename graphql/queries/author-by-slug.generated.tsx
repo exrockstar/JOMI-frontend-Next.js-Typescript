@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AuthorBySlugQueryVariables = Types.Exact<{
-  slug: Types.Scalars['String'];
+  slug: Types.Scalars['String']['input'];
 }>;
 
 
-export type AuthorBySlugQuery = { __typename?: 'Query', authorBySlug?: { __typename?: 'Author', _id: string, display_name?: string | null | undefined, slug?: string | null | undefined, role?: string | null | undefined, image?: { __typename?: 'Image', filename?: string | null | undefined, geometry?: { __typename?: 'Geometry', height: number, width: number } | null | undefined } | null | undefined } | null | undefined };
+export type AuthorBySlugQuery = { __typename?: 'Query', authorBySlug?: { __typename?: 'Author', _id: string, display_name?: string | null, slug?: string | null, role?: string | null, image?: { __typename?: 'Image', filename?: string | null, geometry?: { __typename?: 'Geometry', height: number, width: number } | null } | null } | null };
 
 
 export const AuthorBySlugDocument = gql`

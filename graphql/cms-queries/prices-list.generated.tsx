@@ -3,20 +3,20 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { PricePartsFragmentDoc } from './PriceParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type PricesListQueryVariables = Types.Exact<{
   input?: Types.InputMaybe<Types.PriceFilterInput>;
 }>;
 
 
-export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> };
+export type PricesListQuery = { __typename?: 'Query', prices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, unit_amount: number }> };
 
 export type PricesByCountryQueryVariables = Types.Exact<{
   input: Types.PriceFilterInput;
 }>;
 
 
-export type PricesByCountryQuery = { __typename?: 'Query', pricesByCountry: { __typename?: 'PriceOutputByCountry', count: number, allProductIds: Array<string>, countries: Array<{ __typename?: 'PriceByCountry', code: Types.CountryEnum, name: string, prices: Array<{ __typename?: 'StripePrice', _id: string, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> }>, defaultPrices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null | undefined, product: string, interval?: Types.OrderInterval | null | undefined, unit_amount: number }> } };
+export type PricesByCountryQuery = { __typename?: 'Query', pricesByCountry: { __typename?: 'PriceOutputByCountry', count: number, allProductIds: Array<string>, countries: Array<{ __typename?: 'PriceByCountry', code: Types.CountryEnum, name: string, prices: Array<{ __typename?: 'StripePrice', _id: string, product: string, interval?: Types.OrderInterval | null, unit_amount: number }> }>, defaultPrices: Array<{ __typename?: 'StripePrice', _id: string, priceId?: string | null, product: string, interval?: Types.OrderInterval | null, unit_amount: number }> } };
 
 export type GetDefaultPricesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 

@@ -3,27 +3,27 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { UserPartsFragmentDoc } from '../fragments/UserParts.fragment.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type SignInMutationVariables = Types.Exact<{
   input: Types.SignInInput;
 }>;
 
 
-export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null };
 
 export type SignInViaTokenMutationVariables = Types.Exact<{
-  token: Types.Scalars['String'];
+  token: Types.Scalars['String']['input'];
 }>;
 
 
-export type SignInViaTokenMutation = { __typename?: 'Mutation', tokenSignIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInViaTokenMutation = { __typename?: 'Mutation', tokenSignIn?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null };
 
 export type SignInViaOldTokenMutationVariables = Types.Exact<{
-  tokenId: Types.Scalars['String'];
+  tokenId: Types.Scalars['String']['input'];
 }>;
 
 
-export type SignInViaOldTokenMutation = { __typename?: 'Mutation', user?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type SignInViaOldTokenMutation = { __typename?: 'Mutation', user?: { __typename?: 'User', _id: string, subActive: boolean, email: string, role: Types.UserRoles, isPasswordSet: boolean, name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null };
 
 
 export const SignInDocument = gql`

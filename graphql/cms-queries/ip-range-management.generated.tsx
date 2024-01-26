@@ -3,24 +3,24 @@ import * as Types from '../types';
 import { gql } from '@apollo/client';
 import { IpRangePartsFragmentDoc } from './IpRangeParts.generated';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type CreateIpRangeMutationVariables = Types.Exact<{
   input: Types.IpRangeInput;
 }>;
 
 
-export type CreateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined, notes?: string | null | undefined } | null | undefined };
+export type CreateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null, updated?: any | null, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null, notes?: string | null } | null };
 
 export type UpdateIpRangeMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
   input: Types.IpRangeInput;
 }>;
 
 
-export type UpdateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null | undefined, updated?: any | null | undefined, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null | undefined, notes?: string | null | undefined } | null | undefined };
+export type UpdateIpRangeMutation = { __typename?: 'Mutation', ip_range?: { __typename?: 'IpRange', _id: string, created?: any | null, updated?: any | null, location: string, institution: string, start_string: string, end_string: string, lastEditedBy?: string | null, notes?: string | null } | null };
 
 export type DeleteIpRangeMutationVariables = Types.Exact<{
-  id: Types.Scalars['String'];
+  id: Types.Scalars['String']['input'];
 }>;
 
 

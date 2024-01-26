@@ -2,13 +2,13 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type AccessesByUserIdQueryVariables = Types.Exact<{
   input: Types.AccessesByUserIdInput;
 }>;
 
 
-export type AccessesByUserIdQuery = { __typename?: 'Query', accessesByUserId?: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', created: any, article_title?: string | null | undefined, activity: Types.ActivityType, ip_address_str?: string | null | undefined, time_watched?: number | null | undefined, user_agent?: string | null | undefined, block_type?: string | null | undefined, accessType?: Types.AccessTypeEnum | null | undefined, matchedBy?: Types.MatchedBy | null | undefined, orderId?: string | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } | null | undefined };
+export type AccessesByUserIdQuery = { __typename?: 'Query', accessesByUserId?: { __typename?: 'AccessEventsOutput', count: number, events: Array<{ __typename?: 'Access', created: any, article_title?: string | null, activity: Types.ActivityType, ip_address_str?: string | null, time_watched?: number | null, user_agent?: string | null, block_type?: string | null, accessType?: Types.AccessTypeEnum | null, matchedBy?: Types.MatchedBy | null, orderId?: string | null, institution?: { __typename?: 'Institution', _id: string, name: string } | null }> } | null };
 
 
 export const AccessesByUserIdDocument = gql`

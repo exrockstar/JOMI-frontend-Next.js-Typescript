@@ -2,11 +2,11 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type UserProfilePageQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type UserProfilePageQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, display_name?: string | null | undefined, email: string, instEmailVerified?: boolean | null | undefined, institution?: string | null | undefined, institution_name?: string | null | undefined, institutionalEmail?: string | null | undefined, interests?: Array<string> | null | undefined, isPasswordSet: boolean, phone?: string | null | undefined, specialty?: string | null | undefined, subActive: boolean, user_type?: string | null | undefined, name: { __typename?: 'Name', first?: string | null | undefined, last?: string | null | undefined } } | null | undefined };
+export type UserProfilePageQuery = { __typename?: 'Query', user?: { __typename?: 'User', _id: string, display_name?: string | null, email: string, instEmailVerified?: boolean | null, institution?: string | null, institution_name?: string | null, institutionalEmail?: string | null, interests?: Array<string> | null, isPasswordSet: boolean, phone?: string | null, specialty?: string | null, subActive: boolean, user_type?: string | null, name: { __typename?: 'Name', first?: string | null, last?: string | null } } | null };
 
 
 export const UserProfilePageDocument = gql`

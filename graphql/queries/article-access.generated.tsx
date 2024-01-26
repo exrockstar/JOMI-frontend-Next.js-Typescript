@@ -2,16 +2,16 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type ArticleAccessQueryVariables = Types.Exact<{
-  publication_id: Types.Scalars['String'];
+  publication_id: Types.Scalars['String']['input'];
 }>;
 
 
-export type ArticleAccessQuery = { __typename?: 'Query', getIsRequestInstSubButtonPaperOn: boolean, getTypesWithAccess: Array<Types.AccessTypeEnum>, article?: { __typename?: 'Article', _id: string, title: string, publication_id?: string | null | undefined, showRentArticle: boolean, rentDuration: number, showPurchaseArticle: boolean, status: string, articleAccessType: { __typename?: 'AccessType', accessType?: Types.AccessTypeEnum | null | undefined, institution_name?: string | null | undefined, institution_id?: string | null | undefined, shouldRequestInstVerification?: string | null | undefined, viaTemporaryIp?: boolean | null | undefined, isTrial?: boolean | null | undefined, subscriptionExpiresAt?: any | null | undefined, expiry?: any | null | undefined, requireLogin?: boolean | null | undefined, customInstitutionName?: string | null | undefined } } | null | undefined, getPurchaseAndRentPrices: Array<{ __typename?: 'StripePrice', _id: string, product: string, priceId?: string | null | undefined, unit_amount: number, countryCode?: Types.CountryEnum | null | undefined }>, user?: { __typename?: 'User', isTrialsFeatureEnabled: boolean, trialDuration?: number | null | undefined, trialsAllowed: boolean } | null | undefined };
+export type ArticleAccessQuery = { __typename?: 'Query', getIsRequestInstSubButtonPaperOn: boolean, getTypesWithAccess: Array<Types.AccessTypeEnum>, article?: { __typename?: 'Article', _id: string, title: string, publication_id?: string | null, showRentArticle: boolean, rentDuration: number, showPurchaseArticle: boolean, status: string, articleAccessType: { __typename?: 'AccessType', accessType?: Types.AccessTypeEnum | null, institution_name?: string | null, institution_id?: string | null, shouldRequestInstVerification?: string | null, viaTemporaryIp?: boolean | null, isTrial?: boolean | null, subscriptionExpiresAt?: any | null, expiry?: any | null, requireLogin?: boolean | null, customInstitutionName?: string | null } } | null, getPurchaseAndRentPrices: Array<{ __typename?: 'StripePrice', _id: string, product: string, priceId?: string | null, unit_amount: number, countryCode?: Types.CountryEnum | null }>, user?: { __typename?: 'User', isTrialsFeatureEnabled: boolean, trialDuration?: number | null, trialsAllowed: boolean } | null };
 
 export type ShowFeedbackModalQueryVariables = Types.Exact<{
-  anon_link_id: Types.Scalars['String'];
+  anon_link_id: Types.Scalars['String']['input'];
 }>;
 
 
