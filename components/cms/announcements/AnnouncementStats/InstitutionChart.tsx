@@ -4,7 +4,7 @@ import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js'
 import React, { useMemo } from 'react'
 
-ChartJS.register(ArcElement, Tooltip)
+ChartJS.register(ArcElement)
 
 type ViewData = {
   key: string
@@ -50,6 +50,7 @@ const ViewChart = ({ views, title }: Props) => {
               }
             }
           }}
+          plugins={[ArcElement]}
         />
       </CardContent>
     </Card>

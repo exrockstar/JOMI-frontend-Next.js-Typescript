@@ -22,7 +22,7 @@ import { Line } from 'react-chartjs-2'
 import { useInstitutionTrafficOverTimeByUserTypeQuery } from 'graphql/queries/access.generated'
 import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
-Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
+Chart.register(LineElement, CategoryScale, LinearScale)
 
 const UsersOverTimeByUserType = () => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
@@ -174,6 +174,7 @@ const UsersOverTimeByUserType = () => {
                     }
                   }
                 }}
+                plugins={[Tooltip]}
               ></Line>
             </>
           )}

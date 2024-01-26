@@ -21,7 +21,7 @@ import {
 import { stone, green, rose, amber } from 'tailwindcss/colors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
 
-Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
+Chart.register(LineElement, CategoryScale, LinearScale)
 const colors = [
   amber[500],
   green[500],
@@ -236,6 +236,7 @@ const UsersOverTimeCard = () => {
                     }
                   }
                 }}
+                plugins={[Tooltip]}
               ></Bar>
             </>
           )}

@@ -6,26 +6,13 @@ import {
   CategoryScale,
   Tooltip,
   LinearScale,
-  BarElement
+  BarElement,
+  LineElement
 } from 'chart.js'
 import React, { useMemo } from 'react'
 import { InstitutionUserTypeStat } from 'graphql/types'
 import { graphColors } from './getColors'
-
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  ChartDataLabels
-)
-
-ChartJS.defaults.plugins.datalabels.display = false
-type ViewData = {
-  key: string
-  views: number
-}
-
+ChartJS.register(LineElement, BarElement, CategoryScale, LinearScale)
 type Props = {
   user_types: InstitutionUserTypeStat[]
   title: string
@@ -80,6 +67,7 @@ const UserTypesCard = ({ user_types, title }: Props) => {
                 }
               }
             }}
+            plugins={[Tooltip, ChartDataLabels]}
           />
         </CardContent>
       </Box>
