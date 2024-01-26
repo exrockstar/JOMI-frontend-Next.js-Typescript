@@ -56,7 +56,7 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
     role === UserRoles.Admin
       ? [
           <Button
-            key="access"
+            key="access-cms"
             component={MuiLink}
             endIcon={<OpenInNew />}
             sx={{ color: '#FFF' }}
@@ -70,7 +70,7 @@ const AccessLayout: React.FC<PropsWithChildren> = ({ children }) => {
   if (router.query.id) {
     buttons.push(
       <Button
-        key="access"
+        key="access-cms-institution-list"
         component={MuiLink}
         endIcon={<OpenInNew />}
         sx={{ color: '#FFF' }}

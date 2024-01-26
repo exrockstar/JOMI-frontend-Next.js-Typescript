@@ -4,24 +4,20 @@ import {
   Card,
   CardContent,
   CircularProgress,
-  FormControl,
   MenuItem,
-  OutlinedInput,
   Select,
   Stack,
   Typography
 } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Chart from 'chart.js/auto'
 import { CategoryScale, Tooltip, LinearScale, LineElement } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { useRouter } from 'next/router'
 import { useInstitutionTrafficOverTimeQuery } from 'graphql/queries/access.generated'
-import { indigo, green, rose, zinc } from 'tailwindcss/colors'
 import { graphColors } from './getColors'
 import useInstitutionAccessInput from './useInstitutionAccessInput'
 
-Chart.register(LineElement, CategoryScale, LinearScale, Tooltip)
+Chart.register(LineElement, CategoryScale, LinearScale)
 
 const TrafficOverTimeCard = () => {
   const { endDate, startDate, filters, institutionId, globalFilters } =
@@ -109,6 +105,7 @@ const TrafficOverTimeCard = () => {
                     }
                   }
                 }}
+                plugins={[Tooltip]}
               ></Line>
             </>
           )}
