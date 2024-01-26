@@ -981,22 +981,20 @@ export type ImageMetadata = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
-
-
 export type InsertPromoCodeInput = {
-  _id: Scalars['ID'];
-  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
-  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
-  days?: InputMaybe<Scalars['Int']>;
-  expiration: Scalars['DateTime'];
+  _id: Scalars['ID']['input'];
+  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  bulkUsedCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  days?: InputMaybe<Scalars['Int']['input']>;
+  expiration: Scalars['DateTime']['input'];
   interval: OrderInterval;
-  isSubscription: Scalars['Boolean'];
-  notes?: InputMaybe<Scalars['String']>;
-  numberOfCodes?: InputMaybe<Scalars['Int']>;
-  numberUnused?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['Int']>;
-  times_redeemed?: InputMaybe<Scalars['Int']>;
-  title: Scalars['String'];
+  isSubscription: Scalars['Boolean']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  numberOfCodes?: InputMaybe<Scalars['Int']['input']>;
+  numberUnused?: InputMaybe<Scalars['Int']['input']>;
+  price?: InputMaybe<Scalars['Int']['input']>;
+  times_redeemed?: InputMaybe<Scalars['Int']['input']>;
+  title: Scalars['String']['input'];
   type: PromoCodeType;
 };
 
@@ -1234,15 +1232,15 @@ export type MediaOutput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addCRMTagsToOrderListResults: Scalars['Boolean'];
-  addCRMTagsToTriageQueueResults: Scalars['Boolean'];
-  addCRMTagsToUsers: Scalars['Boolean'];
-  addLanguagesToExistingArticles: Scalars['String'];
-  addOrUpdateOrder: Scalars['Boolean'];
-  addPromoCode?: Maybe<Scalars['Boolean']>;
-  addPurchaseArticleOrder: Scalars['Boolean'];
-  addTranslationsHash: Scalars['String'];
-  addTrialOrderForUser: Scalars['Boolean'];
+  addCRMTagsToOrderListResults: Scalars['Boolean']['output'];
+  addCRMTagsToTriageQueueResults: Scalars['Boolean']['output'];
+  addCRMTagsToUsers: Scalars['Boolean']['output'];
+  addLanguagesToExistingArticles: Scalars['String']['output'];
+  addOrUpdateOrder: Scalars['Boolean']['output'];
+  addPromoCode?: Maybe<Scalars['Boolean']['output']>;
+  addPurchaseArticleOrder: Scalars['Boolean']['output'];
+  addTranslationsHash: Scalars['String']['output'];
+  addTrialOrderForUser: Scalars['Boolean']['output'];
   addVote: NewArticleVote;
   applyInstitutionToTriage: TriageQueue;
   cancelJob: Scalars['String']['output'];
@@ -1272,13 +1270,13 @@ export type Mutation = {
   deleteOrder?: Maybe<Order>;
   deletePage: Page;
   deletePrice?: Maybe<StripePrice>;
-  deletePromoCode: Scalars['Boolean'];
+  deletePromoCode: Scalars['Boolean']['output'];
   deleteRedirect: DeleteRedirectOutput;
-  deleteSignInToken: Scalars['Boolean'];
-  deleteStripePromocode: Scalars['Boolean'];
-  editPromoCode: Scalars['Boolean'];
-  forgotPasswordCms: Scalars['Boolean'];
-  generateAllScienceOpenXml: Scalars['String'];
+  deleteSignInToken: Scalars['Boolean']['output'];
+  deleteStripePromocode: Scalars['Boolean']['output'];
+  editPromoCode: Scalars['Boolean']['output'];
+  forgotPasswordCms: Scalars['Boolean']['output'];
+  generateAllScienceOpenXml: Scalars['String']['output'];
   generateDOI: Article;
   generateScienceOpenXmlByArticle: Scalars['String']['output'];
   getInstitution: Institution;
@@ -1302,7 +1300,6 @@ export type Mutation = {
   syncDefaultPricesToDb: Scalars['Boolean']['output'];
   toggleTrialAccess: Scalars['Boolean']['output'];
   tokenSignIn?: Maybe<User>;
-  trackAnnouncement: Scalars['Boolean']['output'];
   trackAnnouncements: Scalars['Boolean']['output'];
   trackArticle: Scalars['Boolean']['output'];
   trackFeedack?: Maybe<Feedback>;
@@ -1524,11 +1521,8 @@ export type MutationDeletePriceArgs = {
 
 
 export type MutationDeletePromoCodeArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
-
-
-
 
 
 export type MutationDeleteRedirectArgs = {
@@ -1544,9 +1538,6 @@ export type MutationDeleteSignInTokenArgs = {
 export type MutationDeleteStripePromocodeArgs = {
   id: Scalars['String']['input'];
 };
-
-
-
 
 
 export type MutationEditPromoCodeArgs = {
@@ -1672,11 +1663,6 @@ export type MutationToggleTrialAccessArgs = {
 
 export type MutationTokenSignInArgs = {
   token: Scalars['String']['input'];
-};
-
-
-export type MutationTrackAnnouncementArgs = {
-  _id: Scalars['String']['input'];
 };
 
 
@@ -2339,22 +2325,22 @@ export type Project = {
 
 export type PromoCode = {
   __typename?: 'PromoCode';
-  _id: Scalars['ID'];
-  bulkUnusedCodes: Array<Scalars['String']>;
-  bulkUsedCodes: Array<Scalars['String']>;
-  created: Scalars['DateTime'];
-  createdAt: Scalars['DateTime'];
-  days?: Maybe<Scalars['Int']>;
-  expiration: Scalars['DateTime'];
+  _id: Scalars['ID']['output'];
+  bulkUnusedCodes: Array<Scalars['String']['output']>;
+  bulkUsedCodes: Array<Scalars['String']['output']>;
+  created: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  days?: Maybe<Scalars['Int']['output']>;
+  expiration: Scalars['DateTime']['output'];
   institution?: Maybe<Institution>;
   interval?: Maybe<OrderInterval>;
-  isSubscription: Scalars['Boolean'];
-  notes?: Maybe<Scalars['String']>;
-  numberUnused?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Int']>;
+  isSubscription: Scalars['Boolean']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  numberUnused?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<Scalars['Int']['output']>;
   stripe?: Maybe<StripePromo>;
-  times_redeemed?: Maybe<Scalars['Int']>;
-  title: Scalars['String'];
+  times_redeemed?: Maybe<Scalars['Int']['output']>;
+  title: Scalars['String']['output'];
   type: PromoCodeType;
   updated: Scalars['DateTime']['output'];
 };
@@ -2367,18 +2353,18 @@ export enum PromoCodeDuration {
 
 export type PromoCodeListInput = {
   filters?: InputMaybe<Array<ColumnFilter>>;
-  isSubscription?: InputMaybe<Scalars['Boolean']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  sort_by?: InputMaybe<Scalars['String']>;
-  sort_order?: InputMaybe<Scalars['Int']>;
+  isSubscription?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  sort_by?: InputMaybe<Scalars['String']['input']>;
+  sort_order?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type PromoCodeListOutput = {
   __typename?: 'PromoCodeListOutput';
-  count: Scalars['Int'];
-  dbQueryString: Scalars['String'];
+  count: Scalars['Int']['output'];
+  dbQueryString: Scalars['String']['output'];
   promocodes: Array<PromoCode>;
 };
 
@@ -2654,11 +2640,8 @@ export type QueryGetPriceByProductIdArgs = {
 
 
 export type QueryGetPromoDetailArgs = {
-  code: Scalars['String'];
+  code: Scalars['String']['input'];
 };
-
-
-
 
 
 export type QueryGetPurchasedArticlesByUserIdArgs = {
@@ -3480,39 +3463,32 @@ export type UpdatePriceInput = {
   interval?: InputMaybe<OrderInterval>;
 };
 
-
-
-export type UpdatePromoCodeInput = {
-  _id: Scalars['ID'];
-  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
-  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
-  days?: InputMaybe<Scalars['Int']>;
-  expiration?: InputMaybe<Scalars['DateTime']>;
-  interval?: InputMaybe<OrderInterval>;
-  isSubscription?: InputMaybe<Scalars['Boolean']>;
-  notes?: InputMaybe<Scalars['String']>;
-  numberOfCodes?: InputMaybe<Scalars['Int']>;
-  numberUnused?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['Int']>;
-  times_redeemed?: InputMaybe<Scalars['Int']>;
-  title?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<PromoCodeType>;
+export type UpdateProfileInput = {
+  display_name?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  institution_name?: InputMaybe<Scalars['String']['input']>;
+  institutional_email?: InputMaybe<Scalars['String']['input']>;
+  interests?: InputMaybe<Array<Scalars['String']['input']>>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+  specialty?: InputMaybe<Scalars['ID']['input']>;
+  user_type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdatePromoCodeInput = {
-  _id: Scalars['ID'];
-  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']>>;
-  bulkUsedCodes?: InputMaybe<Array<Scalars['String']>>;
-  days?: InputMaybe<Scalars['Int']>;
-  expiration?: InputMaybe<Scalars['DateTime']>;
+  _id: Scalars['ID']['input'];
+  bulkUnusedCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  bulkUsedCodes?: InputMaybe<Array<Scalars['String']['input']>>;
+  days?: InputMaybe<Scalars['Int']['input']>;
+  expiration?: InputMaybe<Scalars['DateTime']['input']>;
   interval?: InputMaybe<OrderInterval>;
-  isSubscription?: InputMaybe<Scalars['Boolean']>;
-  notes?: InputMaybe<Scalars['String']>;
-  numberOfCodes?: InputMaybe<Scalars['Int']>;
-  numberUnused?: InputMaybe<Scalars['Int']>;
-  price?: InputMaybe<Scalars['Int']>;
-  times_redeemed?: InputMaybe<Scalars['Int']>;
-  title?: InputMaybe<Scalars['String']>;
+  isSubscription?: InputMaybe<Scalars['Boolean']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  numberOfCodes?: InputMaybe<Scalars['Int']['input']>;
+  numberUnused?: InputMaybe<Scalars['Int']['input']>;
+  price?: InputMaybe<Scalars['Int']['input']>;
+  times_redeemed?: InputMaybe<Scalars['Int']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<PromoCodeType>;
 };
 

@@ -2,27 +2,27 @@ import * as Types from '../types';
 
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 export type GetAllPromoCodesQueryVariables = Types.Exact<{
   input: Types.PromoCodeListInput;
 }>;
 
 
-export type GetAllPromoCodesQuery = { __typename?: 'Query', getAllPromoCodes?: { __typename?: 'PromoCodeListOutput', count: number, dbQueryString: string, promocodes: Array<{ __typename?: 'PromoCode', _id: string, created: any, createdAt: any, bulkUsedCodes: Array<string>, bulkUnusedCodes: Array<string>, numberUnused?: number | null | undefined, notes?: string | null | undefined, interval?: Types.OrderInterval | null | undefined, type: Types.PromoCodeType, days?: number | null | undefined, expiration: any, price?: number | null | undefined, isSubscription: boolean, updated: any, title: string, times_redeemed?: number | null | undefined, institution?: { __typename?: 'Institution', _id: string, name: string } | null | undefined }> } | null | undefined };
+export type GetAllPromoCodesQuery = { __typename?: 'Query', getAllPromoCodes?: { __typename?: 'PromoCodeListOutput', count: number, dbQueryString: string, promocodes: Array<{ __typename?: 'PromoCode', _id: string, created: any, createdAt: any, bulkUsedCodes: Array<string>, bulkUnusedCodes: Array<string>, numberUnused?: number | null, notes?: string | null, interval?: Types.OrderInterval | null, type: Types.PromoCodeType, days?: number | null, expiration: any, price?: number | null, isSubscription: boolean, updated: any, title: string, times_redeemed?: number | null, institution?: { __typename?: 'Institution', _id: string, name: string } | null }> } | null };
 
 export type GetPromoCodeDetailQueryVariables = Types.Exact<{
-  code: Types.Scalars['String'];
+  code: Types.Scalars['String']['input'];
 }>;
 
 
-export type GetPromoCodeDetailQuery = { __typename?: 'Query', getPromoDetail?: { __typename?: 'PromoCode', _id: string, created: any, createdAt: any, bulkUsedCodes: Array<string>, bulkUnusedCodes: Array<string>, numberUnused?: number | null | undefined, notes?: string | null | undefined, interval?: Types.OrderInterval | null | undefined, type: Types.PromoCodeType, days?: number | null | undefined, expiration: any, price?: number | null | undefined, isSubscription: boolean, updated: any, title: string, times_redeemed?: number | null | undefined } | null | undefined };
+export type GetPromoCodeDetailQuery = { __typename?: 'Query', getPromoDetail?: { __typename?: 'PromoCode', _id: string, created: any, createdAt: any, bulkUsedCodes: Array<string>, bulkUnusedCodes: Array<string>, numberUnused?: number | null, notes?: string | null, interval?: Types.OrderInterval | null, type: Types.PromoCodeType, days?: number | null, expiration: any, price?: number | null, isSubscription: boolean, updated: any, title: string, times_redeemed?: number | null } | null };
 
 export type AddPromoCodeMutationVariables = Types.Exact<{
   input: Types.InsertPromoCodeInput;
 }>;
 
 
-export type AddPromoCodeMutation = { __typename?: 'Mutation', addPromoCode?: boolean | null | undefined };
+export type AddPromoCodeMutation = { __typename?: 'Mutation', addPromoCode?: boolean | null };
 
 export type EditPromoCodeMutationVariables = Types.Exact<{
   input: Types.UpdatePromoCodeInput;
@@ -32,7 +32,7 @@ export type EditPromoCodeMutationVariables = Types.Exact<{
 export type EditPromoCodeMutation = { __typename?: 'Mutation', editPromoCode: boolean };
 
 export type DeletePromoCodeMutationVariables = Types.Exact<{
-  code: Types.Scalars['String'];
+  code: Types.Scalars['String']['input'];
 }>;
 
 
